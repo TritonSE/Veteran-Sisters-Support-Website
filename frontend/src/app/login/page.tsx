@@ -27,10 +27,20 @@ export default function LoginForm() {
         <form className={styles.innerForm} id="contactForm">
           <label htmlFor="email">Email</label>
           <input type="text" id="email" className={styles.input} required></input>
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">
+            Password
+            <a style={{ color: "#057E6F", marginLeft: "263px", marginRight: "0px" }}>
+              {" "}
+              Forgot your password?
+            </a>
+          </label>
           <input type="text" id="password" className={styles.input} required></input>
           <Button label="Sign In" className={styles.signInButton}></Button>
         </form>
+        <div>
+          Don&apos;t have an account?
+          <a style={{ color: "#057E6F" }}> Fill out a form.</a>
+        </div>
       </div>
     </main>
   );
