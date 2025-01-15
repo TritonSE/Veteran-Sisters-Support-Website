@@ -53,6 +53,7 @@ web_modules/
 
 # Optional eslint cache
 .eslintcache
+frontend/.eslintcache
 
 # Optional stylelint cache
 .stylelintcache
