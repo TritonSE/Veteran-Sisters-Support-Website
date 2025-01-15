@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 
 import styles from "./page.module.css";
+
 import { Button } from "@/components/Button";
 
 export default function LoginForm() {
@@ -34,7 +35,7 @@ export default function LoginForm() {
               Forgot your password?
             </a>
           </label>
-          <input type="text" id="password" className={styles.input} required></input>
+          <input type="password" id="password" className={styles.input} required></input>
 
           <div className={styles.rememberMeContainer}>
             <input type="checkbox" id="rememberMe" className={styles.checkbox} defaultChecked />
@@ -45,9 +46,11 @@ export default function LoginForm() {
 
           <Button label="Sign In" className={styles.signInButton}></Button>
         </form>
-        <div>
-          Don&apos;t have an account?
-          <a style={{ color: "#057E6F" }}> Fill out a form.</a>
+        <div className={styles.subtitle2}>
+          <div style={{ textAlign: "center" }}>
+            Don&apos;t have an account?
+            <a style={{ color: "#057E6F" }}> Fill out a form.</a>
+          </div>
         </div>
       </div>
     </main>
