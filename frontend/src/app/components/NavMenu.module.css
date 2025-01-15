@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.profile {
+  display: flex;
+  padding-bottom: var(--Spacing-sm, 16px);
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-bottom: 1.5px solid #d6dade;
+}
+
+.profileFrame {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  padding: 4px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+
+.homeFrame {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.homeBackground {
+  display: flex;
+  padding: 7.111px;
+  align-items: center;
+  gap: 7.111px;
+  border-radius: var(--Spacing-s, 8px);
+  background: var(--Background-4, #d6dade);
+}
