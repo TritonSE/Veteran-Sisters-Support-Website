@@ -1,0 +1,34 @@
+.page {
+  background-color: white;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form {
+  width: 600px;
+  height: 471px;
+  border: 1px solid #d0d7de;
+  display: flex;
+  justify-content: center;
+}
+
+.titleBar {
+  width: 552px;
+  height: 146px;
+  background-color: #252525;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.subtitle {
+}
+
+.subtitle2 {
+}
+
+.subtext {
+}
