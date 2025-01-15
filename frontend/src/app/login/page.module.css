@@ -57,3 +57,13 @@
 
 .subtext {
 }
+
+.signInButton {
+  width: 100%;
+  display: flex;
+  padding: 12px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+}

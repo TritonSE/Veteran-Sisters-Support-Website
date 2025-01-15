@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 
 import styles from "./page.module.css";
+import { Button } from "@/components/Button";
 
 export default function LoginForm() {
   // const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -28,6 +29,7 @@ export default function LoginForm() {
           <input type="text" id="email" className={styles.input} required></input>
           <label htmlFor="password">Password</label>
           <input type="text" id="password" className={styles.input} required></input>
+          <Button label="Sign In" className={styles.signInButton}></Button>
         </form>
       </div>
     </main>
