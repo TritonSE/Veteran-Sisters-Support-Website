@@ -2,11 +2,13 @@
 import { ref, updateMetadata, uploadBytes } from "firebase/storage";
 import { ChangeEvent, useState } from "react";
 
+import { FileUpload } from "./components/FileUpload";
 import { storage } from "./firebase";
 import styles from "./page.module.css";
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
+  const [uploadPopup, setUploadPopup] = useState<boolean>(false);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -43,7 +45,20 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <input onChange={handleFileChange} type="file" className={styles.button} />
-      <button onClick={uploadFile}>Upload</button>
+      <button
+        onClick={() => {
+          setUploadPopup(true);
+        }}
+      >
+        Upload
+      </button>
+      {uploadPopup && (
+        <FileUpload
+          onClose={() => {
+            setUploadPopup(false);
+          }}
+        ></FileUpload>
+      )}
     </div>
   );
 }

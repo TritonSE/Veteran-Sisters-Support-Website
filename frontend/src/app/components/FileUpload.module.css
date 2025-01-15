@@ -1,0 +1,134 @@
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 65vw;
+  height: 80vh;
+  border-radius: 8px;
+  background-color: white;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.xwrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 10px 27px;
+  font-size: 30px;
+}
+
+.xbutton {
+  height: 10px;
+  width: 10px;
+  color: gray;
+}
+
+.xbutton:hover {
+  cursor: pointer;
+}
+
+.uploadWrapper {
+  border-radius: 8px;
+  border: 2px dashed #bdc9d2;
+  width: 90%;
+  height: 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  justify-content: center;
+  align-items: center;
+}
+
+.iconWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.selectButton {
+  border-radius: 8px;
+  border: 1.5px solid var(--Primary, #057e6f);
+  background: var(--Background-1, #fff);
+  color: #057e6f;
+  display: flex;
+  padding: 12px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.selectButton:hover {
+  cursor: pointer;
+}
+
+.fileTypeLabel {
+  width: 90%;
+  font-size: 13px;
+  position: relative;
+  bottom: 10px;
+}
+
+.bottomWrapper {
+  width: 90%;
+  height: 25%;
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+}
+
+.programWrapper {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.checkRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkBox {
+  width: 32px;
+  height: 32px;
+  border-color: #057e6f;
+  background-color: #057e6f;
+  border-width: 2px;
+  border-radius: 4px;
+}
+
+.commentsWrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.commentsBox {
+  height: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--Stroke-2, #d0d7de);
+  padding: 12px;
+  resize: none;
+}
