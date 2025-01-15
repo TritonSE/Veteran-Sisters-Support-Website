@@ -3,10 +3,14 @@ import { User } from "../models/userModel.js";
 
 const router = express.Router();
 
-router.get("/users", (req, res) => {
-  const role = req.query.role;
-
-  res.send(`requesting all users with role=${role}`);
+router.get("/users", async (req, res) => {
+  const { assignedProgram, ...userQuery } = req.query;
+  const users = await User.find(userQuery).exec();
+  // only return users that are assigned to assignedProgram
+  const filteredUsers = assignedProgram
+    ? users.filter((user) => user.assignedPrograms.includes(assignedProgram))
+    : users;
+  res.send(filteredUsers);
 });
 
 router.get("/users/:email", async (req, res) => {
@@ -21,12 +25,11 @@ router.get("/users/:email", async (req, res) => {
 
 router.post("/users", async (req, res) => {
   const { email, firstName, lastName, role, assignedPrograms, assignedVeteran } = req.body;
-
   const existingUser = await User.findOne({ email }).exec();
   if (existingUser) {
     res.status(409).send(`User with email=${email} already exists`);
   } else {
-    const newUser = await User.create({
+    await User.create({
       email,
       firstName,
       lastName,
@@ -38,8 +41,10 @@ router.post("/users", async (req, res) => {
   }
 });
 
-router.delete("/users/:email", (req, res) => {
-  res.send(`deleting user with email=${req.params.email}`);
+router.delete("/users/:email", async (req, res) => {
+  const email = req.params.email;
+  const deleteStatus = await User.deleteMany({ email }).exec();
+  res.send(deleteStatus);
 });
 
 export default router;
