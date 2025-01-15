@@ -70,3 +70,40 @@
   gap: 10px;
   align-self: stretch;
 }
+
+.rememberMeContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  margin-bottom: 24px;
+}
+
+.checkbox {
+  width: 21.333px;
+  height: 21.333px;
+  flex-shrink: 0;
+  appearance: none;
+  border: 2px solid #d0d7de;
+  border-radius: 2px;
+}
+
+.checkbox:checked {
+  background-color: #057e6f;
+  border: 2px solid #057e6f;
+}
+
+.checkbox:checked::before {
+  background-color: #057e6f;
+  border: 2px solid #057e6f;
+  content: "✔";
+  color: white;
+}
+
+.rememberMeLabel {
+  color: var(--Neutral-Black, #000);
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+}
