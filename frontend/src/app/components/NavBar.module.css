@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  height: 100%;
+  padding: var(--Spacing-4xl, 80px) var(--Spacing-sm, 16px);
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border-right: 1px solid var(--Stroke-1, #edf1f5);
+  background: var(--Background-1, #fff);
+  position: fixed;
+  top: 0;
+  left: 0;
+}
