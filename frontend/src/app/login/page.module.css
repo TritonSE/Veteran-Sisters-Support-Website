@@ -8,23 +8,48 @@
 }
 
 .form {
-  width: 600px;
-  height: 471px;
+  width: 632px;
+  height: 644px;
   border: 1px solid #d0d7de;
-  display: flex;
+  /* display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center; */
+  padding: 48px 64px;
+  border-radius: 8px;
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
+  color: #3a3c3d;
 }
 
 .titleBar {
-  width: 552px;
-  height: 146px;
+  width: 504px;
+  height: 145px;
   background-color: #252525;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 24px;
 }
 
 .subtitle {
+  color: #3a3c3d;
+  font-family: "Albert Sans";
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.innerForm {
+}
+
+.input {
+  width: 100%;
+  height: 51px;
+  margin: 10px 0;
+  display: inline-block;
+  background-color: white;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
 }
 
 .subtitle2 {
