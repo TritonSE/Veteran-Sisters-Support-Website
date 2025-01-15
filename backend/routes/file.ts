@@ -1,5 +1,6 @@
-import * as FileController from "../controllers/file";
 import express from "express";
+
+import * as FileController from "../controllers/file";
 
 const router = express.Router();
 
