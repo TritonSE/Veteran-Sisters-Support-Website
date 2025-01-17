@@ -4,7 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
-import fileRoutes from "./routes/file";
+import fileRoutes from "./routes/fileRoutes.js";
 
 // import { CustomError, InternalError } from "./errors.js";
 
@@ -51,10 +51,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// app.use("/tier", tierRouter);
-// app.use("/user", userRouter);
-// app.use("/category", categoryRouter);
-// app.use("/visualization", visRouter);
+// routes
 app.use("/api/file", fileRoutes);
 
 app.use(errorHandler);

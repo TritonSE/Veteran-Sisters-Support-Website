@@ -2,6 +2,7 @@ import { ref, updateMetadata, uploadBytes } from "firebase/storage";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 
+import createFileObject, { CreateFileObjectRequest } from "../api/fileApi";
 import { storage } from "../firebase";
 
 import styles from "./FileUpload.module.css";
@@ -9,8 +10,15 @@ import styles from "./FileUpload.module.css";
 type FileUploadProps = {
   onClose: () => void;
 };
+
+type CheckBoxStates = {
+  BattleBuddies: boolean;
+  IAdvocacy: boolean;
+  OperationWellness: boolean;
+};
+
 export function FileUpload({ onClose }: FileUploadProps) {
-  const [checkboxStates, setCheckboxStates] = useState({
+  const [checkboxStates, setCheckboxStates] = useState<CheckBoxStates>({
     BattleBuddies: false,
     IAdvocacy: false,
     OperationWellness: false,
@@ -26,27 +34,49 @@ export function FileUpload({ onClose }: FileUploadProps) {
 
   const uploadFile = () => {
     if (file) {
-      const storageRef = ref(storage, file.name);
-      uploadBytes(storageRef, file)
-        .then(() => {
-          console.log("uploaded!");
-          const newMetadata = {
-            customMetadata: {
-              uploader: "Steve", // user id
-              permittedUsers: "Joe$Srikar$Andrew", // user ids encoded (has to be string)
-            },
-          };
-          updateMetadata(storageRef, newMetadata)
-            .then(() => {
-              console.log("updated!");
-              onClose();
-            })
-            .catch((error: unknown) => {
-              console.error(error);
-            });
+      const fileObjRequest: CreateFileObjectRequest = {
+        filename: file.name,
+        uploader: "Steve",
+        permissions: ["Joe", "Srikar", "Andrew"],
+        comments: comments ? [comments] : [],
+        programs: Object.keys(checkboxStates).filter(
+          (key) => checkboxStates[key as keyof CheckBoxStates],
+        ),
+      };
+      console.log(Object.keys(checkboxStates));
+      createFileObject(fileObjRequest)
+        .then((result) => {
+          if (result.success) {
+            console.log("file object created");
+            const extension = file.name.includes(".") ? (file.name.split(".").pop() ?? "") : "";
+            const storageRef = ref(storage, `files/${result.data._id}.${extension}`);
+            uploadBytes(storageRef, file)
+              .then(() => {
+                console.log("uploaded!");
+                const newMetadata = {
+                  customMetadata: {
+                    uploader: "Steve", // user id
+                    permittedUsers: "Joe$Srikar$Andrew", // user ids encoded (has to be string)
+                  },
+                };
+                updateMetadata(storageRef, newMetadata)
+                  .then(() => {
+                    console.log("updated!");
+                    onClose();
+                  })
+                  .catch((err: unknown) => {
+                    console.error(err);
+                  });
+              })
+              .catch((error: unknown) => {
+                console.error(error);
+              });
+          } else {
+            console.error(result.error);
+          }
         })
-        .catch((error: unknown) => {
-          console.error(error);
+        .catch((err: unknown) => {
+          console.error(err);
         });
     }
   };
@@ -111,7 +141,9 @@ export function FileUpload({ onClose }: FileUploadProps) {
             >
               <input
                 type="checkbox"
-                onChange={() => {}}
+                onChange={() => {
+                  console.log("clicked BattleBuddies");
+                }}
                 className={styles.checkBox}
                 checked={checkboxStates.BattleBuddies}
               />{" "}
@@ -125,7 +157,9 @@ export function FileUpload({ onClose }: FileUploadProps) {
             >
               <input
                 type="checkbox"
-                onChange={() => {}}
+                onChange={() => {
+                  console.log("clicked IAdvocacy");
+                }}
                 className={styles.checkBox}
                 checked={checkboxStates.IAdvocacy}
               />{" "}
@@ -142,7 +176,9 @@ export function FileUpload({ onClose }: FileUploadProps) {
             >
               <input
                 type="checkbox"
-                onChange={() => {}}
+                onChange={() => {
+                  console.log("clicked OperationWellness");
+                }}
                 className={styles.checkBox}
                 checked={checkboxStates.OperationWellness}
               />{" "}
