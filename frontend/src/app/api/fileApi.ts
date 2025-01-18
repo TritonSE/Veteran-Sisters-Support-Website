@@ -2,7 +2,6 @@ export type FileObject = {
   _id: string;
   filename: string;
   uploader: string;
-  permissions: string[];
   comments: string[];
   programs: string[];
 };
@@ -11,7 +10,6 @@ type FileObjectJSON = {
   _id: string;
   filename: string;
   uploader: string;
-  permissions: string[];
   comments: string[];
   programs: string[];
 };
@@ -19,7 +17,6 @@ type FileObjectJSON = {
 export type CreateFileObjectRequest = {
   filename: string;
   uploader: string;
-  permissions: string[];
   comments: string[];
   programs: string[];
 };
@@ -29,7 +26,6 @@ const parseFileObject = (fileObj: FileObjectJSON): FileObject => {
     _id: fileObj._id,
     uploader: fileObj.uploader,
     filename: fileObj.filename,
-    permissions: fileObj.permissions,
     comments: fileObj.comments,
     programs: fileObj.programs,
   };
@@ -41,7 +37,7 @@ const createFileObject = async (
   fileObject: CreateFileObjectRequest,
 ): Promise<APIResult<FileObject>> => {
   try {
-    const response = await fetch("http://localhost:5000/api/file", {
+    const response = await fetch("http://localhost:4000/api/file", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

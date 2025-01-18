@@ -25,19 +25,28 @@ export function FileUpload({ onClose }: FileUploadProps) {
   });
   const [comments, setComments] = useState<string>();
   const [file, setFile] = useState<File | null>(null);
+  const [sizeError, setSizeError] = useState<boolean>(false);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]);
+      const currFile = e.target.files[0];
+      if (currFile.size > 1000000000) {
+        setSizeError(true);
+      } else {
+        setSizeError(false);
+        setFile(e.target.files[0]);
+      }
     }
   };
 
   const uploadFile = () => {
-    if (file) {
+    if (
+      file &&
+      (checkboxStates.BattleBuddies || checkboxStates.IAdvocacy || checkboxStates.OperationWellness)
+    ) {
       const fileObjRequest: CreateFileObjectRequest = {
         filename: file.name,
         uploader: "Steve",
-        permissions: ["Joe", "Srikar", "Andrew"],
         comments: comments ? [comments] : [],
         programs: Object.keys(checkboxStates).filter(
           (key) => checkboxStates[key as keyof CheckBoxStates],
@@ -206,6 +215,12 @@ export function FileUpload({ onClose }: FileUploadProps) {
             </div>
           </div>
         </div>
+        {sizeError && (
+          <div className={styles.error}>
+            <Image src="./error_symbol.svg" alt="error" width={20} height={20} /> File size was too
+            big, please upload one smaller than 1 GB!
+          </div>
+        )}
       </div>
     </>
   );
