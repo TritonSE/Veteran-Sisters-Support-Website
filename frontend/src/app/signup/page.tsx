@@ -23,7 +23,7 @@ export default function SignUpForm() {
       case 0:
         return (
           <main className={styles.page}>
-            <div className={styles.form0}>
+            <div className={styles.formContainer}>
               <div className={styles.titleBar}>
                 <Image
                   id="logo"
@@ -34,14 +34,16 @@ export default function SignUpForm() {
                   style={{ objectFit: "contain" }}
                 ></Image>
               </div>
-              <div className={styles.subtitle}>Create a membership account</div>
-              <Button label="Sign up as a Veteran" className={styles.signUpButton}></Button>
-              <Button label="Sign up as a Volunteer" className={styles.signUpButton}></Button>
-              <Button label="Continue" className={styles.continueButton}></Button>
-              <div className={styles.subtitle2}>
-                <div style={{ textAlign: "center" }}>
-                  Already have an account?
-                  <a style={{ color: "#057E6F" }}> Log in.</a>
+              <div className={styles.form}>
+                <div className={styles.subtitle}>Create a membership account</div>
+                <Button label="Sign up as a Veteran" className={styles.signUpButton}></Button>
+                <Button label="Sign up as a Volunteer" className={styles.signUpButton}></Button>
+                <Button label="Continue" className={styles.continueButton}></Button>
+                <div className={styles.subtitle2}>
+                  <div style={{ textAlign: "center" }}>
+                    Already have an account?
+                    <a style={{ color: "#057E6F" }}> Log in.</a>
+                  </div>
                 </div>
               </div>
             </div>
