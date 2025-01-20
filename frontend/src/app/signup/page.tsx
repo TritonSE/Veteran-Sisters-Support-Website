@@ -23,7 +23,7 @@ export default function SignUpForm() {
       case 0:
         return (
           <main className={styles.page}>
-            <div className={styles.form}>
+            <div className={styles.form0}>
               <div className={styles.titleBar}>
                 <Image
                   id="logo"
@@ -34,37 +34,14 @@ export default function SignUpForm() {
                   style={{ objectFit: "contain" }}
                 ></Image>
               </div>
-              <div className={styles.subtitle}>Sign in to your account</div>
-              <form className={styles.innerForm} id="contactForm">
-                <label htmlFor="email">Email</label>
-                <input type="text" id="email" className={styles.input} required></input>
-                <label htmlFor="password">
-                  Password
-                  <a style={{ color: "#057E6F", marginLeft: "263px", marginRight: "0px" }}>
-                    {" "}
-                    Forgot your password?
-                  </a>
-                </label>
-                <input type="password" id="password" className={styles.input} required></input>
-
-                <div className={styles.rememberMeContainer}>
-                  <input
-                    type="checkbox"
-                    id="rememberMe"
-                    className={styles.checkbox}
-                    defaultChecked
-                  />
-                  <label htmlFor="rememberMe" className={styles.rememberMeLabel}>
-                    Remember me
-                  </label>
-                </div>
-
-                <Button label="Sign In" className={styles.signInButton}></Button>
-              </form>
+              <div className={styles.subtitle}>Create a membership account</div>
+              <Button label="Sign up as a Veteran" className={styles.signUpButton}></Button>
+              <Button label="Sign up as a Volunteer" className={styles.signUpButton}></Button>
+              <Button label="Continue" className={styles.continueButton}></Button>
               <div className={styles.subtitle2}>
                 <div style={{ textAlign: "center" }}>
-                  Don&apos;t have an account?
-                  <a style={{ color: "#057E6F" }}> Fill out a form.</a>
+                  Already have an account?
+                  <a style={{ color: "#057E6F" }}> Log in.</a>
                 </div>
               </div>
             </div>
