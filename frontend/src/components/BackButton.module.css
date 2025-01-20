@@ -1,0 +1,6 @@
+.backButton {
+  display: flex;
+  justify-content: space-between;
+  width: 58px;
+  color: #60696f;
+}

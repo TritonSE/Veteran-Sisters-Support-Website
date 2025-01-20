@@ -9,7 +9,7 @@
 
 .form {
   width: 542px;
-  height: 385px;
+  height: auto;
   border: 1px solid #d0d7de;
   padding: 48px 64px;
   border-radius: 8px;
