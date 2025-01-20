@@ -38,7 +38,11 @@ export default function SignUpForm() {
                 <div className={styles.subtitle}>Create a membership account</div>
                 <Button label="Sign up as a Veteran" className={styles.signUpButton}></Button>
                 <Button label="Sign up as a Volunteer" className={styles.signUpButton}></Button>
-                <Button label="Continue" className={styles.continueButton}></Button>
+                <Button
+                  label="Continue"
+                  className={styles.continueButton}
+                  onClick={handleNext}
+                ></Button>
                 <div className={styles.subtitle2}>
                   <div style={{ textAlign: "center" }}>
                     Already have an account?

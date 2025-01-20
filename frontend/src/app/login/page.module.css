@@ -55,6 +55,9 @@
   gap: 10px;
   align-self: stretch;
   margin-top: 8px;
+  background: var(--Primary, #057e6f);
+  color: var(--Neutral-Base-White, #fafafa);
+  border: none;
 }
 
 .rememberMeContainer {
