@@ -7,9 +7,9 @@
   align-items: center;
 }
 
-.form {
-  width: 632px;
-  height: 644px;
+.form0 {
+  width: 542px;
+  height: 492px;
   border: 1px solid #d0d7de;
   padding: 48px 64px;
   border-radius: 8px;
@@ -33,7 +33,7 @@
   font-family: "Albert Sans";
   font-size: 32px;
   font-weight: 600;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .innerForm {
@@ -53,13 +53,31 @@
 }
 
 .subtitle2 {
-  margin-top: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
 }
 
 .subtext {
 }
 
-.signInButton {
+.continueButton {
+  width: 100%;
+  display: flex;
+  padding: 12px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: var(--Spacing-md, 24px);
+  align-self: stretch;
+  background: var(--Primary, #057e6f);
+  color: var(--Neutral-Base-White, #fafafa);
+  border: none;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.signUpButton {
   width: 100%;
   display: flex;
   padding: 12px 24px;
@@ -67,6 +85,11 @@
   align-items: center;
   gap: 10px;
   align-self: stretch;
+  border-radius: 8px;
+  border: 1px solid var(--Stroke-2, #d0d7de);
+  background: var(--Background-1, #fff);
+  margin-top: 16px;
+  margin-bottom: 12px;
 }
 
 .rememberMeContainer {
