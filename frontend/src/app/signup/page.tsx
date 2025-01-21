@@ -139,6 +139,7 @@ export default function SignUpForm() {
               </div>
               <div className={styles.form}>
                 <div className={styles.interestsBox}>
+                  <BackButton handlePrevious={handlePrevious}></BackButton>
                   <ProgressBar percentCompleted={80}></ProgressBar>
                   <div className={styles.title}>
                     What are your interests? <a style={{ color: "#B80037" }}> *</a>
