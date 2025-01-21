@@ -1,13 +1,20 @@
 import { User } from "../models/userModel.js";
 export const queryUsers = async (req, res) => {
   try {
-    const { assignedProgram, ...userQuery } = req.query;
+    const { assignedProgram, assignedVeteran, ...userQuery } = req.query;
     const users = await User.find(userQuery).exec();
-    // only return users that are assigned to assignedProgram
-    const filteredUsers = assignedProgram
+
+    // if assignedProgram specified, only return users that are assigned to the assignedProgram
+    const usersByAssignedProgram = assignedProgram
       ? users.filter((user) => user.assignedPrograms.includes(assignedProgram))
       : users;
-    res.json(filteredUsers);
+
+    // if assignedVeteran specified, only return users that are assigned to the assignedVeteran
+    const usersByAssignedVeteran = assignedVeteran
+      ? usersByAssignedProgram.filter((user) => user.assignedVeterans.includes(assignedVeteran))
+      : usersByAssignedProgram;
+
+    res.json(usersByAssignedVeteran);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -31,7 +38,7 @@ export const getUserByEmail = async (req, res) => {
 
 export const addUser = async (req, res) => {
   try {
-    const { email, firstName, lastName, role, assignedPrograms, assignedVeteran } = req.body;
+    const { email, firstName, lastName, role, assignedPrograms, assignedVeterans } = req.body;
     const existingUser = await User.findOne({ email }).exec();
     if (existingUser) {
       res.status(409).json({ error: "User with that email already exists" });
@@ -42,7 +49,7 @@ export const addUser = async (req, res) => {
         lastName,
         role,
         assignedPrograms,
-        assignedVeteran,
+        assignedVeterans,
       });
       res.status(201).json(newUser);
     }

@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 const userSchema = new Schema({
-  email: String,
-  firstName: String,
-  lastName: String,
+  email: { type: String, required: true },
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
   role: {
     type: String,
     enum: ["veteran", "volunteer", "staff", "admin"],
@@ -15,7 +15,7 @@ const userSchema = new Schema({
     enum: ["battle buddies", "advocacy", "operation wellness"],
     required: true,
   },
-  assignedVeteran: String,
+  assignedVeterans: [String],
 });
 
 export const User = model("User", userSchema);
