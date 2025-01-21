@@ -7,9 +7,11 @@ import styles from "./page.module.css";
 
 import { BackButton } from "@/components/BackButton";
 import { Button } from "@/components/Button";
+import OnboardingOption from "@/components/OnboardingOption";
+import ProgressBar from "@/components/ProgressBar";
 
 export default function SignUpForm() {
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(4);
 
   const handleNext = () => {
     if (currentPage < 4) setCurrentPage(currentPage + 1);
@@ -118,11 +120,84 @@ export default function SignUpForm() {
           </main>
         );
       case 2:
-      // sign up 1
+      // sign up 2
       case 3:
-      // sign up 1
+      // sign up 3
       case 4:
-      // sign up 1
+        return (
+          <main className={styles.page}>
+            <div className={styles.formContainer}>
+              <div className={styles.titleBar}>
+                <Image
+                  id="logo"
+                  width={142.288}
+                  height={16.66}
+                  src="Logo.svg"
+                  alt=""
+                  style={{ objectFit: "contain" }}
+                ></Image>
+              </div>
+              <div className={styles.form}>
+                <div className={styles.interestsBox}>
+                  <ProgressBar percentCompleted={80}></ProgressBar>
+                  <div className={styles.title}>
+                    What are your interests? <a style={{ color: "#B80037" }}> *</a>
+                  </div>
+                  <div className={styles.subtext}>
+                    Select multiple and we'll help personalize your experience.
+                  </div>
+                  <OnboardingOption
+                    isChecked={false}
+                    mainText={"Get a battle buddy"}
+                    description={"Description about this option and why it’s good"}
+                  ></OnboardingOption>
+                  <OnboardingOption
+                    isChecked={false}
+                    mainText={"Be a battle buddy"}
+                    description={"Description about this option and why it’s good"}
+                  ></OnboardingOption>
+                  <OnboardingOption
+                    isChecked={false}
+                    mainText={"Get help filing for VA benefits"}
+                    description={"Description about this option and why it’s good"}
+                  ></OnboardingOption>
+                  <OnboardingOption
+                    isChecked={false}
+                    mainText={"Get help filing for VA benefits"}
+                    description={"Description about this option and why it’s good"}
+                  ></OnboardingOption>
+                  <OnboardingOption
+                    isChecked={false}
+                    mainText={"Learn more about becoming a peer support specialist"}
+                    description={"Description about this option and why it’s good"}
+                  ></OnboardingOption>
+                  <OnboardingOption
+                    isChecked={false}
+                    mainText={"Wellness events"}
+                    description={"Description about this option and why it’s good"}
+                  ></OnboardingOption>
+                  <OnboardingOption
+                    isChecked={false}
+                    mainText={"Social events"}
+                    description={"Description about this option and why it’s good"}
+                  ></OnboardingOption>
+                  <OnboardingOption isChecked={false} mainText={"Other"}></OnboardingOption>
+                  <Button
+                    label="Continue"
+                    className={styles.continueButton}
+                    onClick={handleNext}
+                  ></Button>
+                  <div className={styles.subtitle2}>
+                    <div style={{ textAlign: "center" }}>
+                      Already have an account?
+                      <a style={{ color: "#057E6F" }}> Log in.</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        );
     }
   };
 

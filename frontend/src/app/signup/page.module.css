@@ -9,6 +9,7 @@
 
 .formContainer {
   width: 542px;
+  height: auto;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -42,6 +43,14 @@
   margin-bottom: 16px;
 }
 
+.title {
+  color: #3a3c3d;
+  font-family: "Albert Sans";
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
 .innerForm {
 }
 
@@ -66,6 +75,18 @@
   align-items: flex-start;
   gap: 24px;
   align-self: stretch;
+}
+
+.subtext {
+  color: var(--Text-3, #3a3c3d);
+
+  /* body small */
+  font-family: "Albert Sans";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 24px;
 }
 
 .continueButton {
@@ -134,4 +155,7 @@
   font-size: 14px;
   font-weight: 500;
   line-height: normal;
+}
+
+.interestBox {
 }
