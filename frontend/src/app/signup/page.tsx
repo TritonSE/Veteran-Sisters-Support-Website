@@ -11,7 +11,7 @@ import OnboardingOption from "@/components/OnboardingOption";
 import ProgressBar from "@/components/ProgressBar";
 
 export default function SignUpForm() {
-  const [currentPage, setCurrentPage] = useState(4);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const handleNext = () => {
     if (currentPage < 4) setCurrentPage(currentPage + 1);
