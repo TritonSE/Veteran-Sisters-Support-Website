@@ -1,6 +1,6 @@
 .page {
   background-color: white;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -15,6 +15,7 @@
   overflow: hidden;
   border-radius: 8px;
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
+  margin: 80px;
 }
 
 .form {
@@ -75,6 +76,7 @@
   align-items: flex-start;
   gap: 24px;
   align-self: stretch;
+  color: black;
 }
 
 .subtext {
@@ -155,6 +157,12 @@
   font-size: 14px;
   font-weight: 500;
   line-height: normal;
+}
+
+.addressDropdown {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .interestBox {
