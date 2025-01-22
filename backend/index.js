@@ -52,7 +52,7 @@ app.use(cors());
 app.use(express.json());
 
 // routes
-app.use("/api/file", fileRoutes);
+app.use("/api", fileRoutes);
 
 app.use(errorHandler);
 
