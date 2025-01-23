@@ -19,7 +19,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module",
     // Add this:
-    "project": true
+    "project": false
   },
   "plugins": [
     "@typescript-eslint",
