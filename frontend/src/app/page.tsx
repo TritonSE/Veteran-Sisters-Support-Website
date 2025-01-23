@@ -1,10 +1,14 @@
+"use client";
 import Image from "next/image";
 
+import { NavBar } from "./components/NavBar";
 import styles from "./page.module.css";
 
 export default function Home() {
+  
   return (
     <div className={styles.page}>
+      <NavBar />
       <main className={styles.main}>
         <Image
           className={styles.logo}
