@@ -40,7 +40,10 @@ export default function LoginForm() {
         <div className={styles.subtitle2}>
           <div>
             Don&apos;t have an account?
-            <a style={{ color: "#057E6F" }}> Sign up.</a>
+            <a href="/signup" style={{ color: "#057E6F" }}>
+              {" "}
+              Sign up.
+            </a>
           </div>
         </div>
       </div>

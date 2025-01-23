@@ -13,7 +13,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ percentCompleted }) => {
     <div className={styles.progressBarContainer}>
       <div
         className={styles.progressBar}
-        style={{ width: `${percentCompleted}%` }}
+        style={{ width: `${percentCompleted.toString()}%` }}
         aria-valuenow={percentCompleted}
         aria-valuemin={0}
         aria-valuemax={100}

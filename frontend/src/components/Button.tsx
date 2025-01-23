@@ -4,9 +4,9 @@ import React from "react";
 
 import styles from "./Button.module.css";
 
-export interface ButtonProps extends React.ComponentProps<"button"> {
+export type ButtonProps = React.ComponentProps<"button"> & {
   label: string;
-}
+};
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   { label, className, ...props },

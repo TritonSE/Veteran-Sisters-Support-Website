@@ -57,7 +57,10 @@ export default function SignUpForm() {
                 <div className={styles.subtitle2}>
                   <div style={{ textAlign: "center" }}>
                     Already have an account?
-                    <a style={{ color: "#057E6F" }}> Log in.</a>
+                    <a href="/login" style={{ color: "#057E6F" }}>
+                      {" "}
+                      Log in.
+                    </a>
                   </div>
                 </div>
               </form>
@@ -82,7 +85,7 @@ export default function SignUpForm() {
               <form className={styles.form}>
                 <div style={{ marginBottom: "24px" }}>
                   <BackButton handlePrevious={handlePrevious} />
-                  <ProgressBar percentCompleted={30}></ProgressBar>
+                  <ProgressBar percentCompleted={25}></ProgressBar>
                 </div>
                 <div className={styles.subtitle}>Create a membership account</div>
                 <label htmlFor="email">Email</label>
@@ -159,7 +162,10 @@ export default function SignUpForm() {
                 <div className={styles.subtitle2}>
                   <div style={{ textAlign: "center" }}>
                     Already have an account?
-                    <a style={{ color: "#057E6F" }}> Log in.</a>
+                    <a href="/login" style={{ color: "#057E6F" }}>
+                      {" "}
+                      Log in.
+                    </a>
                   </div>
                 </div>
               </form>
@@ -184,7 +190,7 @@ export default function SignUpForm() {
               <form className={styles.form}>
                 <div style={{ marginBottom: "24px" }}>
                   <BackButton handlePrevious={handlePrevious} />
-                  <ProgressBar percentCompleted={30}></ProgressBar>
+                  <ProgressBar percentCompleted={50}></ProgressBar>
                 </div>
                 <div className={styles.subtitle}>Tell Us About Your Service</div>
                 <div style={{ marginBottom: "24px" }}>
@@ -229,7 +235,10 @@ export default function SignUpForm() {
                 <div className={styles.subtitle2}>
                   <div style={{ textAlign: "center" }}>
                     Already have an account?
-                    <a style={{ color: "#057E6F" }}> Log in.</a>
+                    <a href="/login" style={{ color: "#057E6F" }}>
+                      {" "}
+                      Log in.
+                    </a>
                   </div>
                 </div>
               </form>
@@ -254,7 +263,7 @@ export default function SignUpForm() {
               <div className={styles.form}>
                 <div className={styles.interestsBox}>
                   <BackButton handlePrevious={handlePrevious}></BackButton>
-                  <ProgressBar percentCompleted={80}></ProgressBar>
+                  <ProgressBar percentCompleted={75}></ProgressBar>
                   <div className={styles.title}>
                     What are your interests? <a style={{ color: "#B80037" }}> *</a>
                   </div>
@@ -305,7 +314,10 @@ export default function SignUpForm() {
                   <div className={styles.subtitle2}>
                     <div style={{ textAlign: "center" }}>
                       Already have an account?
-                      <a style={{ color: "#057E6F" }}> Log in.</a>
+                      <a href="/login" style={{ color: "#057E6F" }}>
+                        {" "}
+                        Log in.
+                      </a>
                     </div>
                   </div>
                 </div>
