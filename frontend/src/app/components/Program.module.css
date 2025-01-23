@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  padding: 4px var(--Spacing-s, 8px);
+  justify-content: center;
+  align-items: center;
+  gap: var(--Spacing-xs, 4px);
+  border-radius: var(--Spacing-xs, 4px);
+}
+
+.text {
+  /* body xsmall */
+  font-family: "Albert Sans";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  color: inherit;
+}
+
+.battleBuddies {
+  color: #92400e;
+  border: 0px solid rgba(146, 64, 14, 0.3);
+  background: rgba(146, 64, 14, 0.1);
+}
+
+.advocacy {
+  color: #3730a3;
+  border: 0px solid rgba(55, 48, 163, 0.3);
+  background: rgba(55, 48, 163, 0.1);
+}
+
+.operationWellness {
+  color: #337357;
+  border: 0px solid rgba(51, 115, 87, 0.4);
+  background: rgba(51, 115, 87, 0.1);
+}
