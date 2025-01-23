@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import fileRoutes from "./routes/fileRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 // import { CustomError, InternalError } from "./errors.js";
 
@@ -53,6 +54,8 @@ app.use(express.json());
 
 // routes
 app.use("/api", fileRoutes);
+
+app.use("/api", userRoutes);
 
 app.use(errorHandler);
 
