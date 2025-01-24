@@ -1,0 +1,23 @@
+.nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  width: 50%;
+}
+
+.navItem {
+  display: flex;
+  padding: 12px var(--Spacing-md, 24px);
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: var(--Spacing-s, 8px) var(--Spacing-s, 8px) 0px 0px;
+  border-bottom: 1.5px solid var(--Primary, #057e6f);
+}
+
+.navItem:hover {
+  background: var(--Neutral-Base-White, #fafafa);
+}
