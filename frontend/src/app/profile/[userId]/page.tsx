@@ -1,4 +1,4 @@
-import UserProfile from "./UserProfile";
+import UserProfile from "../../components/UserProfile";
 
 export default async function Page({ params }: { params: Promise<{ userId: string }> }) {
   const userIdString: string = (await params).userId;
