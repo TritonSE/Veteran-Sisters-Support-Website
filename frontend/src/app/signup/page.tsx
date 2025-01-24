@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { MouseEvent, useState } from "react";
 
 import styles from "./page.module.css";
 
@@ -13,6 +13,7 @@ import ProgressBar from "@/components/ProgressBar";
 export default function SignUpForm() {
   const [currentPage, setCurrentPage] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [activeButton, setActiveButton] = useState("");
 
   const handleNext = () => {
     // Go to the next form step
@@ -27,6 +28,10 @@ export default function SignUpForm() {
   const handleDropdown = () => {
     // Show Address Dropdown
     setShowDropdown((prev) => !prev);
+  };
+
+  const handleButton = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
   };
 
   const renderPage = () => {
@@ -47,8 +52,42 @@ export default function SignUpForm() {
               </div>
               <form className={styles.form}>
                 <div className={styles.subtitle}>Create a membership account</div>
-                <Button label="Sign up as a Veteran" className={styles.signUpButton}></Button>
-                <Button label="Sign up as a Volunteer" className={styles.signUpButton}></Button>
+                <Button
+                  label="Sign up as a Veteran"
+                  className={styles.signUpButton}
+                  onClick={(e) => {
+                    setActiveButton("button1");
+                    handleButton(e);
+                  }}
+                  style={{
+                    backgroundColor: activeButton === "button1" ? "lightgrey" : "white",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (activeButton !== "button1")
+                      e.currentTarget.style.backgroundColor = "#f2f2f2";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeButton !== "button1") e.currentTarget.style.backgroundColor = "white";
+                  }}
+                ></Button>
+                <Button
+                  label="Sign up as a Volunteer"
+                  className={styles.signUpButton}
+                  onClick={(e) => {
+                    setActiveButton("button2");
+                    handleButton(e);
+                  }}
+                  style={{
+                    backgroundColor: activeButton === "button2" ? "lightgrey" : "white",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (activeButton !== "button2")
+                      e.currentTarget.style.backgroundColor = "#f2f2f2";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeButton !== "button2") e.currentTarget.style.backgroundColor = "white";
+                  }}
+                ></Button>
                 <Button
                   label="Continue"
                   className={styles.continueButton}
@@ -268,7 +307,7 @@ export default function SignUpForm() {
                     What are your interests? <a style={{ color: "#B80037" }}> *</a>
                   </div>
                   <div className={styles.subtext}>
-                    Select multiple and we'll help personalize your experience.
+                    Select multiple and we&apos;ll help personalize your experience.
                   </div>
                   <OnboardingOption
                     isChecked={false}
@@ -307,7 +346,7 @@ export default function SignUpForm() {
                   ></OnboardingOption>
                   <OnboardingOption isChecked={false} mainText={"Other"}></OnboardingOption>
                   <Button
-                    label="Continue"
+                    label="Submit"
                     className={styles.continueButton}
                     onClick={handleNext}
                   ></Button>

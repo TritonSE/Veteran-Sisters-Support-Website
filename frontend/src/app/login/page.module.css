@@ -1,5 +1,5 @@
 .page {
-  background-color: white;
+  background-image: url("../../../public/signUpBackground.svg");
   height: 100vh;
   width: 100%;
   display: flex;
@@ -8,6 +8,7 @@
 }
 
 .form {
+  background-color: white;
   width: 542px;
   height: auto;
   border: 1px solid #d0d7de;
