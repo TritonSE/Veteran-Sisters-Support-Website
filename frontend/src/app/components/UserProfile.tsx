@@ -1,6 +1,7 @@
 "use client"; // TODO: why is this required?
 import { getUserProfile, Role } from "../api/profileApi";
 import { useEffect, useState } from "react";
+import ProfileHeader from "@/app/components/ProfileHeader";
 
 export default function UserProfile({ userId }: { userId: string }) {
   const [viewingRole, setViewingRole] = useState(Role.STAFF as string);
@@ -30,6 +31,18 @@ export default function UserProfile({ userId }: { userId: string }) {
       >
         <option value={Role.ADMIN}>Admin</option>
       </select>
+      <ProfileHeader
+        firstName={userProfile.firstName}
+        lastName={userProfile.lastName}
+        role={userProfile.role}
+        assignedPrograms={userProfile.assignedPrograms}
+        yearJoined={userProfile.yearJoined}
+        age={userProfile.age}
+        phoneNumber={userProfile.phoneNumber}
+        profilePictureUrl={userProfile.profilePictureUrl}
+        gender={userProfile.gender}
+        email={userProfile.email}
+      />
     </div>
   );
 }
