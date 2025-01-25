@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { MouseEvent, useState } from "react";
 
 import styles from "./page.module.css";
+import "@fontsource/albert-sans";
 
 import { BackButton } from "@/components/BackButton";
 import { Button } from "@/components/Button";
@@ -14,15 +15,34 @@ export default function SignUpForm() {
   const [currentPage, setCurrentPage] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
   const [activeButton, setActiveButton] = useState("");
+  const [isVeteran, setIsVeteran] = useState(false);
 
   const handleNext = () => {
     // Go to the next form step
-    if (currentPage < 3) setCurrentPage(currentPage + 1);
+
+    if (currentPage === 0 && !activeButton) {
+      alert("Please select a sign-up option to continue.");
+      return;
+    }
+
+    // Skip "Tell Us About Your Service" if not a Veteran
+    if (currentPage === 1 && !isVeteran) {
+      setCurrentPage(currentPage + 2);
+    } else {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   const handlePrevious = () => {
     // Go to the previous form step
-    if (currentPage > 0) setCurrentPage(currentPage - 1);
+    if (currentPage > 0) {
+      if (currentPage === 3 && !isVeteran) {
+        // Skip "Tell Us About Your Service" when going back and not a veteran
+        setCurrentPage(1);
+      } else {
+        setCurrentPage(currentPage - 1);
+      }
+    }
   };
 
   const handleDropdown = () => {
@@ -30,8 +50,17 @@ export default function SignUpForm() {
     setShowDropdown((prev) => !prev);
   };
 
-  const handleButton = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleButton = (e: MouseEvent<HTMLButtonElement>, buttonType: string) => {
     e.preventDefault();
+
+    setActiveButton(buttonType);
+
+    // Update isVeteran based on the button clicked
+    if (buttonType === "button1") {
+      setIsVeteran(true);
+    } else {
+      setIsVeteran(false);
+    }
   };
 
   const renderPage = () => {
@@ -56,8 +85,7 @@ export default function SignUpForm() {
                   label="Sign up as a Veteran"
                   className={styles.signUpButton}
                   onClick={(e) => {
-                    setActiveButton("button1");
-                    handleButton(e);
+                    handleButton(e, "button1");
                   }}
                   style={{
                     backgroundColor: activeButton === "button1" ? "lightgrey" : "white",
@@ -69,13 +97,12 @@ export default function SignUpForm() {
                   onMouseLeave={(e) => {
                     if (activeButton !== "button1") e.currentTarget.style.backgroundColor = "white";
                   }}
-                ></Button>
+                />
                 <Button
                   label="Sign up as a Volunteer"
                   className={styles.signUpButton}
                   onClick={(e) => {
-                    setActiveButton("button2");
-                    handleButton(e);
+                    handleButton(e, "button2");
                   }}
                   style={{
                     backgroundColor: activeButton === "button2" ? "lightgrey" : "white",
@@ -87,7 +114,7 @@ export default function SignUpForm() {
                   onMouseLeave={(e) => {
                     if (activeButton !== "button2") e.currentTarget.style.backgroundColor = "white";
                   }}
-                ></Button>
+                />
                 <Button
                   label="Continue"
                   className={styles.continueButton}
@@ -107,7 +134,6 @@ export default function SignUpForm() {
           </main>
         );
       case 1:
-        // sign up 1
         return (
           <main className={styles.page}>
             <div className={styles.formContainer}>
@@ -127,10 +153,12 @@ export default function SignUpForm() {
                   <ProgressBar percentCompleted={25}></ProgressBar>
                 </div>
                 <div className={styles.subtitle}>Create a membership account</div>
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email" className={styles.formEntry}>
+                  Email
+                </label>
                 <a style={{ color: "#B80037" }}> *</a>
                 <input type="text" id="email" className={styles.input} required></input>
-                <label htmlFor="phone">
+                <label htmlFor="phone" className={styles.formEntry}>
                   Phone number
                   <a style={{ color: "#B80037" }}> *</a>
                 </label>
@@ -143,19 +171,21 @@ export default function SignUpForm() {
                 ></input>
                 <div className={styles.doubleInput}>
                   <div style={{ marginRight: "16px" }}>
-                    <label htmlFor="firstName">
+                    <label htmlFor="firstName" className={styles.formEntry}>
                       First name
                       <a style={{ color: "#B80037" }}> *</a>
                     </label>
                     <input type="text" id="firstName" className={styles.input} required></input>
                   </div>
                   <div>
-                    <label htmlFor="lastName">Last name</label>
+                    <label htmlFor="lastName" className={styles.formEntry}>
+                      Last name
+                    </label>
                     <input type="text" id="lastName" className={styles.input}></input>
                   </div>
                 </div>
                 <div className={styles.addressDropdown} onClick={handleDropdown}>
-                  <div style={{ fontSize: "16px", fontWeight: "600" }}>
+                  <div className={styles.subHeader}>
                     Address Information
                     <a style={{ color: "#60696F", fontWeight: "400", fontSize: "13px" }}>
                       {" "}
@@ -173,21 +203,31 @@ export default function SignUpForm() {
                 </div>
                 {showDropdown && (
                   <div style={{ marginTop: "16px" }}>
-                    <label htmlFor="address">Street address</label>
+                    <label htmlFor="address" className={styles.formEntry}>
+                      Street address
+                    </label>
                     <input type="text" id="address" className={styles.input}></input>
-                    <label htmlFor="address2">Street address line 2</label>
+                    <label htmlFor="address2" className={styles.formEntry}>
+                      Street address line 2
+                    </label>
                     <input type="text" id="address2" className={styles.input}></input>
                     <div className={styles.doubleInput}>
                       <div style={{ marginRight: "16px" }}>
-                        <label htmlFor="city">City</label>
+                        <label htmlFor="city" className={styles.formEntry}>
+                          City
+                        </label>
                         <input type="text" id="city" className={styles.input} required></input>
                       </div>
                       <div style={{ marginRight: "16px" }}>
-                        <label htmlFor="state">State</label>
+                        <label htmlFor="state" className={styles.formEntry}>
+                          State
+                        </label>
                         <input type="text" id="state" className={styles.input}></input>
                       </div>
                       <div>
-                        <label htmlFor="zip">Zip code</label>
+                        <label htmlFor="zip" className={styles.formEntry}>
+                          Zip code
+                        </label>
                         <input type="text" id="zip" className={styles.input}></input>
                       </div>
                     </div>
@@ -212,7 +252,6 @@ export default function SignUpForm() {
           </main>
         );
       case 2:
-        // sign up 2
         return (
           <main className={styles.page}>
             <div className={styles.formContainer}>
@@ -231,11 +270,13 @@ export default function SignUpForm() {
                   <BackButton handlePrevious={handlePrevious} />
                   <ProgressBar percentCompleted={50}></ProgressBar>
                 </div>
-                <div className={styles.subtitle}>Tell Us About Your Service</div>
-                <div style={{ marginBottom: "24px" }}>
+                <div className={styles.title}>Tell Us About Your Service</div>
+                <div className={styles.description}>
                   This helps us match you with the right benefits and community.
                 </div>
-                <label htmlFor="date">Date service ended</label>
+                <label htmlFor="date" className={styles.formEntry}>
+                  Date service ended
+                </label>
                 <a style={{ color: "#B80037" }}> *</a>
                 <input
                   type="text"
@@ -244,25 +285,25 @@ export default function SignUpForm() {
                   placeholder="MM-DD-YYYY"
                   required
                 ></input>
-                <label htmlFor="branch">
+                <label htmlFor="branch" className={styles.formEntry}>
                   Branch of service
                   <a style={{ color: "#B80037" }}> *</a>
                 </label>
                 <select id="branch" className={styles.input} required>
                   <option value="">Please select</option>
                 </select>
-                <label htmlFor="status">
+                <label htmlFor="status" className={styles.formEntry}>
                   Current military status
                   <a style={{ color: "#B80037" }}> *</a>
                 </label>
                 <select id="status" className={styles.input} required>
                   <option value="">Please select</option>
                 </select>
-                <label htmlFor="gender">
+                <label htmlFor="gender" className={styles.formEntry}>
                   Gender
                   <a style={{ color: "#B80037" }}> *</a>
                 </label>
-                <select id="gender" className={styles.input} required>
+                <select id="gender" className={`${styles.input} ${styles.lastDropdown}`} required>
                   <option value="">Please select</option>
                 </select>
 
@@ -284,7 +325,6 @@ export default function SignUpForm() {
             </div>
           </main>
         );
-      // sign up 3
       case 3:
         return (
           <main className={styles.page}>

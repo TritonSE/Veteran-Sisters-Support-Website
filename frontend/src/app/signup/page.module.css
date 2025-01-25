@@ -65,7 +65,12 @@
   background-color: white;
   border: 1px solid #d0d7de;
   border-radius: 8px;
-  color: #3a3c3d;
+  color: var(--Text-2, #4d5358);
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .doubleInput {
@@ -78,6 +83,11 @@
   gap: 24px;
   align-self: stretch;
   color: black;
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .subtext {
@@ -166,5 +176,36 @@
   align-items: center;
 }
 
-.interestBox {
+.lastDropdown {
+  margin-bottom: 0;
+}
+
+.formEntry {
+  color: var(--Neutral-Black, #000);
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.subHeader {
+  color: #3a3c3d;
+  font-family: "Albert Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.description {
+  color: var(--Text-3, #3a3c3d);
+
+  /* body small */
+  font-family: "Albert Sans";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 24px;
 }

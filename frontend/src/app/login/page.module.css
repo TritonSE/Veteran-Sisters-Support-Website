@@ -39,11 +39,25 @@
   background-color: white;
   border: 1px solid #d0d7de;
   border-radius: 4px;
-
-  color: #3a3c3d;
+  color: var(--Text-2, #4d5358);
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .subtitle2 {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+  color: black;
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
   margin-top: 24px;
 }
 
@@ -96,4 +110,18 @@
   font-size: 14px;
   font-weight: 500;
   line-height: normal;
+}
+
+.formEntry {
+  color: var(--Neutral-Black, #000);
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.forgotPassword {
+  float: right;
+  color: var(--Primary, #057e6f);
 }

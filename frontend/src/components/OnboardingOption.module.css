@@ -31,8 +31,6 @@
 
 .mainText {
   color: var(--Text-3, #3a3c3d);
-
-  /* body medium */
   font-family: "Albert Sans";
   font-size: 14px;
   font-style: normal;
@@ -42,8 +40,6 @@
 
 .description {
   color: var(--Text-1, #60696f);
-
-  /* body xsmall */
   font-family: "Albert Sans";
   font-size: 12px;
   font-style: normal;

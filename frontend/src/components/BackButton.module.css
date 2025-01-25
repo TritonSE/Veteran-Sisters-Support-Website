@@ -2,5 +2,12 @@
   display: flex;
   justify-content: space-between;
   width: 58px;
-  color: #60696f;
+
+  color: var(--Text-1, #60696f);
+  /* body medium */
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }

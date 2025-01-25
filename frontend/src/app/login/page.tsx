@@ -5,6 +5,7 @@ import React from "react";
 import styles from "./page.module.css";
 
 import { Button } from "@/components/Button";
+import "@fontsource/albert-sans";
 
 export default function LoginForm() {
   // const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -15,16 +16,15 @@ export default function LoginForm() {
       <div className={styles.form}>
         <div className={styles.subtitle}>Log in to your account</div>
         <form className={styles.innerForm} id="contactForm">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email" className={styles.formEntry}>
+            Email
+          </label>
           <a style={{ color: "#B80037" }}> *</a>
           <input type="text" id="email" className={styles.input} required></input>
-          <label htmlFor="password">
+          <label htmlFor="password" className={styles.formEntry}>
             Password
             <a style={{ color: "#B80037" }}> *</a>
-            <a style={{ color: "#057E6F", marginLeft: "194px", marginRight: "0px" }}>
-              {" "}
-              Forgot your password?
-            </a>
+            <a className={styles.forgotPassword}> Forgot your password?</a>
           </label>
           <input type="password" id="password" className={styles.input} required></input>
 

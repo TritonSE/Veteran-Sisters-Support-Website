@@ -17,7 +17,7 @@ const OnboardingOption: React.FC<OnboardingOptionProps> = ({
 }) => {
   const [checked, setChecked] = useState(isChecked);
 
-  const handleCheckboxClick = () => {
+  const handleClick = () => {
     setChecked(!checked);
   };
 
@@ -27,13 +27,14 @@ const OnboardingOption: React.FC<OnboardingOptionProps> = ({
       style={{
         padding: description ? "12px 16px" : "8px 16px",
       }}
+      onClick={handleClick}
     >
       <div className={styles.flexContent}>
         <div className={styles.textContent}>
           <div className={styles.mainText}>{mainText}</div>
           <div className={styles.description}>{description}</div>
         </div>
-        <div className={styles.checkboxContainer} onClick={handleCheckboxClick}>
+        <div className={styles.checkboxContainer}>
           <img
             src={checked ? "/checkbox.checked.svg" : "/checkbox.unchecked.svg"}
             className={styles.checkbox}
