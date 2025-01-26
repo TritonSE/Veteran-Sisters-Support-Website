@@ -1,4 +1,4 @@
-import { ref, updateMetadata, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes } from "firebase/storage";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 
@@ -9,6 +9,7 @@ import styles from "./FileUpload.module.css";
 
 type FileUploadProps = {
   onClose: () => void;
+  onUpload: () => void;
 };
 
 type CheckBoxStates = {
@@ -17,7 +18,7 @@ type CheckBoxStates = {
   OperationWellness: boolean;
 };
 
-export function FileUpload({ onClose }: FileUploadProps) {
+export function FileUpload({ onClose, onUpload }: FileUploadProps) {
   const [checkboxStates, setCheckboxStates] = useState<CheckBoxStates>({
     BattleBuddies: false,
     IAdvocacy: false,
@@ -26,6 +27,7 @@ export function FileUpload({ onClose }: FileUploadProps) {
   const [comments, setComments] = useState<string>();
   const [file, setFile] = useState<File | null>(null);
   const [sizeError, setSizeError] = useState<boolean>(false);
+  const [uploading, setUploading] = useState<boolean>(false);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -42,8 +44,12 @@ export function FileUpload({ onClose }: FileUploadProps) {
   const uploadFile = () => {
     if (
       file &&
-      (checkboxStates.BattleBuddies || checkboxStates.IAdvocacy || checkboxStates.OperationWellness)
+      (checkboxStates.BattleBuddies ||
+        checkboxStates.IAdvocacy ||
+        checkboxStates.OperationWellness) &&
+      !uploading
     ) {
+      setUploading(true);
       const fileObjRequest: CreateFileObjectRequest = {
         filename: file.name,
         uploader: "Steve",
@@ -52,7 +58,6 @@ export function FileUpload({ onClose }: FileUploadProps) {
           (key) => checkboxStates[key as keyof CheckBoxStates],
         ),
       };
-      console.log(Object.keys(checkboxStates));
       createFileObject(fileObjRequest)
         .then((result) => {
           if (result.success) {
@@ -61,21 +66,10 @@ export function FileUpload({ onClose }: FileUploadProps) {
             const storageRef = ref(storage, `files/${result.data._id}.${extension}`);
             uploadBytes(storageRef, file)
               .then(() => {
-                console.log("uploaded!");
-                const newMetadata = {
-                  customMetadata: {
-                    uploader: "Steve", // user id
-                    permittedUsers: "Joe$Srikar$Andrew", // user ids encoded (has to be string)
-                  },
-                };
-                updateMetadata(storageRef, newMetadata)
-                  .then(() => {
-                    console.log("updated!");
-                    onClose();
-                  })
-                  .catch((err: unknown) => {
-                    console.error(err);
-                  });
+                console.log("uploaded to firebase");
+                setUploading(false);
+                onClose();
+                onUpload();
               })
               .catch((error: unknown) => {
                 console.error(error);

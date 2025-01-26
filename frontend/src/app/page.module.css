@@ -1,8 +1,35 @@
 .page {
-  background-color: white;
-  height: 100vh;
+  height: 100%;
+  width: 100%;
+  padding-left: 200px;
+  padding-right: 150px;
+  padding-top: 50px;
+  padding-bottom: 100px;
 }
 
 .button {
+  cursor: pointer;
+}
+
+.topRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.uploadButton {
+  border-radius: 8px;
+  background: var(--Primary, #057e6f);
+  display: flex;
+  flex-direction: row;
+  padding: 12px 20px;
+  align-items: center;
+  gap: 10px;
+  color: var(--Neutral-Base-White, #fafafa);
+  font-size: 14px;
+}
+
+.uploadButton:hover {
   cursor: pointer;
 }

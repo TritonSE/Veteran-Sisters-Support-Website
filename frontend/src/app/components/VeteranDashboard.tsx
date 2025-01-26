@@ -1,10 +1,15 @@
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { FileObject, getFilesByUploader } from "../api/fileApi";
 
 import styles from "./VeteranDashboard.module.css";
 
-export function VeteranDashboard() {
+type VeteranDashboardProps = {
+  refresh: boolean;
+};
+
+export function VeteranDashboard({ refresh }: VeteranDashboardProps) {
   const [selectedProgram, setSelectedProgram] = useState<string>("All");
   const [fileObjects, setFileObjects] = useState<FileObject[]>([]);
   const [filteredFiles, setFilteredFiles] = useState<FileObject[]>([]);
@@ -21,7 +26,7 @@ export function VeteranDashboard() {
       .catch((err: unknown) => {
         console.error(err);
       });
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     if (selectedProgram === "All") {
@@ -31,61 +36,71 @@ export function VeteranDashboard() {
     }
   }, [selectedProgram, fileObjects]);
 
+  const DocumentPreview = (documentName: string, fileType: string) => {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, width: 220 }}>
+        <div className={styles.documentPreview}>
+          {fileType === "pdf" ? (
+            <Image src="./pdf_icon.svg" width={80} height={80} alt="pdf" />
+          ) : (
+            <Image src="./doc_icon.svg" width={80} height={80} alt="pdf" />
+          )}
+        </div>
+        <div style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>
+          {documentName}
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div style={{ marginLeft: "100px" }}>
-      <h1>Documents</h1>
+    <div>
+      <div style={{ fontSize: 20, marginBottom: 10, fontWeight: 500 }}>Documents</div>
       <div className={styles.nav}>
         <div
-          className={styles.navItem}
-          style={{
-            backgroundColor: selectedProgram === "All" ? "rgba(5, 126, 111, 0.10)" : "white",
-          }}
+          className={selectedProgram === "All" ? styles.navItemSelected : styles.navItem}
           onClick={() => {
             setSelectedProgram("All");
           }}
         >
-          <p>All</p>
+          All
         </div>
         <div
-          className={styles.navItem}
-          style={{
-            backgroundColor:
-              selectedProgram === "BattleBuddies" ? "rgba(5, 126, 111, 0.10)" : "white",
-          }}
+          className={selectedProgram === "BattleBuddies" ? styles.navItemSelected : styles.navItem}
           onClick={() => {
             setSelectedProgram("BattleBuddies");
           }}
         >
-          <p>Battle Buddies</p>
+          Battle Buddies
         </div>
         <div
-          style={{
-            backgroundColor: selectedProgram === "IAdvocacy" ? "rgba(5, 126, 111, 0.10)" : "white",
-          }}
-          className={styles.navItem}
+          className={selectedProgram === "IAdvocacy" ? styles.navItemSelected : styles.navItem}
           onClick={() => {
             setSelectedProgram("IAdvocacy");
           }}
         >
-          <p>I Advocacy</p>
+          I Advocacy
         </div>
         <div
-          style={{
-            backgroundColor:
-              selectedProgram === "OperationWellness" ? "rgba(5, 126, 111, 0.10)" : "white",
-          }}
-          className={styles.navItem}
+          className={
+            selectedProgram === "OperationWellness" ? styles.navItemSelected : styles.navItem
+          }
           onClick={() => {
             setSelectedProgram("OperationWellness");
           }}
         >
-          <p>Operation Wellness</p>
+          Operation Wellness
         </div>
       </div>
 
-      <div>
+      <div className={styles.documentTable}>
         {filteredFiles.map((obj) => (
-          <div key={obj._id}>{obj.filename}</div>
+          <div key={obj._id}>
+            {DocumentPreview(
+              obj.filename,
+              obj.filename.includes(".") ? (obj.filename.split(".").pop() ?? "") : "",
+            )}
+          </div>
         ))}
       </div>
     </div>
