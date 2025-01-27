@@ -1,0 +1,54 @@
+.page {
+  display: flex;
+  width: 100%;
+  padding: var(--Spacing-4xl, 80px) var(--Spacing-3xl, 64px);
+  justify-content: center;
+  align-items: flex-start;
+  flex-shrink: 0;
+  height: 100vh;
+
+  background: var(--Neutral-Base-White, #fafafa);
+}
+
+.frame {
+  display: flex;
+  max-width: 1024px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-2xl, 48px);
+  flex: 1 0 0;
+}
+
+.welcome {
+  color: var(--Text-3, #3a3c3d);
+
+  /* title large */
+  font-family: "Albert Sans";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.temp {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-md, 24px);
+  align-self: stretch;
+}
+
+.temp2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--Spacing-sm, 16px);
+  align-self: stretch;
+}
+
+.temp3 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+}
