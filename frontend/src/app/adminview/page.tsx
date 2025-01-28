@@ -7,7 +7,7 @@ import styles from "./page.module.css";
 
 export default function Home() {
   return (
-    <div>
+    <div className={styles.container}>
       <NavBar />
       <div className={styles.page}>
         <div className={styles.frame}>

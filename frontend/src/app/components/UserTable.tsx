@@ -6,6 +6,7 @@ import { User, getNonAdminUsers } from "../api/users";
 import { UserItem } from "./UserItem";
 import styles from "./UserTable.module.css";
 
+//TODO sorted list
 export function UserTable() {
   const [users, setUsers] = useState<User[]>([]);
   const [tab, setTab] = useState<string>("all");
@@ -20,6 +21,7 @@ export function UserTable() {
           if (result.success) {
             setUsers(result.data);
             setTab(program);
+            setPage(0);
           } else {
             alert(result.error);
           }
@@ -33,6 +35,7 @@ export function UserTable() {
           if (result.success) {
             setUsers(result.data);
             setTab(program);
+            setPage(0);
           } else {
             alert(result.error);
           }
@@ -67,7 +70,7 @@ export function UserTable() {
               handleChangeProgram("all");
             }}
           >
-            <span className={styles.tabText}>All</span>
+            <span>All</span>
           </div>
           <div
             className={tab === "battle buddies" ? styles.selectedTabItem : styles.tabItem}
@@ -75,7 +78,7 @@ export function UserTable() {
               handleChangeProgram("battle buddies");
             }}
           >
-            <span className={styles.tabText}>Battle Buddies</span>
+            <span>Battle Buddies</span>
           </div>
           <div
             className={tab === "advocacy" ? styles.selectedTabItem : styles.tabItem}
@@ -83,7 +86,7 @@ export function UserTable() {
               handleChangeProgram("advocacy");
             }}
           >
-            <span className={styles.tabText}>Advocacy</span>
+            <span>Advocacy</span>
           </div>
           <div
             className={tab === "operation wellness" ? styles.selectedTabItem : styles.tabItem}
@@ -91,7 +94,7 @@ export function UserTable() {
               handleChangeProgram("operation wellness");
             }}
           >
-            <span className={styles.tabText}>Operation Wellness</span>
+            <span>Operation Wellness</span>
           </div>
         </div>
       </div>
@@ -112,7 +115,7 @@ export function UserTable() {
               <span className={styles.tableHeaderText}>Assigned to</span>
             </div>
           </div>
-          {users.slice(page, page + pageSize).map((user) => (
+          {users.slice(page * pageSize, (page + 1) * pageSize).map((user) => (
             <UserItem
               key={user._id}
               user={{

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { User } from "../api/users";
 
 import { Program } from "./Program";
@@ -24,28 +26,33 @@ export function UserItem({ user }: UserItemProp) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.verticalDivider}></div>
-      <div className={styles.name}>
-        <div className={styles.nameFrame}>
-          <span className={styles.nameText}>{`${user.firstName} ${user.lastName}`}</span>
-          <span className={styles.emailText}>{user.email}</span>
+      {/* Placeholder link  */}
+      <Link href="/profile" className={styles.link}>
+        <div className={styles.verticalDivider}></div>
+        <div className={styles.name}>
+          <div className={styles.nameFrame}>
+            <span className={styles.nameText}>{`${user.firstName} ${user.lastName}`}</span>
+            <span className={styles.emailText}>{user.email}</span>
+          </div>
         </div>
-      </div>
-      <div className={styles.role}>
-        <Role role={user.role} />
-      </div>
-      <div className={styles.program}>
-        <div className={styles.programList}>
-          {user.assignedPrograms.includes("battle buddies") && <Program program="battle buddies" />}
-          {user.assignedPrograms.includes("advocacy") && <Program program="advocacy" />}
-          {user.assignedPrograms.includes("operation wellness") && (
-            <Program program="operation wellness" />
-          )}
+        <div className={styles.role}>
+          <Role role={user.role} />
         </div>
-      </div>
-      <div className={styles.assignedTo}>
-        <span className={assignedStyle}>{assignedText}</span>
-      </div>
+        <div className={styles.program}>
+          <div className={styles.programList}>
+            {user.assignedPrograms.includes("battle buddies") && (
+              <Program program="battle buddies" />
+            )}
+            {user.assignedPrograms.includes("advocacy") && <Program program="advocacy" />}
+            {user.assignedPrograms.includes("operation wellness") && (
+              <Program program="operation wellness" />
+            )}
+          </div>
+        </div>
+        <div className={styles.assignedTo}>
+          <span className={assignedStyle}>{assignedText}</span>
+        </div>
+      </Link>
     </div>
   );
 }

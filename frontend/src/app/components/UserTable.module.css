@@ -54,6 +54,13 @@
   align-items: center;
 
   border-bottom: 1px solid var(--Stroke-1, #edf1f5);
+
+  /* body large */
+  font-family: "Albert Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .tabItem {
@@ -66,6 +73,8 @@
   border-radius: var(--Spacing-s, 8px) var(--Spacing-s, 8px) 0px 0px;
   border-bottom: 1px solid var(--Stroke-1, #edf1f5);
   background: var(--Neutral-Base-White, #fafafa);
+
+  color: var(--Text-1, #60696f);
 }
 
 .tabItem:hover {
@@ -87,17 +96,9 @@
   border-radius: var(--Spacing-s, 8px) var(--Spacing-s, 8px) 0px 0px;
   border-bottom: 1.5px solid var(--Primary, #057e6f);
   background: rgba(5, 126, 111, 0.1);
-}
 
-.tabText {
-  color: var(--Text-1, #60696f);
-
-  /* body large */
-  font-family: "Albert Sans";
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
+  color: var(--Primary, #057e6f);
+  font-weight: 600;
 }
 
 .table {
@@ -219,6 +220,10 @@
   border-radius: 8px;
   border: 1px solid var(--Stroke-2, #d0d7de);
   background: #fff;
+}
+
+.arrowBox:hover {
+  cursor: pointer;
 }
 
 .arrowBoxDisabled {

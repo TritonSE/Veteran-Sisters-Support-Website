@@ -7,6 +7,14 @@
   border-bottom: 1px solid var(--Stroke-1, #edf1f5);
 }
 
+.link {
+  display: flex;
+  align-items: flex-start;
+  align-self: stretch;
+
+  width: 1024px;
+}
+
 .verticalDivider {
   width: 1px;
   align-self: stretch;
