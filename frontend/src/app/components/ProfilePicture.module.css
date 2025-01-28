@@ -1,0 +1,12 @@
+.defaultProfileIcon {
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 48px;
+  background: var(--Background-3, #e9ebed);
+  font-size: 48px;
+  color: var(--Text-3, #3a3c3d);
+}

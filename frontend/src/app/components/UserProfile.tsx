@@ -2,6 +2,7 @@
 import { getUserProfile, Role } from "../api/profileApi";
 import { useEffect, useState } from "react";
 import ProfileHeader from "@/app/components/ProfileHeader";
+import styles from "./UserProfile.module.css";
 
 export default function UserProfile({ userId }: { userId: string }) {
   const [viewingRole, setViewingRole] = useState(Role.STAFF as string);
@@ -13,24 +14,27 @@ export default function UserProfile({ userId }: { userId: string }) {
   }, [viewingRole]);
 
   return (
-    <div>
-      <label htmlFor="roleViewing">Role Viewing</label>
-      <select
-        id="roleViewing"
-        value={viewingRole}
-        onChange={(event) => setViewingRole(event.target.value)}
-      >
-        <option value={Role.STAFF}>Staff</option>
-        <option value={Role.VOLUNTEER}>Volunteer</option>
-      </select>
-      <label htmlFor="roleViewing">Viewer Role</label>
-      <select
-        id="roleViewing"
-        value={viewingRole}
-        onChange={(event) => setViewerRole(event.target.value)}
-      >
-        <option value={Role.ADMIN}>Admin</option>
-      </select>
+    <div className={styles.userProfile}>
+      <div className={styles.viewerViewingSelector}>
+        <label htmlFor="roleViewing">Role Viewing</label>
+        <select
+          id="roleViewing"
+          value={viewingRole}
+          onChange={(event) => setViewingRole(event.target.value)}
+        >
+          <option value={Role.STAFF}>Staff</option>
+          <option value={Role.VOLUNTEER}>Volunteer</option>
+        </select>
+        <label htmlFor="roleViewing">Viewer Role</label>
+        <select
+          id="roleViewing"
+          value={viewingRole}
+          onChange={(event) => setViewerRole(event.target.value)}
+        >
+          <option value={Role.ADMIN}>Admin</option>
+        </select>
+      </div>
+      <div className={styles.profileHeading}>Profile Information</div>
       <ProfileHeader
         firstName={userProfile.firstName}
         lastName={userProfile.lastName}
@@ -39,7 +43,6 @@ export default function UserProfile({ userId }: { userId: string }) {
         yearJoined={userProfile.yearJoined}
         age={userProfile.age}
         phoneNumber={userProfile.phoneNumber}
-        profilePictureUrl={userProfile.profilePictureUrl}
         gender={userProfile.gender}
         email={userProfile.email}
       />

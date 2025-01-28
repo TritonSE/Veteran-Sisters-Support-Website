@@ -1,0 +1,55 @@
+.profileHeader {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+}
+
+.profileContent {
+  display: flex;
+  gap: 24px;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--Spacing-s, 8px);
+}
+
+.userInfoHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--Spacing-sm, 16px);
+}
+
+.userFullName {
+  color: var(--Text-3, #3a3c3d);
+
+  /* title medium */
+  font-family: "Albert Sans";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.userMetadata {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--Spacing-s, 8px);
+  flex-wrap: wrap;
+  max-width: 326px;
+}
+
+.userMetadata * {
+  width: fit-content;
+  color: var(--Text-1, #60696f);
+  /* body large */
+  font-family: "Albert Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.userMetadata .smallMetadata {
+  font-size: 14px;
+}
