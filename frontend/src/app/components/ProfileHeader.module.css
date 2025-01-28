@@ -1,7 +1,7 @@
 .profileHeader {
   display: flex;
-  flex: 1 0 0;
-  flex-direction: column;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .profileContent {
@@ -13,6 +13,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--Spacing-s, 8px);
+  justify-content: center;
 }
 
 .userInfoHeader {
@@ -31,15 +32,20 @@
   font-weight: 500;
   line-height: normal;
 }
+
 .userMetadata {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   gap: var(--Spacing-s, 8px);
   flex-wrap: wrap;
-  max-width: 326px;
 }
 
-.userMetadata * {
+.userMetadata .metadataSubsection {
+  display: flex;
+}
+
+.userMetadata .metadataSubsection * {
   width: fit-content;
   color: var(--Text-1, #60696f);
   /* body large */
@@ -52,4 +58,10 @@
 
 .userMetadata .smallMetadata {
   font-size: 14px;
+}
+
+.profileContentControls {
+  display: flex;
+  padding: var(--Spacing-s, 8px) 0px;
+  gap: var(--Spacing-s, 8px);
 }

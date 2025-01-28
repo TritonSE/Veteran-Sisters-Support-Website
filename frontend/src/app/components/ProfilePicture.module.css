@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 96px;
+  min-width: 96px;
   height: 96px;
   border-radius: 48px;
   background: var(--Background-3, #e9ebed);

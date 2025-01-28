@@ -1,6 +1,9 @@
 import styles from "./ProfileHeader.module.css";
-import { Role, AssignedProgram } from "../api/profileApi";
+import { Role as RoleType, AssignedProgram } from "../api/profileApi";
 import { ProfilePicture } from "./ProfilePicture";
+import { Role } from "./Role";
+import { Program } from "./Program";
+import { Button } from "./Button";
 
 function Divider() {
   return (
@@ -16,7 +19,7 @@ function Divider() {
 export default function ProfileHeader(params: {
   firstName: string;
   lastName: string;
-  role: Role;
+  role: RoleType;
   assignedPrograms: AssignedProgram[];
   yearJoined: number;
   age: number;
@@ -46,19 +49,31 @@ export default function ProfileHeader(params: {
         <div className={styles.userInfo}>
           <div className={styles.userInfoHeader}>
             <div className={styles.userFullName}>{fullName}</div>
+            <Role role={role} />
+            {assignedPrograms.map((program) => (
+              <Program program={program} key={program} />
+            ))}
           </div>
           <div className={styles.userMetadata}>
-            <div>{joinedText}</div>
-            <Divider />
-            <div>{ageText}</div>
-            <Divider />
-            <div>{genderText}</div>
-            <Divider />
-            <div className={styles.smallMetadata}>{email}</div>
-            <Divider />
-            <div className={styles.smallMetadata}>{phoneNumber}</div>
+            <div className={styles.metadataSubsection}>
+              <div>{joinedText}</div>
+              <Divider />
+              <div>{ageText}</div>
+              <Divider />
+              <div>{genderText}</div>
+            </div>
+
+            <div className={styles.metadataSubsection}>
+              <div className={styles.smallMetadata}>{email}</div>
+              <Divider />
+              <div className={styles.smallMetadata}>{phoneNumber}</div>
+            </div>
           </div>
         </div>
+      </div>
+      <div className={styles.profileContentControls}>
+        <Button text={"Edit Program"} />
+        <Button text={"Change Role"} />
       </div>
     </div>
   );
