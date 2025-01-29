@@ -21,10 +21,10 @@ export default function ProfileHeader(params: {
   lastName: string;
   role: RoleType;
   assignedPrograms: AssignedProgram[];
-  yearJoined: number;
-  age: number;
-  phoneNumber: string;
-  gender: String;
+  yearJoined?: number;
+  age?: number;
+  phoneNumber?: string;
+  gender?: String;
   email: String;
 }) {
   const {
@@ -42,6 +42,7 @@ export default function ProfileHeader(params: {
   const joinedText = `Joined: ${yearJoined}`;
   const ageText = `Age: ${age}`;
   const genderText = `Gender: ${gender}`;
+  assignedPrograms.sort();
   return (
     <div className={styles.profileHeader}>
       <div className={styles.profileContent}>

@@ -5,6 +5,7 @@
   align-items: flex-start;
   gap: var(--Spacing-md, 24px);
   max-width: 1024px;
+  text-wrap: nowrap;
 }
 
 .viewerViewingSelector {
@@ -21,5 +22,116 @@
   font-size: 24px;
   font-style: normal;
   font-weight: 500;
+  line-height: normal;
+}
+
+.userProfileContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--Spacing-2xl, 48px);
+  align-self: stretch;
+}
+
+.userList {
+  display: flex;
+  width: 1024px;
+  padding: 24px 24px var(--Spacing-l, 32px) 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-sm, 16px);
+
+  border-radius: 8px;
+  border: 1px solid var(--Stroke-2, #d0d7de);
+  background: #fff;
+}
+
+.userListHeading {
+  color: var(--Text-3, #3a3c3d);
+  font-family: "Albert Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.userListContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-md, 24px);
+  align-self: stretch;
+}
+
+.userList .programSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+
+.userList .programSectionHeader {
+  display: flex;
+  gap: 8px;
+}
+
+.userList .userCountBall {
+  padding: 4px 8px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+
+  color: var(--Neutral-Base-White, #fafafa);
+  font-family: "Albert Sans";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.userList .userCountBall.battleBuddies {
+  background: var(--Battle-Buddies, #92400e);
+}
+.userList .userCountBall.advocacy {
+  background: #3730a3;
+}
+.userList .userCountBall.operationalWellness {
+  /* TODO: WHAT SHOULD THIS COLOR BE? */
+  background-color: black;
+}
+
+.userList .userInfo {
+  display: flex;
+  padding-bottom: var(--Spacing-sm, 16px);
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 4px;
+  align-self: stretch;
+}
+
+.userList .userInfo:not(:last-child) {
+  border-bottom: 1px solid var(--Stroke-1, #edf1f5);
+}
+
+.userList .fullName {
+  color: var(--Text-2, #4d5358);
+  /* body medium */
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.userList .email {
+  color: var(--Text-1, #60696f);
+  /* body small */
+  font-family: "Albert Sans";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
   line-height: normal;
 }

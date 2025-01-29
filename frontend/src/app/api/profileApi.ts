@@ -2,13 +2,13 @@ export type UserProfile = {
   email: string;
   firstName: string;
   lastName: string;
-  profilePictureUrl: string;
   assignedPrograms: AssignedProgram[];
-  yearJoined: number;
-  age: number;
-  gender: string;
-  phoneNumber: string;
+  yearJoined?: number;
+  age?: number;
+  gender?: string;
+  phoneNumber?: string;
   role: Role;
+  assignedUsers?: UserProfile[];
   veteransUnderPointOfContact?: Veteran[];
   assignedVeterans?: Veteran[];
 };
@@ -17,7 +17,7 @@ export type Veteran = {
   firstName: string;
   lastName: string;
   email: string;
-  assignedProgram: AssignedProgram;
+  assignedPrograms: AssignedProgram;
 };
 
 export enum AssignedProgram {
@@ -38,49 +38,54 @@ function getStaffProfile(): UserProfile {
     email: "lcfriedman@ucsd.edu",
     firstName: "Leo",
     lastName: "Friedman",
-    profilePictureUrl: "",
     assignedPrograms: [AssignedProgram.BATTLE_BUDDIES, AssignedProgram.ADVOCACY],
     yearJoined: 2012,
     age: 22,
     gender: "Male",
     phoneNumber: "(012) 345-6789",
     role: Role.STAFF,
-    veteransUnderPointOfContact: [
+    assignedUsers: [
       {
         firstName: "Johnny",
         lastName: "Appleseed",
         email: "johnny@appleseed.com",
-        assignedProgram: AssignedProgram.ADVOCACY,
+        role: Role.VETERAN,
+        assignedPrograms: [AssignedProgram.ADVOCACY],
       },
       {
         firstName: "Johnny",
         lastName: "Appleseed",
         email: "johnny@appleseed.com",
-        assignedProgram: AssignedProgram.ADVOCACY,
+        role: Role.VETERAN,
+        assignedPrograms: [AssignedProgram.ADVOCACY],
       },
       {
         firstName: "Johnny",
         lastName: "Appleseed",
         email: "johnny@appleseed.com",
-        assignedProgram: AssignedProgram.BATTLE_BUDDIES,
+        role: Role.VETERAN,
+        assignedPrograms: [AssignedProgram.BATTLE_BUDDIES],
       },
       {
         firstName: "Johnny",
         lastName: "Appleseed",
         email: "johnny@appleseed.com",
-        assignedProgram: AssignedProgram.BATTLE_BUDDIES,
+        role: Role.VETERAN,
+        assignedPrograms: [AssignedProgram.BATTLE_BUDDIES],
       },
       {
         firstName: "Johnny",
         lastName: "Appleseed",
         email: "johnny@appleseed.com",
-        assignedProgram: AssignedProgram.BATTLE_BUDDIES,
+        role: Role.VETERAN,
+        assignedPrograms: [AssignedProgram.BATTLE_BUDDIES],
       },
       {
         firstName: "Johnny",
         lastName: "Appleseed",
         email: "johnny@appleseed.com",
-        assignedProgram: AssignedProgram.BATTLE_BUDDIES,
+        role: Role.VETERAN,
+        assignedPrograms: [AssignedProgram.BATTLE_BUDDIES],
       },
     ],
   };
@@ -91,7 +96,6 @@ function getVolunteerProfile(): UserProfile {
     email: "lcfriedman@ucsd.edu",
     firstName: "Leo",
     lastName: "Friedman",
-    profilePictureUrl: "",
     assignedPrograms: [
       AssignedProgram.BATTLE_BUDDIES,
       AssignedProgram.ADVOCACY,
@@ -102,42 +106,49 @@ function getVolunteerProfile(): UserProfile {
     gender: "Male",
     phoneNumber: "(012) 345-6789",
     role: Role.VOLUNTEER,
-    assignedVeterans: [
+    assignedUsers: [
       {
         firstName: "Johnny",
         lastName: "Appleseed",
         email: "johnny@appleseed.com",
-        assignedProgram: AssignedProgram.ADVOCACY,
+        role: Role.VETERAN,
+        assignedPrograms: [AssignedProgram.ADVOCACY],
       },
       {
         firstName: "Johnny",
         lastName: "Appleseed",
         email: "johnny@appleseed.com",
-        assignedProgram: AssignedProgram.ADVOCACY,
+        role: Role.VETERAN,
+
+        assignedPrograms: [AssignedProgram.ADVOCACY],
       },
       {
         firstName: "Johnny",
         lastName: "Appleseed",
         email: "johnny@appleseed.com",
-        assignedProgram: AssignedProgram.OPERATION_WELLNESS,
+        role: Role.VETERAN,
+        assignedPrograms: [AssignedProgram.OPERATION_WELLNESS],
       },
       {
         firstName: "Johnny",
         lastName: "Appleseed",
         email: "johnny@appleseed.com",
-        assignedProgram: AssignedProgram.OPERATION_WELLNESS,
+        role: Role.VETERAN,
+        assignedPrograms: [AssignedProgram.OPERATION_WELLNESS],
       },
       {
         firstName: "Johnny",
         lastName: "Appleseed",
         email: "johnny@appleseed.com",
-        assignedProgram: AssignedProgram.OPERATION_WELLNESS,
+        role: Role.VETERAN,
+        assignedPrograms: [AssignedProgram.OPERATION_WELLNESS],
       },
       {
         firstName: "Johnny",
         lastName: "Appleseed",
         email: "johnny@appleseed.com",
-        assignedProgram: AssignedProgram.BATTLE_BUDDIES,
+        role: Role.VETERAN,
+        assignedPrograms: [AssignedProgram.BATTLE_BUDDIES],
       },
     ],
   };
