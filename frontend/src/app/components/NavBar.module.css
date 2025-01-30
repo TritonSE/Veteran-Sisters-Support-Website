@@ -1,0 +1,68 @@
+.container {
+  display: flex;
+  height: 100%;
+  padding: var(--Spacing-4xl, 80px) var(--Spacing-sm, 16px);
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border-right: 1px solid var(--Stroke-1, #edf1f5);
+  background: var(--Background-1, #fff);
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.navMenu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.profile {
+  display: flex;
+  padding-bottom: var(--Spacing-sm, 16px);
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-bottom: 1.5px solid #d6dade;
+}
+
+.profileFrame {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  padding: 4px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+
+.homeFrame {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.homeBackground {
+  display: flex;
+  padding: 7.111px;
+  align-items: center;
+  gap: 7.111px;
+  border-radius: var(--Spacing-s, 8px);
+  background: var(--Background-4, #d6dade);
+}
+
+.logoutFrame {
+  width: 22px;
+  height: 22px;
+}
