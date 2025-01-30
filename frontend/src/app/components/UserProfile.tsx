@@ -4,8 +4,9 @@ import {
   getUserProfile,
   Role as RoleEnum,
   AssignedProgram as AssignedProgramEnum,
-  Role,
 } from "../api/profileApi";
+
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import ProfileHeader from "@/app/components/ProfileHeader";
 import styles from "./UserProfile.module.css";
@@ -83,14 +84,18 @@ export default function UserProfile({ userId }: { userId: string }) {
           gender={userProfile.gender}
           email={userProfile.email}
         />
-        <UserList userGroups={sortedUserGroups} title={userListTitle} />
+        <UserList userGroups={sortedUserGroups} title={userListTitle} editable={true} />
       </div>
     </div>
   );
 }
 
-function UserList(params: { userGroups: [string, UserProfileType[]][]; title: string }) {
-  const { title, userGroups } = params;
+function UserList(params: {
+  userGroups: [string, UserProfileType[]][];
+  title: string;
+  editable: boolean;
+}) {
+  const { title, userGroups, editable } = params;
 
   function programToClassName(program: string) {
     switch (program) {
@@ -107,7 +112,19 @@ function UserList(params: { userGroups: [string, UserProfileType[]][]; title: st
 
   return (
     <div className={styles.userList}>
-      <div className={styles.userListHeading}>{title}</div>
+      <div className={styles.userListHeader}>
+        <div className={styles.userListHeading}>{title}</div>
+        {editable && (
+          <div className={styles.addUser}>
+            <Image
+              src="/pajamas_assignee_icon.svg"
+              width={16}
+              height={16}
+              alt="Assign User"
+            ></Image>
+          </div>
+        )}
+      </div>
       <div className={styles.userListContent}>
         {userGroups.map(([program, users]) => {
           return (
@@ -123,8 +140,18 @@ function UserList(params: { userGroups: [string, UserProfileType[]][]; title: st
                   const fullName = `${user.firstName} ${user.lastName}`;
                   return (
                     <div key={ind} className={styles.userInfo}>
-                      <div className={styles.fullName}>{fullName}</div>
-                      <div className={styles.email}>{user.email}</div>
+                      <div>
+                        <div className={styles.fullName}>{fullName}</div>
+                        <div className={styles.email}>{user.email}</div>
+                      </div>
+                      {editable && (
+                        <Image
+                          src="/trash_icon.svg"
+                          width={20}
+                          height={20}
+                          alt="Remove User"
+                        ></Image>
+                      )}
                     </div>
                   );
                 })

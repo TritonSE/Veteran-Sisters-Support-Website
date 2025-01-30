@@ -47,6 +47,12 @@
   background: #fff;
 }
 
+.userList .userListHeader {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .userListHeading {
   color: var(--Text-3, #3a3c3d);
   font-family: "Albert Sans";
@@ -54,6 +60,19 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+.userList .addUser {
+  display: flex;
+  height: 34px;
+  padding: var(--Spacing-sm, 16px) 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+
+  border-radius: var(--Spacing-sm, 16px);
+  border: 1px solid var(--Primary, #057e6f);
+  background: var(--Primary, #057e6f);
 }
 
 .userListContent {
@@ -105,9 +124,8 @@
 .userList .userInfo {
   display: flex;
   padding-bottom: var(--Spacing-sm, 16px);
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
+  justify-content: space-between;
+  align-items: center;
   gap: 4px;
   align-self: stretch;
 }
