@@ -26,6 +26,7 @@ export default function ProfileHeader(params: {
   phoneNumber?: string;
   gender?: String;
   email: String;
+  profileControls: any[];
 }) {
   const {
     firstName,
@@ -37,6 +38,7 @@ export default function ProfileHeader(params: {
     phoneNumber,
     gender,
     email,
+    profileControls,
   } = params;
   const fullName = `${firstName} ${lastName}`;
   const joinedText = `Joined: ${yearJoined}`;
@@ -72,10 +74,7 @@ export default function ProfileHeader(params: {
           </div>
         </div>
       </div>
-      <div className={styles.profileContentControls}>
-        <Button text={"Edit Program"} />
-        <Button text={"Change Role"} />
-      </div>
+      <div className={styles.profileContentControls}>{profileControls}</div>
     </div>
   );
 }

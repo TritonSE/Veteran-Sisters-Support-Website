@@ -6,20 +6,69 @@ import {
   AssignedProgram as AssignedProgramEnum,
 } from "../api/profileApi";
 
+import { Button } from "@/app/components/Button";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import ProfileHeader from "@/app/components/ProfileHeader";
 import styles from "./UserProfile.module.css";
 import { Program } from "./Program";
 
+interface ProfileRenderingContext {
+  profileControls: any[];
+  showUserList: boolean;
+  userListTitle: string;
+  userListEditable: boolean;
+  viewingPersonalProfile: boolean;
+}
+
+function getProfileRenderingContext(
+  viewerRole: string,
+  viewingRole: string,
+): ProfileRenderingContext {
+  const context: ProfileRenderingContext = {
+    profileControls: [],
+    showUserList: false,
+    userListTitle: "",
+    userListEditable: false,
+    viewingPersonalProfile: false,
+  };
+  context.viewingPersonalProfile = viewerRole == viewingRole;
+  context.profileControls = context.viewingPersonalProfile
+    ? [<Button text="Edit profile" />]
+    : viewerRole == RoleEnum.ADMIN
+      ? [<Button text={"Edit Program"} />, <Button text={"Change Role"} />]
+      : [];
+  context.showUserList = !(viewerRole === RoleEnum.ADMIN && viewingRole === RoleEnum.ADMIN);
+
+  context.userListTitle =
+    viewingRole === RoleEnum.VETERAN || viewingRole === RoleEnum.VOLUNTEER
+      ? "Assigned veterans"
+      : viewingRole === RoleEnum.STAFF
+        ? "Veterans Under Point of Contact"
+        : "";
+
+  context.userListEditable =
+    ((viewerRole === RoleEnum.ADMIN || viewerRole === RoleEnum.STAFF) &&
+      viewingRole === RoleEnum.VETERAN) ||
+    viewingRole === RoleEnum.VOLUNTEER;
+  return context;
+}
+
 export default function UserProfile({ userId }: { userId: string }) {
-  const [viewingRole, setViewingRole] = useState(RoleEnum.STAFF as string);
-  const [veiwerRole, setViewerRole] = useState(RoleEnum.ADMIN as string);
+  const defaultViewingRole = RoleEnum.STAFF as string;
+  const defaultViewerRole = RoleEnum.ADMIN as string;
+
+  const [viewingRole, setViewingRole] = useState(defaultViewingRole);
+  const [veiwerRole, setViewerRole] = useState(defaultViewerRole);
   const [userProfile, setUserProfile] = useState(getUserProfile(viewingRole));
+  const [profileRenderingContext, setProfileRenderingContext] = useState(
+    getProfileRenderingContext(defaultViewerRole, defaultViewingRole),
+  );
 
   useEffect(() => {
     setUserProfile(getUserProfile(viewingRole));
-  }, [viewingRole]);
+    setProfileRenderingContext(getProfileRenderingContext(veiwerRole, viewingRole));
+  }, [viewingRole, veiwerRole]);
 
   // Users for user list
   const emptyUserGroups: { [key: string]: UserProfileType[] } = userProfile.assignedPrograms.reduce(
@@ -45,9 +94,6 @@ export default function UserProfile({ userId }: { userId: string }) {
 
   const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(userGroups).slice().sort();
 
-  const userListTitle =
-    viewingRole == RoleEnum.STAFF ? "Veterans Under Point of Contact" : "Assigned Veterans";
-
   return (
     <div className={styles.userProfile}>
       <div className={styles.viewerViewingSelector}>
@@ -65,12 +111,18 @@ export default function UserProfile({ userId }: { userId: string }) {
           value={viewingRole}
           onChange={(event) => setViewingRole(event.target.value)}
         >
+          <option value={RoleEnum.ADMIN}>Admin</option>
           <option value={RoleEnum.STAFF}>Staff</option>
           <option value={RoleEnum.VOLUNTEER}>Volunteer</option>
         </select>
       </div>
-      {viewingRole === veiwerRole && (
+      {profileRenderingContext.viewingPersonalProfile ? (
         <div className={styles.profileHeading}>Profile Information</div>
+      ) : (
+        <div className={styles.navigateBack}>
+          <Image src="/back_arrow_icon.svg" width={18} height={18} alt="Go back" />
+          <div> Back</div>
+        </div>
       )}
       <div className={styles.userProfileContent}>
         <ProfileHeader
@@ -83,8 +135,15 @@ export default function UserProfile({ userId }: { userId: string }) {
           phoneNumber={userProfile.phoneNumber}
           gender={userProfile.gender}
           email={userProfile.email}
+          profileControls={profileRenderingContext.profileControls}
         />
-        <UserList userGroups={sortedUserGroups} title={userListTitle} editable={true} />
+        {profileRenderingContext.showUserList && (
+          <UserList
+            userGroups={sortedUserGroups}
+            title={profileRenderingContext.userListTitle}
+            editable={profileRenderingContext.userListEditable}
+          />
+        )}
       </div>
     </div>
   );

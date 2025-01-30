@@ -25,6 +25,12 @@
   line-height: normal;
 }
 
+.navigateBack {
+  display: flex;
+  gap: 8px;
+  padding-bottom: var(--Spacing-xs, 4px);
+}
+
 .userProfileContent {
   display: flex;
   flex-direction: column;
