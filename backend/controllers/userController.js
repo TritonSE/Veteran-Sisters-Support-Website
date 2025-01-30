@@ -38,16 +38,19 @@ export const getUserByEmail = async (req, res) => {
 
 export const addUser = async (req, res) => {
   try {
-    const { email, firstName, lastName, role, assignedPrograms, assignedVeterans } = req.body;
+    const { email, phoneNumber, firstName, lastName, role, address, roleSpecificInfo, assignedPrograms, assignedVeterans } = req.body;
     const existingUser = await User.findOne({ email }).exec();
     if (existingUser) {
       res.status(409).json({ error: "User with that email already exists" });
     } else {
       const newUser = await User.create({
         email,
+        phoneNumber,
         firstName,
         lastName,
         role,
+        address,
+        roleSpecificInfo,
         assignedPrograms,
         assignedVeterans,
       });
