@@ -44,50 +44,7 @@ function getStaffProfile(): UserProfile {
     gender: "Male",
     phoneNumber: "(012) 345-6789",
     role: Role.STAFF,
-    assignedUsers: [
-      {
-        firstName: "Johnny",
-        lastName: "Appleseed",
-        email: "johnny@appleseed.com",
-        role: Role.VETERAN,
-        assignedPrograms: [AssignedProgram.ADVOCACY],
-      },
-      {
-        firstName: "Johnny",
-        lastName: "Appleseed",
-        email: "johnny@appleseed.com",
-        role: Role.VETERAN,
-        assignedPrograms: [AssignedProgram.ADVOCACY],
-      },
-      {
-        firstName: "Johnny",
-        lastName: "Appleseed",
-        email: "johnny@appleseed.com",
-        role: Role.VETERAN,
-        assignedPrograms: [AssignedProgram.BATTLE_BUDDIES],
-      },
-      {
-        firstName: "Johnny",
-        lastName: "Appleseed",
-        email: "johnny@appleseed.com",
-        role: Role.VETERAN,
-        assignedPrograms: [AssignedProgram.BATTLE_BUDDIES],
-      },
-      {
-        firstName: "Johnny",
-        lastName: "Appleseed",
-        email: "johnny@appleseed.com",
-        role: Role.VETERAN,
-        assignedPrograms: [AssignedProgram.BATTLE_BUDDIES],
-      },
-      {
-        firstName: "Johnny",
-        lastName: "Appleseed",
-        email: "johnny@appleseed.com",
-        role: Role.VETERAN,
-        assignedPrograms: [AssignedProgram.BATTLE_BUDDIES],
-      },
-    ],
+    assignedUsers: exampleUsers,
   };
 }
 
@@ -106,53 +63,48 @@ function getVolunteerProfile(): UserProfile {
     gender: "Male",
     phoneNumber: "(012) 345-6789",
     role: Role.VOLUNTEER,
-    assignedUsers: [
-      {
-        firstName: "Johnny",
-        lastName: "Appleseed",
-        email: "johnny@appleseed.com",
-        role: Role.VETERAN,
-        assignedPrograms: [AssignedProgram.ADVOCACY],
-      },
-      {
-        firstName: "Johnny",
-        lastName: "Appleseed",
-        email: "johnny@appleseed.com",
-        role: Role.VETERAN,
-
-        assignedPrograms: [AssignedProgram.ADVOCACY],
-      },
-      {
-        firstName: "Johnny",
-        lastName: "Appleseed",
-        email: "johnny@appleseed.com",
-        role: Role.VETERAN,
-        assignedPrograms: [AssignedProgram.OPERATION_WELLNESS],
-      },
-      {
-        firstName: "Johnny",
-        lastName: "Appleseed",
-        email: "johnny@appleseed.com",
-        role: Role.VETERAN,
-        assignedPrograms: [AssignedProgram.OPERATION_WELLNESS],
-      },
-      {
-        firstName: "Johnny",
-        lastName: "Appleseed",
-        email: "johnny@appleseed.com",
-        role: Role.VETERAN,
-        assignedPrograms: [AssignedProgram.OPERATION_WELLNESS],
-      },
-      {
-        firstName: "Johnny",
-        lastName: "Appleseed",
-        email: "johnny@appleseed.com",
-        role: Role.VETERAN,
-        assignedPrograms: [AssignedProgram.BATTLE_BUDDIES],
-      },
-    ],
+    assignedUsers: exampleUsers,
   };
 }
+
+const exampleUsers = [
+  {
+    firstName: "Johnny",
+    lastName: "Appleseed",
+    email: "johnny@appleseed.com",
+    role: Role.VETERAN,
+    assignedPrograms: [AssignedProgram.ADVOCACY],
+  },
+  {
+    firstName: "Johnny",
+    lastName: "Appleseed",
+    email: "johnny@appleseed.com",
+    role: Role.VETERAN,
+
+    assignedPrograms: [AssignedProgram.ADVOCACY],
+  },
+  {
+    firstName: "Johnny",
+    lastName: "Appleseed",
+    email: "johnny@appleseed.com",
+    role: Role.VETERAN,
+    assignedPrograms: [AssignedProgram.OPERATION_WELLNESS],
+  },
+  {
+    firstName: "Johnny",
+    lastName: "Appleseed",
+    email: "johnny@appleseed.com",
+    role: Role.VETERAN,
+    assignedPrograms: [AssignedProgram.OPERATION_WELLNESS],
+  },
+  {
+    firstName: "Johnny",
+    lastName: "Appleseed",
+    email: "johnny@appleseed.com",
+    role: Role.VETERAN,
+    assignedPrograms: [AssignedProgram.OPERATION_WELLNESS],
+  },
+];
 
 export function getUserProfile(role: string): UserProfile {
   switch (role) {

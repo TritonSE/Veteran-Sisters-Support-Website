@@ -20,6 +20,33 @@ export default function UserProfile({ userId }: { userId: string }) {
     setUserProfile(getUserProfile(viewingRole));
   }, [viewingRole]);
 
+  // Users for user list
+  const emptyUserGroups: { [key: string]: UserProfileType[] } = userProfile.assignedPrograms.reduce(
+    (accumulator: { [key: string]: UserProfileType[] }, program: string) => {
+      accumulator[program] = [];
+      return accumulator;
+    },
+    {},
+  );
+
+  const assignedUsers = userProfile.assignedUsers || [];
+  const userGroups: { [key: string]: UserProfileType[] } = assignedUsers.reduce(
+    (accumulator, user) => {
+      user.assignedPrograms.forEach((program: string) => {
+        if (program in accumulator) {
+          accumulator[program].push(user);
+        }
+      });
+      return accumulator;
+    },
+    emptyUserGroups,
+  );
+
+  const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(userGroups).slice().sort();
+
+  const userListTitle =
+    viewingRole == RoleEnum.STAFF ? "Veterans Under Point of Contact" : "Assigned Veterans";
+
   return (
     <div className={styles.userProfile}>
       <div className={styles.viewerViewingSelector}>
@@ -56,14 +83,14 @@ export default function UserProfile({ userId }: { userId: string }) {
           gender={userProfile.gender}
           email={userProfile.email}
         />
-        <UserList users={userProfile.assignedUsers || []} title="Veterans Under Point of Contact" />
+        <UserList userGroups={sortedUserGroups} title={userListTitle} />
       </div>
     </div>
   );
 }
 
-function UserList(params: { users: UserProfileType[]; title: string }) {
-  const { title, users } = params;
+function UserList(params: { userGroups: [string, UserProfileType[]][]; title: string }) {
+  const { title, userGroups } = params;
 
   function programToClassName(program: string) {
     switch (program) {
@@ -78,46 +105,32 @@ function UserList(params: { users: UserProfileType[]; title: string }) {
     }
   }
 
-  const groupedUserItems = users.reduce(
-    (accumulator: { [key: string]: UserProfileType[] }, user: UserProfileType) => {
-      user.assignedPrograms.forEach((program) => {
-        if (!(program in accumulator)) {
-          accumulator[program] = [];
-        }
-        accumulator[program].push(user);
-      });
-      return accumulator;
-    },
-    {},
-  );
-
-  const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(groupedUserItems).map(
-    ([program, users]) => [program, users],
-  );
-  sortedUserGroups.sort();
-
   return (
     <div className={styles.userList}>
       <div className={styles.userListHeading}>{title}</div>
       <div className={styles.userListContent}>
-        {sortedUserGroups.map(([program, users]) => {
+        {userGroups.map(([program, users]) => {
           return (
-            <div className={styles.programSection}>
+            <div key={program} className={styles.programSection}>
               <div className={styles.programSectionHeader}>
                 <Program program={program} />
                 <div className={`${styles.userCountBall} ${styles[programToClassName(program)]}`}>
                   {users.length}
                 </div>
               </div>
-              {users.map((user) => {
-                const fullName = `${user.firstName} ${user.lastName}`;
-                return (
-                  <div className={styles.userInfo}>
-                    <div className={styles.fullName}>{fullName}</div>
-                    <div className={styles.email}>{user.email}</div>
-                  </div>
-                );
-              })}
+              {users.length > 0 ? (
+                users.map((user, ind) => {
+                  const fullName = `${user.firstName} ${user.lastName}`;
+                  return (
+                    <div key={ind} className={styles.userInfo}>
+                      <div className={styles.fullName}>{fullName}</div>
+                      <div className={styles.email}>{user.email}</div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className={styles.unassigned}>Unassigned</div>
+              )}
             </div>
           );
         })}
