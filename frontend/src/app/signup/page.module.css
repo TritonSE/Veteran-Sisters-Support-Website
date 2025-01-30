@@ -1,5 +1,6 @@
 .page {
   background-image: url("../../../public/signUpBackground.svg");
+  background-size: cover;
   min-height: 100vh;
   width: 100%;
   display: flex;
@@ -53,10 +54,8 @@
   margin-bottom: 4px;
 }
 
-.innerForm {
-}
-
-.input {
+.input,
+.inputGreen {
   width: 100%;
   height: 33px;
   padding: 15px;
@@ -64,7 +63,7 @@
   display: inline-block;
   background-color: white;
   border: 1px solid #d0d7de;
-  border-radius: 8px;
+  border-radius: 4px;
   color: var(--Text-2, #4d5358);
   font-family: "Albert Sans";
   font-size: 14px;
@@ -75,6 +74,11 @@
 
 .doubleInput {
   display: flex;
+}
+
+.inputGreen::placeholder {
+  color: #057e6f;
+  opacity: 1;
 }
 
 .subtitle2 {

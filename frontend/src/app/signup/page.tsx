@@ -8,6 +8,7 @@ import "@fontsource/albert-sans";
 
 import { BackButton } from "@/components/BackButton";
 import { Button } from "@/components/Button";
+import CustomDropdown from "@/components/CustomDropdown";
 import OnboardingOption from "@/components/OnboardingOption";
 import ProgressBar from "@/components/ProgressBar";
 
@@ -16,6 +17,8 @@ export default function SignUpForm() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [activeButton, setActiveButton] = useState("");
   const [isVeteran, setIsVeteran] = useState(false);
+  const [selected, setSelected] = useState("");
+  const [activeDropdown, setActiveDropdown] = useState("");
 
   const handleNext = () => {
     // Go to the next form step
@@ -61,6 +64,14 @@ export default function SignUpForm() {
     } else {
       setIsVeteran(false);
     }
+  };
+
+  // Case 2 Custom Dropdown
+  const handleSelect = (option: string) => {
+    setSelected(option);
+  };
+  const toggleDropdown = (id: string) => {
+    setActiveDropdown((prev) => (prev === id ? null : id));
   };
 
   const renderPage = () => {
@@ -198,7 +209,10 @@ export default function SignUpForm() {
                     height={20}
                     src="ic_caretdown.svg"
                     alt=""
-                    style={{ objectFit: "contain" }}
+                    style={{
+                      objectFit: "contain",
+                      transform: showDropdown ? "rotate(180deg)" : "rotate(0deg)",
+                    }}
                   ></Image>
                 </div>
                 {showDropdown && (
@@ -251,7 +265,7 @@ export default function SignUpForm() {
             </div>
           </main>
         );
-      case 2:
+      case 2: {
         return (
           <main className={styles.page}>
             <div className={styles.formContainer}>
@@ -281,31 +295,64 @@ export default function SignUpForm() {
                 <input
                   type="text"
                   id="date"
-                  className={styles.input}
+                  className={styles.inputGreen}
                   placeholder="MM-DD-YYYY"
                   required
                 ></input>
-                <label htmlFor="branch" className={styles.formEntry}>
+                <div className={styles.formEntry}>
                   Branch of service
                   <a style={{ color: "#B80037" }}> *</a>
-                </label>
-                <select id="branch" className={styles.input} required>
-                  <option value="">Please select</option>
-                </select>
+                </div>
+                <CustomDropdown
+                  options={[
+                    "Air Force",
+                    "Army",
+                    "Coast Guard",
+                    "National Guard",
+                    "Marine Corps",
+                    "Space Force",
+                    "First responder",
+                    "Navy",
+                  ]}
+                  isOpen={activeDropdown === "select1"}
+                  toggleDropdown={() => {
+                    toggleDropdown("select1");
+                  }}
+                  onSelect={handleSelect}
+                />
+
                 <label htmlFor="status" className={styles.formEntry}>
                   Current military status
                   <a style={{ color: "#B80037" }}> *</a>
                 </label>
-                <select id="status" className={styles.input} required>
-                  <option value="">Please select</option>
-                </select>
+                <CustomDropdown
+                  options={[
+                    "Active Duty",
+                    "Reservist",
+                    "Veteran",
+                    "Veteran Medically Retired",
+                    "Veteran 20+ years Retired",
+                    "First responder (no military service)",
+                  ]}
+                  isOpen={activeDropdown === "select2"}
+                  toggleDropdown={() => {
+                    toggleDropdown("select2");
+                  }}
+                  onSelect={handleSelect}
+                />
+
                 <label htmlFor="gender" className={styles.formEntry}>
                   Gender
                   <a style={{ color: "#B80037" }}> *</a>
                 </label>
-                <select id="gender" className={`${styles.input} ${styles.lastDropdown}`} required>
-                  <option value="">Please select</option>
-                </select>
+                <CustomDropdown
+                  options={["Female", "Male", "Other"]}
+                  onSelect={handleSelect}
+                  isOpen={activeDropdown === "select3"}
+                  toggleDropdown={() => {
+                    toggleDropdown("select3");
+                  }}
+                />
 
                 <Button
                   label="Continue"
@@ -325,6 +372,7 @@ export default function SignUpForm() {
             </div>
           </main>
         );
+      }
       case 3:
         return (
           <main className={styles.page}>
