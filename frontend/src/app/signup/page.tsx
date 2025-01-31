@@ -224,7 +224,7 @@ export default function SignUpForm() {
                         <label htmlFor="city" className={styles.formEntry}>
                           City
                         </label>
-                        <input type="text" id="city" className={styles.input} required></input>
+                        <input type="text" id="city" className={styles.input}></input>
                       </div>
                       <div style={{ marginRight: "16px" }}>
                         <label htmlFor="state" className={styles.formEntry}>
@@ -237,7 +237,7 @@ export default function SignUpForm() {
                           Zip code
                           <a style={{ color: "#B80037" }}> *</a>
                         </label>
-                        <input type="text" id="zip" className={styles.input}></input>
+                        <input type="text" id="zip" className={styles.input} required></input>
                       </div>
                     </div>
                   </div>
