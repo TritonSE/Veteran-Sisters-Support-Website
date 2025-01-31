@@ -1,0 +1,47 @@
+.tabsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+}
+.tabs {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--Stroke-1, #edf1f5);
+  /* body large */
+  font-family: "Albert Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.tabItem {
+  display: flex;
+  padding: 12px var(--Spacing-md, 24px);
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: var(--Spacing-s, 8px) var(--Spacing-s, 8px) 0px 0px;
+  border-bottom: 1px solid var(--Stroke-1, #edf1f5);
+  background: var(--Neutral-Base-White, #fafafa);
+  color: var(--Text-1, #60696f);
+}
+.tabItem:hover {
+  background: var(--Background-2, #f5f5f5);
+  cursor: pointer;
+}
+.selectedTabItem:hover {
+  cursor: pointer;
+}
+.selectedTabItem {
+  display: flex;
+  padding: 12px var(--Spacing-md, 24px);
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: var(--Spacing-s, 8px) var(--Spacing-s, 8px) 0px 0px;
+  border-bottom: 1.5px solid var(--Primary, #057e6f);
+  background: rgba(5, 126, 111, 0.1);
+  color: var(--Primary, #057e6f);
+  font-weight: 600;
+}

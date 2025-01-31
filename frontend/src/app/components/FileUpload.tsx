@@ -14,14 +14,14 @@ type FileUploadProps = {
 
 type CheckBoxStates = {
   BattleBuddies: boolean;
-  IAdvocacy: boolean;
+  Advocacy: boolean;
   OperationWellness: boolean;
 };
 
 export function FileUpload({ onClose, onUpload }: FileUploadProps) {
   const [checkboxStates, setCheckboxStates] = useState<CheckBoxStates>({
     BattleBuddies: false,
-    IAdvocacy: false,
+    Advocacy: false,
     OperationWellness: false,
   });
   const [comments, setComments] = useState<string>();
@@ -45,7 +45,7 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
     if (
       file &&
       (checkboxStates.BattleBuddies ||
-        checkboxStates.IAdvocacy ||
+        checkboxStates.Advocacy ||
         checkboxStates.OperationWellness) &&
       !uploading
     ) {
@@ -66,7 +66,6 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
             const storageRef = ref(storage, `files/${result.data._id}.${extension}`);
             uploadBytes(storageRef, file)
               .then(() => {
-                console.log("uploaded to firebase");
                 setUploading(false);
                 onClose();
                 onUpload();
@@ -155,18 +154,18 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
             <div
               className={styles.checkRow}
               onClick={() => {
-                setCheckboxStates({ ...checkboxStates, IAdvocacy: !checkboxStates.IAdvocacy });
+                setCheckboxStates({ ...checkboxStates, Advocacy: !checkboxStates.Advocacy });
               }}
             >
               <input
                 type="checkbox"
                 onChange={() => {
-                  console.log("clicked IAdvocacy");
+                  console.log("clicked Advocacy");
                 }}
                 className={styles.checkBox}
-                checked={checkboxStates.IAdvocacy}
+                checked={checkboxStates.Advocacy}
               />{" "}
-              <span>I Advocacy</span>
+              <span>Advocacy</span>
             </div>
             <div
               className={styles.checkRow}
