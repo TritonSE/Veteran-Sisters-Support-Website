@@ -196,13 +196,7 @@ export default function SignUpForm() {
                   </div>
                 </div>
                 <div className={styles.addressDropdown} onClick={handleDropdown}>
-                  <div className={styles.subHeader}>
-                    Address Information
-                    <a style={{ color: "#60696F", fontWeight: "400", fontSize: "13px" }}>
-                      {" "}
-                      Optional
-                    </a>
-                  </div>
+                  <div className={styles.subHeader}>Address Information</div>
                   <Image
                     id="caret"
                     width={20}
@@ -241,6 +235,7 @@ export default function SignUpForm() {
                       <div>
                         <label htmlFor="zip" className={styles.formEntry}>
                           Zip code
+                          <a style={{ color: "#B80037" }}> *</a>
                         </label>
                         <input type="text" id="zip" className={styles.input}></input>
                       </div>

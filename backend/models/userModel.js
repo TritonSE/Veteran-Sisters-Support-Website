@@ -16,12 +16,15 @@ const userSchema = new Schema({
     required: true,
     match: [/^\d{10}$/, "Phone number must be 10 digits"],
   },
+  zipCode: {
+    type: Number,
+    required: true
+  },
   address: {
     streetAddress1: { type: String },
     streetAddress2: { type: String },
     city: { type: String },
     state: { type: String },
-    zipCode: { type: String },
   },
   roleSpecificInfo: {
     serviceInfo: {

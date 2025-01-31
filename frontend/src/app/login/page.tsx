@@ -28,13 +28,6 @@ export default function LoginForm() {
           </label>
           <input type="password" id="password" className={styles.input} required></input>
 
-          {/* <div className={styles.rememberMeContainer}>
-            <input type="checkbox" id="rememberMe" className={styles.checkbox} defaultChecked />
-            <label htmlFor="rememberMe" className={styles.rememberMeLabel}>
-              Remember me
-            </label>
-          </div> */}
-
           <Button label="Continue" className={styles.signInButton}></Button>
         </form>
         <div className={styles.subtitle2}>
