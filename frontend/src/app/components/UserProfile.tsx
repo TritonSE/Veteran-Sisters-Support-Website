@@ -6,21 +6,20 @@ import {
   AssignedProgram as AssignedProgramEnum,
 } from "../api/profileApi";
 
-import { Button } from "@/app/components/Button";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import ProfileHeader from "@/app/components/ProfileHeader";
+import { Button } from "@/app/components/Button";
+import { Role } from "@/app/components/Role";
 import styles from "./UserProfile.module.css";
 import { Program } from "./Program";
-import { ProfilePicture } from "./ProfilePicture";
 
 interface ProfileRenderingContext {
-  profileControls: any[];
   showVolunteerNotes: boolean;
   showUserList: boolean;
   userListTitle: string;
   userListEditable: boolean;
   viewingPersonalProfile: boolean;
+  isProgramAndRoleEditable: boolean;
 }
 
 function getProfileRenderingContext(
@@ -28,19 +27,15 @@ function getProfileRenderingContext(
   viewingRole: string,
 ): ProfileRenderingContext {
   const context: ProfileRenderingContext = {
-    profileControls: [],
     showVolunteerNotes: false,
     showUserList: false,
     userListTitle: "",
     userListEditable: false,
     viewingPersonalProfile: false,
+    isProgramAndRoleEditable: false,
   };
   context.viewingPersonalProfile = viewerRole == viewingRole;
-  context.profileControls = context.viewingPersonalProfile
-    ? [<Button text="Edit profile" />]
-    : viewerRole == RoleEnum.ADMIN
-      ? [<Button text={"Edit Program"} />, <Button text={"Change Role"} />]
-      : [];
+
   context.showVolunteerNotes =
     viewingRole == RoleEnum.VETERAN &&
     (viewerRole === RoleEnum.ADMIN || viewerRole === RoleEnum.STAFF); // TODO When can a volunteer see this + can a veteran see this?
@@ -59,6 +54,10 @@ function getProfileRenderingContext(
     ((viewerRole === RoleEnum.ADMIN || viewerRole === RoleEnum.STAFF) &&
       viewingRole === RoleEnum.VETERAN) ||
     viewingRole === RoleEnum.VOLUNTEER;
+
+  context.isProgramAndRoleEditable =
+    (viewerRole === RoleEnum.ADMIN || viewerRole === RoleEnum.ADMIN) &&
+    !context.viewingPersonalProfile;
   return context;
 }
 
@@ -144,7 +143,8 @@ export default function UserProfile({ userId }: { userId: string }) {
           phoneNumber={userProfile.phoneNumber}
           gender={userProfile.gender}
           email={userProfile.email}
-          profileControls={profileRenderingContext.profileControls}
+          isPersonalProfile={profileRenderingContext.viewingPersonalProfile}
+          isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
         />
         <div className={styles.userProfileInnerContent}>
           {profileRenderingContext.showVolunteerNotes && <VolunteerNotes />}
@@ -162,6 +162,100 @@ export default function UserProfile({ userId }: { userId: string }) {
   );
 }
 
+function ProfilePicture(params: { firstName?: string; size?: string }) {
+  const { firstName, size } = params;
+  const sizeClass = size === "small" ? "small" : "large";
+
+  const firstLetter = firstName && firstName.length > 0 ? firstName[0] : "?";
+  return <div className={`${styles.profilePicture} ${styles[sizeClass]}`}>{firstLetter}</div>;
+}
+
+function Divider() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path
+        d="M9.75 1C9.94891 1 10.1397 1.07902 10.2803 1.21967C10.421 1.36032 10.5 1.55109 10.5 1.75V18.25C10.5 18.4489 10.421 18.6397 10.2803 18.7803C10.1397 18.921 9.94891 19 9.75 19C9.55109 19 9.36032 18.921 9.21967 18.7803C9.07902 18.6397 9 18.4489 9 18.25V1.75C9 1.55109 9.07902 1.36032 9.21967 1.21967C9.36032 1.07902 9.55109 1 9.75 1Z"
+        fill="#60696F"
+      />
+    </svg>
+  );
+}
+
+function ProfileHeader(params: {
+  firstName: string;
+  lastName: string;
+  role: RoleEnum;
+  assignedPrograms: AssignedProgramEnum[];
+  yearJoined?: number;
+  age?: number;
+  phoneNumber?: string;
+  gender?: String;
+  email: String;
+  isProgramAndRoleEditable: boolean;
+  isPersonalProfile: boolean;
+}) {
+  const {
+    firstName,
+    lastName,
+    role,
+    assignedPrograms,
+    yearJoined,
+    age,
+    phoneNumber,
+    gender,
+    email,
+    isProgramAndRoleEditable,
+    isPersonalProfile,
+  } = params;
+  const fullName = `${firstName} ${lastName}`;
+  const joinedText = `Joined: ${yearJoined}`;
+  const ageText = `Age: ${age}`;
+  const genderText = `Gender: ${gender}`;
+  assignedPrograms.sort();
+  return (
+    <div className={styles.profileHeader}>
+      <div className={styles.profileContent}>
+        <ProfilePicture firstName={firstName} />
+        <div className={styles.userInfo}>
+          <div className={styles.userInfoHeader}>
+            <div className={styles.userFullName}>{fullName}</div>
+            <Role role={role} />
+            {assignedPrograms.map((program) => (
+              <Program program={program} key={program} />
+            ))}
+          </div>
+          <div className={styles.userMetadata}>
+            <div className={styles.metadataSubsection}>
+              <div>{joinedText}</div>
+              <Divider />
+              <div>{ageText}</div>
+              <Divider />
+              <div>{genderText}</div>
+            </div>
+
+            <div className={styles.metadataSubsection}>
+              <div className={styles.smallMetadata}>{email}</div>
+              <Divider />
+              <div className={styles.smallMetadata}>{phoneNumber}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={styles.profileContentControls}>
+        {isPersonalProfile ? (
+          <Button text="Edit profile" />
+        ) : isProgramAndRoleEditable ? (
+          <>
+            <Button text={"Edit Program"} /> <Button text={"Change Role"} />
+          </>
+        ) : (
+          <></>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function UserList(params: {
   userGroups: [string, UserProfileType[]][];
   title: string;
@@ -169,19 +263,6 @@ function UserList(params: {
   minimized: boolean;
 }) {
   const { title, userGroups, editable, minimized } = params;
-
-  function programToClassName(program: string) {
-    switch (program) {
-      case AssignedProgramEnum.BATTLE_BUDDIES:
-        return "battleBuddies";
-      case AssignedProgramEnum.ADVOCACY:
-        return "advocacy";
-      case AssignedProgramEnum.OPERATION_WELLNESS:
-        return "operationalWellness";
-      default:
-        return "";
-    }
-  }
 
   const minimizedClassName = minimized ? styles.minimized : "";
 

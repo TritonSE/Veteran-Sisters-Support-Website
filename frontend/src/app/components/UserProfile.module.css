@@ -48,6 +48,99 @@
   align-self: stretch;
 }
 
+/* PROFILE HEADER STYLES */
+
+.profilePicture {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--Background-3, #e9ebed);
+  color: var(--Text-3, #3a3c3d);
+}
+
+.profilePicture.large {
+  font-size: 48px;
+  min-width: 96px;
+  height: 96px;
+  border-radius: 48px;
+}
+.profilePicture.small {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 14px;
+}
+
+.profileHeader {
+  display: flex;
+  width: 1024px;
+  justify-content: space-between;
+}
+
+.profileHeader .profileContent {
+  display: flex;
+  gap: 24px;
+}
+
+.profileHeader .userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--Spacing-s, 8px);
+  justify-content: center;
+}
+
+.profileHeader .userInfoHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--Spacing-sm, 16px);
+}
+
+.profileHeader .userFullName {
+  color: var(--Text-3, #3a3c3d);
+
+  /* title medium */
+  font-family: "Albert Sans";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.profileHeader .userMetadata {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-s, 8px);
+  flex-wrap: wrap;
+}
+
+.profileHeader .userMetadata .metadataSubsection {
+  display: flex;
+}
+
+.profileHeader .userMetadata .metadataSubsection * {
+  width: fit-content;
+  color: var(--Text-1, #60696f);
+  /* body large */
+  font-family: "Albert Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.profileHeader .userMetadata .smallMetadata {
+  font-size: 14px;
+}
+
+.profileHeader .profileContentControls {
+  display: flex;
+  padding: var(--Spacing-s, 8px) 0px;
+  gap: var(--Spacing-s, 8px);
+}
+
+/* USER LIST STYLES */
+
 .userList {
   display: flex;
   width: 1024px;
@@ -122,31 +215,6 @@
   display: flex;
   gap: 8px;
   height: fit-content;
-}
-
-.userList .userCountBall {
-  padding: 4px 8px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 16px;
-
-  color: var(--Neutral-Base-White, #fafafa);
-  font-family: "Albert Sans";
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-}
-
-.userList .userCountBall.battleBuddies {
-  background: var(--Battle-Buddies, #92400e);
-}
-.userList .userCountBall.advocacy {
-  background: #3730a3;
-}
-.userList .userCountBall.operationalWellness {
-  /* TODO: WHAT SHOULD THIS COLOR BE? */
-  background-color: black;
 }
 
 .userList .userInfo {
