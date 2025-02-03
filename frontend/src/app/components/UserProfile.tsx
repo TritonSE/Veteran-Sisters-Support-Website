@@ -12,9 +12,11 @@ import { useEffect, useState } from "react";
 import ProfileHeader from "@/app/components/ProfileHeader";
 import styles from "./UserProfile.module.css";
 import { Program } from "./Program";
+import { ProfilePicture } from "./ProfilePicture";
 
 interface ProfileRenderingContext {
   profileControls: any[];
+  showVolunteerNotes: boolean;
   showUserList: boolean;
   userListTitle: string;
   userListEditable: boolean;
@@ -27,6 +29,7 @@ function getProfileRenderingContext(
 ): ProfileRenderingContext {
   const context: ProfileRenderingContext = {
     profileControls: [],
+    showVolunteerNotes: false,
     showUserList: false,
     userListTitle: "",
     userListEditable: false,
@@ -38,14 +41,19 @@ function getProfileRenderingContext(
     : viewerRole == RoleEnum.ADMIN
       ? [<Button text={"Edit Program"} />, <Button text={"Change Role"} />]
       : [];
+  context.showVolunteerNotes =
+    viewingRole == RoleEnum.VETERAN &&
+    (viewerRole === RoleEnum.ADMIN || viewerRole === RoleEnum.STAFF); // TODO When can a volunteer see this + can a veteran see this?
   context.showUserList = !(viewerRole === RoleEnum.ADMIN && viewingRole === RoleEnum.ADMIN);
 
   context.userListTitle =
-    viewingRole === RoleEnum.VETERAN || viewingRole === RoleEnum.VOLUNTEER
-      ? "Assigned veterans"
-      : viewingRole === RoleEnum.STAFF
-        ? "Veterans Under Point of Contact"
-        : "";
+    viewingRole === RoleEnum.VETERAN
+      ? "Assigned Volunteers"
+      : viewingRole === RoleEnum.VOLUNTEER
+        ? "Assigned Veterans"
+        : viewingRole === RoleEnum.STAFF
+          ? "Veterans Under Point of Contact"
+          : "";
 
   context.userListEditable =
     ((viewerRole === RoleEnum.ADMIN || viewerRole === RoleEnum.STAFF) &&
@@ -114,6 +122,7 @@ export default function UserProfile({ userId }: { userId: string }) {
           <option value={RoleEnum.ADMIN}>Admin</option>
           <option value={RoleEnum.STAFF}>Staff</option>
           <option value={RoleEnum.VOLUNTEER}>Volunteer</option>
+          <option value={RoleEnum.VETERAN}>Veteran</option>
         </select>
       </div>
       {profileRenderingContext.viewingPersonalProfile ? (
@@ -137,13 +146,17 @@ export default function UserProfile({ userId }: { userId: string }) {
           email={userProfile.email}
           profileControls={profileRenderingContext.profileControls}
         />
-        {profileRenderingContext.showUserList && (
-          <UserList
-            userGroups={sortedUserGroups}
-            title={profileRenderingContext.userListTitle}
-            editable={profileRenderingContext.userListEditable}
-          />
-        )}
+        <div className={styles.userProfileInnerContent}>
+          {profileRenderingContext.showVolunteerNotes && <VolunteerNotes />}
+          {profileRenderingContext.showUserList && (
+            <UserList
+              userGroups={sortedUserGroups}
+              title={profileRenderingContext.userListTitle}
+              editable={profileRenderingContext.userListEditable}
+              minimized={profileRenderingContext.showVolunteerNotes}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
@@ -153,8 +166,9 @@ function UserList(params: {
   userGroups: [string, UserProfileType[]][];
   title: string;
   editable: boolean;
+  minimized: boolean;
 }) {
-  const { title, userGroups, editable } = params;
+  const { title, userGroups, editable, minimized } = params;
 
   function programToClassName(program: string) {
     switch (program) {
@@ -169,11 +183,13 @@ function UserList(params: {
     }
   }
 
+  const minimizedClassName = minimized ? styles.minimized : "";
+
   return (
-    <div className={styles.userList}>
+    <div className={`${styles.userList} ${minimizedClassName}`}>
       <div className={styles.userListHeader}>
         <div className={styles.userListHeading}>{title}</div>
-        {editable && (
+        {editable && !minimized && (
           <div className={styles.addUser}>
             <Image
               src="/pajamas_assignee_icon.svg"
@@ -189,10 +205,19 @@ function UserList(params: {
           return (
             <div key={program} className={styles.programSection}>
               <div className={styles.programSectionHeader}>
-                <Program program={program} />
-                <div className={`${styles.userCountBall} ${styles[programToClassName(program)]}`}>
-                  {users.length}
+                <div className={styles.programSectionHeaderSectionInfo}>
+                  <Program program={program} />
                 </div>
+                {editable && minimized && (
+                  <div className={styles.addUser}>
+                    <Image
+                      src="/pajamas_assignee_icon.svg"
+                      width={16}
+                      height={16}
+                      alt="Assign User"
+                    ></Image>
+                  </div>
+                )}
               </div>
               {users.length > 0 ? (
                 users.map((user, ind) => {
@@ -220,6 +245,42 @@ function UserList(params: {
             </div>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+function VolunteerNotes() {
+  return (
+    <div className={styles.volunteerNotes}>
+      <div className={styles.noteHeader}>Notes from Volunteers</div>
+      <div className={styles.noteSection}>
+        <div className={styles.postNoteSection}>
+          <input className={styles.postNoteInputField} placeholder="Add a comment..."></input>
+          <button className={styles.postNoteButton}>Post</button>
+        </div>
+        <div className={styles.postedNotes}>
+          <div className={styles.postedNote}>
+            <ProfilePicture firstName="Leo" size="small" />
+            <div className={styles.noteContent}>
+              <div className={styles.noteHeader}>
+                <div className={styles.noteAuthor}>Leo Friedman</div>
+                <div className={styles.notePostedDate}>14 days ago</div>
+              </div>
+              <div className={styles.noteBody}>I’m a duck and I like eating green peas.</div>
+            </div>
+          </div>
+          <div className={styles.postedNote}>
+            <ProfilePicture firstName="Leo" size="small" />
+            <div className={styles.noteContent}>
+              <div className={styles.noteHeader}>
+                <div className={styles.noteAuthor}>Leo Friedman</div>
+                <div className={styles.notePostedDate}>14 days ago</div>
+              </div>
+              <div className={styles.noteBody}>I’m a duck and I like eating green peas.</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
