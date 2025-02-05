@@ -8,17 +8,8 @@ export type User = {
   role: string;
   assignedPrograms: string[];
   assignedVeterans: string[];
+  assignedVolunteers: string[];
 };
-
-export async function getUserByEmail(email: string): Promise<APIResult<User>> {
-  try {
-    const response = await get(`/api/users/${email}`);
-    const user = (await response.json()) as User;
-    return { success: true, data: user };
-  } catch (error) {
-    return handleAPIError(error);
-  }
-}
 
 export async function getNonAdminUsers(program?: string): Promise<APIResult<User[]>> {
   try {

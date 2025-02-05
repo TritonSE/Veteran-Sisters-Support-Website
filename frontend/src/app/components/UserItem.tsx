@@ -13,15 +13,17 @@ type UserItemProp = {
 export function UserItem({ user }: UserItemProp) {
   let assignedText;
   let assignedStyle = styles.assignedText;
+  const vetLen = user.assignedVeterans.length;
+  const volLen = user.assignedVolunteers.length;
   if (user.role === "staff") {
     assignedText = "Not applicable";
-  } else if (user.assignedVeterans.length === 0) {
+  } else if (vetLen === 0 && volLen === 0) {
     assignedText = "Unassigned";
     assignedStyle = styles.unassignedText;
   } else if (user.role === "volunteer") {
-    assignedText = `${user.assignedVeterans.length.toString()} veterans`;
+    assignedText = `${vetLen.toString()} veteran${vetLen === 1 ? "" : "s"}`;
   } else {
-    assignedText = "1 volunteer";
+    assignedText = `${volLen.toString()} volunteer${volLen === 1 ? "" : "s"}`;
   }
 
   return (

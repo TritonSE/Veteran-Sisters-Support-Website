@@ -3,101 +3,88 @@ import { useEffect, useState } from "react";
 
 import { User, getNonAdminUsers } from "../api/users";
 
+import { Tabs } from "./Tabs";
 import { UserItem } from "./UserItem";
 import styles from "./UserTable.module.css";
 
-//TODO sorted list
 export function UserTable() {
   const [users, setUsers] = useState<User[]>([]);
-  const [tab, setTab] = useState<string>("all");
-  const [userCount, setUserCount] = useState<number>(0);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
   const [page, setPage] = useState<number>(0);
   const pageSize = 8;
 
   const handleChangeProgram = (program: string) => {
     if (program === "all") {
-      getNonAdminUsers()
-        .then((result) => {
-          if (result.success) {
-            setUsers(result.data);
-            setTab(program);
-            setPage(0);
-          } else {
-            alert(result.error);
-          }
-        })
-        .catch((reason: unknown) => {
-          alert(reason);
-        });
+      setUsers(allUsers);
     } else {
-      getNonAdminUsers(program)
-        .then((result) => {
-          if (result.success) {
-            setUsers(result.data);
-            setTab(program);
-            setPage(0);
-          } else {
-            alert(result.error);
-          }
-        })
-        .catch((reason: unknown) => {
-          alert(reason);
-        });
+      setUsers(allUsers.filter((user) => user.assignedPrograms.includes(program)));
     }
   };
 
-  useEffect(() => {
-    handleChangeProgram("all");
-  }, []);
+  const compare = (a: User, b: User) => {
+    if (a.firstName < b.firstName) return -1;
+    if (a.firstName > b.firstName) return 1;
+    return 0;
+  };
+
+  const sortUsers = (userList: User[]) => {
+    const unassigned: User[] = [];
+    const assigned: User[] = [];
+    userList.forEach((user) => {
+      if (
+        user.assignedVeterans.length === 0 &&
+        user.assignedVolunteers.length === 0 &&
+        user.role !== "staff"
+      ) {
+        unassigned.push(user);
+      } else {
+        assigned.push(user);
+      }
+    });
+    unassigned.sort(compare);
+    assigned.sort(compare);
+    unassigned.push(...assigned);
+    return unassigned;
+  };
 
   useEffect(() => {
-    setUserCount(Math.max(userCount, users.length));
-  }, [users]);
+    getNonAdminUsers()
+      .then((result) => {
+        if (result.success) {
+          const sortedList = sortUsers(result.data);
+          setAllUsers(sortedList);
+          setUsers(sortedList);
+        } else {
+          alert(result.error);
+        }
+      })
+      .catch((reason: unknown) => {
+        alert(reason);
+      });
+  }, []);
 
   return (
     <div className={styles.container}>
       <div className={styles.member}>
         <span className={styles.memberTitle}>Members</span>
         <div className={styles.memberCountFrame}>
-          <span>{userCount}</span>
+          <span>{allUsers.length}</span>
         </div>
       </div>
-      <div className={styles.tabsContainer}>
-        <div className={styles.tabs}>
-          <div
-            className={tab === "all" ? styles.selectedTabItem : styles.tabItem}
-            onClick={() => {
-              handleChangeProgram("all");
-            }}
-          >
-            <span>All</span>
-          </div>
-          <div
-            className={tab === "battle buddies" ? styles.selectedTabItem : styles.tabItem}
-            onClick={() => {
-              handleChangeProgram("battle buddies");
-            }}
-          >
-            <span>Battle Buddies</span>
-          </div>
-          <div
-            className={tab === "advocacy" ? styles.selectedTabItem : styles.tabItem}
-            onClick={() => {
-              handleChangeProgram("advocacy");
-            }}
-          >
-            <span>Advocacy</span>
-          </div>
-          <div
-            className={tab === "operation wellness" ? styles.selectedTabItem : styles.tabItem}
-            onClick={() => {
-              handleChangeProgram("operation wellness");
-            }}
-          >
-            <span>Operation Wellness</span>
-          </div>
-        </div>
-      </div>
+      <Tabs
+        OnAll={() => {
+          handleChangeProgram("all");
+        }}
+        OnBattleBuddies={() => {
+          handleChangeProgram("battle buddies");
+        }}
+        OnAdvocacy={() => {
+          handleChangeProgram("advocacy");
+        }}
+        OnOperationWellness={() => {
+          handleChangeProgram("operation wellness");
+        }}
+      />
       <div className={styles.table}>
         <div className={styles.tableContent}>
           <div className={styles.tableHeader}>
@@ -126,6 +113,7 @@ export function UserTable() {
                 role: user.role,
                 assignedPrograms: user.assignedPrograms,
                 assignedVeterans: user.assignedVeterans,
+                assignedVolunteers: user.assignedVolunteers,
               }}
             />
           ))}

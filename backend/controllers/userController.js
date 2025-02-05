@@ -50,6 +50,7 @@ export const addUser = async (req, res) => {
         role,
         assignedPrograms,
         assignedVeterans,
+        assignedVolunteers,
       });
       res.status(201).json(newUser);
     }
