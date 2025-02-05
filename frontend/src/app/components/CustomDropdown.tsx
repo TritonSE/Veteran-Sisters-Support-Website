@@ -8,6 +8,7 @@ type CustomDropdownProps = {
   isOpen: boolean;
   toggleDropdown: () => void;
   onSelect: (option: string) => void;
+  selected?: string;
 };
 
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
@@ -15,18 +16,16 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   isOpen,
   toggleDropdown,
   onSelect,
+  selected,
 }) => {
-  const [selectedOption, setSelectedOption] = useState("");
-
   const handleSelect = (option: string) => {
-    setSelectedOption(option);
     toggleDropdown();
     onSelect(option);
   };
   return (
     <div>
       <div className={styles.selectBox} onClick={toggleDropdown}>
-        {selectedOption || "Please Select"}
+        {selected || "Please Select"}
         <Image
           id="arrowUp"
           width={35}

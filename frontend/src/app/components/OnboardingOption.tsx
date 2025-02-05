@@ -8,17 +8,20 @@ export type OnboardingOptionProps = {
   mainText: string;
   description?: string;
   isChecked: boolean;
+  onClick: () => void;
 };
 
 const OnboardingOption: React.FC<OnboardingOptionProps> = ({
   mainText,
   description,
   isChecked,
+  onClick,
 }) => {
   const [checked, setChecked] = useState(isChecked);
 
   const handleClick = () => {
     setChecked(!checked);
+    onClick();
   };
 
   return (

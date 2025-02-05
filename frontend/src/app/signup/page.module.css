@@ -213,3 +213,11 @@
   line-height: normal;
   margin-bottom: 24px;
 }
+
+.error {
+  color: #60696f;
+  font-family: "Albert Sans";
+  font-size: 14px;
+  margin-bottom: 12px;
+  margin-top: 8px;
+}

@@ -1,34 +1,66 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { initFirebase } from "../../../firebase/firebase";
 
 import styles from "./page.module.css";
 
-import { Button } from "@/components/Button";
+import { Button } from "@/app/components/Button";
 import "@fontsource/albert-sans";
 
-export default function LoginForm() {
-  // const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+const { auth } = initFirebase();
 
-  // }
+export default function LoginForm() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError("");
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log("User logged in:", userCredential.user);
+    } catch (error: any) {
+      console.error("Login error:", error);
+      setError(error.message);
+    }
+  };
+
   return (
     <main className={styles.page}>
       <div className={styles.form}>
         <div className={styles.subtitle}>Log in to your account</div>
-        <form className={styles.innerForm} id="contactForm">
+        <form className={styles.innerForm} id="contactForm" onSubmit={handleLogin}>
           <label htmlFor="email" className={styles.formEntry}>
             Email
           </label>
           <a style={{ color: "#B80037" }}> *</a>
-          <input type="text" id="email" className={styles.input} required></input>
+          <input
+            type="email"
+            id="email"
+            className={styles.input}
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          ></input>
           <label htmlFor="password" className={styles.formEntry}>
             Password
             <a style={{ color: "#B80037" }}> *</a>
             <a className={styles.forgotPassword}> Forgot your password?</a>
           </label>
-          <input type="password" id="password" className={styles.input} required></input>
+          <input
+            type="password"
+            id="password"
+            className={styles.input}
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          ></input>
 
-          <Button label="Continue" className={styles.signInButton}></Button>
+          <Button label="Continue" className={styles.signInButton} type="submit"></Button>
         </form>
         <div className={styles.subtitle2}>
           <div>

@@ -3,7 +3,7 @@ import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 
 import createFileObject, { CreateFileObjectRequest } from "../api/fileApi";
-import { storage } from "../firebase";
+import { storage } from "../../../firebase/firebase";
 
 import styles from "./FileUpload.module.css";
 
