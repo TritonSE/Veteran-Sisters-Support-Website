@@ -15,7 +15,7 @@ export type CreateFileObjectRequest = {
 
 export type APIResult<T> = { success: true; data: T } | { success: false; error: string };
 
-const createFileObject = async (
+export const createFileObject = async (
   fileObject: CreateFileObjectRequest,
 ): Promise<APIResult<FileObject>> => {
   try {
@@ -37,4 +37,20 @@ const createFileObject = async (
   }
 };
 
-export default createFileObject;
+export const getFilesByUploader = async (uploader: string): Promise<APIResult<FileObject[]>> => {
+  try {
+    const response = await fetch(`http://localhost:4000/api/files/${uploader}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      return { success: false, error: response.statusText };
+    }
+    const data = (await response.json()) as FileObject[];
+    return { success: true, data };
+  } catch (error: unknown) {
+    return { success: false, error: (error as Error).message };
+  }
+};
