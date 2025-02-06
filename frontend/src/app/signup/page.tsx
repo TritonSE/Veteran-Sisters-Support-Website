@@ -187,32 +187,6 @@ export default function SignUpForm() {
     e.preventDefault();
     let hasError = false;
 
-    if (password.length < 6) {
-      setFormErrors((prev) => ({
-        ...prev,
-        password: "Password must be at least 6 characters long.",
-      }));
-      hasError = true;
-    } else {
-      setFormErrors((prev) => ({
-        ...prev,
-        password: "",
-      }));
-    }
-
-    if (password !== confirmPassword) {
-      setFormErrors((prev) => ({
-        ...prev,
-        confirmPassword: "Passwords do not match..",
-      }));
-      hasError = true;
-    } else {
-      setFormErrors((prev) => ({
-        ...prev,
-        confirmPassword: "",
-      }));
-    }
-
     if (selectedOptions.length === 0) {
       setFormErrors((prev) => ({
         ...prev,

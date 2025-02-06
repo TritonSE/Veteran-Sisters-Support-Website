@@ -7,7 +7,7 @@ import { json } from "envalid/dist/validators";
  */
 export default cleanEnv(
   {
-    NEXT_PUBLIC_FIREBASE_SETTINGS: process.env.NEXT_PUBLIC_FIREBASE_SETTINGS,
+    NEXT_PUBLIC_FIREBASE: process.env.NEXT_PUBLIC_FIREBASE,
   },
   {
     NEXT_PUBLIC_FIREBASE: json(), // Firebase settings for frontend, stored as a JSON string
