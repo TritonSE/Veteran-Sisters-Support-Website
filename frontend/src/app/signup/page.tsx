@@ -12,8 +12,9 @@ import CustomDropdown from "@/app/components/CustomDropdown";
 import OnboardingOption from "@/app/components/OnboardingOption";
 import ProgressBar from "@/app/components/ProgressBar";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "firebase/auth";
 import { initFirebase } from "../../../firebase/firebase";
+import { FirebaseError } from "firebase/app";
 const { auth } = initFirebase();
 
 export default function SignUpForm() {
@@ -21,7 +22,6 @@ export default function SignUpForm() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [activeButton, setActiveButton] = useState("");
   const [isVeteran, setIsVeteran] = useState(false);
-  const [selected, setSelected] = useState("");
   const [activeDropdown, setActiveDropdown] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,50 +34,89 @@ export default function SignUpForm() {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [zip, setZip] = useState("");
-  const [passwordError, setPasswordError] = useState(""); // Error for password length
-  const [confirmPasswordError, setConfirmPasswordError] = useState(""); // Error for mismatch
   const [serviceDate, setServiceDate] = useState("");
   const [branch, setBranch] = useState("");
   const [militaryStatus, setMilitaryStatus] = useState("");
   const [gender, setGender] = useState("");
-  const [formErrors, setFormErrors] = useState<{
-    zip?: string;
-    requiredFields?: string;
-    service?: string;
-  }>({}); // Error for empty required fields
-  const [onboardingError, setOnboardingError] = useState(""); // Error for no onboarding options chosen
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [formErrors, setFormErrors] = useState<{
+    signUpOption?: string; // Choosing veteran vs volunteer
+    email?: string; // An account with this email already exists
+    password?: string; // Password must be 6 characters
+    confirmPassword?: string; // Confirm password and password inputs must match
+    zip?: string; // Zip is required (special error message since it is hidden in dropdown)
+    requiredFields?: string; // On page 1, some text fields are required
+    service?: string; // On service page, all fields are required
+    onboarding?: string; // At least one interest must be chosen on last page
+  }>({});
 
-  const handleNext = (e?: MouseEvent<HTMLButtonElement>) => {
+  const handleNext = async (e?: MouseEvent<HTMLButtonElement>) => {
     if (e) e.preventDefault();
 
     if (currentPage === 0 && !activeButton) {
-      alert("Please select a sign-up option to continue.");
+      setFormErrors((prev) => ({
+        ...prev,
+        signUpOption: "Please select an option.",
+      }));
       return;
     }
 
     let hasError = false;
 
     if (currentPage === 1) {
+      // Check if email is valid
+      const emailRegex =
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!emailRegex.test(email)) {
+        setFormErrors((prev) => ({
+          ...prev,
+          email: "Please enter a valid email address.",
+        }));
+        return;
+      }
+
       // Validate password length
-      if (password.length < 6) {
-        setPasswordError("Password must be at least 6 characters long.");
+      if (password.length < 6 && password.length > 0) {
+        setFormErrors((prev) => ({
+          ...prev,
+          password: "Password must be at least 6 characters long.",
+        }));
         hasError = true;
       } else {
-        setPasswordError(""); // Clear error if password length is valid
+        setFormErrors((prev) => ({
+          ...prev,
+          password: "",
+        }));
       }
 
       // Validate confirm password matches password
       if (password !== confirmPassword) {
-        setConfirmPasswordError("Passwords do not match.");
+        setFormErrors((prev) => ({
+          ...prev,
+          confirmPassword: "Passwords do not match.",
+        }));
         hasError = true;
       } else {
-        setConfirmPasswordError(""); // Clear error if passwords match
+        setFormErrors((prev) => ({
+          ...prev,
+          confirmPassword: "",
+        }));
       }
 
       // Validate required fields
-      const isFormValid = validateForm();
-      if (!isFormValid) {
+      if (!zip) {
+        setFormErrors((prev) => ({
+          ...prev,
+          zip: "Zip code is required.",
+        }));
+        hasError = true;
+      }
+
+      if (!email || !password || !confirmPassword || !phone || !firstName) {
+        setFormErrors((prev) => ({
+          ...prev,
+          requiredFields: "All required fields must be filled.",
+        }));
         hasError = true;
       }
 
@@ -101,8 +140,8 @@ export default function SignUpForm() {
 
     setShowDropdown(false);
     setActiveDropdown("");
+    setFormErrors({});
 
-    // Move to the next page in a single click after errors are resolved
     setCurrentPage((prev) => (prev === 1 && !isVeteran ? prev + 2 : prev + 1));
   };
 
@@ -110,10 +149,8 @@ export default function SignUpForm() {
     setShowDropdown(false);
     setActiveDropdown("");
 
-    // Go to the previous form step
     if (currentPage > 0) {
       if (currentPage === 3 && !isVeteran) {
-        // Skip "Tell Us About Your Service" when going back and not a veteran
         setCurrentPage(1);
       } else {
         setCurrentPage(currentPage - 1);
@@ -139,28 +176,9 @@ export default function SignUpForm() {
     }
   };
 
-  // // Case 2 Custom Dropdown
-  // const handleSelect = (option: string) => {
-  //   setSelected(option);
-  // };
+  // Case 2 Custom Dropdown
   const toggleDropdown = (id: string) => {
     setActiveDropdown((prev) => (prev === id ? null : id));
-  };
-
-  const validateForm = () => {
-    let errors: { zip?: string; requiredFields?: string } = {};
-
-    if (!zip) {
-      errors.zip = "Zip code is required.";
-    }
-
-    if (!email || !password || !confirmPassword || !phone || !firstName) {
-      errors.requiredFields = "All required fields must be filled.";
-    }
-
-    setFormErrors(errors); // Store errors in state
-
-    return Object.keys(errors).length === 0; // Returns true if no errors
   };
 
   const handleSignup = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -168,25 +186,43 @@ export default function SignUpForm() {
     let hasError = false;
 
     if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters long.");
+      setFormErrors((prev) => ({
+        ...prev,
+        password: "Password must be at least 6 characters long.",
+      }));
       hasError = true;
     } else {
-      setPasswordError("");
+      setFormErrors((prev) => ({
+        ...prev,
+        password: "",
+      }));
     }
 
     if (password !== confirmPassword) {
-      setConfirmPasswordError("Passwords do not match.");
+      setFormErrors((prev) => ({
+        ...prev,
+        confirmPassword: "Passwords do not match..",
+      }));
       hasError = true;
     } else {
-      setConfirmPasswordError("");
+      setFormErrors((prev) => ({
+        ...prev,
+        confirmPassword: "",
+      }));
     }
 
     // New validation for onboarding options
     if (selectedOptions.length === 0) {
-      setOnboardingError("Please select at least one option.");
+      setFormErrors((prev) => ({
+        ...prev,
+        onboarding: "Please select at least one option.",
+      }));
       hasError = true;
     } else {
-      setOnboardingError("");
+      setFormErrors((prev) => ({
+        ...prev,
+        onboarding: "",
+      }));
     }
 
     if (hasError) return;
@@ -194,9 +230,24 @@ export default function SignUpForm() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       console.log("User signed up:", userCredential.user);
-      handleNext();
-    } catch (error: any) {
-      console.error("Signup error:", error);
+      // Proceed with further logic upon successful signup
+    } catch (error: unknown) {
+      // Check if the error is an instance of FirebaseError
+      if (error instanceof FirebaseError) {
+        if (error.code === "auth/email-already-in-use") {
+          // Set your form error state with an appropriate message
+          setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            email: "An account with this email already exists.",
+          }));
+        } else {
+          // Log or handle other Firebase-related errors
+          console.error("Signup error:", error.message);
+        }
+      } else {
+        // Handle unexpected errors
+        console.error("Unexpected error:", error);
+      }
     }
   };
 
@@ -228,6 +279,9 @@ export default function SignUpForm() {
               </div>
               <form className={styles.form}>
                 <div className={styles.subtitle}>Create a membership account</div>
+                {formErrors.signUpOption && (
+                  <p className={styles.error}>{formErrors.signUpOption}</p>
+                )}
                 <Button
                   label="Sign up as a Veteran"
                   className={styles.signUpButton}
@@ -319,6 +373,7 @@ export default function SignUpForm() {
                   Password
                 </label>
                 <a style={{ color: "#B80037" }}> *</a>
+                {formErrors.password && <p className={styles.error}>{formErrors.password}</p>}
                 <input
                   type="password"
                   id="password"
@@ -328,16 +383,17 @@ export default function SignUpForm() {
                   onChange={(e) => {
                     setPassword(e.target.value);
                     if (e.target.value.length >= 6) {
-                      setPasswordError("");
+                      setFormErrors((prev) => ({ ...prev, password: "" }));
                     }
                   }}
                 ></input>
-                {passwordError && <p className={styles.error}>{passwordError}</p>}
                 <label htmlFor="confirmPassword" className={styles.formEntry}>
                   Confirm password
                 </label>
                 <a style={{ color: "#B80037" }}> *</a>
-                {confirmPasswordError && <p className={styles.error}>{confirmPasswordError}</p>}
+                {formErrors.confirmPassword && (
+                  <p className={styles.error}>{formErrors.confirmPassword}</p>
+                )}
                 <input
                   type="password"
                   id="confirmPassword"
@@ -349,9 +405,12 @@ export default function SignUpForm() {
                   }}
                   onBlur={() => {
                     if (confirmPassword && confirmPassword !== password) {
-                      setConfirmPasswordError("Passwords do not match.");
+                      setFormErrors((prev) => ({
+                        ...prev,
+                        confirmPassword: "Passwords do not match.",
+                      }));
                     } else {
-                      setConfirmPasswordError("");
+                      setFormErrors((prev) => ({ ...prev, confirmPassword: "" }));
                     }
                   }}
                 ></input>
@@ -636,7 +695,9 @@ export default function SignUpForm() {
                   <div className={styles.subtext}>
                     Select multiple and we&apos;ll help personalize your experience.
                   </div>
-                  {onboardingError && <p className={styles.error}>{onboardingError}</p>}
+                  {formErrors.onboarding && <p className={styles.error}>{formErrors.onboarding}</p>}
+                  {formErrors.email && <p className={styles.error}>{formErrors.email}</p>}
+
                   <OnboardingOption
                     isChecked={false}
                     mainText={"Get a battle buddy"}
