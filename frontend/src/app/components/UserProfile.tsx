@@ -365,6 +365,7 @@ function UserList(params: {
                           width={20}
                           height={20}
                           alt="Remove User"
+                          className={styles.removeUser}
                         ></Image>
                       )}
                     </div>

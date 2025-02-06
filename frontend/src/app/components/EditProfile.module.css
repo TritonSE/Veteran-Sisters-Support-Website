@@ -78,6 +78,10 @@
   line-height: normal;
 }
 
+.field .changePassword:hover {
+  cursor: pointer;
+}
+
 .field .fieldInput {
   display: flex;
   padding: 7px 15px;
@@ -104,4 +108,72 @@
   align-items: flex-start;
   gap: var(--Spacing-s, 8px);
   width: 100%;
+}
+
+.confirmPasswordModal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(37, 37, 37, 0.2);
+  backdrop-filter: blur(4px);
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirmPasswordModal .modalContent {
+  display: flex;
+  min-width: 600px;
+  padding: var(--Spacing-md, 24px);
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 32px;
+
+  border-radius: var(--Spacing-s, 8px);
+  background: #fff;
+}
+
+.confirmPasswordModal .modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.confirmPasswordModal .modalInfo {
+  display: flex;
+  width: 379px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-s, 8px);
+}
+
+.confirmPasswordModal .closeModal:hover {
+  cursor: pointer;
+}
+
+.confirmPasswordModal .modalHeading {
+  color: var(--Text-3, #3a3c3d);
+  font-family: "Albert Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.confirmPasswordModal .modalSubtext {
+  color: var(--Text-2, #4d5358);
+  /* body small */
+  font-family: "Albert Sans";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.confirmPasswordModal .modalControls {
+  display: flex;
+  align-items: center;
+  gap: var(--Spacing-s, 8px);
 }

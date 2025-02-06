@@ -185,6 +185,14 @@
   background: var(--Primary, #057e6f);
 }
 
+.userList .addUser:hover {
+  cursor: pointer;
+}
+
+.userList .removeUser:hover {
+  cursor: pointer;
+}
+
 .userListContent {
   display: flex;
   flex-direction: column;

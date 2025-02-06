@@ -4,8 +4,11 @@ import { Button } from "@/app/components/Button";
 import styles from "./EditProfile.module.css";
 import NavigateBack from "./NavigateBack";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { useState } from "react";
 
 export default function EditProfile({ userId }: { userId: string }) {
+  const [modalOpen, setModalOpen] = useState(false);
   const router = useRouter();
   const user = getUserProfile(RoleEnum.VETERAN);
   return (
@@ -23,6 +26,7 @@ export default function EditProfile({ userId }: { userId: string }) {
           label="Password"
           defaultValue={"xxxxxxxxxxxxxxxxxxxxxx"}
           type="password"
+          openModal={() => setModalOpen(true)}
         />
         <Field required={false} label="Phone Number" defaultValue={user.phoneNumber || ""} />
         <Field required={false} label="Age" defaultValue={user.age || null} type="number" />
@@ -39,17 +43,69 @@ export default function EditProfile({ userId }: { userId: string }) {
           }}
         />
       </div>
+      <ConfirmPasswordModal showModal={modalOpen} closeModal={() => setModalOpen(false)} />
     </div>
   );
 }
 
-function Field(params: { label: string; defaultValue: any; required: boolean; type?: string }) {
-  const { label, defaultValue, required, type } = params;
+function ConfirmPasswordModal(params: { showModal: boolean; closeModal: () => void }) {
+  const { showModal, closeModal } = params;
+
+  return (
+    <>
+      {showModal && (
+        <div className={styles.confirmPasswordModal}>
+          <div className={styles.modalContent}>
+            <div className={styles.modalHeader}>
+              <div className={styles.modalInfo}>
+                <div className={styles.modalHeading}>Change your password</div>
+                <div className={styles.modalSubtext}>
+                  Your new password will be saved to your profile information.
+                </div>
+              </div>
+              <Image
+                className={styles.closeModal}
+                src="/close_button.svg"
+                alt="Close modal"
+                width={24}
+                height={24}
+                onClick={closeModal}
+              />
+            </div>
+            <Field
+              label="Enter new password"
+              defaultValue="xxxxxxxxxxxxxxxxxxxxxx"
+              type="password"
+              required={true}
+            />
+            <div className={styles.modalControls}>
+              <Button text="Cancel" onClick={closeModal} />
+              <Button text="Save" filled={true} onClick={closeModal} />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function Field(params: {
+  label: string;
+  defaultValue: any;
+  required?: boolean;
+  type?: string;
+  openModal?: () => void;
+}) {
+  const { label, defaultValue, required, type, openModal } = params;
   return (
     <div className={styles.field}>
       <div className={styles.fieldLabelContainer}>
         <div className={styles.fieldLabel}>{label}</div>
-        {type === "password" && <div className={styles.changePassword}>Change password?</div>}
+        {openModal && (
+          <div className={styles.changePassword} onClick={openModal}>
+            Change password?
+          </div>
+        )}
       </div>
       <input
         className={styles.fieldInput}
