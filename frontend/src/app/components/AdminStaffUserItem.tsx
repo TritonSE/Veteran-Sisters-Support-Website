@@ -2,15 +2,15 @@ import Link from "next/link";
 
 import { User } from "../api/users";
 
+import styles from "./AdminStaffUserItem.module.css";
 import { Program } from "./Program";
 import { Role } from "./Role";
-import styles from "./UserItem.module.css";
 
-type UserItemProp = {
+type AdminStaffUserItemProp = {
   user: User;
 };
 
-export function UserItem({ user }: UserItemProp) {
+export function AdminStaffUserItem({ user }: AdminStaffUserItemProp) {
   let assignedText;
   let assignedStyle = styles.assignedText;
   const vetLen = user.assignedVeterans.length;

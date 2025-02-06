@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 
 import { User, getNonAdminUsers } from "../api/users";
 
+import { AdminStaffUserItem } from "./AdminStaffUserItem";
+import styles from "./AdminStaffUserTable.module.css";
 import { Tabs } from "./Tabs";
-import { UserItem } from "./UserItem";
-import styles from "./UserTable.module.css";
 
-export function UserTable() {
+export function AdminStaffUserTable() {
   const [users, setUsers] = useState<User[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [page, setPage] = useState<number>(0);
@@ -19,6 +19,7 @@ export function UserTable() {
     } else {
       setUsers(allUsers.filter((user) => user.assignedPrograms.includes(program)));
     }
+    setPage(0);
   };
 
   const compare = (a: User, b: User) => {
@@ -103,7 +104,7 @@ export function UserTable() {
             </div>
           </div>
           {users.slice(page * pageSize, (page + 1) * pageSize).map((user) => (
-            <UserItem
+            <AdminStaffUserItem
               key={user._id}
               user={{
                 _id: user._id,

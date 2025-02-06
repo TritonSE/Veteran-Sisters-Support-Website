@@ -11,7 +11,6 @@ type TabsProp = {
 
 export function Tabs({ OnAll, OnBattleBuddies, OnAdvocacy, OnOperationWellness }: TabsProp) {
   const [tab, setTab] = useState<string>("all");
-
   return (
     <div className={styles.tabsContainer}>
       <div className={styles.tabs}>

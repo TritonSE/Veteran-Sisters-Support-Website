@@ -5,7 +5,7 @@ import { NavBar } from "../components/NavBar";
 
 import styles from "./page.module.css";
 
-export default function AdminDashboard() {
+export default function StaffDashboard() {
   return (
     <div className={styles.container}>
       <NavBar />
