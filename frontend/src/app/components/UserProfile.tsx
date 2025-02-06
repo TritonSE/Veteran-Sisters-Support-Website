@@ -1,17 +1,16 @@
-"use client"; // TODO: why is this required?
+"use client";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Button } from "@/app/components/Button";
+import { Role } from "@/app/components/Role";
+import { Program } from "@/app/components//Program";
 import {
   UserProfile as UserProfileType,
   getUserProfile,
   Role as RoleEnum,
   AssignedProgram as AssignedProgramEnum,
-} from "../api/profileApi";
-
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { Button } from "@/app/components/Button";
-import { Role } from "@/app/components/Role";
+} from "@/app/api/profileApi";
 import styles from "./UserProfile.module.css";
-import { Program } from "./Program";
 
 interface ProfileRenderingContext {
   invalidContext: boolean;

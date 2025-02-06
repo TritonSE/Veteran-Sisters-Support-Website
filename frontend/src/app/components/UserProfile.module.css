@@ -29,6 +29,15 @@
   display: flex;
   gap: 8px;
   padding-bottom: var(--Spacing-xs, 4px);
+  align-items: center;
+
+  color: var(--Text-1, #60696f);
+  /* body medium */
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .userProfileContent {

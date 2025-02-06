@@ -1,0 +1,10 @@
+.editProfilePage {
+  display: flex;
+  padding: var(--Spacing-4xl, 80px) var(--Spacing-3xl, 64px);
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1 0 0;
+  align-self: stretch;
+  background: var(--Neutral-Base-White, #fafafa);
+  min-height: 100vh;
+}
