@@ -18,7 +18,7 @@ const userSchema = new Schema({
   },
   zipCode: {
     type: Number,
-    required: true
+    required: true,
   },
   address: {
     streetAddress1: { type: String },
@@ -36,14 +36,30 @@ const userSchema = new Schema({
       },
       branchOfService: {
         type: String,
-        enum: ["Air Force", "Army", "Coast Guard", "First Responder", "Marine Corps", "Navy", "National Guard", "Space Force"],
+        enum: [
+          "Air Force",
+          "Army",
+          "Coast Guard",
+          "First Responder",
+          "Marine Corps",
+          "Navy",
+          "National Guard",
+          "Space Force",
+        ],
         required: function () {
           return this.role === "veteran";
         },
       },
       currentMilitaryStatus: {
         type: String,
-        enum: ["Active Duty", "Reservist", "Veteran", "Veteran Medically Retired", "Veteran 20+ Years Retired", "First Responder"],
+        enum: [
+          "Active Duty",
+          "Reservist",
+          "Veteran",
+          "Veteran Medically Retired",
+          "Veteran 20+ Years Retired",
+          "First Responder",
+        ],
         required: function () {
           return this.role === "veteran";
         },
@@ -56,19 +72,21 @@ const userSchema = new Schema({
         },
       },
     },
-    interests: [{
-      type: String,
-      enum: [
-        "Get a battle buddy",
-        "Be a battle buddy",
-        "Get help filing for VA benefits",
-        "Get help with a discharge update",
-        "Learn more about becoming a peer support specialist",
-        "Wellness events",
-        "Social events",
-        "Other"
-      ],
-    }],
+    interests: [
+      {
+        type: String,
+        enum: [
+          "Get a battle buddy",
+          "Be a battle buddy",
+          "Get help filing for VA benefits",
+          "Get help with a discharge update",
+          "Learn more about becoming a peer support specialist",
+          "Wellness events",
+          "Social events",
+          "Other",
+        ],
+      },
+    ],
   },
   assignedPrograms: {
     type: [String],

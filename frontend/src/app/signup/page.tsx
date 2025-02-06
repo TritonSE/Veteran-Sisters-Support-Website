@@ -1,7 +1,11 @@
 "use client";
 
+import { FirebaseError } from "firebase/app";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import Image from "next/image";
 import React, { MouseEvent, useState } from "react";
+
+import { initFirebase } from "../../../firebase/firebase";
 
 import styles from "./page.module.css";
 import "@fontsource/albert-sans";
@@ -12,9 +16,6 @@ import CustomDropdown from "@/app/components/CustomDropdown";
 import OnboardingOption from "@/app/components/OnboardingOption";
 import ProgressBar from "@/app/components/ProgressBar";
 
-import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "firebase/auth";
-import { initFirebase } from "../../../firebase/firebase";
-import { FirebaseError } from "firebase/app";
 const { auth } = initFirebase();
 
 export default function SignUpForm() {
@@ -41,7 +42,8 @@ export default function SignUpForm() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [formErrors, setFormErrors] = useState<{
     signUpOption?: string; // Choosing veteran vs volunteer
-    email?: string; // An account with this email already exists
+    email?: string; // Invalid email string
+    alreadyExists?: string; // An account with this email already exists
     password?: string; // Password must be 6 characters
     confirmPassword?: string; // Confirm password and password inputs must match
     zip?: string; // Zip is required (special error message since it is hidden in dropdown)
@@ -50,7 +52,7 @@ export default function SignUpForm() {
     onboarding?: string; // At least one interest must be chosen on last page
   }>({});
 
-  const handleNext = async (e?: MouseEvent<HTMLButtonElement>) => {
+  const handleNext = (e?: MouseEvent<HTMLButtonElement>) => {
     if (e) e.preventDefault();
 
     if (currentPage === 0 && !activeButton) {
@@ -67,12 +69,12 @@ export default function SignUpForm() {
       // Check if email is valid
       const emailRegex =
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      if (!emailRegex.test(email)) {
+      if (email && !emailRegex.test(email)) {
         setFormErrors((prev) => ({
           ...prev,
           email: "Please enter a valid email address.",
         }));
-        return;
+        hasError = true;
       }
 
       // Validate password length
@@ -211,7 +213,6 @@ export default function SignUpForm() {
       }));
     }
 
-    // New validation for onboarding options
     if (selectedOptions.length === 0) {
       setFormErrors((prev) => ({
         ...prev,
@@ -228,25 +229,15 @@ export default function SignUpForm() {
     if (hasError) return;
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("User signed up:", userCredential.user);
-      // Proceed with further logic upon successful signup
+      await createUserWithEmailAndPassword(auth, email, password);
     } catch (error: unknown) {
-      // Check if the error is an instance of FirebaseError
       if (error instanceof FirebaseError) {
         if (error.code === "auth/email-already-in-use") {
-          // Set your form error state with an appropriate message
           setFormErrors((prevErrors) => ({
             ...prevErrors,
-            email: "An account with this email already exists.",
+            alreadyExists: "An account with this email already exists.",
           }));
-        } else {
-          // Log or handle other Firebase-related errors
-          console.error("Signup error:", error.message);
         }
-      } else {
-        // Handle unexpected errors
-        console.error("Unexpected error:", error);
       }
     }
   };
@@ -357,6 +348,7 @@ export default function SignUpForm() {
                 {formErrors.requiredFields && (
                   <p className={styles.error}>{formErrors.requiredFields}</p>
                 )}
+                {formErrors.email && <p className={styles.error}>{formErrors.email}</p>}
                 <label htmlFor="email" className={styles.formEntry}>
                   Email
                 </label>
@@ -367,7 +359,9 @@ export default function SignUpForm() {
                   className={styles.input}
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                 ></input>
                 <label htmlFor="password" className={styles.formEntry}>
                   Password
@@ -425,7 +419,9 @@ export default function SignUpForm() {
                   className={styles.input}
                   required
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                  }}
                 ></input>
                 <div className={styles.doubleInput}>
                   <div style={{ marginRight: "16px" }}>
@@ -439,7 +435,9 @@ export default function SignUpForm() {
                       className={styles.input}
                       required
                       value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
+                      onChange={(e) => {
+                        setFirstName(e.target.value);
+                      }}
                     ></input>
                   </div>
                   <div>
@@ -451,7 +449,9 @@ export default function SignUpForm() {
                       id="lastName"
                       className={styles.input}
                       value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
+                      onChange={(e) => {
+                        setLastName(e.target.value);
+                      }}
                     ></input>
                   </div>
                 </div>
@@ -480,7 +480,9 @@ export default function SignUpForm() {
                       id="address"
                       className={styles.input}
                       value={streetAddress}
-                      onChange={(e) => setStreetAddress(e.target.value)}
+                      onChange={(e) => {
+                        setStreetAddress(e.target.value);
+                      }}
                     ></input>
                     <label htmlFor="address2" className={styles.formEntry}>
                       Street address line 2
@@ -490,7 +492,9 @@ export default function SignUpForm() {
                       id="address2"
                       className={styles.input}
                       value={streetAddressLine2}
-                      onChange={(e) => setStreetAddressLine2(e.target.value)}
+                      onChange={(e) => {
+                        setStreetAddressLine2(e.target.value);
+                      }}
                     ></input>
                     <div className={styles.doubleInput}>
                       <div style={{ marginRight: "16px" }}>
@@ -502,7 +506,9 @@ export default function SignUpForm() {
                           id="city"
                           className={styles.input}
                           value={city}
-                          onChange={(e) => setCity(e.target.value)}
+                          onChange={(e) => {
+                            setCity(e.target.value);
+                          }}
                         ></input>
                       </div>
                       <div style={{ marginRight: "16px" }}>
@@ -514,7 +520,9 @@ export default function SignUpForm() {
                           id="state"
                           className={styles.input}
                           value={state}
-                          onChange={(e) => setState(e.target.value)}
+                          onChange={(e) => {
+                            setState(e.target.value);
+                          }}
                         ></input>
                       </div>
                       <div>
@@ -592,7 +600,9 @@ export default function SignUpForm() {
                   placeholder="MM-DD-YYYY"
                   required
                   value={serviceDate}
-                  onChange={(e) => setServiceDate(e.target.value)}
+                  onChange={(e) => {
+                    setServiceDate(e.target.value);
+                  }}
                 ></input>
                 <div className={styles.formEntry}>
                   Branch of service
@@ -613,7 +623,9 @@ export default function SignUpForm() {
                   toggleDropdown={() => {
                     toggleDropdown("select1");
                   }}
-                  onSelect={(option) => setBranch(option)}
+                  onSelect={(option) => {
+                    setBranch(option);
+                  }}
                   selected={branch}
                 />
 
@@ -634,7 +646,9 @@ export default function SignUpForm() {
                   toggleDropdown={() => {
                     toggleDropdown("select2");
                   }}
-                  onSelect={(option) => setMilitaryStatus(option)}
+                  onSelect={(option) => {
+                    setMilitaryStatus(option);
+                  }}
                   selected={militaryStatus}
                 />
 
@@ -644,7 +658,9 @@ export default function SignUpForm() {
                 </label>
                 <CustomDropdown
                   options={["Female", "Male", "Other"]}
-                  onSelect={(option) => setGender(option)}
+                  onSelect={(option) => {
+                    setGender(option);
+                  }}
                   isOpen={activeDropdown === "select3"}
                   toggleDropdown={() => {
                     toggleDropdown("select3");
@@ -696,56 +712,72 @@ export default function SignUpForm() {
                     Select multiple and we&apos;ll help personalize your experience.
                   </div>
                   {formErrors.onboarding && <p className={styles.error}>{formErrors.onboarding}</p>}
-                  {formErrors.email && <p className={styles.error}>{formErrors.email}</p>}
+                  {formErrors.alreadyExists && (
+                    <p className={styles.error}>{formErrors.alreadyExists}</p>
+                  )}
 
                   <OnboardingOption
                     isChecked={false}
                     mainText={"Get a battle buddy"}
                     description={"Description about this option and why it’s good"}
-                    onClick={() => handleToggleOption("Get a battle buddy")}
+                    onClick={() => {
+                      handleToggleOption("Get a battle buddy");
+                    }}
                   ></OnboardingOption>
                   <OnboardingOption
                     isChecked={false}
                     mainText={"Be a battle buddy"}
                     description={"Description about this option and why it’s good"}
-                    onClick={() => handleToggleOption("Be a battle buddy")}
+                    onClick={() => {
+                      handleToggleOption("Be a battle buddy");
+                    }}
                   ></OnboardingOption>
                   <OnboardingOption
                     isChecked={false}
                     mainText={"Get help filing for VA benefits"}
                     description={"Description about this option and why it’s good"}
-                    onClick={() => handleToggleOption("Get help filing for VA benefits")}
+                    onClick={() => {
+                      handleToggleOption("Get help filing for VA benefits");
+                    }}
                   ></OnboardingOption>
                   <OnboardingOption
                     isChecked={false}
                     mainText={"Get help filing for VA benefits"}
                     description={"Description about this option and why it’s good"}
-                    onClick={() => handleToggleOption("Get help filing for VA benefits")}
+                    onClick={() => {
+                      handleToggleOption("Get help filing for VA benefits");
+                    }}
                   ></OnboardingOption>
                   <OnboardingOption
                     isChecked={false}
                     mainText={"Learn more about becoming a peer support specialist"}
                     description={"Description about this option and why it’s good"}
-                    onClick={() =>
-                      handleToggleOption("Learn more about becoming a peer support specialist")
-                    }
+                    onClick={() => {
+                      handleToggleOption("Learn more about becoming a peer support specialist");
+                    }}
                   ></OnboardingOption>
                   <OnboardingOption
                     isChecked={false}
                     mainText={"Wellness events"}
                     description={"Description about this option and why it’s good"}
-                    onClick={() => handleToggleOption("Wellness events")}
+                    onClick={() => {
+                      handleToggleOption("Wellness events");
+                    }}
                   ></OnboardingOption>
                   <OnboardingOption
                     isChecked={false}
                     mainText={"Social events"}
                     description={"Description about this option and why it’s good"}
-                    onClick={() => handleToggleOption("Social events")}
+                    onClick={() => {
+                      handleToggleOption("Social events");
+                    }}
                   ></OnboardingOption>
                   <OnboardingOption
                     isChecked={false}
                     mainText={"Other"}
-                    onClick={() => handleToggleOption("Other")}
+                    onClick={() => {
+                      handleToggleOption("Other");
+                    }}
                   ></OnboardingOption>
                   <Button
                     label="Submit"

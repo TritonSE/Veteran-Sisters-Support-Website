@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState } from "react";
+
 import { initFirebase } from "../../../firebase/firebase";
 
 import styles from "./page.module.css";
@@ -21,11 +22,9 @@ export default function LoginForm() {
     setError("");
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      console.log("User logged in:", userCredential.user);
-    } catch (error: any) {
-      console.error("Login error:", error);
-      setError(error.message);
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch {
+      setError("Account not found.");
     }
   };
 
@@ -33,6 +32,7 @@ export default function LoginForm() {
     <main className={styles.page}>
       <div className={styles.form}>
         <div className={styles.subtitle}>Log in to your account</div>
+        {error && <p className={styles.error}>{error}</p>}
         <form className={styles.innerForm} id="contactForm" onSubmit={handleLogin}>
           <label htmlFor="email" className={styles.formEntry}>
             Email
@@ -44,7 +44,9 @@ export default function LoginForm() {
             className={styles.input}
             required
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
           ></input>
           <label htmlFor="password" className={styles.formEntry}>
             Password
@@ -57,7 +59,9 @@ export default function LoginForm() {
             className={styles.input}
             required
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
           ></input>
 
           <Button label="Continue" className={styles.signInButton} type="submit"></Button>

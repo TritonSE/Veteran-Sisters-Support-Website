@@ -125,3 +125,11 @@
   float: right;
   color: var(--Primary, #057e6f);
 }
+
+.error {
+  color: #60696f;
+  font-family: "Albert Sans";
+  font-size: 14px;
+  margin-bottom: 4px;
+  margin-top: 8px;
+}
