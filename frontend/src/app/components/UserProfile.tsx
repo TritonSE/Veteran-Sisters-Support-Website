@@ -14,6 +14,7 @@ import styles from "./UserProfile.module.css";
 import { Program } from "./Program";
 
 interface ProfileRenderingContext {
+  invalidContext: boolean;
   showVolunteerNotes: boolean;
   showUserList: boolean;
   userListTitle: string;
@@ -27,6 +28,7 @@ function getProfileRenderingContext(
   viewingRole: string,
 ): ProfileRenderingContext {
   const context: ProfileRenderingContext = {
+    invalidContext: false,
     showVolunteerNotes: false,
     showUserList: false,
     userListTitle: "",
@@ -34,30 +36,69 @@ function getProfileRenderingContext(
     viewingPersonalProfile: false,
     isProgramAndRoleEditable: false,
   };
-  context.viewingPersonalProfile = viewerRole == viewingRole;
-
-  context.showVolunteerNotes =
-    viewingRole == RoleEnum.VETERAN &&
-    (viewerRole === RoleEnum.ADMIN || viewerRole === RoleEnum.STAFF); // TODO When can a volunteer see this + can a veteran see this?
-  context.showUserList = !(viewerRole === RoleEnum.ADMIN && viewingRole === RoleEnum.ADMIN);
-
-  context.userListTitle =
-    viewingRole === RoleEnum.VETERAN
-      ? "Assigned Volunteers"
-      : viewingRole === RoleEnum.VOLUNTEER
-        ? "Assigned Veterans"
-        : viewingRole === RoleEnum.STAFF
-          ? "Veterans Under Point of Contact"
-          : "";
-
-  context.userListEditable =
-    ((viewerRole === RoleEnum.ADMIN || viewerRole === RoleEnum.STAFF) &&
-      viewingRole === RoleEnum.VETERAN) ||
-    viewingRole === RoleEnum.VOLUNTEER;
-
-  context.isProgramAndRoleEditable =
-    (viewerRole === RoleEnum.ADMIN || viewerRole === RoleEnum.ADMIN) &&
-    !context.viewingPersonalProfile;
+  const { ADMIN, STAFF, VOLUNTEER, VETERAN } = RoleEnum;
+  // veteran personal profile view
+  if (viewerRole === VETERAN && viewingRole === VETERAN) {
+    context.showUserList = true;
+    context.userListTitle = "Assigned Volunteers";
+    context.viewingPersonalProfile = true;
+    return context;
+  }
+  // volunteer personal profile view
+  else if (viewerRole === VOLUNTEER && viewingRole === VOLUNTEER) {
+    context.showUserList = true;
+    context.userListTitle = "Assigned Veterans";
+    context.viewingPersonalProfile = true;
+    return context;
+  }
+  // staff personal profile view
+  else if (viewerRole === STAFF && viewingRole === STAFF) {
+    context.showUserList = true;
+    context.userListTitle = "Veterans Under Point of Contact";
+    context.viewingPersonalProfile = true;
+    return context;
+  }
+  // admin personal profile view
+  else if (viewerRole === ADMIN && viewingRole === ADMIN) {
+    context.viewingPersonalProfile = true;
+    return context;
+  }
+  // admin views staff
+  else if (viewerRole === ADMIN && viewingRole === STAFF) {
+    context.showUserList = true;
+    context.userListTitle = "Veterans Under Point of Contact";
+    context.isProgramAndRoleEditable = true;
+    return context;
+  }
+  // admin/staff view volunteer
+  else if ((viewerRole === ADMIN || viewerRole === STAFF) && viewingRole === VOLUNTEER) {
+    context.showUserList = true;
+    context.userListEditable = true;
+    context.userListTitle = "Assigned Veterans";
+    context.isProgramAndRoleEditable = true;
+    return context;
+  }
+  // admin/staff view veteran
+  else if ((viewerRole === ADMIN || viewerRole === STAFF) && viewingRole === VETERAN) {
+    context.showUserList = true;
+    context.userListEditable = true;
+    context.userListTitle = "Assigned Volunteers";
+    context.isProgramAndRoleEditable = true;
+    context.showVolunteerNotes = true;
+    return context;
+  }
+  // volunteer view veteran
+  else if (viewerRole === VOLUNTEER && viewingRole === VETERAN) {
+    context.showUserList = true;
+    context.userListTitle = "Assigned Volunteers";
+    context.showVolunteerNotes = true;
+    return context;
+  }
+  // veteran view volunteer
+  else if (viewerRole === VETERAN && viewingRole === VOLUNTEER) {
+    return context;
+  }
+  context.invalidContext = true;
   return context;
 }
 
@@ -102,15 +143,18 @@ export default function UserProfile({ userId }: { userId: string }) {
   const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(userGroups).slice().sort();
 
   return (
-    <div className={styles.userProfile}>
+    <>
       <div className={styles.viewerViewingSelector}>
         <label htmlFor="viewerRole">Viewer Role</label>
         <select
           id="viewerRole"
-          value={viewingRole}
+          value={veiwerRole}
           onChange={(event) => setViewerRole(event.target.value)}
         >
           <option value={RoleEnum.ADMIN}>Admin</option>
+          <option value={RoleEnum.STAFF}>Staff</option>
+          <option value={RoleEnum.VOLUNTEER}>Volunteer</option>
+          <option value={RoleEnum.VETERAN}>Veteran</option>
         </select>
         <label htmlFor="roleViewing">Role Viewing</label>
         <select
@@ -124,41 +168,47 @@ export default function UserProfile({ userId }: { userId: string }) {
           <option value={RoleEnum.VETERAN}>Veteran</option>
         </select>
       </div>
-      {profileRenderingContext.viewingPersonalProfile ? (
-        <div className={styles.profileHeading}>Profile Information</div>
+      {profileRenderingContext.invalidContext ? (
+        <h1>Error: Invalid Profile Rendering Context</h1>
       ) : (
-        <div className={styles.navigateBack}>
-          <Image src="/back_arrow_icon.svg" width={18} height={18} alt="Go back" />
-          <div> Back</div>
+        <div className={styles.userProfile}>
+          {profileRenderingContext.viewingPersonalProfile ? (
+            <div className={styles.profileHeading}>Profile Information</div>
+          ) : (
+            <div className={styles.navigateBack}>
+              <Image src="/back_arrow_icon.svg" width={18} height={18} alt="Go back" />
+              <div> Back</div>
+            </div>
+          )}
+          <div className={styles.userProfileContent}>
+            <ProfileHeader
+              firstName={userProfile.firstName}
+              lastName={userProfile.lastName}
+              role={userProfile.role}
+              assignedPrograms={userProfile.assignedPrograms}
+              yearJoined={userProfile.yearJoined}
+              age={userProfile.age}
+              phoneNumber={userProfile.phoneNumber}
+              gender={userProfile.gender}
+              email={userProfile.email}
+              isPersonalProfile={profileRenderingContext.viewingPersonalProfile}
+              isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
+            />
+            <div className={styles.userProfileInnerContent}>
+              {profileRenderingContext.showVolunteerNotes && <VolunteerNotes />}
+              {profileRenderingContext.showUserList && (
+                <UserList
+                  userGroups={sortedUserGroups}
+                  title={profileRenderingContext.userListTitle}
+                  editable={profileRenderingContext.userListEditable}
+                  minimized={profileRenderingContext.showVolunteerNotes}
+                />
+              )}
+            </div>
+          </div>
         </div>
       )}
-      <div className={styles.userProfileContent}>
-        <ProfileHeader
-          firstName={userProfile.firstName}
-          lastName={userProfile.lastName}
-          role={userProfile.role}
-          assignedPrograms={userProfile.assignedPrograms}
-          yearJoined={userProfile.yearJoined}
-          age={userProfile.age}
-          phoneNumber={userProfile.phoneNumber}
-          gender={userProfile.gender}
-          email={userProfile.email}
-          isPersonalProfile={profileRenderingContext.viewingPersonalProfile}
-          isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
-        />
-        <div className={styles.userProfileInnerContent}>
-          {profileRenderingContext.showVolunteerNotes && <VolunteerNotes />}
-          {profileRenderingContext.showUserList && (
-            <UserList
-              userGroups={sortedUserGroups}
-              title={profileRenderingContext.userListTitle}
-              editable={profileRenderingContext.userListEditable}
-              minimized={profileRenderingContext.showVolunteerNotes}
-            />
-          )}
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
 

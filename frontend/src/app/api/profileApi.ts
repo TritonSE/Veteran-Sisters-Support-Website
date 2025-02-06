@@ -33,7 +33,7 @@ export enum Role {
   STAFF = "staff",
 }
 
-function getStaffProfile(): UserProfile {
+function getUser1(roll: Role): UserProfile {
   return {
     email: "lcfriedman@ucsd.edu",
     firstName: "Leo",
@@ -43,12 +43,12 @@ function getStaffProfile(): UserProfile {
     age: 22,
     gender: "Male",
     phoneNumber: "(012) 345-6789",
-    role: Role.STAFF,
+    role: roll,
     assignedUsers: exampleUsers,
   };
 }
 
-function getVolunteerProfile(): UserProfile {
+function getUser2(roll: Role): UserProfile {
   return {
     email: "lcfriedman@ucsd.edu",
     firstName: "Leo",
@@ -62,7 +62,7 @@ function getVolunteerProfile(): UserProfile {
     age: 22,
     gender: "Male",
     phoneNumber: "(012) 345-6789",
-    role: Role.VOLUNTEER,
+    role: roll,
     assignedUsers: exampleUsers,
   };
 }
@@ -107,12 +107,5 @@ const exampleUsers = [
 ];
 
 export function getUserProfile(role: string): UserProfile {
-  switch (role) {
-    case Role.STAFF:
-      return getStaffProfile();
-    case Role.VOLUNTEER:
-      return getVolunteerProfile();
-    default:
-      return getStaffProfile();
-  }
+  return getUser1(role as Role);
 }

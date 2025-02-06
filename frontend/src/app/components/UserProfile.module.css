@@ -42,6 +42,7 @@
 
 .userProfileInnerContent {
   display: flex;
+  min-width: 1024px;
   padding-bottom: var(--Spacing-l, 32px);
   align-items: flex-start;
   gap: var(--Spacing-md, 24px);
@@ -143,11 +144,12 @@
 
 .userList {
   display: flex;
-  width: 1024px;
+  width: 100%;
   padding: 24px 24px var(--Spacing-l, 32px) 24px;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--Spacing-sm, 16px);
+  height: fit-content;
 
   border-radius: 8px;
   border: 1px solid var(--Stroke-2, #d0d7de);
@@ -219,7 +221,6 @@
 
 .userList .userInfo {
   display: flex;
-  padding-bottom: var(--Spacing-sm, 16px);
   justify-content: space-between;
   align-items: center;
   gap: 4px;
@@ -228,6 +229,7 @@
 
 .userList .userInfo:not(:last-child) {
   border-bottom: 1px solid var(--Stroke-1, #edf1f5);
+  padding-bottom: var(--Spacing-sm, 16px);
 }
 
 .userList .fullName {
@@ -260,6 +262,8 @@
   line-height: normal;
 }
 
+/* VOLUNTEER NOTES STYLES */
+
 .volunteerNotes {
   display: flex;
   padding: 24px 24px var(--Spacing-l, 32px) 24px;
@@ -268,6 +272,7 @@
   gap: var(--Spacing-sm, 16px);
   align-self: stretch;
   width: 100%;
+  height: fit-content;
 
   border-radius: 8px;
   border: 1px solid var(--Stroke-2, #d0d7de);
