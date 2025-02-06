@@ -2,7 +2,7 @@
 import { getUserProfile, Role as RoleEnum } from "@/app/api/profileApi";
 import { Button } from "@/app/components/Button";
 import styles from "./EditProfile.module.css";
-import Image from "next/image";
+import NavigateBack from "./NavigateBack";
 import { useRouter } from "next/navigation";
 
 export default function EditProfile({ userId }: { userId: string }) {
@@ -10,10 +10,7 @@ export default function EditProfile({ userId }: { userId: string }) {
   const user = getUserProfile(RoleEnum.VETERAN);
   return (
     <div className={styles.editProfile}>
-      <div className={styles.navigateBack} onClick={() => router.back()}>
-        <Image src="/back_arrow_icon.svg" width={18} height={18} alt="Go back" />
-        <div> Back</div>
-      </div>
+      <NavigateBack />
       <div className={styles.editProfileHeader}>Edit profile information</div>
       <div className={styles.editProfileFormContent}>
         <div className={styles.editName}>
@@ -32,8 +29,15 @@ export default function EditProfile({ userId }: { userId: string }) {
         <Field required={false} label="Gender" defaultValue={user.gender || ""} />
       </div>
       <div className={styles.formControls}>
-        <Button text="Cancel" />
-        <Button text="Save" />
+        <Button text="Cancel" onClick={() => router.back()} />
+        <Button
+          text="Save"
+          filled={true}
+          onClick={() => {
+            // TODO: call updateProfile api
+            router.back();
+          }}
+        />
       </div>
     </div>
   );

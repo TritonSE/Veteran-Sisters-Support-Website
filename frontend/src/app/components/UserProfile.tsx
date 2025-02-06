@@ -11,6 +11,8 @@ import {
   AssignedProgram as AssignedProgramEnum,
 } from "@/app/api/profileApi";
 import styles from "./UserProfile.module.css";
+import NavigateBack from "./NavigateBack";
+import { useRouter, usePathname } from "next/navigation";
 
 interface ProfileRenderingContext {
   invalidContext: boolean;
@@ -103,7 +105,7 @@ function getProfileRenderingContext(
 
 export default function UserProfile({ userId }: { userId: string }) {
   const defaultViewingRole = RoleEnum.STAFF as string;
-  const defaultViewerRole = RoleEnum.ADMIN as string;
+  const defaultViewerRole = RoleEnum.STAFF as string;
 
   const [viewingRole, setViewingRole] = useState(defaultViewingRole);
   const [veiwerRole, setViewerRole] = useState(defaultViewerRole);
@@ -174,10 +176,7 @@ export default function UserProfile({ userId }: { userId: string }) {
           {profileRenderingContext.viewingPersonalProfile ? (
             <div className={styles.profileHeading}>Profile Information</div>
           ) : (
-            <div className={styles.navigateBack}>
-              <Image src="/back_arrow_icon.svg" width={18} height={18} alt="Go back" />
-              <div> Back</div>
-            </div>
+            <NavigateBack />
           )}
           <div className={styles.userProfileContent}>
             <ProfileHeader
@@ -261,6 +260,8 @@ function ProfileHeader(params: {
   const ageText = `Age: ${age}`;
   const genderText = `Gender: ${gender}`;
   assignedPrograms.sort();
+  const router = useRouter();
+  const pathname = usePathname();
   return (
     <div className={styles.profileHeader}>
       <div className={styles.profileContent}>
@@ -292,7 +293,7 @@ function ProfileHeader(params: {
       </div>
       <div className={styles.profileContentControls}>
         {isPersonalProfile ? (
-          <Button text="Edit profile" />
+          <Button text="Edit profile" onClick={() => router.push(`${pathname}/edit`)} />
         ) : isProgramAndRoleEditable ? (
           <>
             <Button text={"Edit Program"} /> <Button text={"Change Role"} />

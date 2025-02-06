@@ -1,122 +1,107 @@
 .editProfile {
-    display: flex;
-    min-width: 624px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--Spacing-md, 24px);
-  }
-  
-  .editProfileFormContent {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--Spacing-sm, 16px);
-    align-self: stretch;
-  }
-  
-  .navigateBack {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  
-    color: var(--Text-1, #60696f);
-    /* body medium */
-    font-family: "Albert Sans";
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-  
-  .editProfileHeader {
-    color: var(--Text-3, #3a3c3d);
-  
-    /* title medium */
-    font-family: "Albert Sans";
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-  
-  .editProfileForm {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--Spacing-md, 24px);
-    align-self: stretch;
-  }
-  
-  .editName {
-    display: flex;
-    align-items: flex-start;
-    gap: 24px;
-    align-self: stretch;
-  }
-  
-  /* FIELD STYLES */
-  
-  .field {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    flex: 1 0 0;
-    width: 100%;
-  }
-  
-  .field .fieldLabelContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    align-self: stretch;
-  }
-  
-  .field .fieldLabel {
-    color: var(--Text-3, #3a3c3d);
-    /* body medium */
-    font-family: "Albert Sans";
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-  
-  .field .changePassword {
-    color: var(--Primary, #057e6f);
-    /* body medium */
-    font-family: "Albert Sans";
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-  
-  .field .fieldInput {
-    display: flex;
-    padding: 7px 15px;
-    align-items: center;
-    gap: 10px;
-    align-self: stretch;
-  
-    color: var(--Text-2, #4d5358);
-    /* body medium */
-    font-family: "Albert Sans";
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  
-    border-radius: var(--Spacing-xs, 4px);
-    border: 1px solid var(--Stroke-2, #d0d7de);
-    background: var(--Background-1, #fff);
-  }
-  
-  .formControls {
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-start;
-    gap: var(--Spacing-s, 8px);
-    width: 100%;
-  }
-  
+  display: flex;
+  min-width: 624px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-md, 24px);
+}
+
+.editProfileFormContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-sm, 16px);
+  align-self: stretch;
+}
+
+.editProfileHeader {
+  color: var(--Text-3, #3a3c3d);
+
+  /* title medium */
+  font-family: "Albert Sans";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.editProfileForm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-md, 24px);
+  align-self: stretch;
+}
+
+.editName {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+}
+
+/* FIELD STYLES */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1 0 0;
+  width: 100%;
+}
+
+.field .fieldLabelContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.field .fieldLabel {
+  color: var(--Text-3, #3a3c3d);
+  /* body medium */
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.field .changePassword {
+  color: var(--Primary, #057e6f);
+  /* body medium */
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.field .fieldInput {
+  display: flex;
+  padding: 7px 15px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+
+  color: var(--Text-2, #4d5358);
+  /* body medium */
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  border-radius: var(--Spacing-xs, 4px);
+  border: 1px solid var(--Stroke-2, #d0d7de);
+  background: var(--Background-1, #fff);
+}
+
+.formControls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: var(--Spacing-s, 8px);
+  width: 100%;
+}
