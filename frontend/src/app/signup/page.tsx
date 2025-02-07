@@ -205,6 +205,9 @@ export default function SignUpForm() {
       await createUserWithEmailAndPassword(auth, email, password);
       // If successful, create user data in MongoDB
       try {
+        console.log("DateServiceEnded", new Date(serviceDate));
+        const [month, day, year] = serviceDate.split("-").map(Number);
+        const dateObject = new Date(year, month - 1, day);
         const newUser: User = {
           email,
           firstName,
@@ -220,7 +223,7 @@ export default function SignUpForm() {
           },
           roleSpecificInfo: {
             serviceInfo: {
-              dateServiceEnded: new Date(serviceDate),
+              dateServiceEnded: dateObject,
               branchOfService: branch,
               currentMilitaryStatus: militaryStatus,
               gender,
