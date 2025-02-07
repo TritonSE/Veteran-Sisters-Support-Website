@@ -15,12 +15,13 @@ import { Button } from "@/app/components/Button";
 import CustomDropdown from "@/app/components/CustomDropdown";
 import OnboardingOption from "@/app/components/OnboardingOption";
 import ProgressBar from "@/app/components/ProgressBar";
+import { createUser, User } from "../api/userApi";
 
 const { auth } = initFirebase();
 
 export default function SignUpForm() {
   const [currentPage, setCurrentPage] = useState(0);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(true);
   const [activeButton, setActiveButton] = useState("");
   const [isVeteran, setIsVeteran] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState("");
@@ -140,7 +141,6 @@ export default function SignUpForm() {
       }
     }
 
-    setShowDropdown(false);
     setActiveDropdown("");
     setFormErrors({});
 
@@ -148,7 +148,6 @@ export default function SignUpForm() {
   };
 
   const handlePrevious = () => {
-    setShowDropdown(false);
     setActiveDropdown("");
 
     if (currentPage > 0) {
@@ -204,6 +203,38 @@ export default function SignUpForm() {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      // If successful, create user data in MongoDB
+      try {
+        const newUser: User = {
+          email,
+          firstName,
+          lastName,
+          role: isVeteran ? "veteran" : "volunteer",
+          phoneNumber: phone,
+          zipCode: parseInt(zip),
+          address: {
+            streetAddress1: streetAddress,
+            streetAddress2: streetAddressLine2,
+            city,
+            state,
+          },
+          roleSpecificInfo: {
+            serviceInfo: {
+              dateServiceEnded: new Date(serviceDate),
+              branchOfService: branch,
+              currentMilitaryStatus: militaryStatus,
+              gender,
+            },
+            interests: selectedOptions,
+            assignedPrograms: [],
+          },
+          assignedVeterans: [],
+        };
+        await createUser(newUser);
+        console.log("User created successfully");
+      } catch (error: unknown) {
+        console.log("Error creating User", error);
+      }
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
         if (error.code === "auth/email-already-in-use") {
@@ -417,6 +448,7 @@ export default function SignUpForm() {
                   <div>
                     <label htmlFor="lastName" className={styles.formEntry}>
                       Last name
+                      <a style={{ color: "#B80037" }}> *</a>
                     </label>
                     <input
                       type="text"
@@ -426,6 +458,7 @@ export default function SignUpForm() {
                       onChange={(e) => {
                         setLastName(e.target.value);
                       }}
+                      required
                     ></input>
                   </div>
                 </div>
