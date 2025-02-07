@@ -44,6 +44,7 @@ export default function SignUpForm() {
   const [formErrors, setFormErrors] = useState<{
     signUpOption?: string; // Choosing veteran vs volunteer
     email?: string; // Invalid email string
+    phone?: string; // Invalid phone number
     alreadyExists?: string; // An account with this email already exists
     password?: string; // Password must be 6 characters
     confirmPassword?: string; // Confirm password and password inputs must match
@@ -104,6 +105,16 @@ export default function SignUpForm() {
           ...prev,
           confirmPassword: "",
         }));
+      }
+
+      // Check if phone number is valid
+      const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
+      if (phone && !phoneRegex.test(phone)) {
+        setFormErrors((prev) => ({
+          ...prev,
+          phone: "Please enter a valid phone number in the format XXX-XXX-XXXX.",
+        }));
+        hasError = true;
       }
 
       // Validate required fields
@@ -205,7 +216,6 @@ export default function SignUpForm() {
       await createUserWithEmailAndPassword(auth, email, password);
       // If successful, create user data in MongoDB
       try {
-        console.log("DateServiceEnded", new Date(serviceDate));
         const [month, day, year] = serviceDate.split("-").map(Number);
         const dateObject = new Date(year, month - 1, day);
         const newUser: User = {
@@ -416,6 +426,7 @@ export default function SignUpForm() {
                     }
                   }}
                 ></input>
+                {formErrors.phone && <p className={styles.error}>{formErrors.phone}</p>}
                 <label htmlFor="phone" className={styles.formEntry}>
                   Phone number
                   <a style={{ color: "#B80037" }}> *</a>

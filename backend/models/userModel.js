@@ -14,7 +14,7 @@ const userSchema = new Schema({
   phoneNumber: {
     type: String,
     required: true,
-    match: [/^\d{10}$/, "Phone number must be 10 digits"],
+    match: [/^\d{3}-\d{3}-\d{4}$/, "Phone number must be in the format XXX-XXX-XXXX"],
   },
   zipCode: {
     type: Number,
@@ -45,6 +45,7 @@ const userSchema = new Schema({
           "Navy",
           "National Guard",
           "Space Force",
+          "",
         ],
         required: function () {
           return this.role === "veteran";
@@ -59,6 +60,7 @@ const userSchema = new Schema({
           "Veteran Medically Retired",
           "Veteran 20+ Years Retired",
           "First Responder",
+          "",
         ],
         required: function () {
           return this.role === "veteran";
@@ -66,7 +68,7 @@ const userSchema = new Schema({
       },
       gender: {
         type: String,
-        enum: ["Female", "Male", "Other"],
+        enum: ["Female", "Male", "Other", ""],
         required: function () {
           return this.role === "veteran";
         },
@@ -84,6 +86,7 @@ const userSchema = new Schema({
           "Wellness events",
           "Social events",
           "Other",
+          "",
         ],
       },
     ],
