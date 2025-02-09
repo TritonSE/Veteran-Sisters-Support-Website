@@ -3,9 +3,11 @@
 import { FirebaseError } from "firebase/app";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { MouseEvent, useState } from "react";
 
 import { initFirebase } from "../../../firebase/firebase";
+import { User, createUser } from "../api/userApi";
 
 import styles from "./page.module.css";
 import "@fontsource/albert-sans";
@@ -15,11 +17,11 @@ import { Button } from "@/app/components/Button";
 import CustomDropdown from "@/app/components/CustomDropdown";
 import OnboardingOption from "@/app/components/OnboardingOption";
 import ProgressBar from "@/app/components/ProgressBar";
-import { createUser, User } from "../api/userApi";
 
 const { auth } = initFirebase();
 
 export default function SignUpForm() {
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(0);
   const [showDropdown, setShowDropdown] = useState(true);
   const [activeButton, setActiveButton] = useState("");
@@ -214,6 +216,7 @@ export default function SignUpForm() {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      console.log("Firebase User created successfully!");
       // If successful, create user data in MongoDB
       try {
         const [month, day, year] = serviceDate.split("-").map(Number);
@@ -244,9 +247,11 @@ export default function SignUpForm() {
           assignedVeterans: [],
         };
         await createUser(newUser);
-        console.log("User created successfully");
+        router.push("/login?success=true");
+        console.log("User created successfully in MongoDB");
       } catch (error: unknown) {
-        console.log("Error creating User", error);
+        console.error("User creation failed:", error);
+        alert("Something went wrong. Please try again.");
       }
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
@@ -257,6 +262,7 @@ export default function SignUpForm() {
           }));
         }
       }
+      return;
     }
   };
 

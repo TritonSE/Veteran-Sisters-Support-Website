@@ -1,28 +1,39 @@
 "use client";
 
 import { signInWithEmailAndPassword } from "firebase/auth";
-import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 import { initFirebase } from "../../../firebase/firebase";
 
 import styles from "./page.module.css";
 
 import { Button } from "@/app/components/Button";
+import SuccessNotification from "@/app/components/SuccessNotification";
 import "@fontsource/albert-sans";
 
 const { auth } = initFirebase();
 
 export default function LoginForm() {
+  const searchParams = useSearchParams(); // Search for query parameters
+  const [showSuccess, setShowSuccess] = useState(false); // If user successfully signed up and was redirected
+  const [showLoggedin, setShowLoggedin] = useState(false); // Once user logs in
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    if (searchParams.get("success") === "true") {
+      setShowSuccess(true);
+    }
+  }, [searchParams]);
+
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
-
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      setShowLoggedin(true);
     } catch {
       setError("Account not found.");
     }
@@ -76,6 +87,8 @@ export default function LoginForm() {
           </div>
         </div>
       </div>
+      {showSuccess && <SuccessNotification message="User Created Successfully" />}
+      {showLoggedin && <SuccessNotification message="User Logged In Successfully" />}
     </main>
   );
 }
