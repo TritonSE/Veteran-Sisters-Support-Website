@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { MouseEvent, useState } from "react";
 
-import { initFirebase } from "../../../firebase/firebase";
+import { auth } from "../../../firebase/firebase";
 import { User, createUser } from "../api/userApi";
 
 import styles from "./page.module.css";
@@ -17,8 +17,6 @@ import { Button } from "@/app/components/Button";
 import CustomDropdown from "@/app/components/CustomDropdown";
 import OnboardingOption from "@/app/components/OnboardingOption";
 import ProgressBar from "@/app/components/ProgressBar";
-
-const { auth } = initFirebase();
 
 export default function SignUpForm() {
   const router = useRouter();

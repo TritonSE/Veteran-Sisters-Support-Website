@@ -1,17 +1,17 @@
-import { initializeApp } from "firebase/app";
+import { FirebaseOptions, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 
 import env from "@/util/validateEnv";
 
-export const initFirebase = () => {
-  if (!env.NEXT_PUBLIC_FIREBASE) {
-    throw new Error("Cannot get firebase settings");
-  }
+if (!env.NEXT_PUBLIC_FIREBASE) {
+  throw new Error("Cannot get Firebase settings");
+}
 
-  const firebaseConfig = env.NEXT_PUBLIC_FIREBASE;
+const firebaseConfig: FirebaseOptions = env.NEXT_PUBLIC_FIREBASE;
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const storage = getStorage(app);
 
-  return { app, auth };
-};
+export { app, auth, storage };
