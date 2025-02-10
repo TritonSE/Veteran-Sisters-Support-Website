@@ -1,0 +1,55 @@
+.flexContainer {
+  display: flex;
+  width: 100%;
+  height: auto;
+  padding: 12px 16px;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 8px;
+  border: 1.5px solid var(--Stroke-2, #d0d7de);
+  background: var(--Background-1, #fff);
+
+  margin-top: 16px;
+}
+
+.flexContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1 0 0;
+  height: auto;
+}
+
+.textContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  height: auto;
+}
+
+.mainText {
+  color: var(--Text-3, #3a3c3d);
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.description {
+  color: var(--Text-1, #60696f);
+  font-family: "Albert Sans";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.checkboxContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}

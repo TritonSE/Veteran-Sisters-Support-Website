@@ -2,8 +2,13 @@ import { ref, uploadBytes } from "firebase/storage";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 
+<<<<<<< HEAD
 import { CreateFileObjectRequest, createFileObject } from "../api/fileApi";
 import { storage } from "../firebase";
+=======
+import { storage } from "../../../firebase/firebase";
+import createFileObject, { CreateFileObjectRequest } from "../api/fileApi";
+>>>>>>> Login_Katelyn_Navyaa
 
 import styles from "./FileUpload.module.css";
 
