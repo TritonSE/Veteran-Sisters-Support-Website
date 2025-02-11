@@ -5,6 +5,7 @@ import { FileObject, getFilesByUploader } from "../api/fileApi";
 
 import { Tabs } from "./Tabs";
 import styles from "./VeteranFilesTable.module.css";
+import Link from "next/link";
 
 type VeteranFilesTableProps = {
   refresh: boolean;
@@ -37,16 +38,16 @@ export function VeteranFilesTable({ refresh }: VeteranFilesTableProps) {
     }
   }, [selectedProgram, fileObjects]);
 
-  const DocumentPreview = (documentName: string, fileType: string) => {
+  const DocumentPreview = (documentId: string, documentName: string, fileType: string) => {
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 8, width: 220 }}>
-        <div className={styles.documentPreview}>
+        <Link className={styles.documentPreview} href={`document/${documentId}`}>
           {fileType === "pdf" ? (
-            <Image src="./pdf_icon.svg" width={80} height={80} alt="pdf" />
+            <Image src="/pdf_icon.svg" width={80} height={80} alt="pdf" />
           ) : (
-            <Image src="./doc_icon.svg" width={80} height={80} alt="pdf" />
+            <Image src="/doc_icon.svg" width={80} height={80} alt="pdf" />
           )}
-        </div>
+        </Link>
         <div>
           <div
             style={{
@@ -98,6 +99,7 @@ export function VeteranFilesTable({ refresh }: VeteranFilesTableProps) {
         {filteredFiles.map((obj) => (
           <div key={obj._id}>
             {DocumentPreview(
+              obj._id,
               obj.filename,
               obj.filename.includes(".") ? (obj.filename.split(".").pop() ?? "") : "",
             )}

@@ -62,8 +62,7 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
         .then((result) => {
           if (result.success) {
             console.log("file object created");
-            const extension = file.name.includes(".") ? (file.name.split(".").pop() ?? "") : "";
-            const storageRef = ref(storage, `files/${result.data._id}.${extension}`);
+            const storageRef = ref(storage, `files/${result.data._id}`);
             uploadBytes(storageRef, file)
               .then(() => {
                 setUploading(false);
@@ -89,14 +88,14 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
       <div className={styles.modal}>
         <div className={styles.xwrapper}>
           <div onClick={onClose} className={styles.xbutton}>
-            <Image src="./close_button.svg" width={24} height={24} alt="close_button" />
+            <Image src="/close_button.svg" width={24} height={24} alt="close_button" />
           </div>
         </div>
         <div className={styles.uploadWrapper}>
           <div className={styles.iconWrapper}>
-            <Image src="./pdf_icon.svg" width={83} height={83} alt="pdf" />
+            <Image src="/pdf_icon.svg" width={83} height={83} alt="pdf" />
             <span>or</span>
-            <Image src="./doc_icon.svg" width={83} height={83} alt="doc" />
+            <Image src="/doc_icon.svg" width={83} height={83} alt="doc" />
           </div>
           {!file ? (
             <>
@@ -120,7 +119,7 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
                 }}
                 className={styles.xbutton}
               >
-                <Image src="./close_button.svg" width={24} height={24} alt="close_button" />
+                <Image src="/close_button.svg" width={24} height={24} alt="close_button" />
               </div>
             </div>
           )}
@@ -210,7 +209,7 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
         </div>
         {sizeError && (
           <div className={styles.error}>
-            <Image src="./error_symbol.svg" alt="error" width={20} height={20} /> File size was too
+            <Image src="/error_symbol.svg" alt="error" width={20} height={20} /> File size was too
             big, please upload one smaller than 1 GB!
           </div>
         )}

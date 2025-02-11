@@ -1,0 +1,100 @@
+.document{
+    padding-left: 10%;
+    padding-top: 64px;
+    width: 50%;
+    /* height: 100%; */
+}
+
+.header{
+    position: fixed;
+    top: 0px;
+    z-index: 1;
+    border-bottom: 1px solid var(--Stroke-3, #BDC9D2);
+    background: var(--Background-1, #FFF);
+    width: 100%;
+    height: 64px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 32px;
+}
+
+.headerSection{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    color: var(--Text-5, #252525);
+}
+
+.comment{
+    display: flex;
+    width: 362px;
+    padding: 16px 20px;
+    flex-direction: column;
+    gap: 16px;
+    border-radius: 8px;
+    background: var(--Background-1, #FFF);
+}
+
+.commentTopRow{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    color: var(--Text-4, #303030);
+    font-weight: 500;
+    font-family: "Albert Sans";
+    font-size: 14px;
+}
+
+.profileIcon{
+    width: 32px;
+    height: 32px;
+    border-radius: 100px;
+    background-color: #C9D1E4;
+    color: #283F7A;
+    font-family: "Albert Sans";
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.commentBody{
+    color: var(--Text-2, #4D5358);
+    font-family: "Albert Sans";
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.commentBottomRow{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.commentDate{
+    color: var(--Text-1, #60696F);
+    font-family: Inconsolata;
+    font-size: 12px;;
+}
+
+.commentBottomIcons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 11px;
+}
+
+.commentsWrapper{
+    position: absolute;
+    top: 100px;
+    right: 10%;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+
+}

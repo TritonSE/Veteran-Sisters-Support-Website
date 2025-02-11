@@ -6,7 +6,7 @@ import { FileUpload } from "../components/FileUpload";
 import { NavBar } from "../components/NavBar";
 import { VeteranFilesTable } from "../components/VeteranFilesTable";
 
-import styles from "./veteranDashboard.module.css";
+import styles from "./page.module.css";
 
 export default function VeteranDashboard() {
   const [uploadPopup, setUploadPopup] = useState<boolean>(false);
@@ -25,7 +25,7 @@ export default function VeteranDashboard() {
             }}
             className={styles.uploadButton}
           >
-            <Image src="./upload_icon.svg" alt="upload" width={24} height={24} />
+            <Image src="/upload_icon.svg" alt="upload" width={24} height={24} />
             Upload document
           </div>
         </div>
@@ -50,7 +50,7 @@ export default function VeteranDashboard() {
       )}
       {showUploadConfirm && (
         <div className={styles.uploadConfirm}>
-          <Image src="./check.svg" width={20} height={20} alt="check" />
+          <Image src="/check.svg" width={20} height={20} alt="check" />
           Document upload success!
         </div>
       )}
