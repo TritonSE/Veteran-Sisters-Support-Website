@@ -4,108 +4,78 @@ import { Button } from "@/app/components/Button";
 import styles from "./EditProfile.module.css";
 import NavigateBack from "./NavigateBack";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { useState } from "react";
 
 export default function EditProfile({ userId }: { userId: string }) {
-  const [modalOpen, setModalOpen] = useState(false);
   const router = useRouter();
   const user = getUserProfile(RoleEnum.VETERAN);
   return (
-    <div className={styles.editProfile}>
+    <form className={styles.editProfile}>
       <NavigateBack />
       <div className={styles.editProfileHeader}>Edit profile information</div>
+
       <div className={styles.editProfileFormContent}>
         <div className={styles.editName}>
           <Field required={true} label="First Name" defaultValue={user.firstName} />
           <Field required={true} label="Last Name" defaultValue={user.lastName} />
         </div>
-        <Field required={true} label="Email" defaultValue={user.email} />
-        <Field
-          required={true}
-          label="Password"
-          defaultValue={"xxxxxxxxxxxxxxxxxxxxxx"}
-          type="password"
-          openModal={() => setModalOpen(true)}
-        />
-        <Field required={false} label="Phone Number" defaultValue={user.phoneNumber || ""} />
-        <Field required={false} label="Age" defaultValue={user.age || null} type="number" />
-        <Field required={false} label="Gender" defaultValue={user.gender || ""} />
+        <Field required={true} label="Email" defaultValue={user.email} type="email" />
+        <Field required={true} label="Phone Number" defaultValue={user.phoneNumber || ""} />
+        <Field required={true} label="Age" defaultValue={user.age || null} type="number" />
+        <Field required={true} label="Gender" defaultValue={user.gender || ""} />
       </div>
       <div className={styles.formControls}>
-        <Button text="Cancel" onClick={() => router.back()} />
         <Button
-          text="Save"
-          filled={true}
-          onClick={() => {
-            // TODO: call updateProfile api
-            router.back();
+          text="Click to change password"
+          onClick={(event) => {
+            event.preventDefault();
           }}
         />
-      </div>
-      <ConfirmPasswordModal showModal={modalOpen} closeModal={() => setModalOpen(false)} />
-    </div>
-  );
-}
+        <div className={styles.formSubmissionControls}>
+          <Button
+            text="Cancel"
+            onClick={(event) => {
+              event.preventDefault();
+              router.back();
+            }}
+          />
+          <Button
+            text="Save"
+            filled={true}
+            onClick={(event) => {
+              event.preventDefault();
 
-function ConfirmPasswordModal(params: { showModal: boolean; closeModal: () => void }) {
-  const { showModal, closeModal } = params;
+              const inputs: any = document.querySelectorAll(`input.${styles.fieldInput}`);
 
-  return (
-    <>
-      {showModal && (
-        <div className={styles.confirmPasswordModal}>
-          <div className={styles.modalContent}>
-            <div className={styles.modalHeader}>
-              <div className={styles.modalInfo}>
-                <div className={styles.modalHeading}>Change your password</div>
-                <div className={styles.modalSubtext}>
-                  Your new password will be saved to your profile information.
-                </div>
-              </div>
-              <Image
-                className={styles.closeModal}
-                src="/close_button.svg"
-                alt="Close modal"
-                width={24}
-                height={24}
-                onClick={closeModal}
-              />
-            </div>
-            <Field
-              label="Enter new password"
-              defaultValue="xxxxxxxxxxxxxxxxxxxxxx"
-              type="password"
-              required={true}
-            />
-            <div className={styles.modalControls}>
-              <Button text="Cancel" onClick={closeModal} />
-              <Button text="Save" filled={true} onClick={closeModal} />
-            </div>
-          </div>
+              const formData = {
+                firstName: inputs[0]?.value,
+                lastName: inputs[1]?.value,
+                email: inputs[2]?.value,
+                phoneNumber: inputs[3]?.value,
+                age: Number(inputs[4]?.value),
+                gender: inputs[5]?.value,
+              };
+
+              const form = document.querySelector("form");
+              if (form && !form.reportValidity()) {
+                return; // Prevent navigation if validation fails
+              }
+
+              // TODO: call updateProfile api with form data
+              router.back();
+            }}
+          />
         </div>
-      )}
-    </>
+      </div>
+    </form>
   );
 }
 
-function Field(params: {
-  label: string;
-  defaultValue: any;
-  required?: boolean;
-  type?: string;
-  openModal?: () => void;
-}) {
-  const { label, defaultValue, required, type, openModal } = params;
+function Field(params: { label: string; defaultValue: any; required?: boolean; type?: string }) {
+  const { label, defaultValue, required, type } = params;
   return (
     <div className={styles.field}>
       <div className={styles.fieldLabelContainer}>
         <div className={styles.fieldLabel}>{label}</div>
-        {openModal && (
-          <div className={styles.changePassword} onClick={openModal}>
-            Change password?
-          </div>
-        )}
       </div>
       <input
         className={styles.fieldInput}
