@@ -338,6 +338,10 @@
 
   height: fit-content;
 }
+.volunteerNotes .postNoteButton:hover {
+  cursor: pointer;
+}
+
 .volunteerNotes .postedNotes {
   display: flex;
   flex-direction: column;
