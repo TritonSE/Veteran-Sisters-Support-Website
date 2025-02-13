@@ -56,11 +56,11 @@ export function AdminStaffUserTable() {
           setAllUsers(sortedList);
           setUsers(sortedList);
         } else {
-          alert(result.error);
+          console.error(result.error);
         }
       })
       .catch((reason: unknown) => {
-        alert(reason);
+        console.error(reason);
       });
   }, []);
 

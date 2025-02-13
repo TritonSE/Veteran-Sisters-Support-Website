@@ -16,6 +16,9 @@ export async function getNonAdminUsers(program?: string): Promise<APIResult<User
     const response = program
       ? await get(`/api/nonAdminUsers?assignedProgram=${program}`)
       : await get(`/api/nonAdminUsers`);
+    if (!response.ok) {
+      return { success: false, error: response.statusText };
+    }
     const users = (await response.json()) as User[];
     return { success: true, data: users };
   } catch (error) {
