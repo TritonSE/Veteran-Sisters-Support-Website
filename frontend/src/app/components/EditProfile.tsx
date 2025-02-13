@@ -1,13 +1,31 @@
 "use client";
-import { getUserProfile, Role as RoleEnum } from "@/app/api/profileApi";
+import { getUserProfile, UserProfile as UserProfileType } from "@/app/api/profileApi";
 import { Button } from "@/app/components/Button";
 import styles from "./EditProfile.module.css";
 import NavigateBack from "./NavigateBack";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function EditProfile({ userId }: { userId: string }) {
   const router = useRouter();
-  const user = getUserProfile(RoleEnum.VETERAN);
+  const [userProfile, setUserProfile] = useState<UserProfileType | undefined>(undefined);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const res = await getUserProfile(userId);
+      if (res.success) {
+        return res.data;
+      }
+    };
+    fetchUserProfile()
+      .then((res) => {
+        setUserProfile(res);
+      })
+      .catch((err: unknown) => {
+        console.error(err);
+      });
+  }, []);
+
   return (
     <form className={styles.editProfile}>
       <NavigateBack />
@@ -15,13 +33,13 @@ export default function EditProfile({ userId }: { userId: string }) {
 
       <div className={styles.editProfileFormContent}>
         <div className={styles.editName}>
-          <Field required={true} label="First Name" defaultValue={user.firstName} />
-          <Field required={true} label="Last Name" defaultValue={user.lastName} />
+          <Field required={true} label="First Name" defaultValue={userProfile?.firstName} />
+          <Field required={true} label="Last Name" defaultValue={userProfile?.lastName} />
         </div>
-        <Field required={true} label="Email" defaultValue={user.email} type="email" />
-        <Field required={true} label="Phone Number" defaultValue={user.phoneNumber || ""} />
-        <Field required={true} label="Age" defaultValue={user.age || null} type="number" />
-        <Field required={true} label="Gender" defaultValue={user.gender || ""} />
+        <Field required={true} label="Email" defaultValue={userProfile?.email} type="email" />
+        <Field required={true} label="Phone Number" defaultValue={userProfile?.phoneNumber || ""} />
+        <Field required={true} label="Age" defaultValue={userProfile?.age || null} type="number" />
+        <Field required={true} label="Gender" defaultValue={userProfile?.gender || ""} />
       </div>
       <div className={styles.formControls}>
         <Button
