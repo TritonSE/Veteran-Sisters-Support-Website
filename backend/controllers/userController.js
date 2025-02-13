@@ -1,4 +1,5 @@
 import { User } from "../models/userModel.js";
+import mongoose from "mongoose";
 export const queryUsers = async (req, res) => {
   try {
     const { assignedProgram, assignedVeteran, ...userQuery } = req.query;
@@ -36,9 +37,35 @@ export const getUserByEmail = async (req, res) => {
   }
 };
 
+export const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).exec();
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ error: "Could not find user" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 export const addUser = async (req, res) => {
   try {
-    const { email, firstName, lastName, role, assignedPrograms, assignedVeterans } = req.body;
+    const {
+      email,
+      firstName,
+      lastName,
+      role,
+      assignedPrograms,
+      assignedVeterans,
+      yearJoined,
+      age,
+      gender,
+      phoneNumber,
+    } = req.body;
     const existingUser = await User.findOne({ email }).exec();
     if (existingUser) {
       res.status(409).json({ error: "User with that email already exists" });
@@ -50,6 +77,10 @@ export const addUser = async (req, res) => {
         role,
         assignedPrograms,
         assignedVeterans,
+        yearJoined,
+        age,
+        gender,
+        phoneNumber,
       });
       res.status(201).json(newUser);
     }

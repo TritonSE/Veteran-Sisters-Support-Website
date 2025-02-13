@@ -3,7 +3,7 @@ import styles from "./Role.module.css";
 import { Role as RoleEnum } from "../api/profileApi";
 
 type RoleProp = {
-  role: string;
+  role: string | undefined;
 };
 
 export function Role({ role }: RoleProp) {

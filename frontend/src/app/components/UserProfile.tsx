@@ -1,18 +1,28 @@
 "use client";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
+import {
+  AssignedProgram as AssignedProgramEnum,
+  ProfileComment,
+  ProfileCommentPostRequest,
+  Role as RoleEnum,
+  UserProfile as UserProfileType,
+  exampleUsers,
+  getComments,
+  getUserProfile,
+  postComment,
+} from "../api/profileApi";
+
+// import { Program } from "./Program";
+
+import NavigateBack from "./NavigateBack";
+import styles from "./UserProfile.module.css";
+
+import { Program } from "@/app/components//Program";
 import { Button } from "@/app/components/Button";
 import { Role } from "@/app/components/Role";
-import { Program } from "@/app/components//Program";
-import {
-  UserProfile as UserProfileType,
-  getUserProfile,
-  Role as RoleEnum,
-  AssignedProgram as AssignedProgramEnum,
-} from "@/app/api/profileApi";
-import styles from "./UserProfile.module.css";
-import NavigateBack from "./NavigateBack";
-import { useRouter, usePathname } from "next/navigation";
 
 interface ProfileRenderingContext {
   invalidContext: boolean;
@@ -103,32 +113,140 @@ function getProfileRenderingContext(
   return context;
 }
 
+function VolunteerNotes({ userId }: { userId: string }) {
+  const [profileNotes, setProfileNotes] = useState<ProfileComment[] | undefined>([]);
+  const [currentComment, setCurrentComment] = useState<string>("");
+  // use this to trigger a re-fetch of the notes when new note posted
+  const [profileNotesChanged, setProfileNotesChanged] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchProfileNotes = async () => {
+      const res = await getComments(userId);
+      if (res.success) {
+        return res.data;
+      }
+    };
+    fetchProfileNotes()
+      .then((res) => {
+        setProfileNotes(res);
+      })
+      .catch((err: unknown) => {
+        console.error(err);
+      });
+  }, [profileNotesChanged]);
+
+  const postProfileNote = async (comment: ProfileCommentPostRequest) => {
+    const res = await postComment(comment);
+    if (res.success) {
+      setProfileNotesChanged(!profileNotesChanged);
+    }
+  };
+  return (
+    <div className={styles.volunteerNotes}>
+      <div className={styles.noteHeader}>Notes from Volunteers</div>
+      <div className={styles.noteSection}>
+        <div className={styles.postNoteSection}>
+          <input
+            className={styles.postNoteInputField}
+            placeholder="Add a comment..."
+            value={currentComment}
+            onChange={(event) => {
+              setCurrentComment(event.target.value);
+            }}
+          ></input>
+          <button
+            onClick={(event) => {
+              event.preventDefault();
+              const comment = {
+                profileId: userId,
+                commenterId: "67a4255fc7beaa03529393dc",
+                comment: currentComment,
+                datePosted: new Date(),
+              };
+              postProfileNote(comment)
+                .then(() => {
+                  console.log("Comment posted");
+                })
+                .catch((err: unknown) => {
+                  console.error(err);
+                });
+            }}
+            className={styles.postNoteButton}
+          >
+            Post
+          </button>
+        </div>
+        <div className={styles.postedNotes}>
+          {profileNotes && profileNotes.length > 0 ? (
+            profileNotes.map((comment, ind) => {
+              return (
+                <div key={ind} className={styles.postedNote}>
+                  <ProfilePicture firstName={comment.user} size="small" />
+                  <div className={styles.noteContent}>
+                    <div className={styles.noteHeader}>
+                      <div className={styles.noteAuthor}>{comment.user}</div>
+                      <div className={styles.notePostedDate}>
+                        {Math.floor(
+                          (new Date().getTime() - new Date(comment.datePosted).getTime()) /
+                            (1000 * 60 * 60 * 24),
+                        )}{" "}
+                        days ago
+                      </div>
+                    </div>
+                    <div className={styles.noteBody}>{comment.comment}</div>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div>No notes</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function UserProfile({ userId }: { userId: string }) {
-  const defaultViewingRole = RoleEnum.STAFF as string;
-  const defaultViewerRole = RoleEnum.STAFF as string;
+  const defaultViewingRole = RoleEnum.VETERAN as string;
+  const defaultViewerRole = RoleEnum.ADMIN as string;
 
   const [viewingRole, setViewingRole] = useState(defaultViewingRole);
   const [veiwerRole, setViewerRole] = useState(defaultViewerRole);
-  const [userProfile, setUserProfile] = useState(getUserProfile(viewingRole));
+  const [userProfile, setUserProfile] = useState<UserProfileType | undefined>(undefined);
   const [profileRenderingContext, setProfileRenderingContext] = useState(
     getProfileRenderingContext(defaultViewerRole, defaultViewingRole),
   );
 
   useEffect(() => {
-    setUserProfile(getUserProfile(viewingRole));
+    const fetchUserProfile = async () => {
+      const res = await getUserProfile(userId);
+      if (res.success) {
+        return res.data;
+      }
+    };
+    fetchUserProfile()
+      .then((res) => {
+        setUserProfile(res);
+      })
+      .catch((err: unknown) => {
+        console.error(err);
+      });
+  }, []);
+
+  useEffect(() => {
     setProfileRenderingContext(getProfileRenderingContext(veiwerRole, viewingRole));
   }, [viewingRole, veiwerRole]);
 
   // Users for user list
-  const emptyUserGroups: { [key: string]: UserProfileType[] } = userProfile.assignedPrograms.reduce(
-    (accumulator: { [key: string]: UserProfileType[] }, program: string) => {
-      accumulator[program] = [];
-      return accumulator;
-    },
-    {},
-  );
+  const emptyUserGroups: { [key: string]: UserProfileType[] } = (
+    userProfile?.assignedPrograms ?? []
+  ).reduce((accumulator: { [key: string]: UserProfileType[] }, program: string) => {
+    accumulator[program] = [];
+    return accumulator;
+  }, {});
 
-  const assignedUsers = userProfile.assignedUsers || [];
+  const assignedUsers = exampleUsers || [];
   const userGroups: { [key: string]: UserProfileType[] } = assignedUsers.reduce(
     (accumulator, user) => {
       user.assignedPrograms.forEach((program: string) => {
@@ -149,8 +267,10 @@ export default function UserProfile({ userId }: { userId: string }) {
         <label htmlFor="viewerRole">Viewer Role</label>
         <select
           id="viewerRole"
-          value={veiwerRole}
-          onChange={(event) => setViewerRole(event.target.value)}
+          value={viewingRole}
+          onChange={(event) => {
+            setViewerRole(event.target.value);
+          }}
         >
           <option value={RoleEnum.ADMIN}>Admin</option>
           <option value={RoleEnum.STAFF}>Staff</option>
@@ -161,7 +281,9 @@ export default function UserProfile({ userId }: { userId: string }) {
         <select
           id="roleViewing"
           value={viewingRole}
-          onChange={(event) => setViewingRole(event.target.value)}
+          onChange={(event) => {
+            setViewingRole(event.target.value);
+          }}
         >
           <option value={RoleEnum.ADMIN}>Admin</option>
           <option value={RoleEnum.STAFF}>Staff</option>
@@ -180,20 +302,20 @@ export default function UserProfile({ userId }: { userId: string }) {
           )}
           <div className={styles.userProfileContent}>
             <ProfileHeader
-              firstName={userProfile.firstName}
-              lastName={userProfile.lastName}
-              role={userProfile.role}
-              assignedPrograms={userProfile.assignedPrograms}
-              yearJoined={userProfile.yearJoined}
-              age={userProfile.age}
-              phoneNumber={userProfile.phoneNumber}
-              gender={userProfile.gender}
-              email={userProfile.email}
+              firstName={userProfile?.firstName}
+              lastName={userProfile?.lastName}
+              role={userProfile?.role}
+              assignedPrograms={userProfile?.assignedPrograms}
+              yearJoined={userProfile?.yearJoined}
+              age={userProfile?.age}
+              phoneNumber={userProfile?.phoneNumber}
+              gender={userProfile?.gender}
+              email={userProfile?.email}
               isPersonalProfile={profileRenderingContext.viewingPersonalProfile}
               isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
             />
             <div className={styles.userProfileInnerContent}>
-              {profileRenderingContext.showVolunteerNotes && <VolunteerNotes />}
+              {profileRenderingContext.showVolunteerNotes && <VolunteerNotes userId={userId} />}
               {profileRenderingContext.showUserList && (
                 <UserList
                   userGroups={sortedUserGroups}
@@ -230,15 +352,15 @@ function Divider() {
 }
 
 function ProfileHeader(params: {
-  firstName: string;
-  lastName: string;
-  role: RoleEnum;
-  assignedPrograms: AssignedProgramEnum[];
-  yearJoined?: number;
-  age?: number;
-  phoneNumber?: string;
-  gender?: String;
-  email: String;
+  firstName: string | undefined;
+  lastName: string | undefined;
+  role: RoleEnum | undefined;
+  assignedPrograms: AssignedProgramEnum[] | undefined;
+  yearJoined?: number | undefined;
+  age?: number | undefined;
+  phoneNumber?: string | undefined;
+  gender?: string | undefined;
+  email: string | undefined;
   isProgramAndRoleEditable: boolean;
   isPersonalProfile: boolean;
 }) {
@@ -255,11 +377,11 @@ function ProfileHeader(params: {
     isProgramAndRoleEditable,
     isPersonalProfile,
   } = params;
-  const fullName = `${firstName} ${lastName}`;
-  const joinedText = `Joined: ${yearJoined}`;
-  const ageText = `Age: ${age}`;
-  const genderText = `Gender: ${gender}`;
-  assignedPrograms.sort();
+  const fullName = `${firstName ?? "Unknown"} ${lastName ?? "Unkown"}`;
+  const joinedText = `Joined: ${yearJoined ?? 0}`;
+  const ageText = `Age: ${age ?? 0}`;
+  const genderText = `Gender: ${gender ?? "Unknown"}`;
+  assignedPrograms?.sort();
   const router = useRouter();
   const pathname = usePathname();
   return (
@@ -270,9 +392,7 @@ function ProfileHeader(params: {
           <div className={styles.userInfoHeader}>
             <div className={styles.userFullName}>{fullName}</div>
             <Role role={role} />
-            {assignedPrograms.map((program) => (
-              <Program program={program} key={program} />
-            ))}
+            {assignedPrograms?.map((program) => <Program program={program} key={program} />)}
           </div>
           <div className={styles.userMetadata}>
             <div className={styles.metadataSubsection}>
@@ -293,7 +413,12 @@ function ProfileHeader(params: {
       </div>
       <div className={styles.profileContentControls}>
         {isPersonalProfile ? (
-          <Button text="Edit profile" onClick={() => router.push(`${pathname}/edit`)} />
+          <Button
+            text="Edit profile"
+            onClick={() => {
+              router.push(`${pathname}/edit`);
+            }}
+          />
         ) : isProgramAndRoleEditable ? (
           <>
             <Button text={"Edit Program"} /> <Button text={"Change Role"} />
@@ -377,42 +502,6 @@ function UserList(params: {
             </div>
           );
         })}
-      </div>
-    </div>
-  );
-}
-
-function VolunteerNotes() {
-  return (
-    <div className={styles.volunteerNotes}>
-      <div className={styles.noteHeader}>Notes from Volunteers</div>
-      <div className={styles.noteSection}>
-        <div className={styles.postNoteSection}>
-          <input className={styles.postNoteInputField} placeholder="Add a comment..."></input>
-          <button className={styles.postNoteButton}>Post</button>
-        </div>
-        <div className={styles.postedNotes}>
-          <div className={styles.postedNote}>
-            <ProfilePicture firstName="Leo" size="small" />
-            <div className={styles.noteContent}>
-              <div className={styles.noteHeader}>
-                <div className={styles.noteAuthor}>Leo Friedman</div>
-                <div className={styles.notePostedDate}>14 days ago</div>
-              </div>
-              <div className={styles.noteBody}>I’m a duck and I like eating green peas.</div>
-            </div>
-          </div>
-          <div className={styles.postedNote}>
-            <ProfilePicture firstName="Leo" size="small" />
-            <div className={styles.noteContent}>
-              <div className={styles.noteHeader}>
-                <div className={styles.noteAuthor}>Leo Friedman</div>
-                <div className={styles.notePostedDate}>14 days ago</div>
-              </div>
-              <div className={styles.noteBody}>I’m a duck and I like eating green peas.</div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
