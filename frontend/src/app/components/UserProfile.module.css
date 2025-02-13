@@ -152,6 +152,7 @@
 
 .userList.minimized {
   width: 256px;
+  min-width: 256px;
 }
 
 .userList .userListHeader {

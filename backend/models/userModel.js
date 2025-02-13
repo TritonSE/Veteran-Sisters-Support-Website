@@ -15,7 +15,7 @@ const userSchema = new Schema({
     enum: ["battle buddies", "advocacy", "operation wellness"],
     required: true,
   },
-  assignedVeterans: [String],
+  assignedUsers: [String],
   yearJoined: { type: Number },
   age: { type: Number },
   gender: { type: String },

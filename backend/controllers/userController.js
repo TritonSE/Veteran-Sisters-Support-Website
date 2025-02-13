@@ -40,12 +40,13 @@ export const getUserByEmail = async (req, res) => {
 export const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findById(id).exec();
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).json({ error: "Could not find user" });
+    const user = (await User.findById(id).exec()).toObject();
+    if (!user) {
+      return res.status(404).json({ error: "Could not find user" });
     }
+    const assignedUsers = await User.find({ email: { $in: user?.assignedUsers } });
+    user.assignedUsers = assignedUsers.map((user) => user.toObject());
+    res.json(user);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -60,7 +61,7 @@ export const addUser = async (req, res) => {
       lastName,
       role,
       assignedPrograms,
-      assignedVeterans,
+      assignedUsers,
       yearJoined,
       age,
       gender,
@@ -76,7 +77,7 @@ export const addUser = async (req, res) => {
         lastName,
         role,
         assignedPrograms,
-        assignedVeterans,
+        assignedUsers,
         yearJoined,
         age,
         gender,

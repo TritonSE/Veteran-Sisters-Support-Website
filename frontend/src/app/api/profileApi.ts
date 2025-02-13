@@ -62,95 +62,14 @@ function parseProfileComment(comment: ProfileCommentRequest[]): ProfileComment[]
   }));
 }
 
-// function getStaffProfile(): UserProfile {
-//   return {
-//     email: "lcfriedman@ucsd.edu",
-//     firstName: "Leo",
-//     lastName: "Friedman",
-//     assignedPrograms: [AssignedProgram.BATTLE_BUDDIES, AssignedProgram.ADVOCACY],
-//     yearJoined: 2012,
-//     age: 22,
-//     gender: "Male",
-//     phoneNumber: "(012) 345-6789",
-//     role: roll,
-//     assignedUsers: exampleUsers,
-//   };
-// }
-
-// function getUser2(roll: Role): UserProfile {
-//   return {
-//     email: "lcfriedman@ucsd.edu",
-//     firstName: "Leo",
-//     lastName: "Friedman",
-//     assignedPrograms: [
-//       AssignedProgram.BATTLE_BUDDIES,
-//       AssignedProgram.ADVOCACY,
-//       AssignedProgram.OPERATION_WELLNESS,
-//     ],
-//     yearJoined: 2012,
-//     age: 22,
-//     gender: "Male",
-//     phoneNumber: "(012) 345-6789",
-//     role: roll,
-//     assignedUsers: exampleUsers,
-//   };
-// }
-
-export const exampleUsers = [
-  {
-    firstName: "Johnny",
-    lastName: "Appleseed",
-    email: "johnny@appleseed.com",
-    role: Role.VETERAN,
-    assignedPrograms: [AssignedProgram.ADVOCACY],
-  },
-  {
-    firstName: "Johnny",
-    lastName: "Appleseed",
-    email: "johnny@appleseed.com",
-    role: Role.VETERAN,
-
-    assignedPrograms: [AssignedProgram.ADVOCACY],
-  },
-  {
-    firstName: "Johnny",
-    lastName: "Appleseed",
-    email: "johnny@appleseed.com",
-    role: Role.VETERAN,
-    assignedPrograms: [AssignedProgram.OPERATION_WELLNESS],
-  },
-  {
-    firstName: "Johnny",
-    lastName: "Appleseed",
-    email: "johnny@appleseed.com",
-    role: Role.VETERAN,
-    assignedPrograms: [AssignedProgram.OPERATION_WELLNESS],
-  },
-  {
-    firstName: "Johnny",
-    lastName: "Appleseed",
-    email: "johnny@appleseed.com",
-    role: Role.VETERAN,
-    assignedPrograms: [AssignedProgram.OPERATION_WELLNESS],
-  },
-];
-
 export async function getUserProfile(userId: string): Promise<APIResult<UserProfile>> {
-  // switch (role) {
-  //   case Role.STAFF:
-  //     return getStaffProfile();
-  //   case Role.VOLUNTEER:
-  //     return getVolunteerProfile();
-  //   default:
-  //     return getStaffProfile();
-  // }
   try {
     const response = await fetch(`http://localhost:4000/api/users/id/${userId}`);
     if (!response.ok) {
       return { success: false, error: response.statusText };
     }
     const data = (await response.json()) as UserProfile;
-    console.log(data);
+
     return { success: true, data };
   } catch (error: unknown) {
     return { success: false, error: (error as Error).message };
