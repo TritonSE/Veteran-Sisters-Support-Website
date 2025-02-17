@@ -40,13 +40,14 @@ export const getUserByEmail = async (req, res) => {
 export const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = (await User.findById(id).exec()).toObject();
+    const user = await User.findById(id).exec();
     if (!user) {
       return res.status(404).json({ error: "Could not find user" });
     }
+    const userObject = user.toObject();
     const assignedUsers = await User.find({ email: { $in: user?.assignedUsers } });
-    user.assignedUsers = assignedUsers.map((user) => user.toObject());
-    res.json(user);
+    userObject.assignedUsers = assignedUsers.map((user) => user.toObject());
+    res.json(userObject);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
