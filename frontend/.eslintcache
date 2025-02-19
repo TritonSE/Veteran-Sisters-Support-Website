@@ -1,92 +1,154 @@
 [
   {
-    "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/next-env.d.ts": "1",
-    "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/next.config.ts": "2",
-    "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/src/app/api/fileApi.ts": "3",
-    "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/src/app/components/FileUpload.tsx": "4",
-    "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/src/app/firebase.ts": "5",
-    "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/src/app/layout.tsx": "6",
-    "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/src/app/page.tsx": "7",
-    "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/src/app/components/NavBar.tsx": "8",
-    "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/src/app/components/Tabs.tsx": "9",
-    "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/src/app/components/VeteranFilesTable.tsx": "10",
-    "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/src/app/veteranDashboard/page.tsx": "11"
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\next-env.d.ts": "1",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\next.config.ts": "2",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\adminview\\page.tsx": "3",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\api\\fileApi.ts": "4",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\api\\users.ts": "5",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\FileUpload.tsx": "6",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\NavBar.tsx": "7",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\Program.tsx": "8",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\Role.tsx": "9",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\firebase.ts": "10",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\layout.tsx": "11",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\page.tsx": "12",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\api\\requests.ts": "13",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\Tabs.tsx": "14",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\AdminStaffUserItem.tsx": "15",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\AdminStaffUserTable.tsx": "16",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\VeteranFilesTable.tsx": "17",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\staffview\\page.tsx": "18",
+    "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\veteranDashboard\\page.tsx": "19"
   },
   {
-    "size": 211,
-    "mtime": 1736725052662,
-    "results": "12",
-    "hashOfConfig": "13"
+    "size": 216,
+    "mtime": 1736492259505,
+    "results": "20",
+    "hashOfConfig": "21"
   },
   {
     "size": 133,
-    "mtime": 1736724869378,
-    "results": "14",
-    "hashOfConfig": "13"
+    "mtime": 1736938559828,
+    "results": "22",
+    "hashOfConfig": "21"
   },
   {
-    "size": 1574,
-    "mtime": 1737596314723,
-    "results": "15",
-    "hashOfConfig": "13"
+    "size": 560,
+    "mtime": 1738825865792,
+    "results": "23",
+    "hashOfConfig": "21"
   },
   {
-    "size": 7127,
-    "mtime": 1738309491654,
-    "results": "16",
-    "hashOfConfig": "13"
+    "size": 1630,
+    "mtime": 1738823351798,
+    "results": "24",
+    "hashOfConfig": "21"
   },
   {
-    "size": 250,
-    "mtime": 1737593057504,
-    "results": "17",
-    "hashOfConfig": "13"
+    "size": 680,
+    "mtime": 1738742432610,
+    "results": "25",
+    "hashOfConfig": "21"
   },
   {
-    "size": 1345,
-    "mtime": 1738308487986,
-    "results": "18",
-    "hashOfConfig": "13"
-  },
-  {
-    "size": 271,
-    "mtime": 1738310486579,
-    "results": "19",
-    "hashOfConfig": "13"
+    "size": 7347,
+    "mtime": 1738823351802,
+    "results": "26",
+    "hashOfConfig": "21"
   },
   {
     "size": 1071,
-    "mtime": 1737592875860,
-    "results": "20",
-    "hashOfConfig": "13"
+    "mtime": 1737949210970,
+    "results": "27",
+    "hashOfConfig": "21"
   },
   {
-    "size": 1517,
-    "mtime": 1738307620438
+    "size": 916,
+    "mtime": 1738742432616,
+    "results": "28",
+    "hashOfConfig": "21"
   },
   {
-    "size": 2652,
-    "mtime": 1738310577546
+    "size": 602,
+    "mtime": 1738742432619,
+    "results": "29",
+    "hashOfConfig": "21"
   },
   {
-    "size": 1731,
-    "mtime": 1738310582565
+    "size": 250,
+    "mtime": 1737949211228,
+    "results": "30",
+    "hashOfConfig": "21"
   },
   {
-    "filePath": "21",
-    "messages": "22",
-    "suppressedMessages": "23",
+    "size": 1413,
+    "mtime": 1738823351810,
+    "results": "31",
+    "hashOfConfig": "21"
+  },
+  {
+    "size": 305,
+    "mtime": 1738826670335,
+    "results": "32",
+    "hashOfConfig": "21"
+  },
+  {
+    "size": 6060,
+    "mtime": 1738742432609,
+    "results": "33",
+    "hashOfConfig": "21"
+  },
+  {
+    "size": 1577,
+    "mtime": 1738823919868,
+    "results": "34",
+    "hashOfConfig": "21"
+  },
+  {
+    "size": 2128,
+    "mtime": 1738826003083,
+    "results": "35",
+    "hashOfConfig": "21"
+  },
+  {
+    "size": 5273,
+    "mtime": 1738826038432,
+    "results": "36",
+    "hashOfConfig": "21"
+  },
+  {
+    "size": 3136,
+    "mtime": 1738823351807,
+    "results": "37",
+    "hashOfConfig": "21"
+  },
+  {
+    "size": 560,
+    "mtime": 1738825856242,
+    "results": "38",
+    "hashOfConfig": "21"
+  },
+  {
+    "size": 1777,
+    "mtime": 1738823351814,
+    "results": "39",
+    "hashOfConfig": "21"
+  },
+  {
+    "filePath": "40",
+    "messages": "41",
+    "suppressedMessages": "42",
     "errorCount": 0,
     "fatalErrorCount": 0,
     "warningCount": 0,
     "fixableErrorCount": 0,
     "fixableWarningCount": 0
   },
-  "11scnqg",
+  "onam0m",
   {
-    "filePath": "24",
-    "messages": "25",
-    "suppressedMessages": "26",
+    "filePath": "43",
+    "messages": "44",
+    "suppressedMessages": "45",
     "errorCount": 0,
     "fatalErrorCount": 0,
     "warningCount": 0,
@@ -94,9 +156,9 @@
     "fixableWarningCount": 0
   },
   {
-    "filePath": "27",
-    "messages": "28",
-    "suppressedMessages": "29",
+    "filePath": "46",
+    "messages": "47",
+    "suppressedMessages": "48",
     "errorCount": 0,
     "fatalErrorCount": 0,
     "warningCount": 0,
@@ -104,9 +166,9 @@
     "fixableWarningCount": 0
   },
   {
-    "filePath": "30",
-    "messages": "31",
-    "suppressedMessages": "32",
+    "filePath": "49",
+    "messages": "50",
+    "suppressedMessages": "51",
     "errorCount": 0,
     "fatalErrorCount": 0,
     "warningCount": 0,
@@ -114,9 +176,9 @@
     "fixableWarningCount": 0
   },
   {
-    "filePath": "33",
-    "messages": "34",
-    "suppressedMessages": "35",
+    "filePath": "52",
+    "messages": "53",
+    "suppressedMessages": "54",
     "errorCount": 0,
     "fatalErrorCount": 0,
     "warningCount": 0,
@@ -124,9 +186,59 @@
     "fixableWarningCount": 0
   },
   {
-    "filePath": "36",
-    "messages": "37",
-    "suppressedMessages": "38",
+    "filePath": "55",
+    "messages": "56",
+    "suppressedMessages": "57",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "58",
+    "messages": "59",
+    "suppressedMessages": "60",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "61",
+    "messages": "62",
+    "suppressedMessages": "63",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "64",
+    "messages": "65",
+    "suppressedMessages": "66",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "67",
+    "messages": "68",
+    "suppressedMessages": "69",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "70",
+    "messages": "71",
+    "suppressedMessages": "72",
     "errorCount": 0,
     "fatalErrorCount": 0,
     "warningCount": 2,
@@ -135,9 +247,9 @@
     "source": null
   },
   {
-    "filePath": "39",
-    "messages": "40",
-    "suppressedMessages": "41",
+    "filePath": "73",
+    "messages": "74",
+    "suppressedMessages": "75",
     "errorCount": 0,
     "fatalErrorCount": 0,
     "warningCount": 0,
@@ -145,63 +257,189 @@
     "fixableWarningCount": 0
   },
   {
-    "filePath": "42",
-    "messages": "43",
-    "suppressedMessages": "44",
+    "filePath": "76",
+    "messages": "77",
+    "suppressedMessages": "78",
+    "errorCount": 2,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": null
+  },
+  {
+    "filePath": "79",
+    "messages": "80",
+    "suppressedMessages": "81",
     "errorCount": 0,
     "fatalErrorCount": 0,
     "warningCount": 0,
     "fixableErrorCount": 0,
     "fixableWarningCount": 0
   },
-  "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/next-env.d.ts",
+  {
+    "filePath": "82",
+    "messages": "83",
+    "suppressedMessages": "84",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "85",
+    "messages": "86",
+    "suppressedMessages": "87",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "88",
+    "messages": "89",
+    "suppressedMessages": "90",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "91",
+    "messages": "92",
+    "suppressedMessages": "93",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "94",
+    "messages": "95",
+    "suppressedMessages": "96",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\next-env.d.ts",
   [],
   [],
-  "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/next.config.ts",
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\next.config.ts",
   [],
   [],
-  "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/src/app/api/fileApi.ts",
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\adminview\\page.tsx",
   [],
   [],
-  "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/src/app/components/FileUpload.tsx",
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\api\\fileApi.ts",
   [],
   [],
-  "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/src/app/firebase.ts",
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\api\\users.ts",
   [],
   [],
-  "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/src/app/layout.tsx",
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\FileUpload.tsx",
+  [],
+  [],
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\NavBar.tsx",
+  [],
+  [],
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\Program.tsx",
+  [],
+  [],
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\Role.tsx",
+  [],
+  [],
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\firebase.ts",
+  [],
+  [],
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\layout.tsx",
   [
-    "45",
-    "46"
+    "97",
+    "98"
   ],
   [],
-  "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/src/app/page.tsx",
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\page.tsx",
   [],
   [],
-  "/Users/andrewyz/Code/Veteran-Sisters-Support-Website/frontend/src/app/components/NavBar.tsx",
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\api\\requests.ts",
+  [
+    "99",
+    "100"
+  ],
+  [],
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\Tabs.tsx",
+  [],
+  [],
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\AdminStaffUserItem.tsx",
+  [],
+  [],
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\AdminStaffUserTable.tsx",
+  [],
+  [],
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\components\\VeteranFilesTable.tsx",
+  [],
+  [],
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\staffview\\page.tsx",
+  [],
+  [],
+  "C:\\Users\\poojo\\OneDrive\\Desktop\\java\\tse\\Veteran-Sisters-Support-Website\\frontend\\src\\app\\veteranDashboard\\page.tsx",
   [],
   [],
   {
-    "ruleId": "47",
+    "ruleId": "101",
     "severity": 1,
-    "message": "48",
+    "message": "102",
     "line": 31,
     "column": 9,
-    "nodeType": "49",
+    "nodeType": "103",
     "endLine": 34,
     "endColumn": 11
   },
   {
-    "ruleId": "47",
+    "ruleId": "101",
     "severity": 1,
-    "message": "48",
+    "message": "102",
     "line": 35,
-    "column": 7,
-    "nodeType": "49",
-    "endLine": 35,
-    "endColumn": 265
+    "column": 9,
+    "nodeType": "103",
+    "endLine": 38,
+    "endColumn": 11
+  },
+  {
+    "ruleId": "104",
+    "severity": 2,
+    "message": "105",
+    "line": 69,
+    "column": 20,
+    "nodeType": "106",
+    "messageId": "107",
+    "endLine": 69,
+    "endColumn": 35
+  },
+  {
+    "ruleId": "108",
+    "severity": 2,
+    "message": "109",
+    "line": 76,
+    "column": 12,
+    "nodeType": null,
+    "messageId": "110",
+    "endLine": 76,
+    "endColumn": 13
   },
   "@next/next/no-page-custom-font",
   "Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font",
-  "JSXOpeningElement"
+  "JSXOpeningElement",
+  "@typescript-eslint/restrict-template-expressions",
+  "Invalid type \"number\" of template literal expression.",
+  "MemberExpression",
+  "invalidType",
+  "@typescript-eslint/no-unused-vars",
+  "'e' is defined but never used.",
+  "unusedVar"
 ]

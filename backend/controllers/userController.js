@@ -65,6 +65,7 @@ export const addUser = async (req, res) => {
         roleSpecificInfo,
         assignedPrograms,
         assignedVeterans,
+        assignedVolunteers,
       });
       res.status(201).json(newUser);
     }
@@ -81,6 +82,23 @@ export const deleteUser = async (req, res) => {
   try {
   } catch (error) {
     console.log("deleteUser Error", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getUsersNonAdmins = async (req, res) => {
+  try {
+    const { assignedProgram } = req.query;
+    const users = await User.find({ role: { $ne: "admin" } }).exec();
+
+    // if assignedProgram specified, only return users that are assigned to the assignedProgram
+    const usersByAssignedProgram = assignedProgram
+      ? users.filter((user) => user.assignedPrograms.includes(assignedProgram))
+      : users;
+
+    res.status(200).json(usersByAssignedProgram);
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

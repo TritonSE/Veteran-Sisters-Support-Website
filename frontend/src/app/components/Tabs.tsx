@@ -1,12 +1,14 @@
 import { useState } from "react";
 
 import styles from "./Tabs.module.css";
+
 type TabsProp = {
   OnAll: () => void;
   OnBattleBuddies: () => void;
   OnAdvocacy: () => void;
   OnOperationWellness: () => void;
 };
+
 export function Tabs({ OnAll, OnBattleBuddies, OnAdvocacy, OnOperationWellness }: TabsProp) {
   const [tab, setTab] = useState<string>("all");
   return (

@@ -97,6 +97,7 @@ const userSchema = new Schema({
     required: true,
   },
   assignedVeterans: [String],
+  assignedVolunteers: [String],
 });
 
 export const User = model("User", userSchema);
