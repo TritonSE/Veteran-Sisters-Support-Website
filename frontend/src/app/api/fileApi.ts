@@ -13,6 +13,15 @@ export type CreateFileObjectRequest = {
   programs: string[];
 };
 
+// export type ActivityObject = {
+//   firstName: string;
+//   lastName: string;
+//   role: string;
+//   documentName: string;
+//   activityType: string;  // E.g., "file upload"
+//   timestamp: string
+// }
+
 export type APIResult<T> = { success: true; data: T } | { success: false; error: string };
 
 export const createFileObject = async (

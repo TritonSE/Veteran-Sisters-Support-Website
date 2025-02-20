@@ -6,6 +6,7 @@ import express from "express";
 import mongoose from "mongoose";
 import fileRoutes from "./routes/fileRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import activityRoutes from "./routes/activityRoutes.js";
 
 // import { CustomError, InternalError } from "./errors.js";
 
@@ -56,6 +57,8 @@ app.use(express.json());
 app.use("/api", fileRoutes);
 
 app.use("/api", userRoutes);
+
+app.use("/api", activityRoutes);
 
 app.use(errorHandler);
 
