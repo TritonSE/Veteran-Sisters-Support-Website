@@ -185,6 +185,13 @@ export default function UserDetails({
                 setFormErrors((prev) => ({ ...prev, password: "" }));
               }
             }}
+            onBlur={() => {
+              if (confirmPassword && confirmPassword !== "" && confirmPassword !== password) {
+                setFormErrors((prev) => ({ ...prev, confirmPassword: "Passwords do not match." }));
+              } else {
+                setFormErrors((prev) => ({ ...prev, confirmPassword: "" }));
+              }
+            }}
           />
           <label htmlFor="confirmPassword" className={styles.formEntry}>
             Confirm password
