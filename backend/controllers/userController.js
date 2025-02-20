@@ -87,3 +87,19 @@ export const getUsersNonAdmins = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const getVeteransByVolunteer = async (req, res) => {
+  try {
+    const { volunteerId } = req.params;
+    const users = await User.find({ assignedVolunteers: { $in: [volunteerId] } });
+
+    if (users) {
+      res.status(200).json(users);
+    } else {
+      res.status(404).json({ error: "Could not find users" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
