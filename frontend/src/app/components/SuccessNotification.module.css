@@ -1,0 +1,15 @@
+.notif {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #057e6f;
+  color: white;
+
+  border-radius: 8px;
+  font-family: "Albert Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  padding: 16px;
+}
