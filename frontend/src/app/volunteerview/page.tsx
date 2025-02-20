@@ -1,0 +1,33 @@
+"use client";
+
+import { NavBar } from "../components/NavBar";
+import { VeteranListUserItem } from "../components/VeteranProfileCard";
+
+import styles from "./page.module.css";
+
+export default function StaffDashboard() {
+  return (
+    <div className={styles.container}>
+      <NavBar />
+      <div className={styles.page}>
+        <div className={styles.frame}>
+          <div className={styles.welcome}>
+            <span>Welcome, !</span>
+          </div>
+        </div>
+        <VeteranListUserItem
+          user={{
+            _id: "string",
+            email: "tkn003@ucsd.edu",
+            firstName: "veteranfirstname",
+            lastName: "veteranlastname",
+            role: "veteran",
+            assignedPrograms: [],
+            assignedVeterans: [],
+            assignedVolunteers: [],
+          }}
+        />
+      </div>
+    </div>
+  );
+}
