@@ -42,7 +42,7 @@ export default function LoginForm() {
       <div className={styles.form}>
         <div className={styles.subtitle}>Log in to your account</div>
         {error && <p className={styles.error}>{error}</p>}
-        <form className={styles.innerForm} id="contactForm" onSubmit={handleLogin}>
+        <form className={styles.innerForm} id="contactForm" onSubmit={(e) => void handleLogin(e)}>
           <label htmlFor="email" className={styles.formEntry}>
             Email
           </label>

@@ -8,7 +8,7 @@ if (!env.NEXT_PUBLIC_FIREBASE) {
   throw new Error("Cannot get Firebase settings");
 }
 
-const firebaseConfig: FirebaseOptions = env.NEXT_PUBLIC_FIREBASE;
+const firebaseConfig: FirebaseOptions = env.NEXT_PUBLIC_FIREBASE as FirebaseOptions;
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);

@@ -5,16 +5,16 @@ export const queryUsers = async (req, res) => {
     const users = await User.find(userQuery).exec();
 
     // if assignedProgram specified, only return users that are assigned to the assignedProgram
-    // const usersByAssignedProgram = assignedProgram
-    //   ? users.filter((user) => user.assignedPrograms.includes(assignedProgram))
-    //   : users;
+    const usersByAssignedProgram = assignedProgram
+      ? users.filter((user) => user.assignedPrograms.includes(assignedProgram))
+      : users;
 
-    // // if assignedVeteran specified, only return users that are assigned to the assignedVeteran
-    // const usersByAssignedVeteran = assignedVeteran
-    //   ? usersByAssignedProgram.filter((user) => user.assignedVeterans.includes(assignedVeteran))
-    //   : usersByAssignedProgram;
+    // if assignedVeteran specified, only return users that are assigned to the assignedVeteran
+    const usersByAssignedVeteran = assignedVeteran
+      ? usersByAssignedProgram.filter((user) => user.assignedVeterans.includes(assignedVeteran))
+      : usersByAssignedProgram;
 
-    // res.json(usersByAssignedVeteran);
+    res.json(usersByAssignedVeteran);
   } catch (error) {
     console.log("queryUser Error", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -65,7 +65,7 @@ export const addUser = async (req, res) => {
         roleSpecificInfo,
         assignedPrograms,
         assignedVeterans,
-        assignedVolunteers,
+        assignedVolunteers: [],
       });
       res.status(201).json(newUser);
     }
