@@ -7,16 +7,16 @@ export const queryActiveVolunteers = async (req, res) => {
     let query = {};
 
     if (program) {
-      query.assignedPrograms = program;
+      const programsArray = program.split(",").map((p) => p.trim());
+      query.assignedProgram = { $in: programsArray };
     }
 
     if (veteran) {
-      query.assignedVeterans = veteran;
+      query.assignedVeteran = veteran;
     }
 
     const filteredVolunteers = await ActiveVolunteers.find(query)
       .populate("volunteer", "firstName lastName email")
-      .populate("assignedVeterans", "firstName lastName email")
       .exec();
 
     res.json(filteredVolunteers);
@@ -26,69 +26,62 @@ export const queryActiveVolunteers = async (req, res) => {
   }
 };
 
-//add a volunteer using their userID, program, and assigned veteranID
+//add a volunteer using their user email, program, and assigned veteran email
 export const addVolunteer = async (req, res) => {
   try {
-    const { userId, program, veteranId } = req.body;
-    const existingUser = await ActiveVolunteers.findOne({ volunteer: userId }).exec();
+    const { userEmail, program, veteranEmail } = req.body;
 
-    if (existingUser) {
-      if (!existingUser.assignedPrograms.includes(program)) {
-        existingUser.assignedPrograms.push(program);
-      }
+    const existingVolunteer = await ActiveVolunteers.findOne({
+      volunteer: userEmail,
+      assignedProgram: program,
+      assignedVeteran: veteranEmail,
+    }).exec();
 
-      if (!existingUser.assignedVeterans.includes(veteranId)) {
-        existingUser.assignedVeterans.push(veteranId);
-      }
-
-      await existingUser.save();
-      res.status(200).json(existingUser);
-    } else {
-      const newVolunteer = await ActiveVolunteers.create({
-        volunteer: userId,
-        assignedPrograms: [program],
-        assignedVeterans: [veteranId],
-      });
-      res.status(201).json(newVolunteer);
+    if (existingVolunteer) {
+      return res
+        .status(400)
+        .json({ error: "This volunteer is already assigned to this program and veteran." });
     }
+
+    const newVolunteer = await ActiveVolunteers.create({
+      volunteer: userEmail,
+      assignedProgram: program,
+      assignedVeteran: veteranEmail,
+    });
+
+    res.status(201).json(newVolunteer);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-//delete a volunteer using their userID, program, or veteranID
+//delete a volunteer using their user email, program, or veteran email
 export const removeVolunteer = async (req, res) => {
   try {
     const id = req.params.id;
     const { program, veteran } = req.query;
 
-    const volunteer = await ActiveVolunteers.findOne({ volunteer: id }).exec();
+    const volunteerEntry = await ActiveVolunteers.findOne({
+      volunteer: id,
+      ...(program && { assignedProgram: program }),
+      ...(veteran && { assignedVeteran: veteran }),
+    }).exec();
 
-    // If no `program` or `veteran` is provided in the query, remove the entire volunteer
+    if (!volunteerEntry) {
+      return res.status(404).json({ error: "Volunteer assignment not found" });
+    }
+
+    // If no specific program or veteran is provided, delete all assignments of the volunteer
     if (!program && !veteran) {
-      await ActiveVolunteers.deleteOne({ volunteer: id }).exec();
-      return res.status(200).json({ message: "Volunteer removed" });
+      await ActiveVolunteers.deleteMany({ volunteer: id }).exec();
+      return res.status(200).json({ message: "All volunteer assignments removed" });
     }
 
-    // If `program` is provided, remove it from `assignedPrograms`
-    if (program) {
-      volunteer.assignedPrograms = volunteer.assignedPrograms.filter((p) => p !== program);
-    }
+    // If a specific entry is found, delete it
+    await ActiveVolunteers.deleteOne({ _id: volunteerEntry._id }).exec();
 
-    // If `veteran` is provided, remove it from `assignedVeterans`
-    if (veteran) {
-      volunteer.assignedVeterans = volunteer.assignedVeterans.filter((v) => v !== veteran);
-    }
-
-    // If there are no assigned programs or veterans left, remove the entire volunteer
-    if (volunteer.assignedPrograms.length === 0 && volunteer.assignedVeterans.length === 0) {
-      await ActiveVolunteers.deleteOne({ volunteer: id }).exec();
-      return res.status(200).json({ message: "Volunteer removed" });
-    }
-    await volunteer.save();
-
-    res.status(200).json({ message: "Removed successfully", volunteer });
+    return res.status(200).json({ message: "Volunteer assignment removed successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });

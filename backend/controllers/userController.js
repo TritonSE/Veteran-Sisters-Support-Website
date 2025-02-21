@@ -69,3 +69,40 @@ export const deleteUser = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const updateUser = async (req, res) => {
+  try {
+    const email = req.params.email;
+    const { program, veteranEmail } = req.body;
+
+    const user = await User.findOne({ email }).exec();
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (program) {
+      const programIndex = user.assignedPrograms.indexOf(program);
+      if (programIndex > -1) {
+        user.assignedPrograms.splice(programIndex, 1);
+      } else {
+        user.assignedPrograms.push(program);
+      }
+    }
+
+    if (veteranEmail) {
+      const veteranIndex = user.assignedVeterans.indexOf(veteranEmail);
+      if (veteranIndex > -1) {
+        user.assignedVeterans.splice(veteranIndex, 1);
+      } else {
+        user.assignedVeterans.push(veteranEmail);
+      }
+    }
+
+    await user.save();
+
+    res.status(200).json({ message: "User updated successfully", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
