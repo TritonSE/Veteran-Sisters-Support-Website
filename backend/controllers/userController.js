@@ -91,7 +91,9 @@ export const getUsersNonAdmins = async (req, res) => {
 export const getVeteransByVolunteer = async (req, res) => {
   try {
     const { volunteerId } = req.params;
-    const users = await User.find({ assignedVolunteers: { $in: [volunteerId] } });
+    const users = await User.find({ assignedVolunteers: { $in: [volunteerId] } }).sort({
+      firstName: "asc",
+    });
 
     if (users) {
       res.status(200).json(users);
