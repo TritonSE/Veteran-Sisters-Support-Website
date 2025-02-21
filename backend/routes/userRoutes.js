@@ -4,6 +4,7 @@ import {
   getUserByEmail,
   addUser,
   deleteUser,
+  getUsersNonAdmins,
   updateUser,
 } from "../controllers/userController.js";
 
@@ -12,6 +13,8 @@ const router = express.Router();
 router.get("/users", queryUsers);
 
 router.get("/users/:email", getUserByEmail);
+
+router.get("/nonAdminUsers", getUsersNonAdmins);
 
 router.post("/users", addUser);
 
