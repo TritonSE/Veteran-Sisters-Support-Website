@@ -1,19 +1,13 @@
 .container {
+  display: flex;
   width: 232px;
   height: 85px;
   border-radius: 8px;
   border-width: 1px;
-  padding-top: 24px;
-  padding-right: 20px;
-  padding-bottom: 24px;
-  padding-left: 20px;
   gap: 12px;
 
   background: #ffffff;
   border: 1px solid #d0d7de;
-
-  display: flex;
-  flex-direction: row;
 }
 
 .profile {
@@ -50,6 +44,10 @@
   font-size: 14px;
   line-height: 16.8px;
   letter-spacing: 0%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 143px;
 }
 
 .email {
@@ -58,4 +56,24 @@
   font-size: 13px;
   line-height: 15.6px;
   letter-spacing: 0%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 143px;
+}
+
+.link {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  align-self: stretch;
+
+  height: 100%;
+  width: 100%;
+  gap: 12px;
+
+  padding-top: 24px;
+  padding-right: 20px;
+  padding-bottom: 24px;
+  padding-left: 20px;
 }
