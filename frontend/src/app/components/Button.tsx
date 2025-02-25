@@ -1,5 +1,6 @@
-import styles from "./Button.module.css";
 import React from "react";
+
+import styles from "./Button.module.css";
 
 export type ButtonProps = React.ComponentProps<"button"> & {
   label: string;
