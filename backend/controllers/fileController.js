@@ -46,3 +46,15 @@ export const getFileByUploader = async (req, res, next) => {
     res.status(400).json({ error: "Internal Server Error" });
   }
 };
+
+export const editFileById = async (req, res) => {
+  try{
+    const { id } = req.params
+    const update = req.body;
+    const file = await FileObject.findOneAndUpdate({_id: id}, update, {new: true}).populate("uploader").populate([{path: "comments", populate:[{path: "commenterId"}]}])
+    res.status(200).json(file)
+
+  }catch (error) {
+    next(error)
+  }
+}

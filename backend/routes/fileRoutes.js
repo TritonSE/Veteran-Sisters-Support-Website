@@ -8,4 +8,6 @@ router.post("/file", FileController.uploadFile);
 router.get("/file/uploader/:id", FileController.getFileByUploader);
 router.get("/file/:id", FileController.getFileById)
 
+router.put("/file/:id", FileController.editFileById)
+
 export default router;
