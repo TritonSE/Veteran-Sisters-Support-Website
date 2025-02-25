@@ -7,8 +7,6 @@ import {
   getUsersNonAdmins,
 } from "../controllers/userController.js";
 
-console.log("Request received at /api/users");
-
 const router = express.Router();
 
 router.get("/users", queryUsers);

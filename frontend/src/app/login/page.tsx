@@ -4,15 +4,13 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-import { initFirebase } from "../../../firebase/firebase";
+import { auth } from "../../../firebase/firebase";
 
 import styles from "./page.module.css";
 
 import { Button } from "@/app/components/Button";
 import SuccessNotification from "@/app/components/SuccessNotification";
 import "@fontsource/albert-sans";
-
-const { auth } = initFirebase();
 
 export default function LoginForm() {
   const searchParams = useSearchParams(); // Search for query parameters
@@ -44,7 +42,7 @@ export default function LoginForm() {
       <div className={styles.form}>
         <div className={styles.subtitle}>Log in to your account</div>
         {error && <p className={styles.error}>{error}</p>}
-        <form className={styles.innerForm} id="contactForm" onSubmit={handleLogin}>
+        <form className={styles.innerForm} id="contactForm" onSubmit={(e) => void handleLogin(e)}>
           <label htmlFor="email" className={styles.formEntry}>
             Email
           </label>

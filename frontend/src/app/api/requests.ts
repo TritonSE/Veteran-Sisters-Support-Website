@@ -66,7 +66,7 @@ async function assertOk(response: Response): Promise<void> {
     return;
   }
 
-  let message = `${response.status} ${response.statusText}`;
+  let message = `${String(response.status)} ${response.statusText}`;
 
   try {
     const text = await response.text();
@@ -74,7 +74,7 @@ async function assertOk(response: Response): Promise<void> {
       message += ": " + text;
     }
   } catch (e) {
-    // skip errors
+    console.log(e);
   }
 
   throw new Error(message);

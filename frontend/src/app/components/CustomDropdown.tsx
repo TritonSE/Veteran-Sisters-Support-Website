@@ -25,7 +25,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   return (
     <div>
       <div className={styles.selectBox} onClick={toggleDropdown}>
-        {selected || "Please Select"}
+        {selected ?? "Please Select"}
         <Image
           id="arrowUp"
           width={35}
