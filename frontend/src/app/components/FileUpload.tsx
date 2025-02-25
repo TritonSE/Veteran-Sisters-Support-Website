@@ -3,9 +3,9 @@ import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 
 import { CreateFileObjectRequest, createFileObject } from "../api/fileApi";
+import { storage } from "../../../firebase/firebase";
 
 import styles from "./FileUpload.module.css";
-import { storage } from "../../../firebase/firebase";
 
 type FileUploadProps = {
   onClose: () => void;
