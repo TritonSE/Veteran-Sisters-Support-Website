@@ -11,7 +11,6 @@ export type UserProfile = {
   role: Role | undefined;
   assignedUsers?: UserProfile[];
   veteransUnderPointOfContact?: Veteran[];
-  assignedVeterans?: Veteran[];
 };
 
 export type Veteran = {

@@ -27,6 +27,8 @@ type ProfileRenderingContext = {
 function getProfileRenderingContext(
   viewingRole: string | undefined | null,
   viewingId: string | undefined | null,
+  viewerRole: string | undefined | null,
+  viewerId: string | undefined | null,
 ): ProfileRenderingContext {
   const context: ProfileRenderingContext = {
     invalidContext: false,
@@ -37,8 +39,6 @@ function getProfileRenderingContext(
     viewingPersonalProfile: false,
     isProgramAndRoleEditable: false,
   };
-  const viewerId = localStorage.getItem("viewerId");
-  const viewerRole = localStorage.getItem("viewerRole");
 
   const { ADMIN, STAFF, VOLUNTEER, VETERAN } = RoleEnum;
   const isPersonalView = viewerId === viewingId;
@@ -110,18 +110,15 @@ function getProfileRenderingContext(
 export default function UserProfile({ userId }: { userId: string }) {
   /**
    * NOTE: Because there is no authentication context at the moment,
-   * this component uses the following localStorage values to determine
-   * the logged in user's context:
-   *
-   * (1.) viewerId -> The id of the logged in user
-   * (2.) viewerRole -> The role of the logged in user
-   *
-   * These values can be set via the Chrome Developer Inspector
+   * this component uses hardcoded viewerId and viewerRole values. Change
+   * these values to test different views.
    */
+  const viewerId = "67b3ab035e17d37a2ba6b65d";
+  const viewerRole = RoleEnum.ADMIN;
 
   const [userProfile, setUserProfile] = useState<UserProfileType | undefined>(undefined);
   const [profileRenderingContext, setProfileRenderingContext] = useState(
-    getProfileRenderingContext(null, null),
+    getProfileRenderingContext(null, null, viewerRole, viewerId),
   );
   const [loading, setLoading] = useState(true);
 
@@ -135,7 +132,9 @@ export default function UserProfile({ userId }: { userId: string }) {
     fetchUserProfile()
       .then((res) => {
         setUserProfile(res);
-        setProfileRenderingContext(getProfileRenderingContext(res?.role, userId));
+        setProfileRenderingContext(
+          getProfileRenderingContext(res?.role, userId, viewerRole, viewerId),
+        );
         setLoading(false);
       })
       .catch((err: unknown) => {
