@@ -5,8 +5,6 @@ import {
   getUserById,
   addUser,
   deleteUser,
-  addUser,
-  deleteUser,
   getUsersNonAdmins,
 } from "../controllers/userController.js";
 

@@ -83,14 +83,14 @@ export function ProfileHeader(params: {
       <div className={styles.profileContentControls}>
         {isPersonalProfile ? (
           <Button
-            text="Edit profile"
+            label="Edit profile"
             onClick={() => {
               router.push(`${pathname}/edit`);
             }}
           />
         ) : isProgramAndRoleEditable ? (
           <>
-            <Button text={"Edit Program"} /> <Button text={"Change Role"} />
+            <Button label={"Edit Program"} /> <Button label={"Change Role"} />
           </>
         ) : (
           <></>

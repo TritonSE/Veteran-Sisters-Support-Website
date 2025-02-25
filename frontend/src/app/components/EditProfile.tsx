@@ -62,26 +62,31 @@ export default function EditProfile({ userId }: { userId: string }) {
         </div>
         <Field required={true} label="Email" defaultValue={userProfile?.email} type="email" />
         <Field required={true} label="Phone Number" defaultValue={userProfile?.phoneNumber ?? ""} />
-        <Field required={true} label="Age" defaultValue={userProfile?.age ?? undefined} type="number" />
+        <Field
+          required={true}
+          label="Age"
+          defaultValue={userProfile?.age ?? undefined}
+          type="number"
+        />
         <Field required={true} label="Gender" defaultValue={userProfile?.gender ?? ""} />
       </div>
       <div className={styles.formControls}>
         <Button
-          text="Click to change password"
+          label="Click to change password"
           onClick={(event) => {
             event.preventDefault();
           }}
         />
         <div className={styles.formSubmissionControls}>
           <Button
-            text="Cancel"
+            label="Cancel"
             onClick={(event) => {
               event.preventDefault();
               router.back();
             }}
           />
           <Button
-            text="Save"
+            label="Save"
             filled={true}
             onClick={(event) => {
               event.preventDefault();
