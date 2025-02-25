@@ -24,7 +24,7 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
     Advocacy: false,
     OperationWellness: false,
   });
-  const [comments, setComments] = useState<string>();
+  const [comment, setComment] = useState<string>();
   const [file, setFile] = useState<File | null>(null);
   const [sizeError, setSizeError] = useState<boolean>(false);
   const [uploading, setUploading] = useState<boolean>(false);
@@ -52,8 +52,8 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
       setUploading(true);
       const fileObjRequest: CreateFileObjectRequest = {
         filename: file.name,
-        uploader: "Steve",
-        comments: comments ? [comments] : [],
+        uploaderId: "67b2e046432b1fc7da8b533c",
+        comment: comment ?? "",
         programs: Object.keys(checkboxStates).filter(
           (key) => checkboxStates[key as keyof CheckBoxStates],
         ),
@@ -192,7 +192,7 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
               placeholder="Add a comment..."
               className={styles.commentsBox}
               onChange={(e) => {
-                setComments(e.target.value);
+                setComment(e.target.value);
               }}
             />
           </div>

@@ -38,6 +38,18 @@
     background: var(--Background-1, #FFF);
 }
 
+.selectedComment{
+    display: flex;
+    width: 362px;
+    padding: 16px 20px;
+    flex-direction: column;
+    gap: 16px;
+    border-radius: 8px;
+    background: var(--Background-1, #FFF);
+    position: relative;
+    right: 50px;
+}
+
 .commentTopRow{
     display: flex;
     flex-direction: row;
@@ -97,4 +109,24 @@
     flex-direction: column;
     gap: 28px;
 
+}
+
+.addCommentButton{
+    position: fixed;
+    right: 10%;
+    bottom: 10%;
+    display: flex;
+    padding: 12px 24px 12px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    background: var(--Primary, #057E6F);
+    color: var(--Neutral-Base-White, #FAFAFA);
+    font-family: "Albert Sans";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    cursor: pointer;
 }

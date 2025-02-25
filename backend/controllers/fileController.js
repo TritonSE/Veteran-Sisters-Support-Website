@@ -1,14 +1,24 @@
+import Comment from "../models/commentModel.js";
 import FileObject from "../models/fileModel.js";
 
 export const uploadFile = async (req, res, next) => {
-  const { filename, uploader, comments, programs } = req.body;
+  const { filename, uploaderId, comment, programs } = req.body;
 
   try {
+    let commentObject = null;
+    if(comment){
+      commentObject = await Comment.create({
+        comment: comment,
+        commenterId: uploaderId,
+        datePosted: Date.now()
+      })
+    }
+
     const fileObject = await FileObject.create({
-      filename,
-      uploader,
-      comments,
-      programs,
+      filename: filename,
+      uploader: uploaderId,
+      comments: commentObject?[commentObject._id]:[],
+      programs: programs,
     });
 
     res.status(201).json(fileObject);
@@ -17,10 +27,20 @@ export const uploadFile = async (req, res, next) => {
   }
 };
 
+export const getFileById = async (req, res, next) => {
+  const { id } = req.params
+  try{
+    const response = await FileObject.findById(id).populate("uploader").populate([{path: "comments", populate:[{path: "commenterId"}]}])
+    res.status(200).json(response)
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const getFileByUploader = async (req, res, next) => {
-  const { uploader } = req.params;
+  const { id } = req.params;
   try {
-    const files = await FileObject.find({ uploader });
+    const files = await FileObject.find({ uploader: id }).populate("uploader").populate("comments");
     res.status(200).json(files);
   } catch (error) {
     res.status(400).json({ error: "Internal Server Error" });
