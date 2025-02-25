@@ -1,12 +1,15 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import {
   ProfileComment,
   ProfileCommentPostRequest,
   getComments,
   postComment,
 } from "../api/profileApi";
-import { ProfilePicture } from "@/app/components/ProfilePicture";
+
 import styles from "./VolunteerNotes.module.css";
+
+import { ProfilePicture } from "@/app/components/ProfilePicture";
 
 export function VolunteerNotes({ userId }: { userId: string }) {
   const [profileNotes, setProfileNotes] = useState<ProfileComment[] | undefined>([]);

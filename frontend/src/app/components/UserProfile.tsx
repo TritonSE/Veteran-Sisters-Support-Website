@@ -11,10 +11,10 @@ import NavigateBack from "./NavigateBack";
 import styles from "./UserProfile.module.css";
 
 import { ProfileHeader } from "@/app/components/ProfileHeader";
-import { VolunteerNotes } from "@/app/components/VolunteerNotes";
 import { UserList } from "@/app/components/UserList";
+import { VolunteerNotes } from "@/app/components/VolunteerNotes";
 
-interface ProfileRenderingContext {
+type ProfileRenderingContext = {
   invalidContext: boolean;
   showVolunteerNotes: boolean;
   showUserList: boolean;
@@ -22,7 +22,7 @@ interface ProfileRenderingContext {
   userListEditable: boolean;
   viewingPersonalProfile: boolean;
   isProgramAndRoleEditable: boolean;
-}
+};
 
 function getProfileRenderingContext(
   viewingRole: string | undefined | null,

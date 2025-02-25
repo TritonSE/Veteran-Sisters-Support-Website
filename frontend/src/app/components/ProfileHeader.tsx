@@ -1,10 +1,13 @@
 import { usePathname, useRouter } from "next/navigation";
-import { Button } from "@/app/components/Button";
-import { Role } from "@/app/components/Role";
-import { Program } from "@/app/components/Program";
-import { ProfilePicture } from "@/app/components/ProfilePicture";
-import { Role as RoleEnum, AssignedProgram as AssignedProgramEnum } from "../api/profileApi";
+
+import { AssignedProgram as AssignedProgramEnum, Role as RoleEnum } from "../api/profileApi";
+
 import styles from "./ProfileHeader.module.css";
+
+import { Button } from "@/app/components/Button";
+import { ProfilePicture } from "@/app/components/ProfilePicture";
+import { Program } from "@/app/components/Program";
+import { Role } from "@/app/components/Role";
 
 function Divider() {
   return (
@@ -44,8 +47,8 @@ export function ProfileHeader(params: {
     isPersonalProfile,
   } = params;
   const fullName = `${firstName ?? "Unknown"} ${lastName ?? "Unknown"}`;
-  const joinedText = `Joined: ${yearJoined ?? 0}`;
-  const ageText = `Age: ${age ?? 0}`;
+  const joinedText = `Joined: ${yearJoined?.toString() ?? "Unknown"}`;
+  const ageText = `Age: ${age?.toString() ?? "Unknown"}`;
   const genderText = `Gender: ${gender ?? "Unknown"}`;
   assignedPrograms?.sort();
   const router = useRouter();

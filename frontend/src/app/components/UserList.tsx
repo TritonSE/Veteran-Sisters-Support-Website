@@ -1,7 +1,10 @@
-import { Program } from "@/app/components/Program";
 import Image from "next/image";
-import styles from "./UserList.module.css";
+
 import { UserProfile as UserProfileType } from "../api/profileApi";
+
+import styles from "./UserList.module.css";
+
+import { Program } from "@/app/components/Program";
 
 export function UserList(params: {
   userProfile: UserProfileType | undefined;
@@ -12,15 +15,15 @@ export function UserList(params: {
   const { title, userProfile, editable, minimized } = params;
 
   // Users for user list
-  const emptyUserGroups: { [key: string]: UserProfileType[] } = (
+  const emptyUserGroups: Record<string, UserProfileType[]> = (
     userProfile?.assignedPrograms ?? []
-  ).reduce((accumulator: { [key: string]: UserProfileType[] }, program: string) => {
+  ).reduce((accumulator: Record<string, UserProfileType[]>, program: string) => {
     accumulator[program] = [];
     return accumulator;
   }, {});
 
   const assignedUsers = userProfile?.assignedUsers ?? [];
-  const userGroups: { [key: string]: UserProfileType[] } = assignedUsers.reduce(
+  const userGroups: Record<string, UserProfileType[]> = assignedUsers.reduce(
     (accumulator, user) => {
       (user?.assignedPrograms ?? []).forEach((program: string) => {
         if (program in accumulator) {
@@ -35,7 +38,7 @@ export function UserList(params: {
   const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(userGroups).slice().sort();
 
   return (
-    <div className={`${styles.userList} ${minimized && styles.minimized}`}>
+    <div className={`${styles.userList} ${minimized ? styles.minimized : ""}`}>
       <div className={styles.userListHeader}>
         <div className={styles.userListHeading}>{title}</div>
         {editable && !minimized && (

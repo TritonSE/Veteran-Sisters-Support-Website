@@ -1,10 +1,34 @@
 "use client";
-import { getUserProfile, UserProfile as UserProfileType } from "@/app/api/profileApi";
-import { Button } from "@/app/components/Button";
-import styles from "./EditProfile.module.css";
-import NavigateBack from "./NavigateBack";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
+import styles from "./EditProfile.module.css";
+import NavigateBack from "./NavigateBack";
+
+import { UserProfile as UserProfileType, getUserProfile } from "@/app/api/profileApi";
+import { Button } from "@/app/components/Button";
+
+function Field(params: {
+  label: string;
+  defaultValue: string | number | undefined;
+  required?: boolean;
+  type?: string;
+}) {
+  const { label, defaultValue, required, type } = params;
+  return (
+    <div className={styles.field}>
+      <div className={styles.fieldLabelContainer}>
+        <div className={styles.fieldLabel}>{label}</div>
+      </div>
+      <input
+        className={styles.fieldInput}
+        type={type ?? "text"}
+        defaultValue={defaultValue}
+        required={required}
+      ></input>
+    </div>
+  );
+}
 
 export default function EditProfile({ userId }: { userId: string }) {
   const router = useRouter();
@@ -37,9 +61,9 @@ export default function EditProfile({ userId }: { userId: string }) {
           <Field required={true} label="Last Name" defaultValue={userProfile?.lastName} />
         </div>
         <Field required={true} label="Email" defaultValue={userProfile?.email} type="email" />
-        <Field required={true} label="Phone Number" defaultValue={userProfile?.phoneNumber || ""} />
-        <Field required={true} label="Age" defaultValue={userProfile?.age || null} type="number" />
-        <Field required={true} label="Gender" defaultValue={userProfile?.gender || ""} />
+        <Field required={true} label="Phone Number" defaultValue={userProfile?.phoneNumber ?? ""} />
+        <Field required={true} label="Age" defaultValue={userProfile?.age ?? undefined} type="number" />
+        <Field required={true} label="Gender" defaultValue={userProfile?.gender ?? ""} />
       </div>
       <div className={styles.formControls}>
         <Button
@@ -62,7 +86,9 @@ export default function EditProfile({ userId }: { userId: string }) {
             onClick={(event) => {
               event.preventDefault();
 
-              const inputs: any = document.querySelectorAll(`input.${styles.fieldInput}`);
+              const inputs: NodeListOf<HTMLInputElement> = document.querySelectorAll(
+                `input.${styles.fieldInput}`,
+              );
 
               const formData = {
                 firstName: inputs[0]?.value,
@@ -78,6 +104,8 @@ export default function EditProfile({ userId }: { userId: string }) {
                 return; // Prevent navigation if validation fails
               }
 
+              console.log(formData);
+
               // TODO: call updateProfile api with form data
               router.back();
             }}
@@ -85,22 +113,5 @@ export default function EditProfile({ userId }: { userId: string }) {
         </div>
       </div>
     </form>
-  );
-}
-
-function Field(params: { label: string; defaultValue: any; required?: boolean; type?: string }) {
-  const { label, defaultValue, required, type } = params;
-  return (
-    <div className={styles.field}>
-      <div className={styles.fieldLabelContainer}>
-        <div className={styles.fieldLabel}>{label}</div>
-      </div>
-      <input
-        className={styles.fieldInput}
-        type={type || "text"}
-        defaultValue={defaultValue}
-        required={required}
-      ></input>
-    </div>
   );
 }

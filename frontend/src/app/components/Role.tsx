@@ -1,6 +1,6 @@
-import styles from "./Role.module.css";
-
 import { Role as RoleEnum } from "../api/profileApi";
+
+import styles from "./Role.module.css";
 
 type RoleProp = {
   role: string | undefined;
