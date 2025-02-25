@@ -1,0 +1,35 @@
+.container {
+  height: 100%;
+  background: var(--Neutral-Base-White, #fafafa);
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.page {
+  display: flex;
+  width: 100%;
+  padding: var(--Spacing-4xl, 80px) var(--Spacing-3xl, 64px);
+  justify-content: center;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+.frame {
+  display: flex;
+  max-width: 1024px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-2xl, 48px);
+  flex: 1 0 0;
+}
+
+.welcome {
+  color: var(--Text-3, #3a3c3d);
+
+  /* title large */
+  font-family: "Albert Sans";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}

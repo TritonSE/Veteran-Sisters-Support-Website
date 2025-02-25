@@ -1,7 +1,7 @@
 "use client"
 import { getDownloadURL, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
-import { storage } from "../firebase";
+import { storage } from "../../../firebase/firebase";
 import Image from "next/image"
 import {Document, Page} from "react-pdf"
 import { pdfjs } from 'react-pdf';
@@ -60,7 +60,7 @@ export function DocumentView({documentId}: DocumentViewProps){
         return(
             <div className={styles.header}>
                 <Link href="/veteranDashboard">
-                    <Image src="/logo.svg" width={143} height={32} alt="logo" />
+                    <Image src="/logo_black.svg" width={143} height={32} alt="logo" />
                 </Link>
                 <div className={styles.headerSection}>{filename}<Image src="/pencil_icon.svg" width={16} height={16} alt="edit"/></div>
                 <div className={styles.headerSection}>
