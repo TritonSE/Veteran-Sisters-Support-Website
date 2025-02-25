@@ -1,5 +1,4 @@
 import { User } from "../models/userModel.js";
-import mongoose from "mongoose";
 export const queryUsers = async (req, res) => {
   try {
     const { assignedProgram, assignedVeteran, ...userQuery } = req.query;
@@ -17,7 +16,7 @@ export const queryUsers = async (req, res) => {
 
     res.json(usersByAssignedVeteran);
   } catch (error) {
-    console.log(error);
+    console.log("queryUser Error", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -32,7 +31,7 @@ export const getUserByEmail = async (req, res) => {
       res.status(404).json({ error: "Could not find user" });
     }
   } catch (error) {
-    console.log(error);
+    console.log("getUserbyEmail Error", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -49,7 +48,7 @@ export const getUserById = async (req, res) => {
     userObject.assignedUsers = assignedUsers.map((user) => user.toObject());
     res.json(userObject);
   } catch (error) {
-    console.log(error);
+    console.log("getUserbyEmail Error", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -67,6 +66,9 @@ export const addUser = async (req, res) => {
       age,
       gender,
       phoneNumber,
+      zipCode,
+      address,
+      roleSpecificInfo,
     } = req.body;
     const existingUser = await User.findOne({ email }).exec();
     if (existingUser) {
@@ -74,9 +76,13 @@ export const addUser = async (req, res) => {
     } else {
       const newUser = await User.create({
         email,
+        phoneNumber,
         firstName,
         lastName,
         role,
+        zipCode,
+        address,
+        roleSpecificInfo,
         assignedPrograms,
         assignedUsers,
         yearJoined,
@@ -87,7 +93,7 @@ export const addUser = async (req, res) => {
       res.status(201).json(newUser);
     }
   } catch (error) {
-    console.log(error);
+    console.log("addUser Error", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -97,6 +103,23 @@ export const deleteUser = async (req, res) => {
   const deleteStatus = await User.deleteMany({ email }).exec();
   res.json(deleteStatus);
   try {
+  } catch (error) {
+    console.log("deleteUser Error", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getUsersNonAdmins = async (req, res) => {
+  try {
+    const { assignedProgram } = req.query;
+    const users = await User.find({ role: { $ne: "admin" } }).exec();
+
+    // if assignedProgram specified, only return users that are assigned to the assignedProgram
+    const usersByAssignedProgram = assignedProgram
+      ? users.filter((user) => user.assignedPrograms.includes(assignedProgram))
+      : users;
+
+    res.status(200).json(usersByAssignedProgram);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });

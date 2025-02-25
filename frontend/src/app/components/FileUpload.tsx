@@ -1,31 +1,33 @@
-import { ref, updateMetadata, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes } from "firebase/storage";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 
-import createFileObject, { CreateFileObjectRequest } from "../api/fileApi";
-import { storage } from "../firebase";
+import { storage } from "../../../firebase/firebase";
+import { CreateFileObjectRequest, createFileObject } from "../api/fileApi";
 
 import styles from "./FileUpload.module.css";
 
 type FileUploadProps = {
   onClose: () => void;
+  onUpload: () => void;
 };
 
 type CheckBoxStates = {
   BattleBuddies: boolean;
-  IAdvocacy: boolean;
+  Advocacy: boolean;
   OperationWellness: boolean;
 };
 
-export function FileUpload({ onClose }: FileUploadProps) {
+export function FileUpload({ onClose, onUpload }: FileUploadProps) {
   const [checkboxStates, setCheckboxStates] = useState<CheckBoxStates>({
     BattleBuddies: false,
-    IAdvocacy: false,
+    Advocacy: false,
     OperationWellness: false,
   });
   const [comments, setComments] = useState<string>();
   const [file, setFile] = useState<File | null>(null);
   const [sizeError, setSizeError] = useState<boolean>(false);
+  const [uploading, setUploading] = useState<boolean>(false);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -42,8 +44,12 @@ export function FileUpload({ onClose }: FileUploadProps) {
   const uploadFile = () => {
     if (
       file &&
-      (checkboxStates.BattleBuddies || checkboxStates.IAdvocacy || checkboxStates.OperationWellness)
+      (checkboxStates.BattleBuddies ||
+        checkboxStates.Advocacy ||
+        checkboxStates.OperationWellness) &&
+      !uploading
     ) {
+      setUploading(true);
       const fileObjRequest: CreateFileObjectRequest = {
         filename: file.name,
         uploader: "Steve",
@@ -52,7 +58,6 @@ export function FileUpload({ onClose }: FileUploadProps) {
           (key) => checkboxStates[key as keyof CheckBoxStates],
         ),
       };
-      console.log(Object.keys(checkboxStates));
       createFileObject(fileObjRequest)
         .then((result) => {
           if (result.success) {
@@ -61,21 +66,9 @@ export function FileUpload({ onClose }: FileUploadProps) {
             const storageRef = ref(storage, `files/${result.data._id}.${extension}`);
             uploadBytes(storageRef, file)
               .then(() => {
-                console.log("uploaded!");
-                const newMetadata = {
-                  customMetadata: {
-                    uploader: "Steve", // user id
-                    permittedUsers: "Joe$Srikar$Andrew", // user ids encoded (has to be string)
-                  },
-                };
-                updateMetadata(storageRef, newMetadata)
-                  .then(() => {
-                    console.log("updated!");
-                    onClose();
-                  })
-                  .catch((err: unknown) => {
-                    console.error(err);
-                  });
+                setUploading(false);
+                onClose();
+                onUpload();
               })
               .catch((error: unknown) => {
                 console.error(error);
@@ -161,18 +154,18 @@ export function FileUpload({ onClose }: FileUploadProps) {
             <div
               className={styles.checkRow}
               onClick={() => {
-                setCheckboxStates({ ...checkboxStates, IAdvocacy: !checkboxStates.IAdvocacy });
+                setCheckboxStates({ ...checkboxStates, Advocacy: !checkboxStates.Advocacy });
               }}
             >
               <input
                 type="checkbox"
                 onChange={() => {
-                  console.log("clicked IAdvocacy");
+                  console.log("clicked Advocacy");
                 }}
                 className={styles.checkBox}
-                checked={checkboxStates.IAdvocacy}
+                checked={checkboxStates.Advocacy}
               />{" "}
-              <span>I Advocacy</span>
+              <span>Advocacy</span>
             </div>
             <div
               className={styles.checkRow}
