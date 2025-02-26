@@ -1,11 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { FileObject, getFilesByUploader } from "../api/fileApi";
 
 import { Tabs } from "./Tabs";
 import styles from "./VeteranFilesTable.module.css";
-import Link from "next/link";
 
 type VeteranFilesTableProps = {
   refresh: boolean;
@@ -21,7 +21,7 @@ export function VeteranFilesTable({ refresh }: VeteranFilesTableProps) {
       .then((result) => {
         if (result.success) {
           setFileObjects(result.data);
-          console.log(result.data)
+          console.log(result.data);
         } else {
           console.log(result.error);
         }

@@ -1,14 +1,15 @@
-import { DocumentView } from "@/app/components/DocumentView"
+import { DocumentView } from "@/app/components/DocumentView";
 
-export default async function DocumentPage({params}: {params: Promise<{documentId: string}>}){
+export default async function DocumentPage({
+  params,
+}: {
+  params: Promise<{ documentId: string }>;
+}) {
+  const documentId = (await params).documentId;
 
-    const documentId = (await params).documentId    
-
-    return(
-        <div>
-            <DocumentView documentId={documentId}/>
-        </div>
-    )
-
+  return (
+    <div>
+      <DocumentView documentId={documentId} />
+    </div>
+  );
 }
-

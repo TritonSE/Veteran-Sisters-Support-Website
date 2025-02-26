@@ -1,11 +1,12 @@
-import { User } from "./users"
+import { User } from "./users";
 
 export type Comment = {
-  id: string
-  comment: string
-  commenterId: User
-  datePosted: string
-}
+  _id: string;
+  comment: string;
+  commenterId: User;
+  datePosted: string;
+  edited?: boolean;
+};
 
 export type FileObject = {
   _id: string;
@@ -27,12 +28,12 @@ export type EditFileObjectRequest = {
   uploader?: string;
   comments?: Comment[];
   programs?: string[];
-}
+};
 
 export type CreateCommentRequest = {
-  comment: string
-  commenterId: string
-}
+  comment: string;
+  commenterId: string;
+};
 
 export type APIResult<T> = { success: true; data: T } | { success: false; error: string };
 
@@ -92,17 +93,19 @@ export const getFileById = async (id: string): Promise<APIResult<FileObject>> =>
   } catch (error: unknown) {
     return { success: false, error: (error as Error).message };
   }
-}
+};
 
-export const createCommentObject = async (comment: CreateCommentRequest): Promise<APIResult<Comment>> => {
-  try{
+export const createCommentObject = async (
+  comment: CreateCommentRequest,
+): Promise<APIResult<Comment>> => {
+  try {
     const response = await fetch(`http://localhost:4000/api/comments`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(comment)
-    })
+      body: JSON.stringify(comment),
+    });
     if (!response.ok) {
       return { success: false, error: response.statusText };
     }
@@ -112,17 +115,20 @@ export const createCommentObject = async (comment: CreateCommentRequest): Promis
   } catch (error: unknown) {
     return { success: false, error: (error as Error).message };
   }
-}
+};
 
-export const editFileObject = async (id: string, update: EditFileObjectRequest): Promise<APIResult<FileObject>> => {
-  try{
+export const editFileObject = async (
+  id: string,
+  update: EditFileObjectRequest,
+): Promise<APIResult<FileObject>> => {
+  try {
     const response = await fetch(`http://localhost:4000/api/file/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(update)
-    })
+      body: JSON.stringify(update),
+    });
     if (!response.ok) {
       return { success: false, error: response.statusText };
     }
@@ -132,4 +138,45 @@ export const editFileObject = async (id: string, update: EditFileObjectRequest):
   } catch (error: unknown) {
     return { success: false, error: (error as Error).message };
   }
-}
+};
+
+export const editCommentObject = async (
+  id: string,
+  newComment: string,
+): Promise<APIResult<Comment>> => {
+  try {
+    const response = await fetch(`http://localhost:4000/api/comment/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ comment: newComment }),
+    });
+    if (!response.ok) {
+      return { success: false, error: response.statusText };
+    }
+    const data = (await response.json()) as Comment;
+    console.log("Data: ", data);
+    return { success: true, data };
+  } catch (error: unknown) {
+    return { success: false, error: (error as Error).message };
+  }
+};
+
+export const deleteCommentObject = async (id: string): Promise<APIResult<{}>> => {
+  try {
+    const response = await fetch(`http://localhost:4000/api/comment/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      return { success: false, error: response.statusText };
+    }
+    const data = response
+    return { success: true, data };
+  } catch (error: unknown) {
+    return { success: false, error: (error as Error).message };
+  }
+};

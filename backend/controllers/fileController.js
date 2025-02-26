@@ -10,7 +10,7 @@ export const uploadFile = async (req, res, next) => {
       commentObject = await Comment.create({
         comment: comment,
         commenterId: uploaderId,
-        datePosted: Date.now()
+        datePosted: new Date()
       })
     }
 
@@ -47,7 +47,7 @@ export const getFileByUploader = async (req, res, next) => {
   }
 };
 
-export const editFileById = async (req, res) => {
+export const editFileById = async (req, res, next) => {
   try{
     const { id } = req.params
     const update = req.body;
