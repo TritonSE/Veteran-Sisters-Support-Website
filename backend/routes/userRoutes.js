@@ -5,7 +5,7 @@ import {
   addUser,
   deleteUser,
   getUsersNonAdmins,
-  getVeteransByVolunteer,
+  getVeteransByVolunteerEmail,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -16,7 +16,7 @@ router.get("/users/:email", getUserByEmail);
 
 router.get("/nonAdminUsers", getUsersNonAdmins);
 
-router.get("/veterans/:volunteerId", getVeteransByVolunteer);
+router.get("/veterans/:volunteerEmail", getVeteransByVolunteerEmail);
 
 router.post("/users", addUser);
 

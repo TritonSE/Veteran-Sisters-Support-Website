@@ -15,8 +15,7 @@ const userSchema = new Schema({
     enum: ["battle buddies", "advocacy", "operation wellness"],
     required: true,
   },
-  assignedVeterans: [String],
-  assignedVolunteers: [String],
+  assignedUsers: [String],
 });
 
 export const User = model("User", userSchema);

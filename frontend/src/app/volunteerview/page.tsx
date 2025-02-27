@@ -14,7 +14,7 @@ export default function StaffDashboard() {
           <div className={styles.welcome}>
             <span>Welcome, !</span>
           </div>
-          <VeteranList volunteerId="67971ace5917b2ea3e4eeb86" />
+          <VeteranList volunteerEmail="volunteer3@gmail.com" />
         </div>
       </div>
     </div>
