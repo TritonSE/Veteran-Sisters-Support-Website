@@ -102,3 +102,18 @@ export const getUsersNonAdmins = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const getUserRole = async (req, res) => {
+  try {
+    const email = req.params.email;
+    const user = await User.findOne({ email }).exec();
+    if (user) {
+      res.json({ role: user.role });
+    } else {
+      res.status(404).json({ error: "User not found" });
+    }
+  } catch (error) {
+    console.error("getUserRole Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

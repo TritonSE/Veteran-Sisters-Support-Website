@@ -1,23 +1,37 @@
 "use client";
+
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-// import Link from "next/link";
 
 import { useAuth } from "../contexts/AuthContext";
 
-import { NavBar } from "./components/NavBar";
 import LoginForm from "./login/page";
 
 export default function Home() {
-  const { currentUser, loggedIn } = useAuth();
+  const { loggedIn, role } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
-    console.log("Auth state updated in home: ", loggedIn, currentUser);
-  }, [currentUser, loggedIn]);
+    if (loggedIn) {
+      // Redirect based on role:
+      switch (role) {
+        case "admin":
+          router.push("/adminview");
+          break;
+        case "staff":
+          router.push("/staffview");
+          break;
+        case "veteran":
+          router.push("/veteranDashboard");
+          break;
+        case "volunteer":
+          router.push("/volunteerDashboard");
+          break;
+        default:
+          break;
+      }
+    }
+  }, [loggedIn, role, router]);
 
-  return (
-    <div>
-      <NavBar />
-      {loggedIn ? <p>User logged in</p> : <LoginForm />}
-    </div>
-  );
+  return <>{!loggedIn && <LoginForm />}</>;
 }
