@@ -1,5 +1,6 @@
 "use client";
 import { getDownloadURL, ref } from "firebase/storage";
+import fileDownload from "js-file-download";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -24,6 +25,8 @@ import styles from "./DocumentView.module.css";
 import { Program } from "./Program";
 import { Role } from "./Role";
 
+import axios from "axios";
+
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
   import.meta.url,
@@ -42,16 +45,30 @@ export function DocumentView({ documentId }: DocumentViewProps) {
   const [currComment, setCurrComment] = useState<number>();
   const [currCommentBody, setCurrCommentBody] = useState<string>();
 
-  const [editingTitle, setEditingTitle] = useState<boolean>()
+  const [editingTitle, setEditingTitle] = useState<boolean>();
+  const [currTitle, setCurrTitle] = useState<string>();
 
-  const months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-           "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
 
   useEffect(() => {
     getFileById(documentId)
       .then((response) => {
         if (response.success) {
           setFile(response.data);
+          setCurrTitle(response.data.filename);
           setComments(response.data.comments);
         } else {
           console.log(response.error);
@@ -109,16 +126,18 @@ export function DocumentView({ documentId }: DocumentViewProps) {
   const postCommentHandler = (edit: boolean, key: number, id: string) => {
     if (currCommentBody?.trim() && file) {
       if (edit) {
-        editCommentObject(id, currCommentBody).then((response) => {
-          if (response.success) {
-            comments[key] = response.data
-            setFile({...file, comments: comments})
-            setCurrComment(undefined);
-            setCurrCommentBody("");
-          }
-        }).catch((error)=>{
-            console.log(error)
-        })
+        editCommentObject(id, currCommentBody)
+          .then((response) => {
+            if (response.success) {
+              comments[key] = response.data;
+              setFile({ ...file, comments });
+              setCurrComment(undefined);
+              setCurrCommentBody("");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       } else {
         const newComment: CreateCommentRequest = {
           commenterId: "67b2e046432b1fc7da8b533c",
@@ -150,23 +169,87 @@ export function DocumentView({ documentId }: DocumentViewProps) {
   };
 
   const deleteCommentHandler = (id: string, key: number) => {
-    deleteCommentObject(id).then((response)=>{
-        console.log(response)
-        if(response.success && file){
-            const newCommentList = comments.slice(0, key).concat(comments.slice(key+1))
-            console.log(newCommentList)
-            editFileObject(file._id, {comments: newCommentList}).then((response2)=>{
-                if(response2.success){
-                    setFile(response2.data);
-                    setComments(response2.data.comments);
-                    setCurrComment(undefined);
-                    setCurrCommentBody("");
-                }
-            })
+    deleteCommentObject(id)
+      .then((response) => {
+        console.log(response);
+        if (response.success && file) {
+          const newCommentList = comments.slice(0, key).concat(comments.slice(key + 1));
+          console.log(newCommentList);
+          editFileObject(file._id, { comments: newCommentList }).then((response2) => {
+            if (response2.success) {
+              setFile(response2.data);
+              setComments(response2.data.comments);
+              setCurrComment(undefined);
+              setCurrCommentBody("");
+            }
+          });
         }
-    }).catch((error)=>{
-        console.log(error)
-    })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const changeTitleHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" && file) {
+      e.preventDefault();
+      e.stopPropagation();
+      editFileObject(file?._id, { filename: currTitle })
+        .then((response) => {
+          if (response.success) {
+            setFile(response.data);
+            setCurrTitle(response.data.filename);
+            setEditingTitle(false);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
+  const formatDate = (datePosted: string) => {
+    const date = new Date(datePosted);
+    const month = months[date.getMonth()];
+    const day = date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
+    const year = date.getFullYear();
+    return `${month} ${day}, ${year}`;
+  };
+
+  //don't ask me how these next two functions work I got them straight
+  const handleDownload = () => {
+    if (fileURL && file) {
+      axios
+        .get(fileURL, {
+          responseType: "blob",
+        })
+        .then((res) => {
+          fileDownload(res.data, file?.filename);
+        });
+    }
+  };
+
+  const handlePrint = () => {
+    if (fileURL && file) {
+      axios
+        .get(fileURL, {
+          responseType: "blob",
+        })
+        .then((res) => {
+          const blobURL = URL.createObjectURL(res.data);
+          const iframe = document.createElement("iframe");
+          document.body.appendChild(iframe);
+
+          iframe.style.display = "none";
+          iframe.src = blobURL;
+          iframe.onload = function () {
+            setTimeout(function () {
+              iframe.focus();
+              if (iframe.contentWindow) iframe.contentWindow.print();
+            }, 1);
+          };
+        });
+    }
   };
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
@@ -179,17 +262,41 @@ export function DocumentView({ documentId }: DocumentViewProps) {
         <Link href="/veteranDashboard">
           <Image src="/logo_black.svg" width={143} height={32} alt="logo" />
         </Link>
-        {editingTitle? 
-        <input className={styles.editTitle} type="text" defaultValue={file?.filename} />
-        :<div className={styles.headerSection} onClick={()=>setEditingTitle(true)}>
-          {filename}
-          <Image src="/pencil_icon.svg" width={16} height={16} alt="edit" />
-        </div>
-        }
-        <div className={styles.headerSection}>
-          <Image src="/download_icon.svg" width={24} height={24} alt="download" />
-          <Image src="/print_icon.svg" width={24} height={24} alt="print" />
-        </div>
+        {editingTitle ? (
+          <input
+            className={styles.editTitle}
+            type="text"
+            defaultValue={currTitle}
+            onChange={(e) => {
+              setCurrTitle(e.target.value);
+            }}
+            onKeyDown={changeTitleHandler}
+          />
+        ) : (
+          <div
+            className={styles.headerSection}
+            onClick={() => {
+              setEditingTitle(true);
+            }}
+          >
+            {filename}
+            <Image src="/pencil_icon.svg" width={16} height={16} alt="edit" />
+          </div>
+        )}
+        {fileURL && (
+          <div className={styles.headerSection}>
+            <Image
+              src="/download_icon.svg"
+              width={24}
+              height={24}
+              alt="download"
+              onClick={handleDownload}
+            />
+            {/* <Link href={fileURL} target="_blank" download> */}
+            <Image src="/print_icon.svg" width={24} height={24} alt="print" onClick={handlePrint} />
+            {/* </Link> */}
+          </div>
+        )}
       </div>
     );
   };
@@ -219,7 +326,9 @@ export function DocumentView({ documentId }: DocumentViewProps) {
             </div>
             <div className={styles.commentBody}>{comment.comment}</div>
             <div className={styles.commentBottomRow}>
-              <div className={styles.commentDate}>{`${months[Number(comment.datePosted.slice(5, 7))-1]} ${comment.datePosted.slice(8, 10)}, ${comment.datePosted.slice(0,4)} ${comment.edited?"(edited)":""}`}</div>
+              <div
+                className={styles.commentDate}
+              >{`${formatDate(comment.datePosted)} ${comment.edited ? "(edited)" : ""}`}</div>
               <div className={styles.commentBottomIcons}>
                 <Image
                   style={{ cursor: "pointer" }}
@@ -233,7 +342,9 @@ export function DocumentView({ documentId }: DocumentViewProps) {
                 />
                 <Image
                   style={{ cursor: "pointer" }}
-                  onClick={()=>deleteCommentHandler(comment._id, key)}
+                  onClick={() => {
+                    deleteCommentHandler(comment._id, key);
+                  }}
                   src="/trash_icon.svg"
                   width={16}
                   height={16}
@@ -274,7 +385,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
                   postCommentHandler(comment.comment !== "", key, comment._id);
                 }}
               >
-                {comment.comment !== ""?"Save":"Post"}
+                {comment.comment !== "" ? "Save" : "Post"}
               </div>
             </div>
           </div>

@@ -174,7 +174,7 @@ export const deleteCommentObject = async (id: string): Promise<APIResult<{}>> =>
     if (!response.ok) {
       return { success: false, error: response.statusText };
     }
-    const data = response
+    const data = response;
     return { success: true, data };
   } catch (error: unknown) {
     return { success: false, error: (error as Error).message };

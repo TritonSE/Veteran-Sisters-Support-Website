@@ -5,7 +5,7 @@ export const queryComments = async (req, res, next) => {
     const profileId = req.params.profileId;
     const comments = await Comment.find({ profileId })
       .populate("profileId", "firstName lastName")
-      .populate("commenterId", "firstName lastName")
+      .populate("commenterId", "firstName lastName");
     if (comments) {
       res.json(comments);
     } else {
@@ -24,6 +24,7 @@ export const addComment = async (req, res, next) => {
       profileId,
       commenterId,
       comment,
+      datePosted: new Date(Date.now()),
     });
     res.status(201).json(newComment);
   } catch (error) {
@@ -33,22 +34,26 @@ export const addComment = async (req, res, next) => {
 };
 
 export const editComment = async (req, res, next) => {
-  try{
-    const { id } = req.params
+  try {
+    const { id } = req.params;
     const { comment } = req.body;
-    const newComment = await Comment.findOneAndUpdate({_id: id}, {comment, datePosted: new Date(), edited: true}, {new: true}).populate("commenterId")
-    res.status(200).json(newComment)
-  } catch (error) { 
-    next(error)
-  } 
-}
+    const newComment = await Comment.findOneAndUpdate(
+      { _id: id },
+      { comment, datePosted: new Date(Date.now()), edited: true },
+      { new: true },
+    ).populate("commenterId");
+    res.status(200).json(newComment);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const deleteComment = async (req, res, next) => {
-  try{
-    const { id } = req.params
-    const response = await Comment.findByIdAndDelete(id) 
-    res.status(204).json(response)
+  try {
+    const { id } = req.params;
+    const response = await Comment.findByIdAndDelete(id);
+    res.status(204).json(response);
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
