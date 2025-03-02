@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 
-import { User, getVeteransByVolunteerEmail } from "../api/users";
+import { User, getVeteransByVolunteer } from "../api/users";
 
 import styles from "./VeteranList.module.css";
 import { VeteranProfileCard } from "./VeteranProfileCard";
 
 type VeteranListProp = {
-  volunteerEmail: string;
+  volunteerId: string;
 };
 
-export function VeteranList({ volunteerEmail }: VeteranListProp) {
+export function VeteranList({ volunteerId }: VeteranListProp) {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    getVeteransByVolunteerEmail(volunteerEmail)
+    getVeteransByVolunteer(volunteerId)
       .then((result) => {
         if (result.success) {
           setUsers(result.data);
@@ -24,7 +24,7 @@ export function VeteranList({ volunteerEmail }: VeteranListProp) {
       .catch((reason: unknown) => {
         console.error(reason);
       });
-  });
+  }, []);
 
   return (
     <div className={styles.container}>

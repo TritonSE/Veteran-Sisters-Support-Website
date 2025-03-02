@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { User } from "../api/users";
 
 import styles from "./VeteranProfileCard.module.css";

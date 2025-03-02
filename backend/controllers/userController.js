@@ -88,10 +88,11 @@ export const getUsersNonAdmins = async (req, res) => {
   }
 };
 
-export const getVeteransByVolunteerEmail = async (req, res) => {
+export const getVeteransByVolunteer = async (req, res) => {
   try {
-    const { volunteerEmail } = req.params;
-    const users = await User.find({ assignedUsers: { $in: [volunteerEmail] } }).sort({
+    const { volunteerId } = req.params;
+    const user = await User.findById(volunteerId);
+    const users = await User.find({ assignedUsers: { $in: [user.email] } }).sort({
       firstName: "asc",
     });
 
