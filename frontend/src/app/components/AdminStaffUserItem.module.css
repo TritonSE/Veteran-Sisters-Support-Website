@@ -50,6 +50,11 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 202px;
 }
 
 .emailText {
@@ -61,6 +66,11 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 202px;
 }
 
 .role {
