@@ -1,0 +1,67 @@
+.profileHeader {
+  display: flex;
+  width: 1024px;
+  justify-content: space-between;
+}
+
+.profileHeader .profileContent {
+  display: flex;
+  gap: 24px;
+}
+
+.profileHeader .userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--Spacing-s, 8px);
+  justify-content: center;
+}
+
+.profileHeader .userInfoHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--Spacing-sm, 16px);
+}
+
+.profileHeader .userFullName {
+  color: var(--Text-3, #3a3c3d);
+
+  /* title medium */
+  font-family: "Albert Sans";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.profileHeader .userMetadata {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-s, 8px);
+  flex-wrap: wrap;
+}
+
+.profileHeader .userMetadata .metadataSubsection {
+  display: flex;
+}
+
+.profileHeader .userMetadata .metadataSubsection * {
+  width: fit-content;
+  color: var(--Text-1, #60696f);
+  /* body large */
+  font-family: "Albert Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.profileHeader .userMetadata .smallMetadata {
+  font-size: 14px;
+}
+
+.profileHeader .profileContentControls {
+  display: flex;
+  padding: var(--Spacing-s, 8px) 0px;
+  gap: var(--Spacing-s, 8px);
+}
