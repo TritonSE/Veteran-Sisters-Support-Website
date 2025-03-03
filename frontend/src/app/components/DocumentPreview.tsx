@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 
 import styles from "./DocumentPreview.module.css";
 
@@ -9,6 +9,10 @@ type DocumentPreviewProps = {
 };
 
 export default function DocumentPreview({ documentName, fileType }: DocumentPreviewProps) {
+  useEffect(() => {
+    console.log(typeof fileType);
+  }, []);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8, width: 220 }}>
       <div className={styles.documentPreview}>

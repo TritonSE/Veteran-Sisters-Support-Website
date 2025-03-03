@@ -24,8 +24,11 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
     getFilesByUploader(uploader)
       .then((result) => {
         if (result.success) {
-          console.log(result.data);
           setFileObjects(result.data);
+          console.log(
+            "Data: ",
+            result.data.filter((file) => file.programs.includes("OperationWellness")),
+          );
         } else {
           console.log(result.error);
         }
@@ -48,7 +51,7 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
           </div>
           <div className={styles.documentTable}>
             {fileObjects
-              .filter((file) => file.programs.includes(program))
+              .filter((obj) => obj.programs.includes(program))
               .slice(0, 4)
               .map((file) => (
                 <div key={file._id}>

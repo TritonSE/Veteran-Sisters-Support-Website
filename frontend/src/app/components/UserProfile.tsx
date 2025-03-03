@@ -180,9 +180,11 @@ export default function UserProfile({ userId }: { userId: string }) {
                   />
                 )}
               </div>
-              <div>
-                <VeteranDocuments uploader={"Steve"} />
-              </div>
+              {userProfile?.role === RoleEnum.VETERAN && (
+                <div>
+                  <VeteranDocuments uploader={"67b2e046432b1fc7da8b533c"} />
+                </div>
+              )}
             </div>
           </div>
         )}
