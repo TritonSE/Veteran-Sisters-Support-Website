@@ -1,11 +1,5 @@
 import { APIResult } from "./fileApi";
-
-export type User = {
-  email: string;
-  firstName: string;
-  lastName: string;
-  assignedVeterans?: string[];
-};
+import { User } from "./users";
 
 export type ActiveVolunteer = {
   assignedProgram: string;

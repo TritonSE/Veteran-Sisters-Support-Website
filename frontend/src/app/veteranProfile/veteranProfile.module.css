@@ -1,4 +1,110 @@
+.dialogContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10rem;
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.dialog {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 900px;
+}
+
 .searchBar {
-  width: 40%;
-  margin: auto;
+  margin: 2rem;
+}
+
+.headerInfoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0px 2rem;
+}
+
+.headerInfo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 24px;
+  font-weight: 5px;
+}
+
+.volunteerInfoContainer {
+  display: flex;
+  align-items: center;
+  margin: 0px 2rem;
+}
+
+.volunteerInfoContainer > div:first-child {
+  margin-right: 2rem;
+}
+
+.volunteerInfoContainer > div:nth-child(2) {
+  margin-right: auto;
+}
+
+.volunteerInfoContainer {
+  line-height: 1.5;
+}
+
+.profilePicLetter {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e9ebed;
+  font-size: 48px;
+}
+
+.profileLink {
+  color: #057e6f;
+  font-weight: 600;
+}
+
+.coloredInfo {
+  color: #057e6f;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin: 2rem 2rem;
+  align-items: center;
+  gap: 5px;
+}
+
+.save {
+  color: white;
+  background-color: #057e6f;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  cursor: pointer;
+}
+
+.cancel {
+  background-color: white;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  padding: 12px 24px;
+  cursor: pointer;
+}
+
+.message {
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
