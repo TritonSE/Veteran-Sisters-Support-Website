@@ -61,6 +61,7 @@ export function VeteranFilesTable({ refresh }: VeteranFilesTableProps) {
             <DocumentPreview
               documentName={obj.filename}
               fileType={obj.filename.includes(".") ? (obj.filename.split(".").pop() ?? "") : ""}
+              component={false}
             />
           </div>
         ))}

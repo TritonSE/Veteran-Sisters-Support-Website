@@ -6,9 +6,14 @@ import styles from "./DocumentPreview.module.css";
 type DocumentPreviewProps = {
   documentName: string;
   fileType: string;
+  component: boolean;
 };
 
-export default function DocumentPreview({ documentName, fileType }: DocumentPreviewProps) {
+export default function DocumentPreview({
+  documentName,
+  fileType,
+  component,
+}: DocumentPreviewProps) {
   useEffect(() => {
     console.log(typeof fileType);
   }, []);
@@ -16,10 +21,22 @@ export default function DocumentPreview({ documentName, fileType }: DocumentPrev
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8, width: 220 }}>
       <div className={styles.documentPreview}>
-        {fileType === "pdf" ? (
-          <Image src="./pdf_icon.svg" width={80} height={80} alt="pdf" />
+        {component ? (
+          <>
+            {fileType === "pdf" ? (
+              <Image src="/pdf_icon.svg" width={80} height={80} alt="pdf" />
+            ) : (
+              <Image src="/doc_icon.svg" width={80} height={80} alt="pdf" />
+            )}
+          </>
         ) : (
-          <Image src="./doc_icon.svg" width={80} height={80} alt="pdf" />
+          <>
+            {fileType === "pdf" ? (
+              <Image src="./pdf_icon.svg" width={80} height={80} alt="pdf" />
+            ) : (
+              <Image src="./doc_icon.svg" width={80} height={80} alt="pdf" />
+            )}
+          </>
         )}
       </div>
       <div>

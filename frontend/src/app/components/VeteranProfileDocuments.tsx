@@ -60,6 +60,7 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
                     fileType={
                       file.filename.includes(".") ? (file.filename.split(".").pop() ?? "") : ""
                     }
+                    component={true}
                   />
                 </div>
               ))}
