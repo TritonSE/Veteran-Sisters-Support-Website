@@ -8,11 +8,11 @@ import {
 } from "../api/profileApi";
 
 import NavigateBack from "./NavigateBack";
+import { ProfileHeader } from "./ProfileHeader";
+import { UserList } from "./UserList";
 import styles from "./UserProfile.module.css";
-
-import { ProfileHeader } from "@/app/components/ProfileHeader";
-import { UserList } from "@/app/components/UserList";
-import { VolunteerNotes } from "@/app/components/VolunteerNotes";
+import { VeteranDocuments } from "./VeteranProfileDocuments";
+import { VolunteerNotes } from "./VolunteerNotes";
 
 type ProfileRenderingContext = {
   invalidContext: boolean;
@@ -180,6 +180,11 @@ export default function UserProfile({ userId }: { userId: string }) {
                   />
                 )}
               </div>
+              {userProfile?.role === RoleEnum.VETERAN && (
+                <div>
+                  <VeteranDocuments uploader={"67b2e046432b1fc7da8b533c"} />
+                </div>
+              )}
             </div>
           </div>
         )}

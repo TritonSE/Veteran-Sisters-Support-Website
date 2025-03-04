@@ -6,6 +6,7 @@ export const queryComments = async (req, res) => {
     const comments = await Comment.find({ profileId })
       .populate("profileId", "firstName lastName")
       .populate("commenterId", "firstName lastName")
+      .sort({ createdAt: -1 })
       .exec();
     if (comments) {
       res.json(comments);

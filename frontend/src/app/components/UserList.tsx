@@ -2,9 +2,8 @@ import Image from "next/image";
 
 import { UserProfile as UserProfileType } from "../api/profileApi";
 
+import { Program } from "./Program";
 import styles from "./UserList.module.css";
-
-import { Program } from "@/app/components/Program";
 
 export function UserList(params: {
   userProfile: UserProfileType | undefined;

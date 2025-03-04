@@ -1,0 +1,17 @@
+.documentTable {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border-top: 1px solid black;
+}
+
+.programName {
+  color: var(--Text-3, #3a3c3d);
+
+  /* title medium */
+  font-family: "Albert Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}

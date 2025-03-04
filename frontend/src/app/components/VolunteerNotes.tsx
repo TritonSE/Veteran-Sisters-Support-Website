@@ -7,9 +7,8 @@ import {
   postComment,
 } from "../api/profileApi";
 
+import { ProfilePicture } from "./ProfilePicture";
 import styles from "./VolunteerNotes.module.css";
-
-import { ProfilePicture } from "@/app/components/ProfilePicture";
 
 export function VolunteerNotes({ userId }: { userId: string }) {
   const [profileNotes, setProfileNotes] = useState<ProfileComment[] | undefined>([]);
@@ -77,26 +76,29 @@ export function VolunteerNotes({ userId }: { userId: string }) {
         </div>
         <div className={styles.postedNotes}>
           {profileNotes && profileNotes.length > 0 ? (
-            profileNotes.map((comment, ind) => {
-              return (
-                <div key={ind} className={styles.postedNote}>
-                  <ProfilePicture firstName={comment.user} size="small" />
-                  <div className={styles.noteContent}>
-                    <div className={styles.noteHeader}>
-                      <div className={styles.noteAuthor}>{comment.user}</div>
-                      <div className={styles.notePostedDate}>
-                        {Math.floor(
-                          (new Date().getTime() - new Date(comment.datePosted).getTime()) /
-                            (1000 * 60 * 60 * 24),
-                        )}{" "}
-                        days ago
+            profileNotes
+              .slice()
+              .reverse()
+              .map((comment, ind) => {
+                return (
+                  <div key={ind} className={styles.postedNote}>
+                    <ProfilePicture firstName={comment.user} size="small" />
+                    <div className={styles.noteContent}>
+                      <div className={styles.noteHeader}>
+                        <div className={styles.noteAuthor}>{comment.user}</div>
+                        <div className={styles.notePostedDate}>
+                          {Math.floor(
+                            (new Date().getTime() - new Date(comment.datePosted).getTime()) /
+                              (1000 * 60 * 60 * 24),
+                          )}{" "}
+                          days ago
+                        </div>
                       </div>
+                      <div className={styles.noteBody}>{comment.comment}</div>
                     </div>
-                    <div className={styles.noteBody}>{comment.comment}</div>
                   </div>
-                </div>
-              );
-            })
+                );
+              })
           ) : (
             <div>No notes</div>
           )}
