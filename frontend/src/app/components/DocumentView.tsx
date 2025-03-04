@@ -92,7 +92,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
       setCurrComment(commentKey);
       setCurrCommentBody(commentBody);
     } else {
-      if (currComment == undefined) {
+      if (currComment === undefined) {
         const dummyUser: User = {
           _id: "",
           firstName: "Andrew",
@@ -171,10 +171,8 @@ export function DocumentView({ documentId }: DocumentViewProps) {
   const deleteCommentHandler = (id: string, key: number) => {
     deleteCommentObject(id)
       .then((response) => {
-        console.log(response);
         if (response.success && file) {
           const newCommentList = comments.slice(0, key).concat(comments.slice(key + 1));
-          console.log(newCommentList);
           editFileObject(file._id, { comments: newCommentList }).then((response2) => {
             if (response2.success) {
               setFile(response2.data);
@@ -216,7 +214,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
     return `${month} ${day}, ${year}`;
   };
 
-  //don't ask me how these next two functions work I got them straight
+  //don't ask me how these next two functions work I got them straight from stack overflow
   const handleDownload = () => {
     if (fileURL && file) {
       axios
@@ -431,7 +429,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
           </div>
           <div
             className={
-              currComment == undefined ? styles.addCommentButton : styles.disabledCommentButton
+              currComment === undefined ? styles.addCommentButton : styles.disabledCommentButton
             }
             onClick={() => {
               writeCommentHandler(false, 0, "");
