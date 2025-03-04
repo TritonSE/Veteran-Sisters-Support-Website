@@ -1,19 +1,24 @@
+import { Role as RoleEnum } from "../api/profileApi";
+
 import styles from "./Role.module.css";
 
 type RoleProp = {
-  role: string;
+  role: string | undefined;
 };
 
 export function Role({ role }: RoleProp) {
   let style;
   let roleName;
-  if (role === "staff") {
+  if (role === RoleEnum.STAFF) {
     style = `${styles.container} ${styles.staff}`;
     roleName = "Staff";
-  } else if (role === "volunteer") {
+  } else if (role === RoleEnum.VOLUNTEER) {
     style = `${styles.container} ${styles.volunteer}`;
     roleName = "Volunteer";
-  } else {
+  } else if (role === RoleEnum.ADMIN) {
+    style = `${styles.container} ${styles.admin}`;
+    roleName = "Admin";
+  } else if (role === RoleEnum.VETERAN) {
     style = `${styles.container} ${styles.veteran}`;
     roleName = "Veteran";
   }
