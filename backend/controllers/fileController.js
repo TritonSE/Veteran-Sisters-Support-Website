@@ -10,7 +10,7 @@ export const uploadFile = async (req, res, next) => {
       commentObject = await Comment.create({
         comment: comment,
         commenterId: uploaderId,
-        datePosted: Date.now,
+        datePosted: new Date(Date.now()),
       });
     }
 
