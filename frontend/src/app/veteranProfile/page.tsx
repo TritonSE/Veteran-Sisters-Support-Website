@@ -6,7 +6,6 @@ import { User } from "../api/users";
 import styles from "./veteranProfile.module.css";
 import VolunteerAssigningDialog from "./volunteerAssigningDialog";
 
-const isOpen = true;
 const program = "advocacy";
 const user3: User = {
   _id: "678ef34b664181e8e671cdb1",
@@ -26,7 +25,6 @@ export default function VeteranProfile() {
     setIsDialogOpen(true);
   };
 
-  // Function to close the dialog
   const closeDialog = () => {
     setIsDialogOpen(false);
   };
@@ -37,7 +35,7 @@ export default function VeteranProfile() {
 
       {isDialogOpen && (
         <VolunteerAssigningDialog
-          isOpen={isOpen}
+          isOpen={isDialogOpen}
           program={program}
           veteran={user3}
           closeDialog={closeDialog}
