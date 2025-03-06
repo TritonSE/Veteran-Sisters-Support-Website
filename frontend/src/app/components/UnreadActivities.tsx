@@ -13,6 +13,7 @@ type UnreadActivitiesProps = {
 
 export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({ isOpen, toggleDropdown }) => {
   const [activities, setActivities] = useState([""]);
+  const activityCount = activities.length;
 
   useEffect(() => {
     getUnreadActivities()
@@ -43,35 +44,55 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({ isOpen, togg
     <div className={styles.component}>
       <ul className={styles.customDropdown}>
         <li className={styles.selectBox} onClick={toggleDropdown}>
-          <Image
-            id="arrowUp"
-            width={35}
-            height={35}
-            src="ic_round-arrow-drop-up.svg"
-            alt="Dropdown arrow"
-            style={{
-              objectFit: "contain",
-              transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-            }}
-          ></Image>
-          Unread activity
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Image
+              id="arrowUp"
+              width={35}
+              height={35}
+              src="ic_round-arrow-drop-up.svg"
+              alt="Dropdown arrow"
+              style={{
+                objectFit: "contain",
+                transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+              }}
+            ></Image>
+            Unread activity
+            <span className={styles.activityCount}>{activityCount}</span>
+          </div>
+          <a href="/activities" style={{ color: "#057E6F", fontSize: "14px", fontWeight: "600" }}>
+            View all activities
+          </a>
         </li>
         {isOpen && (
           <li className={styles.dropdownItem}>
             New Document
-            <div className={styles.subtitle}>
-              Annie Wen <span className={styles.label}>Veteran</span>
-            </div>
-            <div className={styles.horizontalDiv}>
-              <div>Veteran Annie Wen uploaded a new document named &quot;Document1&quot;</div>
-              <button
+            <div>
+              <Image
+                id="pfp"
+                width={40}
+                height={40}
+                src="pfp.svg"
+                alt="Profile Photo"
+                style={{ float: "left", margin: "16px 16px 16px 0px" }}
+              ></Image>
+              <div className={styles.horizontalDiv}>
+                <div className={styles.subtitle}>
+                  Annie Wen <span className={styles.label}>Veteran</span>
+                </div>
+                <div style={{ fontWeight: "14px" }}>Today</div>
+              </div>
+              <div>
+                Veteran Annie Wen uploaded a new document named &quot;Document1&quot; to
+                &quot;Battle Buddies&quot;
+              </div>
+              {/* <button
                 className={styles.button}
                 onClick={() => {
                   handleSelect("New Document");
                 }}
               >
                 Mark as Read
-              </button>
+              </button> */}
             </div>
           </li>
         )}

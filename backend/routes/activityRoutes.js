@@ -1,15 +1,16 @@
 import express from "express";
+import {
+  getUnreadActivities,
+  createActivity,
+  markActivityRead,
+} from "../controllers/activityController.js";
 
 const router = express.Router();
 
-router.get("/activities");
+router.get("/activities", getUnreadActivities);
 
-// router.get("/users/:email", getUserByEmail);
+router.post("/activities", createActivity);
 
-// router.get("/nonAdminUsers", getUsersNonAdmins);
-
-router.post("/activity");
-
-// router.delete("/users/:email", deleteUser);
+router.patch("/activities/:activityId", markActivityRead);
 
 export default router;
