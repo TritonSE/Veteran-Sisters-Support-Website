@@ -16,7 +16,7 @@ export const queryUsers = async (req, res) => {
 
     res.json(usersByAssignedVeteran);
   } catch (error) {
-    console.log(error);
+    console.log("queryUser Error", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -31,31 +31,46 @@ export const getUserByEmail = async (req, res) => {
       res.status(404).json({ error: "Could not find user" });
     }
   } catch (error) {
-    console.log(error);
+    console.log("getUserbyEmail Error", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
 export const addUser = async (req, res) => {
   try {
-    const { email, firstName, lastName, role, assignedPrograms, assignedVeterans } = req.body;
+    const {
+      email,
+      phoneNumber,
+      firstName,
+      lastName,
+      role,
+      zipCode,
+      address,
+      roleSpecificInfo,
+      assignedPrograms,
+      assignedVeterans,
+    } = req.body;
     const existingUser = await User.findOne({ email }).exec();
     if (existingUser) {
       res.status(409).json({ error: "User with that email already exists" });
     } else {
       const newUser = await User.create({
         email,
+        phoneNumber,
         firstName,
         lastName,
         role,
+        zipCode,
+        address,
+        roleSpecificInfo,
         assignedPrograms,
         assignedVeterans,
-        assignedVolunteers,
+        assignedVolunteers: [],
       });
       res.status(201).json(newUser);
     }
   } catch (error) {
-    console.log(error);
+    console.log("addUser Error", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -66,7 +81,7 @@ export const deleteUser = async (req, res) => {
   res.json(deleteStatus);
   try {
   } catch (error) {
-    console.log(error);
+    console.log("deleteUser Error", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
