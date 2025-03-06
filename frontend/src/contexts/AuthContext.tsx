@@ -2,8 +2,9 @@ import { User, onAuthStateChanged } from "firebase/auth";
 import React, { ReactNode, useContext, useEffect, useMemo, useState } from "react";
 
 import { auth } from "../../firebase/firebase";
+import { User as UserType } from "../app/api/users";
 
-const getUserRole = async (email: string, attempts = 0): Promise<string> => {
+const getUserRole = async (email: string, attempts = 0): Promise<UserType> => {
   try {
     const response = await fetch(
       `http://localhost:4000/api/users/role/${encodeURIComponent(email)}`,
@@ -18,9 +19,9 @@ const getUserRole = async (email: string, attempts = 0): Promise<string> => {
     if (!response.ok) {
       throw new Error("Failed to fetch user role");
     }
-    const data = await response.json();
+    const data = (await response.json()) as UserType;
     console.log(data);
-    return data.role;
+    return data;
   } catch (error) {
     console.error("Error fetching user role:", error);
     return "";
@@ -53,17 +54,20 @@ export function AuthProvider({ children }: ProviderProps) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState("");
+  const [mongoId, setMongoId] = useState("");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       console.log("Auth state changed: ", user);
       if (user) {
         setCurrentUser(user);
-        const userRole = await getUserRole(user.email || "");
-        setRole(userRole);
+        const currUser = await getUserRole(user.email || "");
+        setRole(currUser.role);
+        setMongoId(currUser._id);
       } else {
         setCurrentUser(null);
         setRole("");
+        setMongoId("");
       }
       setLoading(false);
     });
@@ -72,8 +76,8 @@ export function AuthProvider({ children }: ProviderProps) {
   }, []);
 
   const value = useMemo(
-    () => ({ currentUser, loggedIn: !!currentUser, loading, role }),
-    [currentUser, loading, role],
+    () => ({ currentUser, loggedIn: !!currentUser, loading, role, mongoId }),
+    [currentUser, loading, role, mongoId],
   );
 
   if (loading) {
