@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 const { Schema, model } = mongoose;
 
 const userSchema = new Schema({
@@ -97,6 +97,8 @@ const userSchema = new Schema({
     required: true,
   },
   assignedUsers: [String],
+  yearJoined: { type: Number },
+  age: { type: Number },
 });
 
 export const User = model("User", userSchema);

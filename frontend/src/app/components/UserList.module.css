@@ -1,0 +1,128 @@
+.userList {
+  display: flex;
+  width: 100%;
+  padding: 24px 24px var(--Spacing-l, 32px) 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-sm, 16px);
+  height: fit-content;
+
+  border-radius: 8px;
+  border: 1px solid var(--Stroke-2, #d0d7de);
+  background: #fff;
+}
+
+.userList.minimized {
+  width: 256px;
+  min-width: 256px;
+}
+
+.userList .userListHeader {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.userListHeading {
+  color: var(--Text-3, #3a3c3d);
+  font-family: "Albert Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userList .addUser {
+  display: flex;
+  height: 34px;
+  padding: var(--Spacing-sm, 16px) 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+
+  border-radius: var(--Spacing-sm, 16px);
+  border: 1px solid var(--Primary, #057e6f);
+  background: var(--Primary, #057e6f);
+}
+
+.userList .addUser:hover {
+  cursor: pointer;
+}
+
+.userList .removeUser:hover {
+  cursor: pointer;
+}
+
+.userListContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-md, 24px);
+  align-self: stretch;
+}
+
+.userList .programSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+
+.userList .programSectionHeader {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+.programSectionHeaderSectionInfo {
+  display: flex;
+  gap: 8px;
+  height: fit-content;
+}
+
+.userList .userInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  align-self: stretch;
+}
+
+.userList .userInfo:not(:last-child) {
+  border-bottom: 1px solid var(--Stroke-1, #edf1f5);
+  padding-bottom: var(--Spacing-sm, 16px);
+}
+
+.userList .fullName {
+  color: var(--Text-2, #4d5358);
+  /* body medium */
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.userList .email {
+  color: var(--Text-1, #60696f);
+  /* body small */
+  font-family: "Albert Sans";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.userList .unassigned {
+  color: var(--Danger-Emphasis, #b80037);
+  /* body medium */
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}

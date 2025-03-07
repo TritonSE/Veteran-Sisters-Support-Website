@@ -1,0 +1,44 @@
+.userProfile {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-md, 24px);
+  max-width: 1024px;
+  text-wrap: nowrap;
+}
+
+.viewerViewingSelector {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.profileHeading {
+  color: var(--Text-3, #3a3c3d);
+
+  /* title medium */
+  font-family: "Albert Sans";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.userProfileContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--Spacing-2xl, 48px);
+  align-self: stretch;
+}
+
+.userProfileInnerContent {
+  display: flex;
+  min-width: 1024px;
+  padding-bottom: var(--Spacing-l, 32px);
+  align-items: flex-start;
+  gap: var(--Spacing-md, 24px);
+  align-self: stretch;
+}

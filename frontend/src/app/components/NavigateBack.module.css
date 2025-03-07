@@ -1,0 +1,17 @@
+.navigateBack {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  color: var(--Text-1, #60696f);
+  /* body medium */
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.navigateBack:hover {
+  cursor: pointer;
+}

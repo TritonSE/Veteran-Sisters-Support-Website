@@ -1,0 +1,127 @@
+.volunteerNotes {
+  display: flex;
+  padding: 24px 24px var(--Spacing-l, 32px) 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-sm, 16px);
+  align-self: stretch;
+  width: 100%;
+  height: fit-content;
+
+  border-radius: 8px;
+  border: 1px solid var(--Stroke-2, #d0d7de);
+  background: #fff;
+}
+.volunteerNotes .noteHeader {
+  display: flex;
+  height: 24px;
+  align-items: center;
+  color: var(--Text-3, #3a3c3d);
+  font-family: "Albert Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.volunteerNotes .noteSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-md, 24px);
+  align-self: stretch;
+}
+.volunteerNotes .postNoteSection {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  align-self: stretch;
+}
+.volunteerNotes .postNoteInputField {
+  display: flex;
+  padding: 0px var(--Spacing-sm, 16px);
+  justify-content: space-between;
+  align-items: center;
+  flex: 1 0 0;
+  align-self: stretch;
+
+  border-radius: 4px;
+  border: 1px solid var(--Stroke-2, #d0d7de);
+}
+
+.volunteerNotes .postNoteButton {
+  all: unset;
+  display: flex;
+  height: 39px;
+  padding: 8px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  border-radius: 8px;
+  background: var(--Primary, #057e6f);
+
+  color: var(--Neutral-Base-White, #fafafa);
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+
+  height: fit-content;
+}
+.volunteerNotes .postNoteButton:hover {
+  cursor: pointer;
+}
+
+.volunteerNotes .postedNotes {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--Spacing-sm, 16px);
+}
+.volunteerNotes .postedNote {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.volunteerNotes .noteContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.volunteerNotes .noteHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.volunteerNotes .noteAuthor {
+  color: var(--Text-3, #3a3c3d);
+
+  /* body medium */
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.volunteerNotes .notePostedDate {
+  color: var(--Text-1, #60696f);
+
+  /* caption */
+  font-family: var(--font-inconsolata);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.volunteerNotes .noteBody {
+  color: var(--Text-3, #3a3c3d);
+
+  /* body small */
+  font-family: "Albert Sans";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
