@@ -181,8 +181,8 @@ export default function UserProfile({ userId }: { userId: string }) {
                 )}
               </div>
               {userProfile?.role === RoleEnum.VETERAN && (
-                <div>
-                  <VeteranDocuments uploader={"67b2e046432b1fc7da8b533c"} />
+                <div style={{ width: "100%" }}>
+                  <VeteranDocuments uploader={userId} />
                 </div>
               )}
             </div>
