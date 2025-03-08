@@ -95,7 +95,7 @@ export default function VolunteerAssigningDialog(props: VolunteerAssigningDialog
 
   const formattedOptions = volunteers.map((v) => ({
     value: v,
-    label: `${v.firstName} ${v.lastName} - ${String(v.assignedVeterans?.length ?? 0)} veterans`,
+    label: `${v.firstName} ${v.lastName} - ${String(v.assignedUsers?.length ?? 0)} veterans`,
   }));
 
   const customLabel = (option: OptionType) => (

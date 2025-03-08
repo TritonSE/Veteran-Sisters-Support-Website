@@ -48,7 +48,7 @@ export const addUser = async (req, res) => {
       address,
       roleSpecificInfo,
       assignedPrograms,
-      assignedVeterans,
+      assignedUsers,
     } = req.body;
     const existingUser = await User.findOne({ email }).exec();
     if (existingUser) {
@@ -64,8 +64,7 @@ export const addUser = async (req, res) => {
         address,
         roleSpecificInfo,
         assignedPrograms,
-        assignedVeterans,
-        assignedVolunteers: [],
+        assignedUsers
       });
       res.status(201).json(newUser);
     }
@@ -123,11 +122,11 @@ export const updateUser = async (req, res) => {
     }
 
     if (veteranEmail) {
-      const veteranIndex = user.assignedVeterans.indexOf(veteranEmail);
+      const veteranIndex = user.assignedUsers.indexOf(veteranEmail);
       if (veteranIndex > -1) {
-        user.assignedVeterans.splice(veteranIndex, 1);
+        user.assignedUsers.splice(veteranIndex, 1);
       } else {
-        user.assignedVeterans.push(veteranEmail);
+        user.assignedUsers.push(veteranEmail);
       }
     }
 

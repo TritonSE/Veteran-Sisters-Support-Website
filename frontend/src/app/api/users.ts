@@ -12,8 +12,6 @@ export type User = {
   age?: number;
   gender?: string;
   phoneNumber?: string;
-  assignedVeterans: string[];
-  assignedVolunteers: string[];
 };
 
 export async function getNonAdminUsers(program?: string): Promise<APIResult<User[]>> {

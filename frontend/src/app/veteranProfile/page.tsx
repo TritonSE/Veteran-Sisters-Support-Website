@@ -14,8 +14,7 @@ const user3: User = {
   lastName: "user3",
   role: "staff",
   assignedPrograms: ["battle buddies", "advocacy", "operation wellness"],
-  assignedVeterans: [],
-  assignedVolunteers: [],
+  assignedUsers: []
 };
 
 export default function VeteranProfile() {
