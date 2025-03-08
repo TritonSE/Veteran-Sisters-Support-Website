@@ -163,6 +163,7 @@ export default function VolunteerAssigningDialog(props: VolunteerAssigningDialog
                 </span>
               </p>
             </div>
+            {/* TODO: link to volunteer profile page when done */}
             <a className={styles.profileLink} href="google.com">
               View Profile
             </a>
