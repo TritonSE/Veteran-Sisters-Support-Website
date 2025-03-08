@@ -5,6 +5,7 @@ import {
   addUser,
   deleteUser,
   getUsersNonAdmins,
+  updateUser,
   getVeteransByVolunteer,
 } from "../controllers/userController.js";
 
@@ -21,5 +22,7 @@ router.get("/veterans/:volunteerId", getVeteransByVolunteer);
 router.post("/users", addUser);
 
 router.delete("/users/:email", deleteUser);
+
+router.put("/users/:email", updateUser);
 
 export default router;
