@@ -137,3 +137,4 @@ dist
 
 frontend/.eslintcache
 backend/.eslintcache
+.firebase/*

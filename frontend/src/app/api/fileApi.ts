@@ -1,3 +1,5 @@
+import { APIResult, get, handleAPIError, post } from "./requests";
+
 export type FileObject = {
   _id: string;
   filename: string;
@@ -13,44 +15,25 @@ export type CreateFileObjectRequest = {
   programs: string[];
 };
 
-export type APIResult<T> = { success: true; data: T } | { success: false; error: string };
-
-export const createFileObject = async (
+export async function createFileObject(
   fileObject: CreateFileObjectRequest,
-): Promise<APIResult<FileObject>> => {
+): Promise<APIResult<FileObject>> {
   try {
-    const response = await fetch("http://localhost:4000/api/file", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(fileObject),
-    });
-    if (!response.ok) {
-      return { success: false, error: response.statusText };
-    }
+    const response = await post("/file", fileObject);
     const data = (await response.json()) as FileObject;
     console.log("Data: ", data);
     return { success: true, data };
   } catch (error: unknown) {
-    return { success: false, error: (error as Error).message };
+    return handleAPIError(error);
   }
-};
+}
 
-export const getFilesByUploader = async (uploader: string): Promise<APIResult<FileObject[]>> => {
+export async function getFilesByUploader(uploader: string): Promise<APIResult<FileObject[]>> {
   try {
-    const response = await fetch(`http://localhost:4000/api/files/${uploader}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      return { success: false, error: response.statusText };
-    }
+    const response = await get(`/files/${uploader}`);
     const data = (await response.json()) as FileObject[];
     return { success: true, data };
   } catch (error: unknown) {
-    return { success: false, error: (error as Error).message };
+    return handleAPIError(error);
   }
-};
+}

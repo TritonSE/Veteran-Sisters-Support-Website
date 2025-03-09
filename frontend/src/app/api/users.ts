@@ -14,8 +14,8 @@ export type User = {
 export async function getNonAdminUsers(program?: string): Promise<APIResult<User[]>> {
   try {
     const response = program
-      ? await get(`/api/nonAdminUsers?assignedProgram=${program}`)
-      : await get(`/api/nonAdminUsers`);
+      ? await get(`/nonAdminUsers?assignedProgram=${program}`)
+      : await get(`/nonAdminUsers`);
     if (!response.ok) {
       return { success: false, error: response.statusText };
     }

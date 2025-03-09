@@ -17,7 +17,7 @@ type Method = "GET" | "POST" | "PUT";
  * in Vite projects.
  */
 // const API_BASE_URL = import.env.VITE_API_BASE_URL;
-const API_BASE_URL = "http://localhost:4000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
 
 /**
  * A wrapper around the built-in `fetch()` function that abstracts away some of

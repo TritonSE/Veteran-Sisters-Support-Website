@@ -6,6 +6,8 @@ import express from "express";
 import mongoose from "mongoose";
 import fileRoutes from "./routes/fileRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import { onRequest } from "firebase-functions/v2/https";
+
 
 // import { CustomError, InternalError } from "./errors.js";
 
@@ -49,7 +51,16 @@ const errorHandler = (err, req, res, next) => {
 };
 
 const app = express();
-app.use(cors());
+
+if (process.env.DEV_PORT) {
+    app.use(cors());
+} else {
+    app.use(
+        cors({
+          origin: false,
+        }),
+      );
+}
 app.use(express.json());
 
 // routes
@@ -59,6 +70,10 @@ app.use("/api", userRoutes);
 
 app.use(errorHandler);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server Started at ${process.env.PORT}`);
-});
+if (process.env.DEV_PORT) {
+    app.listen(process.env.DEV_PORT, () => {
+    console.log(`Server Started at ${process.env.DEV_PORT}`);
+    });
+} 
+
+export const backend = onRequest({ region: "us-west1" }, app);
