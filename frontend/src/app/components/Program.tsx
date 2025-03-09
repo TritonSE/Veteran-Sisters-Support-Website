@@ -4,9 +4,10 @@ import styles from "./Program.module.css";
 
 type ProgramProp = {
   program: string;
+  iconOnly?: boolean;
 };
 
-export function Program({ program }: ProgramProp) {
+export function Program({ program, iconOnly }: ProgramProp) {
   let style;
   let programName;
   let icon;
@@ -26,7 +27,7 @@ export function Program({ program }: ProgramProp) {
   return (
     <div className={style}>
       <Image src={icon} alt="Program" width={14} height={14} />
-      <span className={styles.text}>{programName}</span>
+      {!iconOnly && <span className={styles.text}>{programName}</span>}
     </div>
   );
 }
