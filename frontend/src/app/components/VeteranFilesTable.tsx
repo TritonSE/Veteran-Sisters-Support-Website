@@ -7,16 +7,17 @@ import { VeteranFilePreview } from "./VeteranFilePreview";
 import styles from "./VeteranFilesTable.module.css";
 
 type VeteranFilesTableProps = {
+  veteranId: string;
   refresh: boolean;
 };
 
-export function VeteranFilesTable({ refresh }: VeteranFilesTableProps) {
+export function VeteranFilesTable({ veteranId, refresh }: VeteranFilesTableProps) {
   const [selectedProgram, setSelectedProgram] = useState<string>("All");
   const [fileObjects, setFileObjects] = useState<FileObject[]>([]);
   const [filteredFiles, setFilteredFiles] = useState<FileObject[]>([]);
 
   useEffect(() => {
-    getFilesByUploader("67b2e046432b1fc7da8b533c")
+    getFilesByUploader(veteranId)
       .then((result) => {
         if (result.success) {
           setFileObjects(result.data);

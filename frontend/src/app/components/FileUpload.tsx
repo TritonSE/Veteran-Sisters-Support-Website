@@ -8,6 +8,7 @@ import { CreateFileObjectRequest, createFileObject } from "../api/fileApi";
 import styles from "./FileUpload.module.css";
 
 type FileUploadProps = {
+  veteranId: string
   onClose: () => void;
   onUpload: () => void;
 };
@@ -18,7 +19,7 @@ type CheckBoxStates = {
   OperationWellness: boolean;
 };
 
-export function FileUpload({ onClose, onUpload }: FileUploadProps) {
+export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
   const [checkboxStates, setCheckboxStates] = useState<CheckBoxStates>({
     BattleBuddies: false,
     Advocacy: false,
@@ -52,7 +53,7 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
       setUploading(true);
       const fileObjRequest: CreateFileObjectRequest = {
         filename: file.name,
-        uploaderId: "67b2e046432b1fc7da8b533c",
+        uploaderId: veteranId,
         comment: comment ?? "",
         programs: Object.keys(checkboxStates).filter(
           (key) => checkboxStates[key as keyof CheckBoxStates],
