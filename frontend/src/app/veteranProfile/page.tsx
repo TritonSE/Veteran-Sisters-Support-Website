@@ -9,12 +9,12 @@ import VolunteerAssigningDialog from "./volunteerAssigningDialog";
 const program = "advocacy";
 const user3: User = {
   _id: "678ef34b664181e8e671cdb1",
-  email: "user3@email.com",
+  email: "magmadreamer@gmail.com",
   firstName: "user3",
   lastName: "user3",
   role: "staff",
   assignedPrograms: ["battle buddies", "advocacy", "operation wellness"],
-  assignedUsers: []
+  assignedUsers: [],
 };
 
 export default function VeteranProfile() {
