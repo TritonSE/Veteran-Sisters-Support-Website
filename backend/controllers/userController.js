@@ -36,19 +36,39 @@ export const getUserByEmail = async (req, res) => {
   }
 };
 
+export const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).exec();
+    if (!user) {
+      return res.status(404).json({ error: "Could not find user" });
+    }
+    const userObject = user.toObject();
+    const assignedUsers = await User.find({ email: { $in: user?.assignedUsers } });
+    userObject.assignedUsers = assignedUsers.map((user) => user.toObject());
+    res.json(userObject);
+  } catch (error) {
+    console.log("getUserbyEmail Error", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 export const addUser = async (req, res) => {
   try {
     const {
       email,
-      phoneNumber,
       firstName,
       lastName,
       role,
+      assignedPrograms,
+      assignedUsers,
+      yearJoined,
+      age,
+      gender,
+      phoneNumber,
       zipCode,
       address,
       roleSpecificInfo,
-      assignedPrograms,
-      assignedVeterans,
     } = req.body;
     const existingUser = await User.findOne({ email }).exec();
     if (existingUser) {
@@ -64,8 +84,11 @@ export const addUser = async (req, res) => {
         address,
         roleSpecificInfo,
         assignedPrograms,
-        assignedVeterans,
-        assignedVolunteers: [],
+        assignedUsers,
+        yearJoined,
+        age,
+        gender,
+        phoneNumber,
       });
       res.status(201).json(newUser);
     }
