@@ -27,7 +27,7 @@ export async function getNonAdminUsers(program?: string): Promise<APIResult<User
 
 export async function getVeteransByVolunteer(volunteerId: string): Promise<APIResult<User[]>> {
   try {
-    const response = await get(`/api/veterans/${volunteerId}`);
+    const response = await get(`/veterans/${volunteerId}`);
     if (!response.ok) {
       return { success: false, error: response.statusText };
     }
