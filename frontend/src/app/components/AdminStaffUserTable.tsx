@@ -32,11 +32,7 @@ export function AdminStaffUserTable() {
     const unassigned: User[] = [];
     const assigned: User[] = [];
     userList.forEach((user) => {
-      if (
-        user.assignedVeterans.length === 0 &&
-        user.assignedVolunteers.length === 0 &&
-        user.role !== "staff"
-      ) {
+      if (user.assignedUsers.length === 0 && user.role !== "staff") {
         unassigned.push(user);
       } else {
         assigned.push(user);
@@ -113,8 +109,7 @@ export function AdminStaffUserTable() {
                 lastName: user.lastName,
                 role: user.role,
                 assignedPrograms: user.assignedPrograms,
-                assignedVeterans: user.assignedVeterans,
-                assignedVolunteers: user.assignedVolunteers,
+                assignedUsers: user.assignedUsers,
               }}
             />
           ))}
