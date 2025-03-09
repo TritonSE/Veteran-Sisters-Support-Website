@@ -2,6 +2,7 @@ import express from "express";
 import {
   queryUsers,
   getUserByEmail,
+  getUserById,
   addUser,
   deleteUser,
   getUsersNonAdmins,
@@ -13,7 +14,9 @@ const router = express.Router();
 
 router.get("/users", queryUsers);
 
-router.get("/users/:email", getUserByEmail);
+router.get("/users/email/:email", getUserByEmail);
+
+router.get("/users/id/:id", getUserById);
 
 router.get("/nonAdminUsers", getUsersNonAdmins);
 
