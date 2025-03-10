@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Select from "react-select";
 
 import { assignVolunteerToProgram, getVolunteersByProgram } from "../api/activeVolunteers";
-import { User } from "../api/users";
+import { UserProfile as UserProfileType } from "../api/profileApi";
 import { Program } from "../components/Program";
 import { Role } from "../components/Role";
 
@@ -14,18 +14,18 @@ type VolunteerAssigningDialogProps = {
   closeDialog: () => void;
   isOpen: boolean;
   program: string;
-  veteran: User;
+  veteran: UserProfileType;
 };
 
 type OptionType = {
-  value: User;
+  value: UserProfileType;
   label: string;
 };
 
 export default function VolunteerAssigningDialog(props: VolunteerAssigningDialogProps) {
   const [hasMounted, setHasMounted] = useState(false);
   const [message, setMessage] = useState("");
-  const [volunteers, setVolunteers] = useState<User[]>([]);
+  const [volunteers, setVolunteers] = useState<UserProfileType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedVolunteerOption, setSelectedVolunteerOption] = useState<OptionType | null>(null);
 
