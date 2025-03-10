@@ -1,9 +1,12 @@
 import Image from "next/image";
+import { useState } from "react";
 
+import { removeVolunteerFromVeteran } from "../api/activeVolunteers";
 import { UserProfile as UserProfileType } from "../api/profileApi";
 
 import { Program } from "./Program";
 import styles from "./UserList.module.css";
+import VolunteerAssigningDialog from "./volunteerAssigningDialog";
 
 export function UserList(params: {
   userProfile: UserProfileType | undefined;
@@ -12,6 +15,28 @@ export function UserList(params: {
   minimized: boolean;
 }) {
   const { title, userProfile, editable, minimized } = params;
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const openDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    window.location.reload();
+    setIsDialogOpen(false);
+  };
+
+  const removeVolunteer = (volunteerEmail: string, program: string) => {
+    if (userProfile) {
+      removeVolunteerFromVeteran(volunteerEmail, userProfile.email, program)
+        .then(() => {
+          window.location.reload();
+        })
+        .catch((err: unknown) => {
+          console.error(err);
+        });
+    }
+  };
 
   // Users for user list
   const emptyUserGroups: Record<string, UserProfileType[]> = (
@@ -66,7 +91,16 @@ export function UserList(params: {
                       width={16}
                       height={16}
                       alt="Assign User"
+                      onClick={openDialog}
                     ></Image>
+                    {isDialogOpen && userProfile && (
+                      <VolunteerAssigningDialog
+                        isOpen={isDialogOpen}
+                        program={program}
+                        veteran={userProfile}
+                        closeDialog={closeDialog}
+                      />
+                    )}
                   </div>
                 )}
               </div>
@@ -86,6 +120,9 @@ export function UserList(params: {
                           height={20}
                           alt="Remove User"
                           className={styles.removeUser}
+                          onClick={() => {
+                            removeVolunteer(user.email, program);
+                          }}
                         ></Image>
                       )}
                     </div>

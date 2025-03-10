@@ -8,6 +8,10 @@ export type User = {
   role: string;
   assignedPrograms: string[];
   assignedUsers: string[];
+  yearJoined?: number;
+  age?: number;
+  gender?: string;
+  phoneNumber?: string;
 };
 
 export async function getNonAdminUsers(program?: string): Promise<APIResult<User[]>> {
