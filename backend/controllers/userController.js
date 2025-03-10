@@ -142,12 +142,23 @@ export const updateUser = async (req, res) => {
     }
 
     if (veteranEmail) {
+      //updates assignedUsers on both users involved
+      const veteran = await User.findOne({ email: veteranEmail }).exec();
+      const userIndex = veteran.assignedUsers.indexOf(email);
       const veteranIndex = user.assignedUsers.indexOf(veteranEmail);
       if (veteranIndex > -1) {
         user.assignedUsers.splice(veteranIndex, 1);
       } else {
         user.assignedUsers.push(veteranEmail);
       }
+
+      if (userIndex > -1) {
+        veteran.assignedUsers.splice(userIndex, 1);
+      } else {
+        veteran.assignedUsers.push(email);
+      }
+
+      await veteran.save();
     }
 
     await user.save();

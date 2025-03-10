@@ -60,12 +60,12 @@ export const addVolunteer = async (req, res) => {
 export const removeVolunteer = async (req, res) => {
   try {
     const id = req.params.id;
-    const { program, veteran } = req.query;
+    const { program, veteranEmail } = req.body;
 
     const volunteerEntry = await ActiveVolunteers.findOne({
       volunteer: id,
       ...(program && { assignedProgram: program }),
-      ...(veteran && { assignedVeteran: veteran }),
+      ...(veteranEmail && { assignedVeteran: veteranEmail }),
     }).exec();
 
     if (!volunteerEntry) {
@@ -79,7 +79,7 @@ export const removeVolunteer = async (req, res) => {
     }
 
     // If a specific entry is found, delete it
-    await ActiveVolunteers.deleteOne({ _id: volunteerEntry._id }).exec();
+    await ActiveVolunteers.deleteOne({ volunteer: volunteerEntry.volunteer}).exec();
 
     return res.status(200).json({ message: "Volunteer assignment removed successfully" });
   } catch (error) {
