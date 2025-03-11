@@ -105,6 +105,40 @@ export async function getUserProfile(userId: string): Promise<APIResult<UserProf
   }
 }
 
+export const updateUserProfile = async (
+  userId: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  phoneNumber: string,
+  age: number,
+  gender: Gender,
+) => {
+  try {
+    const response = await fetch(`http://localhost:4000/api/users/id/${userId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        age,
+        gender,
+      }),
+    });
+
+    if (!response.ok) {
+      return { success: false, error: response.statusText };
+    }
+    const data = (await response.json()) as UserProfile;
+
+    return { success: true, data };
+  } catch (error: unknown) {
+    return { success: false, error: (error as Error).message };
+  }
+};
+
 export async function getComments(profileId: string): Promise<APIResult<ProfileComment[]>> {
   try {
     const response = await fetch(`http://localhost:4000/api/comments/${profileId}`);

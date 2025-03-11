@@ -5,7 +5,12 @@ import { useEffect, useState } from "react";
 import styles from "./EditProfile.module.css";
 import NavigateBack from "./NavigateBack";
 
-import { UserProfile as UserProfileType, getUserProfile } from "@/app/api/profileApi";
+import {
+  Gender,
+  UserProfile as UserProfileType,
+  getUserProfile,
+  updateUserProfile,
+} from "@/app/api/profileApi";
 import { Button } from "@/app/components/Button";
 
 function Field(params: {
@@ -50,6 +55,44 @@ export default function EditProfile({ userId }: { userId: string }) {
       });
   }, []);
 
+  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    const inputs: NodeListOf<HTMLInputElement> = document.querySelectorAll(
+      `input.${styles.fieldInput}`,
+    );
+
+    const formData = {
+      firstName: inputs[0]?.value,
+      lastName: inputs[1]?.value,
+      email: inputs[2]?.value,
+      phoneNumber: inputs[3]?.value,
+      age: Number(inputs[4]?.value),
+      gender: inputs[5]?.value,
+    };
+
+    const form = document.querySelector("form");
+    if (form && !form.reportValidity()) {
+      return; // Prevent navigation if validation fails
+    }
+
+    const response = await updateUserProfile(
+      userId,
+      formData?.firstName,
+      formData?.lastName,
+      formData?.email,
+      formData?.phoneNumber,
+      formData?.age,
+      formData?.gender as Gender,
+    );
+
+    if (!response.success) {
+      return; // TODO: show some error UI
+    }
+
+    router.back();
+  };
+
   return (
     <form className={styles.editProfile}>
       <NavigateBack />
@@ -89,36 +132,7 @@ export default function EditProfile({ userId }: { userId: string }) {
               router.back();
             }}
           />
-          <Button
-            label="Save"
-            filled={true}
-            onClick={(event) => {
-              event.preventDefault();
-
-              const inputs: NodeListOf<HTMLInputElement> = document.querySelectorAll(
-                `input.${styles.fieldInput}`,
-              );
-
-              const formData = {
-                firstName: inputs[0]?.value,
-                lastName: inputs[1]?.value,
-                email: inputs[2]?.value,
-                phoneNumber: inputs[3]?.value,
-                age: Number(inputs[4]?.value),
-                gender: inputs[5]?.value,
-              };
-
-              const form = document.querySelector("form");
-              if (form && !form.reportValidity()) {
-                return; // Prevent navigation if validation fails
-              }
-
-              console.log(formData);
-
-              // TODO: call updateProfile api with form data
-              router.back();
-            }}
-          />
+          <Button label="Save" filled={true} onClick={handleSubmit} />
         </div>
       </div>
     </form>
