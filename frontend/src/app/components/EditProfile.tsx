@@ -68,7 +68,11 @@ export default function EditProfile({ userId }: { userId: string }) {
           defaultValue={userProfile?.age ?? undefined}
           type="number"
         />
-        <Field required={true} label="Gender" defaultValue={userProfile?.gender ?? ""} />
+        <Field
+          required={true}
+          label="Gender"
+          defaultValue={userProfile?.roleSpecificInfo?.serviceInfo?.gender ?? ""}
+        />
       </div>
       <div className={styles.formControls}>
         <Button

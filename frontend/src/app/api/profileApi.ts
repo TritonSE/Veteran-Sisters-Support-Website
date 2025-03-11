@@ -6,12 +6,42 @@ export type UserProfile = {
   assignedPrograms: AssignedProgram[] | undefined;
   yearJoined?: number;
   age?: number;
+  roleSpecificInfo?: {
+    serviceInfo?: {
+      dateServiceEnded?: Date;
+      branchOfService?: BranchOfService;
+      currentMilitaryStatus?: CurrentMilitaryStatus;
+      gender?: Gender;
+    };
+  };
   gender?: string;
   phoneNumber?: string;
   role: Role | undefined;
   assignedUsers?: UserProfile[];
   veteransUnderPointOfContact?: Veteran[];
 };
+
+type BranchOfService =
+  | "Air Force"
+  | "Army"
+  | "Coast Guard"
+  | "First Responder"
+  | "Marine Corps"
+  | "Navy"
+  | "National Guard"
+  | "Space Force"
+  | "";
+
+type CurrentMilitaryStatus =
+  | "Active Duty"
+  | "Reservist"
+  | "Veteran"
+  | "Veteran Medically Retired"
+  | "Veteran 20+ Years Retired"
+  | "First Responder"
+  | "";
+
+export type Gender = "Female" | "Male" | "Other" | "";
 
 export type Veteran = {
   firstName: string;

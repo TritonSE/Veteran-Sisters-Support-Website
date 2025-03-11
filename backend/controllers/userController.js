@@ -144,3 +144,32 @@ export const getVeteransByVolunteer = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { firstName, lastName, email, phoneNumber, age, gender } = req.body;
+
+    const update = {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      age,
+      roleSpecificInfo: {
+        serviceInfo: {
+          gender,
+        },
+      },
+    };
+
+    const updatedUser = await User.findByIdAndUpdate(id, update, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

@@ -7,6 +7,7 @@ import {
   deleteUser,
   getUsersNonAdmins,
   getVeteransByVolunteer,
+  updateUser
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -24,5 +25,7 @@ router.get("/veterans/:volunteerId", getVeteransByVolunteer);
 router.post("/users", addUser);
 
 router.delete("/users/:email", deleteUser);
+
+router.patch("/users/id/:id", updateUser);
 
 export default router;
