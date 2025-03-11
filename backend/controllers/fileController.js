@@ -1,5 +1,6 @@
 import Comment from "../models/commentModel.js";
 import FileObject from "../models/fileModel.js";
+import mongoose from "mongoose";
 
 export const uploadFile = async (req, res, next) => {
   const { filename, uploaderId, comment, programs } = req.body;

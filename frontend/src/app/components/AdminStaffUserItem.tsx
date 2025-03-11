@@ -13,17 +13,16 @@ type AdminStaffUserItemProp = {
 export function AdminStaffUserItem({ user }: AdminStaffUserItemProp) {
   let assignedText;
   let assignedStyle = styles.assignedText;
-  const vetLen = user.assignedVeterans.length;
-  const volLen = user.assignedVolunteers.length;
+  const length = user.assignedUsers.length;
   if (user.role === "staff") {
     assignedText = "Not applicable";
-  } else if (vetLen === 0 && volLen === 0) {
+  } else if (length === 0) {
     assignedText = "Unassigned";
     assignedStyle = styles.unassignedText;
   } else if (user.role === "volunteer") {
-    assignedText = `${vetLen.toString()} veteran${vetLen === 1 ? "" : "s"}`;
+    assignedText = `${length.toString()} veteran${length === 1 ? "" : "s"}`;
   } else {
-    assignedText = `${volLen.toString()} volunteer${volLen === 1 ? "" : "s"}`;
+    assignedText = `${length.toString()} volunteer${length === 1 ? "" : "s"}`;
   }
 
   return (

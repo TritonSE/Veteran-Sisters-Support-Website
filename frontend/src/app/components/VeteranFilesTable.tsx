@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Comment, FileObject, getFilesByUploader } from "../api/fileApi";
 
+import DocumentPreview from "./DocumentPreview";
 import { Tabs } from "./Tabs";
 import { VeteranFilePreview } from "./VeteranFilePreview";
 import styles from "./VeteranFilesTable.module.css";

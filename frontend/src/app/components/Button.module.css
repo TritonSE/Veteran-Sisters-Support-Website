@@ -1,9 +1,39 @@
 .button {
+  all: unset;
+  display: flex;
+  padding: 11px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  height: fit-content;
+
   border-radius: 8px;
+  border: 1px solid var(--Stroke-2, #d0d7de);
+  background: var(--Background-1, #fff);
+
+  color: var(--Text-2, #4d5358);
+  /* body medium */
   font-family: "Albert Sans";
-  font-size: 16px;
+  font-size: 14px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+
+.button:hover {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.05) 100%), #fff;
   cursor: pointer;
+}
+
+.button.filled {
+  background: var(--Primary, #057e6f);
+
+  color: var(--Neutral-Base-White, #fafafa);
+
+  /* body medium */
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
