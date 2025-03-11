@@ -55,7 +55,7 @@ export default function Home() {
           router.push("/veteranDashboard");
           break;
         case "volunteer":
-          router.push("/veteranDashboard"); // change after volunteer dashboard is merged
+          router.push("/volunteerview");
           break;
         default:
           break;
