@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 const { Schema, model } = mongoose;
 
 const userSchema = new Schema({
@@ -95,8 +95,9 @@ const userSchema = new Schema({
     enum: ["battle buddies", "advocacy", "operation wellness"],
     required: true,
   },
-  assignedVeterans: [String],
-  assignedVolunteers: [String],
+  assignedUsers: [String],
+  yearJoined: { type: Number },
+  age: { type: Number },
 });
 
 export const User = model("User", userSchema);
