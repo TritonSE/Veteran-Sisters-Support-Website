@@ -11,19 +11,15 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import {
   Comment,
-  CreateCommentRequest,
   FileObject,
-  createCommentObject,
-  deleteCommentObject,
-  editCommentObject,
   editFileObject,
   getFileById,
 } from "../api/fileApi";
+import { getUser } from "../api/userApi";
 import { User } from "../api/users";
 
+import { DocumentComment } from "./DocumentComment";
 import styles from "./DocumentView.module.css";
-import { Program } from "./Program";
-import { Role } from "./Role";
 
 import axios from "axios";
 
@@ -41,27 +37,12 @@ export function DocumentView({ documentId }: DocumentViewProps) {
   const [fileURL, setFileURL] = useState<string>();
   const [numPages, setNumPages] = useState<number>();
 
-  const [comments, setComments] = useState<Comment[]>([]);
   const [currComment, setCurrComment] = useState<number>();
-  const [currCommentBody, setCurrCommentBody] = useState<string>();
 
   const [editingTitle, setEditingTitle] = useState<boolean>();
   const [currTitle, setCurrTitle] = useState<string>();
 
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+  const [currUser, setCurrUser] = useState<User>();
 
   useEffect(() => {
     getFileById(documentId)
@@ -69,7 +50,6 @@ export function DocumentView({ documentId }: DocumentViewProps) {
         if (response.success) {
           setFile(response.data);
           setCurrTitle(response.data.filename);
-          setComments(response.data.comments);
         } else {
           console.log(response.error);
         }
@@ -85,108 +65,17 @@ export function DocumentView({ documentId }: DocumentViewProps) {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
-
-  const writeCommentHandler = (edit: boolean, commentKey: number, commentBody: string) => {
-    if (edit) {
-      setCurrComment(commentKey);
-      setCurrCommentBody(commentBody);
-    } else {
-      if (currComment === undefined) {
-        const dummyUser: User = {
-          _id: "",
-          firstName: "Andrew",
-          lastName: "Zhou",
-          email: "anz008@ucsd.edu",
-          role: "volunteer",
-          assignedPrograms: ["battle buddies"],
-          assignedVeterans: [],
-          assignedVolunteers: [],
-        };
-        const newCommentFrame: Comment = {
-          _id: "",
-          comment: "",
-          commenterId: dummyUser,
-          datePosted: "",
-        };
-        setComments([newCommentFrame].concat(comments));
-        setCurrCommentBody("");
-        setCurrComment(0);
-      }
-    }
-  };
-
-  const cancelCommentHandler = (edit: boolean) => {
-    if (!edit) {
-      setComments(comments.slice(1));
-    }
-    setCurrComment(undefined);
-  };
-
-  const postCommentHandler = (edit: boolean, key: number, id: string) => {
-    if (currCommentBody?.trim() && file) {
-      if (edit) {
-        editCommentObject(id, currCommentBody)
-          .then((response) => {
-            if (response.success) {
-              comments[key] = response.data;
-              setFile({ ...file, comments });
-              setCurrComment(undefined);
-              setCurrCommentBody("");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } else {
-        const newComment: CreateCommentRequest = {
-          commenterId: "67b2e046432b1fc7da8b533c",
-          comment: currCommentBody,
-        };
-        createCommentObject(newComment)
-          .then((response) => {
-            if (response.success) {
-              const newCommentsList = [response.data].concat(comments.slice(1));
-              editFileObject(file._id, { comments: newCommentsList })
-                .then((response2) => {
-                  if (response2.success) {
-                    setFile(response2.data);
-                    setComments(response2.data.comments);
-                    setCurrComment(undefined);
-                    setCurrCommentBody("");
-                  }
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    }
-  };
-
-  const deleteCommentHandler = (id: string, key: number) => {
-    deleteCommentObject(id)
+    getUser("67b2e046432b1fc7da8b533c")
       .then((response) => {
-        if (response.success && file) {
-          const newCommentList = comments.slice(0, key).concat(comments.slice(key + 1));
-          editFileObject(file._id, { comments: newCommentList }).then((response2) => {
-            if (response2.success) {
-              setFile(response2.data);
-              setComments(response2.data.comments);
-              setCurrComment(undefined);
-              setCurrCommentBody("");
-            }
-          });
+        if (response.success) {
+          setCurrUser(response.data);
+          console.log(response.data);
         }
       })
       .catch((error) => {
         console.log(error);
       });
-  };
+  }, []);
 
   const changeTitleHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" && file) {
@@ -204,14 +93,6 @@ export function DocumentView({ documentId }: DocumentViewProps) {
           console.log(error);
         });
     }
-  };
-
-  const formatDate = (datePosted: string) => {
-    const date = new Date(datePosted);
-    const month = months[date.getMonth()];
-    const day = date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
-    const year = date.getFullYear();
-    return `${month} ${day}, ${year}`;
   };
 
   //don't ask me how these next two functions work I got them straight from stack overflow
@@ -299,102 +180,9 @@ export function DocumentView({ documentId }: DocumentViewProps) {
     );
   };
 
-  const Comment = (key: number, comment: Comment) => {
-    const borderColor =
-      comment.commenterId.assignedPrograms[0] === "battle buddies"
-        ? "#0093EB"
-        : comment.commenterId.assignedPrograms[0] === "advocacy"
-          ? "#3730A3"
-          : "#337357";
-    const name = `${comment.commenterId.firstName} ${comment.commenterId.lastName}`;
-    return (
-      <div key={key}>
-        {key != currComment ? (
-          <div
-            className={styles.comment}
-            style={{ border: `1px solid ${borderColor}` } as React.CSSProperties}
-          >
-            <div className={styles.commentTopRow}>
-              <div className={styles.profileIcon}>{name.trim().substring(0, 1).toUpperCase()}</div>
-              <div style={{ maxWidth: 100 }}>{name}</div>
-              <Role role={comment.commenterId.role} />
-              {comment.commenterId.assignedPrograms.map((program, i) => {
-                return <Program key={i} program={program} iconOnly />;
-              })}
-            </div>
-            <div className={styles.commentBody}>{comment.comment}</div>
-            <div className={styles.commentBottomRow}>
-              <div
-                className={styles.commentDate}
-              >{`${formatDate(comment.datePosted)} ${comment.edited ? "(edited)" : ""}`}</div>
-              <div className={styles.commentBottomIcons}>
-                <Image
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    writeCommentHandler(true, key, comment.comment);
-                  }}
-                  src="/pencil_icon_2.svg"
-                  width={16}
-                  height={16}
-                  alt="edit"
-                />
-                <Image
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    deleteCommentHandler(comment._id, key);
-                  }}
-                  src="/trash_icon.svg"
-                  width={16}
-                  height={16}
-                  alt="trash"
-                />
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className={styles.selectedComment}>
-            <div className={styles.commentTopRow}>
-              <div className={styles.profileIcon}>{name.trim().substring(0, 1).toUpperCase()}</div>
-              <div style={{ maxWidth: 100 }}>{name}</div>
-              <Role role={comment.commenterId.role} />
-              {comment.commenterId.assignedPrograms.map((program, i) => {
-                return <Program key={i} program={program} iconOnly />;
-              })}
-            </div>
-            <textarea
-              onChange={(e) => {
-                setCurrCommentBody(e.target.value);
-              }}
-              value={currCommentBody}
-              className={styles.commentInput}
-            />
-            <div className={styles.commentBottomRow}>
-              <div
-                className={styles.commentCancelButton}
-                onClick={() => {
-                  cancelCommentHandler(comment.comment !== "");
-                }}
-              >
-                Cancel
-              </div>
-              <div
-                className={styles.commentPostButton}
-                onClick={() => {
-                  postCommentHandler(comment.comment !== "", key, comment._id);
-                }}
-              >
-                {comment.comment !== "" ? "Save" : "Post"}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
-
   return (
     <>
-      {file && comments && (
+      {file && currUser && (
         <>
           <div style={{ background: "#f5f5f5" }}>
             {HeaderBar(file.filename)}
@@ -422,8 +210,25 @@ export function DocumentView({ documentId }: DocumentViewProps) {
               </>
             )}
             <div className={styles.commentsWrapper}>
-              {comments.map((comment, i) => {
-                return Comment(i, comment);
+              {file.comments.map((comment, i) => {
+                return (
+                  <DocumentComment
+                    key={i}
+                    comment={comment}
+                    file={file}
+                    user={currUser}
+                    commentKey={i}
+                    selected={currComment === i}
+                    setSelected={(selected) => {
+                      if (selected) {
+                        setCurrComment(i);
+                      } else {
+                        setCurrComment(undefined);
+                      }
+                    }}
+                    setFile={setFile}
+                  />
+                );
               })}
             </div>
           </div>
@@ -432,7 +237,14 @@ export function DocumentView({ documentId }: DocumentViewProps) {
               currComment === undefined ? styles.addCommentButton : styles.disabledCommentButton
             }
             onClick={() => {
-              writeCommentHandler(false, 0, "");
+              const newCommentFrame: Comment = {
+                _id: "",
+                comment: "",
+                commenterId: currUser,
+                datePosted: "",
+              };
+              setFile({ ...file, comments: [newCommentFrame].concat(file.comments) });
+              setCurrComment(0);
             }}
           >
             <Image src="/add_icon.svg" width={20} height={20} alt="add"></Image>

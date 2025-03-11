@@ -8,7 +8,7 @@ import { CreateFileObjectRequest, createFileObject } from "../api/fileApi";
 import styles from "./FileUpload.module.css";
 
 type FileUploadProps = {
-  veteranId: string
+  veteranId: string;
   onClose: () => void;
   onUpload: () => void;
 };
