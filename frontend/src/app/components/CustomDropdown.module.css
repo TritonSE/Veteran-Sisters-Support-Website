@@ -42,3 +42,12 @@
 .dropdownItem:hover {
   background-color: #f0f0f0;
 }
+
+.customDropdownWrapper.fullWidth {
+  width: 100%;
+  position: relative;
+}
+
+.customDropdown.fullWidth {
+  width: 100%;
+}

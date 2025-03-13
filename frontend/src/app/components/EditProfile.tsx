@@ -1,6 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ReactNode } from "react";
+import CustomDropdown from "./CustomDropdown";
 
 import styles from "./EditProfile.module.css";
 import NavigateBack from "./NavigateBack";
@@ -13,24 +15,14 @@ import {
 } from "@/app/api/profileApi";
 import { Button } from "@/app/components/Button";
 
-function Field(params: {
-  label: string;
-  defaultValue: string | number | undefined;
-  required?: boolean;
-  type?: string;
-}) {
-  const { label, defaultValue, required, type } = params;
+function Field(params: { label: string; children: ReactNode }) {
+  const { children, label } = params;
   return (
     <div className={styles.field}>
       <div className={styles.fieldLabelContainer}>
         <div className={styles.fieldLabel}>{label}</div>
       </div>
-      <input
-        className={styles.fieldInput}
-        type={type ?? "text"}
-        defaultValue={defaultValue}
-        required={required}
-      ></input>
+      {children}
     </div>
   );
 }
@@ -38,6 +30,7 @@ function Field(params: {
 export default function EditProfile({ userId }: { userId: string }) {
   const router = useRouter();
   const [userProfile, setUserProfile] = useState<UserProfileType | undefined>(undefined);
+  const [genderSelectOpen, setGenderSelectOpen] = useState(false);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -68,7 +61,7 @@ export default function EditProfile({ userId }: { userId: string }) {
       email: inputs[2]?.value,
       phoneNumber: inputs[3]?.value,
       age: Number(inputs[4]?.value),
-      gender: inputs[5]?.value,
+      gender: userProfile?.roleSpecificInfo?.serviceInfo?.gender ?? "",
     };
 
     const form = document.querySelector("form");
@@ -83,7 +76,7 @@ export default function EditProfile({ userId }: { userId: string }) {
       formData?.email,
       formData?.phoneNumber,
       formData?.age,
-      formData?.gender as Gender,
+      formData?.gender,
     );
 
     if (!response.success) {
@@ -100,22 +93,76 @@ export default function EditProfile({ userId }: { userId: string }) {
 
       <div className={styles.editProfileFormContent}>
         <div className={styles.editName}>
-          <Field required={true} label="First Name" defaultValue={userProfile?.firstName} />
-          <Field required={true} label="Last Name" defaultValue={userProfile?.lastName} />
+          <Field label="First Name">
+            <input
+              defaultValue={userProfile?.firstName}
+              required
+              className={styles.fieldInput}
+            ></input>
+          </Field>
+          <Field label="Last Name">
+            <input
+              defaultValue={userProfile?.lastName}
+              required
+              className={styles.fieldInput}
+            ></input>
+          </Field>
         </div>
-        <Field required={true} label="Email" defaultValue={userProfile?.email} type="email" />
-        <Field required={true} label="Phone Number" defaultValue={userProfile?.phoneNumber ?? ""} />
-        <Field
-          required={true}
-          label="Age"
-          defaultValue={userProfile?.age ?? undefined}
-          type="number"
-        />
-        <Field
-          required={true}
-          label="Gender"
-          defaultValue={userProfile?.roleSpecificInfo?.serviceInfo?.gender ?? ""}
-        />
+        <Field label="Email">
+          <input
+            required
+            defaultValue={userProfile?.email}
+            type="email"
+            className={styles.fieldInput}
+          ></input>
+        </Field>
+
+        <Field label="Phone Number">
+          <input
+            required
+            defaultValue={userProfile?.phoneNumber ?? ""}
+            placeholder="xxx-xxx-xxxx"
+            type="tel"
+            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            title="Please enter a phone number in the format: xxx-xxx-xxxx"
+            className={styles.fieldInput}
+          ></input>
+        </Field>
+        <Field label="Age">
+          <input
+            required
+            className={styles.fieldInput}
+            defaultValue={userProfile?.age ?? undefined}
+            type="number"
+          ></input>
+        </Field>
+        <Field label="Gender">
+          <CustomDropdown
+            toggleDropdown={() => {
+              setGenderSelectOpen((genderSelectOpenLocal) => !genderSelectOpenLocal);
+            }}
+            isOpen={genderSelectOpen}
+            options={["Male", "Female", "Other"]}
+            fullWidth={true}
+            onSelect={(option) => {
+              setUserProfile((userProfileLocal) => {
+                return userProfileLocal
+                  ? {
+                      ...userProfileLocal,
+                      roleSpecificInfo: {
+                        ...userProfileLocal?.roleSpecificInfo,
+                        serviceInfo: {
+                          ...userProfileLocal?.roleSpecificInfo?.serviceInfo,
+                          gender: option as Gender,
+                        },
+                      },
+                    }
+                  : undefined;
+              });
+            }}
+            selected={userProfile?.roleSpecificInfo?.serviceInfo?.gender}
+          ></CustomDropdown>
+        </Field>
       </div>
       <div className={styles.formControls}>
         <Button
@@ -132,7 +179,7 @@ export default function EditProfile({ userId }: { userId: string }) {
               router.back();
             }}
           />
-          <Button label="Save" filled={true} onClick={handleSubmit} />
+          <Button label="Save" filled={true} onClick={handleSubmit} type="submit" />
         </div>
       </div>
     </form>
