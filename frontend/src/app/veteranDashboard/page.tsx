@@ -13,7 +13,6 @@ export default function VeteranDashboard() {
   const [uploadPopup, setUploadPopup] = useState<boolean>(false);
   const [refreshDashboard, setRefreshDashboard] = useState<boolean>(false);
   const [showUploadConfirm, setShowUploadConfirm] = useState<boolean>(false);
-  const [unreadActivities, setUnreadActivities] = useState<string[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(true);
 
   const toggleDropdown = () => {
@@ -37,11 +36,7 @@ export default function VeteranDashboard() {
           </div>
         </div>
 
-        <UnreadActivities
-          options={unreadActivities} // Pass the fetched unread activities
-          isOpen={dropdownOpen}
-          toggleDropdown={toggleDropdown}
-        />
+        <UnreadActivities isOpen={dropdownOpen} toggleDropdown={toggleDropdown} />
 
         <br />
         <br />

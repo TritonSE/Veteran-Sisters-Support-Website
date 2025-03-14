@@ -5,7 +5,9 @@ export type ActivityObject = {
   firstName: string;
   lastName: string;
   role: string;
-  type: "document" | "comment" | "assignment" | "report" | "request";
+  type: "document" | "comment" | "assignment" | "report" | "request" | "announcement";
+  title: string;
+  description: string;
   documentName: string;
   programName: string[];
   isRead: boolean;

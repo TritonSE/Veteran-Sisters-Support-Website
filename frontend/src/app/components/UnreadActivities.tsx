@@ -6,7 +6,6 @@ import { ActivityObject, getUnreadActivities, markActivityRead } from "../api/ac
 import styles from "./UnreadActivities.module.css";
 
 type UnreadActivitiesProps = {
-  options: string[];
   isOpen: boolean;
   toggleDropdown: () => void;
 };
@@ -28,17 +27,13 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({ isOpen, togg
       .catch((err: unknown) => {
         console.error(err);
       });
-  }, [isOpen]);
+  });
 
   const handleSelect = (option: string) => {
     // Mark activity as read when selected
-    markActivityRead(option)
-      .then(() => {
-        toggleDropdown();
-      })
-      .catch((err: unknown) => {
-        console.error(err);
-      });
+    markActivityRead(option).catch((err: unknown) => {
+      console.error("Error marking activity as read:", err);
+    });
   };
 
   const getActivityMessage = (activity: ActivityObject) => {
@@ -53,6 +48,8 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({ isOpen, togg
         return `Your report has been resolved.`;
       case "request":
         return `You received access to "${activity.documentName}"`;
+      case "announcement":
+        return String(activity.title);
       default:
         return `Unknown Activity by ${activity.firstName}`;
     }
@@ -88,32 +85,54 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({ isOpen, togg
         {isOpen &&
           activities.map((activity, index) => (
             <li className={styles.dropdownItem} key={index}>
-              New {activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}
+              {activity.type === "document"
+                ? "New Document"
+                : activity.type === "report"
+                  ? "Reports"
+                  : activity.type === "assignment"
+                    ? "New Assignment"
+                    : activity.type === "request"
+                      ? "Requests"
+                      : activity.type === "comment"
+                        ? "New Comment"
+                        : ""}
               <div>
-                <Image
-                  id="pfp"
-                  width={40}
-                  height={40}
-                  src="pfp.svg"
-                  alt="Profile Photo"
-                  style={{ float: "left", margin: "16px 16px 16px 0px" }}
-                ></Image>
-                <div className={styles.horizontalDiv}>
-                  <div className={styles.subtitle}>
-                    {activity.firstName} <span className={styles.label}>{activity.role}</span>
+                {activity.type === "announcement" && (
+                  <div className={styles.urgentButton}>Urgent</div>
+                )}
+                <div className={activity.type === "announcement" ? styles.announcement : ""}>
+                  <Image
+                    id="pfp"
+                    width={40}
+                    height={40}
+                    src="Veteran.svg"
+                    alt="Profile Photo"
+                    style={{ float: "left", margin: "16px 16px 16px 0px" }}
+                  ></Image>
+                  <div className={styles.horizontalDiv}>
+                    <div className={styles.subtitle}>
+                      {activity.firstName}{" "}
+                      <span className={styles.label}>
+                        {activity.role.charAt(0).toUpperCase() + activity.role.slice(1)}
+                      </span>
+                    </div>
+                    <div style={{ fontWeight: "14px" }}>{activity.relativeTime}</div>
                   </div>
-                  <div style={{ fontWeight: "14px" }}>{activity.relativeTime}</div>
-                </div>
-                <div className={styles.horizontalDiv}>
-                  <div>{getActivityMessage(activity)}</div>
-                  <button
-                    className={styles.button}
-                    onClick={() => {
-                      handleSelect(activity._id);
-                    }}
-                  >
-                    View
-                  </button>
+                  <div className={styles.horizontalDiv}>
+                    <div>{getActivityMessage(activity)}</div>
+                    <button
+                      className={styles.button}
+                      onClick={() => {
+                        handleSelect(activity._id);
+                      }}
+                    >
+                      View
+                    </button>
+                  </div>
+
+                  {["report", "announcement"].includes(activity.type) && (
+                    <p className={styles.description}>{activity.description}</p>
+                  )}
                 </div>
               </div>
             </li>

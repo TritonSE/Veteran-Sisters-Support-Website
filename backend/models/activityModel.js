@@ -2,13 +2,25 @@ import mongoose from "mongoose";
 
 const activitySchema = new mongoose.Schema(
   {
-    userID: { type: String, required: true },
+    firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     role: { type: String, required: true }, // "Veteran" or "Volunteer"
     type: {
       type: String,
-      enum: ["document", "comment", "assignment", "report", "request"], // Restrict values
+      enum: ["document", "comment", "assignment", "report", "request", "announcement"], // Restrict values
       required: true,
+    },
+    title: {
+      type: String,
+      required: function () {
+        return this.type === "announcement";
+      },
+    },
+    description: {
+      type: String,
+      required: function () {
+        return ["report", "announcement"].includes(this.type);
+      },
     },
     documentName: {
       type: String,
