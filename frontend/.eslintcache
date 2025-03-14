@@ -1,1 +1,780 @@
-[{"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/firebase/firebase.ts":"1","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/next-env.d.ts":"2","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/next.config.ts":"3","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/adminview/page.tsx":"4","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/activities.ts":"5","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/fileApi.ts":"6","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/requests.ts":"7","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/userApi.ts":"8","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/users.ts":"9","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/AdminStaffUserItem.tsx":"10","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/AdminStaffUserTable.tsx":"11","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/BackButton.tsx":"12","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Button.tsx":"13","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/CustomDropdown.tsx":"14","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/FileUpload.tsx":"15","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/NavBar.tsx":"16","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/OnboardingOption.tsx":"17","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Program.tsx":"18","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/ProgressBar.tsx":"19","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Role.tsx":"20","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/OnboardingInterests.tsx":"21","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/RoleSelection.tsx":"22","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/ServiceDetails.tsx":"23","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/SignUpForm.tsx":"24","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/UserDetails.tsx":"25","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SuccessNotification.tsx":"26","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Tabs.tsx":"27","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/UnreadActivities.tsx":"28","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/VeteranFilesTable.tsx":"29","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/layout.tsx":"30","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/login/page.tsx":"31","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/page.tsx":"32","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/signup/page.tsx":"33","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/staffview/page.tsx":"34","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/veteranDashboard/page.tsx":"35","/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/util/validateEnv.ts":"36"},{"size":499,"mtime":1741286352112,"results":"37","hashOfConfig":"38"},{"size":211,"mtime":1736700643625,"results":"39","hashOfConfig":"38"},{"size":133,"mtime":1736700359436,"results":"40","hashOfConfig":"38"},{"size":538,"mtime":1741286343258,"results":"41","hashOfConfig":"38"},{"size":2470,"mtime":1741954237672,"results":"42","hashOfConfig":"38"},{"size":1781,"mtime":1741291148846,"results":"43","hashOfConfig":"38"},{"size":5889,"mtime":1741286352172,"results":"44","hashOfConfig":"38"},{"size":1349,"mtime":1741286352172,"results":"45","hashOfConfig":"38"},{"size":747,"mtime":1741286343265,"results":"46","hashOfConfig":"38"},{"size":2068,"mtime":1741286343265,"results":"47","hashOfConfig":"38"},{"size":5124,"mtime":1741286343265,"results":"48","hashOfConfig":"38"},{"size":780,"mtime":1741286352172,"results":"49","hashOfConfig":"38"},{"size":501,"mtime":1741291148847,"results":"50","hashOfConfig":"38"},{"size":1318,"mtime":1741286352173,"results":"51","hashOfConfig":"38"},{"size":7199,"mtime":1741302966412,"results":"52","hashOfConfig":"38"},{"size":1071,"mtime":1741286343266,"results":"53","hashOfConfig":"38"},{"size":1175,"mtime":1741286352173,"results":"54","hashOfConfig":"38"},{"size":884,"mtime":1741286343267,"results":"55","hashOfConfig":"38"},{"size":561,"mtime":1741286352173,"results":"56","hashOfConfig":"38"},{"size":577,"mtime":1741291148848,"results":"57","hashOfConfig":"38"},{"size":5885,"mtime":1741286352173,"results":"58","hashOfConfig":"38"},{"size":3179,"mtime":1741286352174,"results":"59","hashOfConfig":"38"},{"size":5708,"mtime":1741286352174,"results":"60","hashOfConfig":"38"},{"size":7995,"mtime":1741286352174,"results":"61","hashOfConfig":"38"},{"size":13057,"mtime":1741286352174,"results":"62","hashOfConfig":"38"},{"size":625,"mtime":1741286352175,"results":"63","hashOfConfig":"38"},{"size":1521,"mtime":1741286343269,"results":"64","hashOfConfig":"38"},{"size":5196,"mtime":1741959547061,"results":"65","hashOfConfig":"38"},{"size":3089,"mtime":1741302839309,"results":"66","hashOfConfig":"38"},{"size":1370,"mtime":1741291148848,"results":"67","hashOfConfig":"38"},{"size":3051,"mtime":1741286352175,"results":"68","hashOfConfig":"38"},{"size":290,"mtime":1741286343271,"results":"69","hashOfConfig":"38"},{"size":208,"mtime":1741286352175,"results":"70","hashOfConfig":"38"},{"size":538,"mtime":1741286343271,"results":"71","hashOfConfig":"38"},{"size":2014,"mtime":1741919595234,"results":"72","hashOfConfig":"38"},{"size":459,"mtime":1741286352175,"results":"73","hashOfConfig":"38"},{"filePath":"74","messages":"75","suppressedMessages":"76","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},"9x6yio",{"filePath":"77","messages":"78","suppressedMessages":"79","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"80","messages":"81","suppressedMessages":"82","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"83","messages":"84","suppressedMessages":"85","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"86","messages":"87","suppressedMessages":"88","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"89","messages":"90","suppressedMessages":"91","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"92","messages":"93","suppressedMessages":"94","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"95","messages":"96","suppressedMessages":"97","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"98","messages":"99","suppressedMessages":"100","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"101","messages":"102","suppressedMessages":"103","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"104","messages":"105","suppressedMessages":"106","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"107","messages":"108","suppressedMessages":"109","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"110","messages":"111","suppressedMessages":"112","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"113","messages":"114","suppressedMessages":"115","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"116","messages":"117","suppressedMessages":"118","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"119","messages":"120","suppressedMessages":"121","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"122","messages":"123","suppressedMessages":"124","errorCount":0,"fatalErrorCount":0,"warningCount":2,"fixableErrorCount":0,"fixableWarningCount":0,"source":null},{"filePath":"125","messages":"126","suppressedMessages":"127","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"128","messages":"129","suppressedMessages":"130","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"131","messages":"132","suppressedMessages":"133","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"134","messages":"135","suppressedMessages":"136","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"137","messages":"138","suppressedMessages":"139","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"140","messages":"141","suppressedMessages":"142","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"143","messages":"144","suppressedMessages":"145","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"146","messages":"147","suppressedMessages":"148","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"149","messages":"150","suppressedMessages":"151","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"152","messages":"153","suppressedMessages":"154","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"155","messages":"156","suppressedMessages":"157","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"158","messages":"159","suppressedMessages":"160","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"161","messages":"162","suppressedMessages":"163","errorCount":0,"fatalErrorCount":0,"warningCount":2,"fixableErrorCount":0,"fixableWarningCount":0,"source":null},{"filePath":"164","messages":"165","suppressedMessages":"166","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"167","messages":"168","suppressedMessages":"169","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"170","messages":"171","suppressedMessages":"172","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"173","messages":"174","suppressedMessages":"175","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"176","messages":"177","suppressedMessages":"178","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"179","messages":"180","suppressedMessages":"181","errorCount":0,"fatalErrorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/firebase/firebase.ts",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/next-env.d.ts",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/next.config.ts",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/adminview/page.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/activities.ts",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/fileApi.ts",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/requests.ts",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/userApi.ts",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/users.ts",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/AdminStaffUserItem.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/AdminStaffUserTable.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/BackButton.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Button.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/CustomDropdown.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/FileUpload.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/NavBar.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/OnboardingOption.tsx",["182","183"],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Program.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/ProgressBar.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Role.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/OnboardingInterests.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/RoleSelection.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/ServiceDetails.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/SignUpForm.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/UserDetails.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SuccessNotification.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Tabs.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/UnreadActivities.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/VeteranFilesTable.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/layout.tsx",["184","185"],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/login/page.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/page.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/signup/page.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/staffview/page.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/veteranDashboard/page.tsx",[],[],"/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/util/validateEnv.ts",[],[],{"ruleId":"186","severity":1,"message":"187","line":41,"column":11,"nodeType":"188","endLine":44,"endColumn":13},{"ruleId":"189","severity":1,"message":"190","line":41,"column":11,"nodeType":"188","endLine":44,"endColumn":13},{"ruleId":"191","severity":1,"message":"192","line":31,"column":9,"nodeType":"188","endLine":34,"endColumn":11},{"ruleId":"191","severity":1,"message":"192","line":35,"column":9,"nodeType":"188","endLine":38,"endColumn":11},"@next/next/no-img-element","Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element","JSXOpeningElement","jsx-a11y/alt-text","img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.","@next/next/no-page-custom-font","Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font"]
+[
+  {
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/firebase/firebase.ts": "1",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/next-env.d.ts": "2",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/next.config.ts": "3",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/adminview/page.tsx": "4",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/activities.ts": "5",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/fileApi.ts": "6",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/requests.ts": "7",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/userApi.ts": "8",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/users.ts": "9",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/AdminStaffUserItem.tsx": "10",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/AdminStaffUserTable.tsx": "11",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/BackButton.tsx": "12",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Button.tsx": "13",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/CustomDropdown.tsx": "14",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/FileUpload.tsx": "15",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/NavBar.tsx": "16",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/OnboardingOption.tsx": "17",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Program.tsx": "18",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/ProgressBar.tsx": "19",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Role.tsx": "20",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/OnboardingInterests.tsx": "21",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/RoleSelection.tsx": "22",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/ServiceDetails.tsx": "23",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/SignUpForm.tsx": "24",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/UserDetails.tsx": "25",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SuccessNotification.tsx": "26",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Tabs.tsx": "27",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/UnreadActivities.tsx": "28",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/VeteranFilesTable.tsx": "29",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/layout.tsx": "30",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/login/page.tsx": "31",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/page.tsx": "32",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/signup/page.tsx": "33",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/staffview/page.tsx": "34",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/veteranDashboard/page.tsx": "35",
+    "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/util/validateEnv.ts": "36"
+  },
+  {
+    "size": 499,
+    "mtime": 1741286352112,
+    "results": "37",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 211,
+    "mtime": 1736700643625,
+    "results": "39",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 133,
+    "mtime": 1736700359436,
+    "results": "40",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 538,
+    "mtime": 1741286343258,
+    "results": "41",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 2470,
+    "mtime": 1741954237672,
+    "results": "42",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 1781,
+    "mtime": 1741291148846,
+    "results": "43",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 5889,
+    "mtime": 1741286352172,
+    "results": "44",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 1349,
+    "mtime": 1741286352172,
+    "results": "45",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 747,
+    "mtime": 1741286343265,
+    "results": "46",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 2068,
+    "mtime": 1741286343265,
+    "results": "47",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 5124,
+    "mtime": 1741286343265,
+    "results": "48",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 780,
+    "mtime": 1741286352172,
+    "results": "49",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 501,
+    "mtime": 1741291148847,
+    "results": "50",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 1318,
+    "mtime": 1741286352173,
+    "results": "51",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 7199,
+    "mtime": 1741302966412,
+    "results": "52",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 1071,
+    "mtime": 1741286343266,
+    "results": "53",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 1175,
+    "mtime": 1741286352173,
+    "results": "54",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 884,
+    "mtime": 1741286343267,
+    "results": "55",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 561,
+    "mtime": 1741286352173,
+    "results": "56",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 577,
+    "mtime": 1741291148848,
+    "results": "57",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 5885,
+    "mtime": 1741286352173,
+    "results": "58",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 3179,
+    "mtime": 1741286352174,
+    "results": "59",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 5708,
+    "mtime": 1741286352174,
+    "results": "60",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 7995,
+    "mtime": 1741286352174,
+    "results": "61",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 13057,
+    "mtime": 1741286352174,
+    "results": "62",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 625,
+    "mtime": 1741286352175,
+    "results": "63",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 1521,
+    "mtime": 1741286343269,
+    "results": "64",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 5196,
+    "mtime": 1741959547061,
+    "results": "65",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 3089,
+    "mtime": 1741302839309,
+    "results": "66",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 1370,
+    "mtime": 1741291148848,
+    "results": "67",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 3051,
+    "mtime": 1741286352175,
+    "results": "68",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 290,
+    "mtime": 1741286343271,
+    "results": "69",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 208,
+    "mtime": 1741286352175,
+    "results": "70",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 538,
+    "mtime": 1741286343271,
+    "results": "71",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 2014,
+    "mtime": 1741919595234,
+    "results": "72",
+    "hashOfConfig": "38"
+  },
+  {
+    "size": 459,
+    "mtime": 1741286352175,
+    "results": "73",
+    "hashOfConfig": "38"
+  },
+  {
+    "filePath": "74",
+    "messages": "75",
+    "suppressedMessages": "76",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  "9x6yio",
+  {
+    "filePath": "77",
+    "messages": "78",
+    "suppressedMessages": "79",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "80",
+    "messages": "81",
+    "suppressedMessages": "82",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "83",
+    "messages": "84",
+    "suppressedMessages": "85",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "86",
+    "messages": "87",
+    "suppressedMessages": "88",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "89",
+    "messages": "90",
+    "suppressedMessages": "91",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "92",
+    "messages": "93",
+    "suppressedMessages": "94",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "95",
+    "messages": "96",
+    "suppressedMessages": "97",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "98",
+    "messages": "99",
+    "suppressedMessages": "100",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "101",
+    "messages": "102",
+    "suppressedMessages": "103",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "104",
+    "messages": "105",
+    "suppressedMessages": "106",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "107",
+    "messages": "108",
+    "suppressedMessages": "109",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "110",
+    "messages": "111",
+    "suppressedMessages": "112",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "113",
+    "messages": "114",
+    "suppressedMessages": "115",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "116",
+    "messages": "117",
+    "suppressedMessages": "118",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "119",
+    "messages": "120",
+    "suppressedMessages": "121",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "122",
+    "messages": "123",
+    "suppressedMessages": "124",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 2,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": null
+  },
+  {
+    "filePath": "125",
+    "messages": "126",
+    "suppressedMessages": "127",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "128",
+    "messages": "129",
+    "suppressedMessages": "130",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "131",
+    "messages": "132",
+    "suppressedMessages": "133",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "134",
+    "messages": "135",
+    "suppressedMessages": "136",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "137",
+    "messages": "138",
+    "suppressedMessages": "139",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "140",
+    "messages": "141",
+    "suppressedMessages": "142",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "143",
+    "messages": "144",
+    "suppressedMessages": "145",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "146",
+    "messages": "147",
+    "suppressedMessages": "148",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "149",
+    "messages": "150",
+    "suppressedMessages": "151",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "152",
+    "messages": "153",
+    "suppressedMessages": "154",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "155",
+    "messages": "156",
+    "suppressedMessages": "157",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "158",
+    "messages": "159",
+    "suppressedMessages": "160",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "161",
+    "messages": "162",
+    "suppressedMessages": "163",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 2,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": null
+  },
+  {
+    "filePath": "164",
+    "messages": "165",
+    "suppressedMessages": "166",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "167",
+    "messages": "168",
+    "suppressedMessages": "169",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "170",
+    "messages": "171",
+    "suppressedMessages": "172",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "173",
+    "messages": "174",
+    "suppressedMessages": "175",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "176",
+    "messages": "177",
+    "suppressedMessages": "178",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "179",
+    "messages": "180",
+    "suppressedMessages": "181",
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/firebase/firebase.ts",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/next-env.d.ts",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/next.config.ts",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/adminview/page.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/activities.ts",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/fileApi.ts",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/requests.ts",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/userApi.ts",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/api/users.ts",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/AdminStaffUserItem.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/AdminStaffUserTable.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/BackButton.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Button.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/CustomDropdown.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/FileUpload.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/NavBar.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/OnboardingOption.tsx",
+  [
+    "182",
+    "183"
+  ],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Program.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/ProgressBar.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Role.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/OnboardingInterests.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/RoleSelection.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/ServiceDetails.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/SignUpForm.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SignUpForm/UserDetails.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/SuccessNotification.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/Tabs.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/UnreadActivities.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/components/VeteranFilesTable.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/layout.tsx",
+  [
+    "184",
+    "185"
+  ],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/login/page.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/page.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/signup/page.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/staffview/page.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/app/veteranDashboard/page.tsx",
+  [],
+  [],
+  "/Users/katelynnguyen/Downloads/Veteran-Sisters-Support-Website/frontend/src/util/validateEnv.ts",
+  [],
+  [],
+  {
+    "ruleId": "186",
+    "severity": 1,
+    "message": "187",
+    "line": 41,
+    "column": 11,
+    "nodeType": "188",
+    "endLine": 44,
+    "endColumn": 13
+  },
+  {
+    "ruleId": "189",
+    "severity": 1,
+    "message": "190",
+    "line": 41,
+    "column": 11,
+    "nodeType": "188",
+    "endLine": 44,
+    "endColumn": 13
+  },
+  {
+    "ruleId": "191",
+    "severity": 1,
+    "message": "192",
+    "line": 31,
+    "column": 9,
+    "nodeType": "188",
+    "endLine": 34,
+    "endColumn": 11
+  },
+  {
+    "ruleId": "191",
+    "severity": 1,
+    "message": "192",
+    "line": 35,
+    "column": 9,
+    "nodeType": "188",
+    "endLine": 38,
+    "endColumn": 11
+  },
+  "@next/next/no-img-element",
+  "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+  "JSXOpeningElement",
+  "jsx-a11y/alt-text",
+  "img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.",
+  "@next/next/no-page-custom-font",
+  "Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font"
+]

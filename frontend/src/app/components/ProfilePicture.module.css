@@ -1,0 +1,20 @@
+.profilePicture {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--Background-3, #e9ebed);
+  color: var(--Text-3, #3a3c3d);
+}
+
+.profilePicture.large {
+  font-size: 48px;
+  min-width: 96px;
+  height: 96px;
+  border-radius: 48px;
+}
+.profilePicture.small {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 14px;
+}
