@@ -1,5 +1,6 @@
 import { APIResult } from "./fileApi";
 export type UserProfile = {
+  _id?:string;
   email: string;
   firstName: string;
   lastName: string;

@@ -5,6 +5,7 @@ export type ActiveVolunteer = {
   assignedProgram: string;
   assignedVeteran: string;
   volunteer: string;
+  volunteerUser: UserProfile
 };
 
 export const getVolunteersByProgram = async (
@@ -31,12 +32,14 @@ export const assignVolunteerToProgram = async (
   volunteerEmail: string,
   veteranEmail: string,
   program: string,
+  volunteerId:string
 ): Promise<APIResult<ActiveVolunteer>> => {
   try {
     const requestBodyVolunteer = {
       userEmail: volunteerEmail,
       veteranEmail,
       program,
+      userId: volunteerId
     };
 
     // First fetch to add volunteer to activeVolunteer schema

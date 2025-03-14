@@ -47,7 +47,7 @@ export default function VolunteerAssigningDialog(props: VolunteerAssigningDialog
   };
 
   const assignVolunteer = () => {
-    if (!selectedVolunteerOption) {
+    if (!selectedVolunteerOption?.value._id) {
       return null;
     }
 
@@ -55,6 +55,7 @@ export default function VolunteerAssigningDialog(props: VolunteerAssigningDialog
       selectedVolunteerOption.value.email,
       props.veteran.email,
       props.program,
+      selectedVolunteerOption.value._id
     )
       .then((response) => {
         if (response.success) {

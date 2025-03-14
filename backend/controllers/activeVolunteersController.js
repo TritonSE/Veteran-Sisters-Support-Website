@@ -16,7 +16,7 @@ export const queryActiveVolunteers = async (req, res) => {
     }
 
     const filteredVolunteers = await ActiveVolunteers.find(query)
-      .populate("volunteer", "firstName lastName email")
+      .populate("volunteerUser", "firstName lastName email")
       .exec();
 
     res.json(filteredVolunteers);
@@ -29,12 +29,13 @@ export const queryActiveVolunteers = async (req, res) => {
 //add a volunteer using their user email, program, and assigned veteran email
 export const addVolunteer = async (req, res) => {
   try {
-    const { userEmail, program, veteranEmail } = req.body;
+    const { userEmail, program, veteranEmail, userId } = req.body;
 
     const existingVolunteer = await ActiveVolunteers.findOne({
       volunteer: userEmail,
       assignedProgram: program,
       assignedVeteran: veteranEmail,
+      volunteerUser: userId
     }).exec();
 
     if (existingVolunteer) {
@@ -47,6 +48,7 @@ export const addVolunteer = async (req, res) => {
       volunteer: userEmail,
       assignedProgram: program,
       assignedVeteran: veteranEmail,
+      volunteerUser: userId
     });
 
     res.status(201).json(newVolunteer);
@@ -73,7 +75,7 @@ export const removeVolunteer = async (req, res) => {
     }
 
     // If no specific program or veteran is provided, delete all assignments of the volunteer
-    if (!program && !veteran) {
+    if (!program && !veteranEmail) {
       await ActiveVolunteers.deleteMany({ volunteer: id }).exec();
       return res.status(200).json({ message: "All volunteer assignments removed" });
     }

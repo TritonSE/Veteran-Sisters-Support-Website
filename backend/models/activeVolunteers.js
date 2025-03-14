@@ -9,6 +9,7 @@ const activeVolunteersSchema = new Schema({
   },
   assignedVeteran: String,
   volunteer: String,
+  volunteerUser: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 export const ActiveVolunteers = model("ActiveVolunteers", activeVolunteersSchema);

@@ -1,12 +1,13 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { removeVolunteerFromVeteran } from "../api/activeVolunteers";
+import { getVolunteersByVeteran, removeVolunteerFromVeteran } from "../api/activeVolunteers";
 import { UserProfile as UserProfileType } from "../api/profileApi";
 
 import { Program } from "./Program";
 import styles from "./UserList.module.css";
 import VolunteerAssigningDialog from "./volunteerAssigningDialog";
+
 
 export function UserList(params: {
   userProfile: UserProfileType | undefined;
@@ -15,8 +16,13 @@ export function UserList(params: {
   minimized: boolean;
 }) {
   const { title, userProfile, editable, minimized } = params;
+  const userPrograms = Object.fromEntries(
+    userProfile?.assignedPrograms?.map((program) => [program, []]) ?? []
+  ) as Record<string, UserProfileType[]>;  
+  
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogProgram, setDialogProgram] = useState("");
+  const [currentVolunteers, setCurrentVolunteers] = useState<Record<string, UserProfileType[]>>(userPrograms)
 
   const openDialog = (program: string) => {
     setIsDialogOpen(true);
@@ -25,6 +31,7 @@ export function UserList(params: {
 
   const closeDialog = () => {
     setIsDialogOpen(false);
+    window.location.reload();
   };
 
   const removeVolunteer = (volunteerEmail: string, program: string) => {
@@ -39,28 +46,68 @@ export function UserList(params: {
     }
   };
 
-  // Users for user list
-  const emptyUserGroups: Record<string, UserProfileType[]> = (
-    userProfile?.assignedPrograms ?? []
-  ).reduce((accumulator: Record<string, UserProfileType[]>, program: string) => {
-    accumulator[program] = [];
-    return accumulator;
-  }, {});
-
-  const assignedUsers = userProfile?.assignedUsers ?? [];
-  const userGroups: Record<string, UserProfileType[]> = assignedUsers.reduce(
-    (accumulator, user) => {
-      (user?.assignedPrograms ?? []).forEach((program: string) => {
-        if (program in accumulator) {
-          accumulator[program].push(user);
+  const fetchVolunteersProfiles = async (veteranEmail: string) => {
+    try {
+      const res = await getVolunteersByVeteran(veteranEmail);
+      if (!res.success || !Array.isArray(res.data)) {
+        throw new Error("Failed to fetch volunteers");
+      }
+  
+      const volunteerUsers: [string, UserProfileType][] = res.data.map((volunteer) => [volunteer.assignedProgram, volunteer.volunteerUser]);
+  
+      setCurrentVolunteers((prevVolunteers) => {
+        const updatedVolunteers = { ...prevVolunteers };
+      
+        for (const [key, userObj] of volunteerUsers) {
+          if (!updatedVolunteers[key].some((user) => user.email === userObj.email)) {
+            updatedVolunteers[key].push(userObj);
+          }
         }
+        return updatedVolunteers; 
       });
-      return accumulator;
-    },
-    emptyUserGroups,
-  );
+  
+    } catch (error) {
+      console.error("Error fetching volunteer profiles:", error);
+      throw new Error("Failed to fetch volunteers")
+    }
+  };
 
-  const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(userGroups).slice().sort();
+  useEffect(() => {
+    const fetchProfiles = async () => {
+      if (userProfile?.email) {
+        await fetchVolunteersProfiles(userProfile.email);
+      }
+    };
+  
+    void fetchProfiles();
+  }, []);
+  
+  
+  
+
+  //Users for user list
+  // const emptyUserGroups: Record<string, UserProfileType[]> = (
+  //   userProfile?.assignedPrograms ?? []
+  // ).reduce((accumulator: Record<string, UserProfileType[]>, program: string) => {
+  //   accumulator[program] = [];
+  //   return accumulator;
+  // }, {});
+
+  // const assignedUsers = userProfile?.assignedUsers ?? [];
+  // const userGroups: Record<string, UserProfileType[]> = assignedUsers.reduce(
+  //   (accumulator, user) => {
+  //     (user?.assignedPrograms ?? []).forEach((program: string) => {
+  //       if (program in accumulator) {
+  //         accumulator[program].push(user);
+  //       }
+  //     });
+  //     return accumulator;
+  //   },
+  //   emptyUserGroups,
+  // );
+
+  const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(currentVolunteers).slice().sort();
+  // console.log(sortedUserGroups)
 
   return (
     <div className={`${styles.userList} ${minimized ? styles.minimized : ""}`}>
