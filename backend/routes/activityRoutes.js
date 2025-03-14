@@ -11,6 +11,6 @@ router.get("/activities", getUnreadActivities);
 
 router.post("/activities", createActivity);
 
-router.patch("/activities/:activityId", markActivityRead);
+router.post("/activities/:activityId", markActivityRead);
 
 export default router;

@@ -15,8 +15,9 @@ export function VeteranFilesTable({ refresh }: VeteranFilesTableProps) {
   const [fileObjects, setFileObjects] = useState<FileObject[]>([]);
   const [filteredFiles, setFilteredFiles] = useState<FileObject[]>([]);
 
+  // Note: Hardcoded a user ID for testing
   useEffect(() => {
-    getFilesByUploader("Steve")
+    getFilesByUploader("67a6322b3fcd070a8e0d2c71")
       .then((result) => {
         if (result.success) {
           setFileObjects(result.data);

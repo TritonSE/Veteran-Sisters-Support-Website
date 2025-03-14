@@ -1,26 +1,62 @@
 import { APIResult, get, handleAPIError, post } from "./requests";
 
 export type ActivityObject = {
+  _id: string;
   firstName: string;
   lastName: string;
   role: string;
+  type: "document" | "comment" | "assignment" | "report" | "request";
   documentName: string;
-  // action: string;
+  programName: string[];
+  isRead: boolean;
+  createdAt: Date;
+  relativeTime: string;
+};
+
+// Set the relative time (Today OR # days ago OR Dec 12) based on timestamp
+const setRelativeTime = (timestamp: string | Date): string => {
+  const activityDate = new Date(timestamp);
+  const today = new Date();
+
+  // Remove time to only compare days
+  const activityDay = new Date(activityDate.setHours(0, 0, 0, 0));
+  const todayDay = new Date(today.setHours(0, 0, 0, 0));
+
+  // Calculate difference in days and round down
+  const timeDiff = todayDay.getTime() - activityDay.getTime();
+  const daysAgo = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+  if (daysAgo === 0) return "Today";
+  if (daysAgo === 1) return "1 day ago";
+  if (daysAgo < 7) {
+    return `${String(daysAgo)} days ago`;
+  } else {
+    // If 7 or more days ago, date is formatted "Dec 12"
+    return new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+    }).format(activityDate);
+  }
 };
 
 // Get unread activities
-export const getUnreadActivities = async (): Promise<APIResult<string[]>> => {
+export const getUnreadActivities = async (): Promise<
+  APIResult<{ recentUnread: ActivityObject[]; totalUnread: number }>
+> => {
   try {
     const response = await get("/api/activities");
     if (response.ok) {
-      const activities = (await response.json()) as ActivityObject[];
+      const activities = (await response.json()) as {
+        recentUnread: ActivityObject[];
+        totalUnread: number;
+      };
 
-      // Map activities into a formatted string array
-      const data = activities.map((activity) => {
-        return `${activity.firstName} ${activity.lastName} (${activity.role}) uploaded a new document named "${activity.documentName}"`;
+      // Set relative time for each activity
+      activities.recentUnread.forEach((activity: ActivityObject) => {
+        activity.relativeTime = setRelativeTime(activity.createdAt);
       });
 
-      return { success: true, data };
+      return { success: true, data: activities };
     } else {
       // Handle response errors if the API call is not successful
       const errorMessage = `Error: ${response.statusText}`;
