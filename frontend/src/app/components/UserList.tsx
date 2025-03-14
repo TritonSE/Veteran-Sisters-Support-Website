@@ -16,13 +16,14 @@ export function UserList(params: {
 }) {
   const { title, userProfile, editable, minimized } = params;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dialogProgram, setDialogProgram] = useState("");
 
-  const openDialog = () => {
+  const openDialog = (program: string) => {
     setIsDialogOpen(true);
+    setDialogProgram(program);
   };
 
   const closeDialog = () => {
-    window.location.reload();
     setIsDialogOpen(false);
   };
 
@@ -63,6 +64,14 @@ export function UserList(params: {
 
   return (
     <div className={`${styles.userList} ${minimized ? styles.minimized : ""}`}>
+      {isDialogOpen && userProfile && (
+        <VolunteerAssigningDialog
+          isOpen={isDialogOpen}
+          program={dialogProgram}
+          veteran={userProfile}
+          closeDialog={closeDialog}
+        />
+      )}
       <div className={styles.userListHeader}>
         <div className={styles.userListHeading}>{title}</div>
         {editable && !minimized && (
@@ -91,16 +100,10 @@ export function UserList(params: {
                       width={16}
                       height={16}
                       alt="Assign User"
-                      onClick={openDialog}
+                      onClick={() => {
+                        openDialog(program);
+                      }}
                     ></Image>
-                    {isDialogOpen && userProfile && (
-                      <VolunteerAssigningDialog
-                        isOpen={isDialogOpen}
-                        program={program}
-                        veteran={userProfile}
-                        closeDialog={closeDialog}
-                      />
-                    )}
                   </div>
                 )}
               </div>
