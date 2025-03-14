@@ -52,7 +52,7 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
       setUploading(true);
       const fileObjRequest: CreateFileObjectRequest = {
         filename: file.name,
-        uploader: "Steve",
+        uploader: "67a6322b3fcd070a8e0d2c71", //Note: Hardcoded user ID for testing
         comments: comments ? [comments] : [],
         programs: Object.keys(checkboxStates).filter(
           (key) => checkboxStates[key as keyof CheckBoxStates],

@@ -1,6 +1,8 @@
 import FileObject from "../models/fileModel.js";
 import mongoose from "mongoose";
 
+import { createDocument } from "./activityController.js";
+
 export const uploadFile = async (req, res, next) => {
   const { filename, uploader, comments, programs } = req.body;
 
@@ -12,7 +14,10 @@ export const uploadFile = async (req, res, next) => {
       programs,
     });
 
-    res.status(201).json(fileObject);
+    // Create unread activity
+    await createDocument({ uploader: uploader, filename: filename, programs: programs });
+
+    return res.status(201).json(fileObject);
   } catch (error) {
     next(error);
   }

@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 import fileRoutes from "./routes/fileRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
+import activityRoutes from "./routes/activityRoutes.js";
 
 // import { CustomError, InternalError } from "./errors.js";
 
@@ -59,6 +60,8 @@ app.use("/api", fileRoutes);
 app.use("/api", userRoutes);
 
 app.use("/api", commentRoutes);
+
+app.use("/api", activityRoutes);
 
 app.use(errorHandler);
 
