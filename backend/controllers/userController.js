@@ -134,7 +134,7 @@ export const getVeteransByVolunteer = async (req, res) => {
       firstName: "asc",
     });
 
-    if (users) {
+    if (users) { 
       res.status(200).json(users);
     } else {
       res.status(404).json({ error: "Could not find users" });

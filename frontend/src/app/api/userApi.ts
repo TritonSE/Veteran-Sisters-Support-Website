@@ -1,3 +1,5 @@
+import { User } from "./users";
+
 export type CreateUserRequest = {
   email: string;
   firstName: string;
@@ -48,5 +50,19 @@ export const createUser = async (
     return { success: false, error: (error as Error).message };
   }
 };
+
+export async function getUser(userId: string): Promise<APIResult<User>> {
+  try {
+    const response = await fetch(`http://localhost:4000/api/users/id/${userId}`);
+    if (!response.ok) {
+      return { success: false, error: response.statusText };
+    }
+    const data = (await response.json()) as User;
+
+    return { success: true, data };
+  } catch (error: unknown) {
+    return { success: false, error: (error as Error).message };
+  }
+}
 
 export default createUser;

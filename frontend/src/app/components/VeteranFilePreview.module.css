@@ -1,0 +1,19 @@
+.documentPreview {
+  width: 220px;
+  height: 250px;
+  border-radius: 8px;
+  border: 2px solid #edf1f5;
+  background-color: #f4f6f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.document {
+  height: 245px;
+  width: 220px;
+  border-radius: 8px;
+  overflow: hidden;
+  align-items: center;
+}
