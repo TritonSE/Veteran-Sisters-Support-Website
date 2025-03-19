@@ -133,7 +133,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
   const HeaderBar = (filename: string) => {
     return (
       <div className={styles.header}>
-        <Link href="/veteranDashboard">
+        <Link href="/">
           <Image src="/logo_black.svg" width={143} height={32} alt="logo" />
         </Link>
         {editingTitle ? (
