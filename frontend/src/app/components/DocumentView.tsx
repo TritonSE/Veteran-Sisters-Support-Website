@@ -9,12 +9,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 import { storage } from "../../../firebase/firebase";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import {
-  Comment,
-  FileObject,
-  editFileObject,
-  getFileById,
-} from "../api/fileApi";
+import { Comment, FileObject, editFileObject, getFileById } from "../api/fileApi";
 import { getUser } from "../api/userApi";
 import { User } from "../api/users";
 
@@ -65,7 +60,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
       .catch((error) => {
         console.log(error);
       });
-    getUser("67b2e046432b1fc7da8b533c")
+    getUser("67bbd461c4c7800e274eeb8a")
       .then((response) => {
         if (response.success) {
           setCurrUser(response.data);
