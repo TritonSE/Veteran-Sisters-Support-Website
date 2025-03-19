@@ -2,11 +2,12 @@ import express from "express";
 import {
   queryUsers,
   getUserByEmail,
-  getUserById,
   addUser,
   deleteUser,
+  getUserById,
   getUsersNonAdmins,
   getUserRole,
+  updateUser,
   getVeteransByVolunteer,
 } from "../controllers/userController.js";
 
@@ -27,5 +28,6 @@ router.post("/users", addUser);
 router.delete("/users/:email", deleteUser);
 
 router.get("/users/role/:email", getUserRole);
+router.put("/users/:email", updateUser);
 
 export default router;
