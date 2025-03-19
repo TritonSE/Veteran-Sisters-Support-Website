@@ -2,9 +2,9 @@ import express from "express";
 import {
   queryUsers,
   getUserByEmail,
-  getUserById,
   addUser,
   deleteUser,
+  getUserById,
   getUsersNonAdmins,
   updateUser,
   getVeteransByVolunteer,

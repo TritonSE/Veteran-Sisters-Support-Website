@@ -89,7 +89,7 @@ const userSchema = new Schema({
           "",
         ],
       },
-    ],
+    ], 
   },
   assignedPrograms: {
     type: [String],

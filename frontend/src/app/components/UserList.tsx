@@ -165,7 +165,7 @@ export function UserList(params: {
                       </div>
                       {editable && (
                         <Image
-                          src="/trash_icon.svg"
+                          src="/trash_icon_3.svg"
                           width={20}
                           height={20}
                           alt="Remove User"
