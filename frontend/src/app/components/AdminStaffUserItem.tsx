@@ -27,8 +27,7 @@ export function AdminStaffUserItem({ user }: AdminStaffUserItemProp) {
 
   return (
     <div className={styles.container}>
-      {/* Placeholder link  */}
-      <Link href="/profile" className={styles.link}>
+      <Link href={`/profile/${user._id}`} className={styles.link}>
         <div className={styles.verticalDivider}></div>
         <div className={styles.name}>
           <div className={styles.nameFrame}>

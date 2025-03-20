@@ -113,7 +113,7 @@ export default function UserProfile({ userId }: { userId: string }) {
    * this component uses hardcoded viewerId and viewerRole values. Change
    * these values to test different views.
    */
-  const viewerId = "67b3ab035e17d37a2ba6b65d";
+  const viewerId = "679349548551c0a2c44eeb86";
   const viewerRole = RoleEnum.ADMIN;
 
   const [userProfile, setUserProfile] = useState<UserProfileType | undefined>(undefined);
