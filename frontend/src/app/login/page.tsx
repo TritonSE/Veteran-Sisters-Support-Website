@@ -1,7 +1,7 @@
 "use client";
 
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 import { auth } from "../../../firebase/firebase";
@@ -10,9 +10,11 @@ import styles from "./page.module.css";
 
 import { Button } from "@/app/components/Button";
 import SuccessNotification from "@/app/components/SuccessNotification";
+
 import "@fontsource/albert-sans";
 
 export default function LoginForm() {
+  const router = useRouter();
   const searchParams = useSearchParams(); // Search for query parameters
   const [showSuccess, setShowSuccess] = useState(false); // If user successfully signed up and was redirected
   const [showLoggedin, setShowLoggedin] = useState(false); // Once user logs in
@@ -32,6 +34,12 @@ export default function LoginForm() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setShowLoggedin(true);
+
+      if (window.location.pathname === "/") {
+        window.location.reload();
+      } else {
+        router.push("/");
+      }
     } catch {
       setError("Account not found.");
     }
