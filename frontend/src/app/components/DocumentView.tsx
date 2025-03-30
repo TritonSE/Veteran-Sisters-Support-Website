@@ -9,12 +9,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 import { storage } from "../../../firebase/firebase";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import {
-  Comment,
-  FileObject,
-  editFileObject,
-  getFileById,
-} from "../api/fileApi";
+import { Comment, FileObject, editFileObject, getFileById } from "../api/fileApi";
 import { getUser } from "../api/userApi";
 import { User } from "../api/users";
 

@@ -1,18 +1,48 @@
 import { APIResult } from "./fileApi";
 export type UserProfile = {
-  _id?:string;
+  _id?: string;
   email: string;
   firstName: string;
   lastName: string;
   assignedPrograms: AssignedProgram[] | undefined;
   yearJoined?: number;
   age?: number;
+  roleSpecificInfo?: {
+    serviceInfo?: {
+      dateServiceEnded?: Date;
+      branchOfService?: BranchOfService;
+      currentMilitaryStatus?: CurrentMilitaryStatus;
+      gender?: Gender;
+    };
+  };
   gender?: string;
   phoneNumber?: string;
   role: Role | undefined;
   assignedUsers?: UserProfile[];
   veteransUnderPointOfContact?: Veteran[];
 };
+
+type BranchOfService =
+  | "Air Force"
+  | "Army"
+  | "Coast Guard"
+  | "First Responder"
+  | "Marine Corps"
+  | "Navy"
+  | "National Guard"
+  | "Space Force"
+  | "";
+
+type CurrentMilitaryStatus =
+  | "Active Duty"
+  | "Reservist"
+  | "Veteran"
+  | "Veteran Medically Retired"
+  | "Veteran 20+ Years Retired"
+  | "First Responder"
+  | "";
+
+export type Gender = "Female" | "Male" | "Other" | "";
 
 export type Veteran = {
   firstName: string;
@@ -75,6 +105,39 @@ export async function getUserProfile(userId: string): Promise<APIResult<UserProf
     return { success: false, error: (error as Error).message };
   }
 }
+
+export const updateUserProfile = async (
+  userId: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  phoneNumber: string,
+  age: number,
+  gender: Gender,
+) => {
+  try {
+    const response = await fetch(`http://localhost:4000/api/users/id/${userId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        age,
+        gender,
+      }),
+    });
+    if (!response.ok) {
+      return { success: false, error: response.statusText };
+    }
+    const data = (await response.json()) as UserProfile;
+
+    return { success: true, data };
+  } catch (error: unknown) {
+    return { success: false, error: (error as Error).message };
+  }
+};
 
 export async function getUserProfileByEmail(userEmail: string): Promise<APIResult<UserProfile>> {
   try {

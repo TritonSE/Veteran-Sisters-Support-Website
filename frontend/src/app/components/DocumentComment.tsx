@@ -57,14 +57,14 @@ export function DocumentComment({
     "Nov",
     "Dec",
   ];
-  
+
   const [currComment, setCurrComment] = useState<Comment>(comment);
   const [tempCommentBody, setTempCommentBody] = useState<string>(comment.comment);
 
-  useEffect(()=>{
-    setCurrComment(comment)
-    setTempCommentBody(comment.comment)
-  }, [comment])
+  useEffect(() => {
+    setCurrComment(comment);
+    setTempCommentBody(comment.comment);
+  }, [comment]);
 
   const formatDate = (datePosted: string) => {
     const date = new Date(datePosted);
@@ -84,7 +84,7 @@ export function DocumentComment({
               setFile(file);
               setCurrComment(response.data);
               setTempCommentBody(response.data.comment);
-              setSelected(false)
+              setSelected(false);
             }
           })
           .catch((error) => {
@@ -105,7 +105,7 @@ export function DocumentComment({
                     setFile(response2.data);
                     setCurrComment(response.data);
                     setTempCommentBody(response.data.comment);
-                    setSelected(false)
+                    setSelected(false);
                   }
                 })
                 .catch((error) => {

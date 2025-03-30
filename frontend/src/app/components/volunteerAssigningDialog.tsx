@@ -55,7 +55,7 @@ export default function VolunteerAssigningDialog(props: VolunteerAssigningDialog
       selectedVolunteerOption.value.email,
       props.veteran.email,
       props.program,
-      selectedVolunteerOption.value._id
+      selectedVolunteerOption.value._id,
     )
       .then((response) => {
         if (response.success) {
