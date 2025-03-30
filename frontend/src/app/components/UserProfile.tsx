@@ -167,7 +167,7 @@ export default function UserProfile({ userId }: { userId: string }) {
                 yearJoined={userProfile?.yearJoined}
                 age={userProfile?.age}
                 phoneNumber={userProfile?.phoneNumber}
-                gender={userProfile?.gender}
+                gender={userProfile?.roleSpecificInfo?.serviceInfo?.gender}
                 email={userProfile?.email}
                 isPersonalProfile={profileRenderingContext.viewingPersonalProfile}
                 isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}

@@ -8,7 +8,6 @@ import { Program } from "./Program";
 import styles from "./UserList.module.css";
 import VolunteerAssigningDialog from "./volunteerAssigningDialog";
 
-
 export function UserList(params: {
   userProfile: UserProfileType | undefined;
   title: string;
@@ -17,12 +16,13 @@ export function UserList(params: {
 }) {
   const { title, userProfile, editable, minimized } = params;
   const userPrograms = Object.fromEntries(
-    userProfile?.assignedPrograms?.map((program) => [program, []]) ?? []
-  ) as Record<string, UserProfileType[]>;  
-  
+    userProfile?.assignedPrograms?.map((program) => [program, []]) ?? [],
+  ) as Record<string, UserProfileType[]>;
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogProgram, setDialogProgram] = useState("");
-  const [currentVolunteers, setCurrentVolunteers] = useState<Record<string, UserProfileType[]>>(userPrograms)
+  const [currentVolunteers, setCurrentVolunteers] =
+    useState<Record<string, UserProfileType[]>>(userPrograms);
 
   const openDialog = (program: string) => {
     setIsDialogOpen(true);
@@ -52,23 +52,25 @@ export function UserList(params: {
       if (!res.success || !Array.isArray(res.data)) {
         throw new Error("Failed to fetch volunteers");
       }
-  
-      const volunteerUsers: [string, UserProfileType][] = res.data.map((volunteer) => [volunteer.assignedProgram, volunteer.volunteerUser]);
-  
+
+      const volunteerUsers: [string, UserProfileType][] = res.data.map((volunteer) => [
+        volunteer.assignedProgram,
+        volunteer.volunteerUser,
+      ]);
+
       setCurrentVolunteers((prevVolunteers) => {
         const updatedVolunteers = { ...prevVolunteers };
-      
+
         for (const [key, userObj] of volunteerUsers) {
           if (!updatedVolunteers[key].some((user) => user.email === userObj.email)) {
             updatedVolunteers[key].push(userObj);
           }
         }
-        return updatedVolunteers; 
+        return updatedVolunteers;
       });
-  
     } catch (error) {
       console.error("Error fetching volunteer profiles:", error);
-      throw new Error("Failed to fetch volunteers")
+      throw new Error("Failed to fetch volunteers");
     }
   };
 
@@ -78,12 +80,9 @@ export function UserList(params: {
         await fetchVolunteersProfiles(userProfile.email);
       }
     };
-  
+
     void fetchProfiles();
   }, []);
-  
-  
-  
 
   //Users for user list
   // const emptyUserGroups: Record<string, UserProfileType[]> = (
@@ -106,7 +105,9 @@ export function UserList(params: {
   //   emptyUserGroups,
   // );
 
-  const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(currentVolunteers).slice().sort();
+  const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(currentVolunteers)
+    .slice()
+    .sort();
   // console.log(sortedUserGroups)
 
   return (
