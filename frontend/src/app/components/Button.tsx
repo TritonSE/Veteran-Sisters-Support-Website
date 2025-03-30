@@ -15,7 +15,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
 ) {
   return (
     <button
-      className={`${styles.button} ${filled ? styles.filled : ""} ${className}`}
+      className={`${styles.button} ${filled ? styles.filled : ""} ${className ?? ""}`}
       ref={ref}
       {...props}
       onClick={onClick}

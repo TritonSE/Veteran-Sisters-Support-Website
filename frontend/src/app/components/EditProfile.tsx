@@ -1,9 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { ReactNode } from "react";
-import CustomDropdown from "./CustomDropdown";
+import { ReactNode, useEffect, useState } from "react";
 
+import CustomDropdown from "./CustomDropdown";
 import styles from "./EditProfile.module.css";
 import NavigateBack from "./NavigateBack";
 

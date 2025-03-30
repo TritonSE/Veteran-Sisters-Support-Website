@@ -1,0 +1,134 @@
+.comment {
+  display: flex;
+  width: 362px;
+  padding: 16px 20px;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 8px;
+  background: var(--Background-1, #fff);
+}
+
+.commentTopRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  color: var(--Text-4, #303030);
+  font-weight: 500;
+  font-family: "Albert Sans";
+  font-size: 14px;
+}
+
+.profileIcon {
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: 100px;
+  background-color: #c9d1e4;
+  color: #283f7a;
+  font-family: "Albert Sans";
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.commentBody {
+  color: var(--Text-2, #4d5358);
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-weight: 500;
+  overflow-wrap: break-word;
+}
+
+.commentBottomRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.commentDate {
+  color: var(--Text-1, #60696f);
+  font-family: Inconsolata;
+  font-size: 12px;
+}
+
+.commentBottomIcons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 11px;
+}
+
+.commentsWrapper {
+  position: absolute;
+  top: 100px;
+  right: 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.selectedComment {
+  display: flex;
+  width: 362px;
+  padding: 16px 20px;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--Stroke-3, #bdc9d2);
+  background: var(--Background-1, #fff);
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
+  position: relative;
+  right: 50px;
+}
+
+.commentInput {
+  padding: 12px var(--Spacing-sm, 16px);
+  justify-content: space-between;
+  align-items: center;
+  color: var(--Text-2, #4d5358);
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-weight: 500;
+  resize: none;
+  border-radius: 4px;
+  border: 1px solid var(--Stroke-2, #d0d7de);
+  background: var(--Background-1, #fff);
+  min-height: 100px;
+}
+
+.commentCancelButton {
+  display: flex;
+  padding: 8px var(--Spacing-sm, 16px);
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--Stroke-2, #d0d7de);
+  background: var(--Background-1, #fff);
+  color: var(--Text-2, #4d5358);
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  cursor: pointer;
+}
+
+.commentPostButton {
+  display: flex;
+  padding: 8px var(--Spacing-sm, 16px);
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  background: var(--Primary, #057e6f);
+  color: var(--Neutral-Base-White, #fafafa);
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  cursor: pointer;
+}

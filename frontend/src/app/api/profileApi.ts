@@ -1,5 +1,6 @@
 import { APIResult } from "./fileApi";
 export type UserProfile = {
+  _id?: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -127,7 +128,6 @@ export const updateUserProfile = async (
         gender,
       }),
     });
-
     if (!response.ok) {
       return { success: false, error: response.statusText };
     }
@@ -138,6 +138,20 @@ export const updateUserProfile = async (
     return { success: false, error: (error as Error).message };
   }
 };
+
+export async function getUserProfileByEmail(userEmail: string): Promise<APIResult<UserProfile>> {
+  try {
+    const response = await fetch(`http://localhost:4000/api/users/email/${userEmail}`);
+    if (!response.ok) {
+      return { success: false, error: response.statusText };
+    }
+    const data = (await response.json()) as UserProfile;
+
+    return { success: true, data };
+  } catch (error: unknown) {
+    return { success: false, error: (error as Error).message };
+  }
+}
 
 export async function getComments(profileId: string): Promise<APIResult<ProfileComment[]>> {
   try {
