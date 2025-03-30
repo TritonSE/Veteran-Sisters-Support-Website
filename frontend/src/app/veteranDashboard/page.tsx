@@ -2,8 +2,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import { getUser } from "../api/userApi";
-import { User, getNonAdminUsers } from "../api/users";
+import { User, getUser } from "../api/userApi";
 import { FileUpload } from "../components/FileUpload";
 import { NavBar } from "../components/NavBar";
 import { VeteranFilesTable } from "../components/VeteranFilesTable";
@@ -25,7 +24,7 @@ export default function VeteranDashboard() {
           console.log(response.data);
         }
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.log(error);
       });
   }, []);

@@ -48,14 +48,14 @@ export function VeteranFilePreview({
         setFileURL(url);
         console.log(url);
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.log(error);
       });
     console.log(latestComment);
   }, []);
 
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
-    setNumPages(numPages);
+  function onDocumentLoadSuccess({ numPages: totalPages }: { numPages: number }): void {
+    setNumPages(totalPages);
   }
 
   function formatAMPM(date: Date) {
@@ -64,8 +64,8 @@ export function VeteranFilePreview({
     const ampm = hours >= 12 ? "pm" : "am";
     hours = hours % 12;
     hours = hours ? hours : 12;
-    const min = minutes < 10 ? "0" + minutes : minutes;
-    const strTime = hours + ":" + min + " " + ampm;
+    const min = String(minutes).padStart(2, "0");
+    const strTime = `${String(hours)}:${min} ${ampm}`;
     return strTime;
   }
 
@@ -119,7 +119,7 @@ export function VeteranFilePreview({
           }}
         >
           {latestComment
-            ? `Commented ${months[latestComment.getMonth()]} ${latestComment.getDate()}, ${latestComment.getFullYear()} at ${formatAMPM(latestComment)}`
+            ? `Commented ${months[latestComment.getMonth()]} ${String(latestComment.getDate())}, ${String(latestComment.getFullYear())} at ${formatAMPM(latestComment)}`
             : "No comments"}
         </div>
       </div>

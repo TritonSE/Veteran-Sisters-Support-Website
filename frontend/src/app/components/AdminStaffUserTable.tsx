@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import { User, getNonAdminUsers } from "../api/users";
+import { User, getNonAdminUsers } from "../api/userApi";
 
 import { AdminStaffUserItem } from "./AdminStaffUserItem";
 import styles from "./AdminStaffUserTable.module.css";

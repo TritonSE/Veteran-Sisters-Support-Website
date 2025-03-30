@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { User } from "../api/users";
+import { User } from "../api/userApi";
 
 import styles from "./AdminStaffUserItem.module.css";
 import { Program } from "./Program";

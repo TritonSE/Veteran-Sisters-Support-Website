@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { User, getVeteransByVolunteer } from "../api/users";
+import { User, getVeteransByVolunteer } from "../api/userApi";
 
 import styles from "./VeteranList.module.css";
 import { VeteranProfileCard } from "./VeteranProfileCard";
