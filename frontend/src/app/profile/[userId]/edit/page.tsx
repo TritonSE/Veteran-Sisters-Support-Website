@@ -1,13 +1,16 @@
+"use client";
+
+import { useParams } from "next/navigation";
+
+import EditProfile from "../../../components/EditProfile";
+
 import styles from "./page.module.css";
 
-import EditProfile from "@/app/components/EditProfile";
-
-export default async function Page({ params }: { params: Promise<{ userId: string }> }) {
-  const userIdString: string = (await params).userId;
-
+export default function Page() {
+    const params = useParams();
   return (
     <div className={styles.editProfilePage}>
-      <EditProfile userId={userIdString} />
+      <EditProfile userId={params.userId as string} />
     </div>
   );
 }

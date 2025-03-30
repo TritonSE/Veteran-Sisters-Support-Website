@@ -1,15 +1,13 @@
-import { DocumentView } from "@/app/components/DocumentView";
+"use client";
+import { useParams } from "next/navigation";
 
-export default async function DocumentPage({
-  params,
-}: {
-  params: Promise<{ documentId: string }>;
-}) {
-  const documentId = (await params).documentId;
+import { DocumentView } from "../../components/DocumentView";
 
+export default function DocumentPage() {
+  const params = useParams();
   return (
     <div>
-      <DocumentView documentId={documentId} />
+      <DocumentView documentId={params.documentId as string} />
     </div>
   );
 }
