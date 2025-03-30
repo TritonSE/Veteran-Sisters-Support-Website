@@ -6,6 +6,7 @@ import {
   deleteUser,
   getUserById,
   getUsersNonAdmins,
+  getUserRole,
   updateUser,
   getVeteransByVolunteer,
   updateUser
@@ -27,6 +28,7 @@ router.post("/users", addUser);
 
 router.delete("/users/:email", deleteUser);
 
+router.get("/users/role/:email", getUserRole);
 router.patch("/users/id/:id", updateUser);
 router.put("/users/:email", updateUser);
 

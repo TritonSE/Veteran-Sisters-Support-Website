@@ -1,20 +1,37 @@
 "use client";
-import Link from "next/link";
 
-import { NavBar } from "./components/NavBar";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+
+import { useAuth } from "../contexts/AuthContext";
+
+import LoginForm from "./login/page";
+import styles from "./page.module.css";
 
 export default function Home() {
-  return (
-    <>
-      <div>
-        <NavBar />
-        <Link style={{ marginLeft: 100 }} href="/veteranDashboard">
-          To Veteran Dashboard
-        </Link>
-        <Link style={{ marginLeft: 100 }} href="/profile/67a54f72a44631441561e216">
-          To Veteran Profile
-        </Link>
-      </div>
-    </>
-  );
+  const { loggedIn, role } = useAuth();
+  const router = useRouter();
+  useEffect(() => {
+    if (loggedIn) {
+      switch (role) {
+        case "admin":
+          router.push("/adminview");
+          break;
+        case "staff":
+          router.push("/staffview");
+          break;
+        case "veteran":
+          router.push("/veteranDashboard");
+          break;
+        case "volunteer":
+          router.push("/volunteerview");
+          break;
+        default:
+          break;
+      }
+    }
+  }, [loggedIn, role, router]);
+
+  return <>{!loggedIn && <LoginForm />}</>;
 }

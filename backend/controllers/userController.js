@@ -84,7 +84,7 @@ export const addUser = async (req, res) => {
         address,
         roleSpecificInfo,
         assignedPrograms,
-        assignedUsers
+        assignedUsers,
       });
       res.status(201).json(newUser);
     }
@@ -119,6 +119,20 @@ export const getUsersNonAdmins = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getUserRole = async (req, res) => {
+  try {
+    const email = req.params.email;
+    const user = await User.findOne({ email }).exec();
+    if (user) {
+      res.json({ role: user.role });
+    } else {
+      res.status(404).json({ error: "User not found" });
+    }
+  } catch (error) {
+    console.error("getUserRole Error:", error);
   }
 };
 
@@ -178,7 +192,7 @@ export const getVeteransByVolunteer = async (req, res) => {
       firstName: "asc",
     });
 
-    if (users) { 
+    if (users) {
       res.status(200).json(users);
     } else {
       res.status(404).json({ error: "Could not find users" });

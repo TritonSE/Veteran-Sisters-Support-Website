@@ -13,6 +13,7 @@ import { UserList } from "./UserList";
 import styles from "./UserProfile.module.css";
 import { VeteranDocuments } from "./VeteranProfileDocuments";
 import { VolunteerNotes } from "./VolunteerNotes";
+import { useAuth } from "@/contexts/AuthContext";
 
 type ProfileRenderingContext = {
   invalidContext: boolean;
@@ -113,12 +114,14 @@ export default function UserProfile({ userId }: { userId: string }) {
    * this component uses hardcoded viewerId and viewerRole values. Change
    * these values to test different views.
    */
-  const viewerId = "67cfa98b6fae2dc82fc19ef4";
-  const viewerRole = RoleEnum.VETERAN;
+  // const viewerId = "67b3ab035e17d37a2ba6b65d";
+  // const viewerRole = RoleEnum.ADMIN;
+
+  const { currentUserId, role } = useAuth();
 
   const [userProfile, setUserProfile] = useState<UserProfileType | undefined>(undefined);
   const [profileRenderingContext, setProfileRenderingContext] = useState(
-    getProfileRenderingContext(null, null, viewerRole, viewerId),
+    getProfileRenderingContext(null, null, currentUserId, role),
   );
   const [loading, setLoading] = useState(true);
 
@@ -133,7 +136,7 @@ export default function UserProfile({ userId }: { userId: string }) {
       .then((res) => {
         setUserProfile(res);
         setProfileRenderingContext(
-          getProfileRenderingContext(res?.role, userId, viewerRole, viewerId),
+          getProfileRenderingContext(res?.role, userId, role, currentUserId),
         );
         setLoading(false);
       })
