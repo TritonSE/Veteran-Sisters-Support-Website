@@ -1,9 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { auth } from "../../../firebase/firebase";
 
 import styles from "./NavBar.module.css";
 
 export const NavBar = () => {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    console.log("Logging out...");
+    await auth.signOut();
+    router.push("/login");
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.navMenu}>
@@ -24,11 +35,15 @@ export const NavBar = () => {
           </Link>
         </div>
       </div>
-      <Link href="/dummy?word=logout">
+      <button
+        onClick={() => {
+          handleLogout();
+        }}
+      >
         <div className={styles.logoutFrame}>
           <Image src="/logout.svg" alt="logout" width={20} height={20}></Image>
         </div>
-      </Link>
+      </button>
     </div>
   );
 };

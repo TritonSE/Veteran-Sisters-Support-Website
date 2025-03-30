@@ -84,7 +84,7 @@ export const addUser = async (req, res) => {
         address,
         roleSpecificInfo,
         assignedPrograms,
-        assignedUsers
+        assignedUsers,
       });
       res.status(201).json(newUser);
     }
@@ -119,6 +119,20 @@ export const getUsersNonAdmins = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getUserRole = async (req, res) => {
+  try {
+    const email = req.params.email;
+    const user = await User.findOne({ email }).exec();
+    if (user) {
+      res.json({ role: user.role });
+    } else {
+      res.status(404).json({ error: "User not found" });
+    }
+  } catch (error) {
+    console.error("getUserRole Error:", error);
   }
 };
 
@@ -178,11 +192,40 @@ export const getVeteransByVolunteer = async (req, res) => {
       firstName: "asc",
     });
 
-    if (users) { 
+    if (users) {
       res.status(200).json(users);
     } else {
       res.status(404).json({ error: "Could not find users" });
     }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { firstName, lastName, email, phoneNumber, age, gender } = req.body;
+
+    const update = {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      age,
+      roleSpecificInfo: {
+        serviceInfo: {
+          gender,
+        },
+      },
+    };
+
+    const updatedUser = await User.findByIdAndUpdate(id, update, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json(updatedUser);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
