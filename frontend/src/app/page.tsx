@@ -1,34 +1,27 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-
+import { AdminDashboard } from "./components/AdminDashboard";
+import { NavBar } from "./components/NavBar";
+import { StaffDashboard } from "./components/StaffDashboard";
+import { VeteranDashboard } from "./components/VeteranDashboard";
+import { VolunteerDashboard } from "./components/VolunteerDashboard";
 import { useAuth } from "./contexts/AuthContext";
-import LoginForm from "./login/page";
 
 export default function Home() {
-  const { loggedIn, role } = useAuth();
-  const router = useRouter();
-  useEffect(() => {
-    if (loggedIn) {
-      switch (role) {
-        case "admin":
-          router.push("/adminview");
-          break;
-        case "staff":
-          router.push("/staffview");
-          break;
-        case "veteran":
-          router.push("/veteranDashboard");
-          break;
-        case "volunteer":
-          router.push("/volunteerview");
-          break;
-        default:
-          break;
-      }
-    }
-  }, [loggedIn, role, router]);
+  const { userId, userRole } = useAuth();
 
-  return <>{!loggedIn && <LoginForm />}</>;
+  return (
+    <div>
+      <NavBar />
+      {userRole === "admin" ? (
+        <AdminDashboard adminId={userId} />
+      ) : userRole === "staff" ? (
+        <StaffDashboard staffId={userId} />
+      ) : userRole === "volunteer" ? (
+        <VolunteerDashboard volunteerId={userId} />
+      ) : (
+        <VeteranDashboard />
+      )}
+    </div>
+  );
 }

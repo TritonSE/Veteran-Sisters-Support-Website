@@ -1,16 +1,15 @@
-"use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { User, getUser } from "../api/userApi";
 import { FileUpload } from "../components/FileUpload";
-import { NavBar } from "../components/NavBar";
 import { VeteranFilesTable } from "../components/VeteranFilesTable";
 import { useAuth } from "../contexts/AuthContext";
 
-import styles from "./page.module.css";
+import { NavBar } from "./NavBar";
+import styles from "./VeteranDashboard.module.css";
 
-export default function VeteranDashboard() {
+export function VeteranDashboard() {
   const { userId, loading: authLoading } = useAuth();
   const [uploadPopup, setUploadPopup] = useState<boolean>(false);
   const [refreshDashboard, setRefreshDashboard] = useState<boolean>(false);
@@ -58,7 +57,6 @@ export default function VeteranDashboard() {
 
   return (
     <>
-      <NavBar />
       {currVeteran && (
         <div className={styles.page}>
           <div className={styles.topRow}>

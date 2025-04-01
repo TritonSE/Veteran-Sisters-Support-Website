@@ -28,7 +28,7 @@ export const NavBar = () => {
           </Link>
         </div>
         <div className={styles.home}>
-          <Link href="/dummy?word=home">
+          <Link href="/">
             <div className={styles.homeFrame}>
               <div className={styles.homeBackground}>
                 <Image src="/home.svg" alt="Home" width={17.778} height={17.778}></Image>
