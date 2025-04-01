@@ -1,13 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { useEffect } from "react";
 
-import { useAuth } from "../contexts/AuthContext";
-
+import { useAuth } from "./contexts/AuthContext";
 import LoginForm from "./login/page";
-import styles from "./page.module.css";
 
 export default function Home() {
   const { loggedIn, role } = useAuth();

@@ -13,7 +13,8 @@ import { UserList } from "./UserList";
 import styles from "./UserProfile.module.css";
 import { VeteranDocuments } from "./VeteranProfileDocuments";
 import { VolunteerNotes } from "./VolunteerNotes";
-import { useAuth } from "@/contexts/AuthContext";
+
+import { useAuth } from "@/app/contexts/AuthContext";
 
 type ProfileRenderingContext = {
   invalidContext: boolean;
@@ -108,89 +109,122 @@ function getProfileRenderingContext(
   return context;
 }
 
-export default function UserProfile({ userId }: { userId: string }) {
-  /**
-   * NOTE: Because there is no authentication context at the moment,
-   * this component uses hardcoded viewerId and viewerRole values. Change
-   * these values to test different views.
-   */
-  // const viewerId = "67b3ab035e17d37a2ba6b65d";
-  // const viewerRole = RoleEnum.ADMIN;
-
-  const { currentUserId, role } = useAuth();
-
+export default function UserProfile({ profileUserId }: { profileUserId: string }) {
+  const { userId, userRole } = useAuth();
   const [userProfile, setUserProfile] = useState<UserProfileType | undefined>(undefined);
   const [profileRenderingContext, setProfileRenderingContext] = useState(
-    getProfileRenderingContext(null, null, currentUserId, role),
+    getProfileRenderingContext(null, null, userId, userRole),
   );
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log("UserProfile useEffect:", { profileUserId, userId, userRole });
+
     const fetchUserProfile = async () => {
-      const res = await getUserProfile(userId);
-      if (res.success) {
-        return res.data;
+      try {
+        if (!profileUserId) {
+          console.error("No profileUserId provided");
+          setError("No user ID provided");
+          setLoading(false);
+          return;
+        }
+
+        console.log("Fetching profile for user:", profileUserId);
+        const res = await getUserProfile(profileUserId);
+        if (res.success) {
+          console.log("Successfully fetched profile:", res.data);
+          setUserProfile(res.data);
+          setProfileRenderingContext(
+            getProfileRenderingContext(res.data.role, profileUserId, userRole, userId),
+          );
+        } else {
+          console.error("Failed to fetch profile:", res.error);
+          setError(res.error || "Failed to fetch user profile");
+        }
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+        setError(
+          err instanceof Error ? err.message : "An error occurred while fetching the profile",
+        );
+      } finally {
+        setLoading(false);
       }
     };
-    fetchUserProfile()
-      .then((res) => {
-        setUserProfile(res);
-        setProfileRenderingContext(
-          getProfileRenderingContext(res?.role, userId, role, currentUserId),
-        );
-        setLoading(false);
-      })
-      .catch((err: unknown) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, []);
 
-  if (!loading)
+    void fetchUserProfile();
+  }, [profileUserId, userId, userRole]);
+
+  if (loading) {
     return (
-      <>
-        {profileRenderingContext?.invalidContext ? (
-          <h1>Error: Invalid Profile Rendering Context</h1>
-        ) : (
-          <div className={styles.userProfile}>
-            {profileRenderingContext?.viewingPersonalProfile ? (
-              <div className={styles.profileHeading}>Profile Information</div>
-            ) : (
-              <NavigateBack />
-            )}
-            <div className={styles.userProfileContent}>
-              <ProfileHeader
-                firstName={userProfile?.firstName}
-                lastName={userProfile?.lastName}
-                role={userProfile?.role}
-                assignedPrograms={userProfile?.assignedPrograms}
-                yearJoined={userProfile?.yearJoined}
-                age={userProfile?.age}
-                phoneNumber={userProfile?.phoneNumber}
-                gender={userProfile?.roleSpecificInfo?.serviceInfo?.gender}
-                email={userProfile?.email}
-                isPersonalProfile={profileRenderingContext.viewingPersonalProfile}
-                isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
-              />
-              <div className={styles.userProfileInnerContent}>
-                {profileRenderingContext.showVolunteerNotes && <VolunteerNotes userId={userId} />}
-                {profileRenderingContext.showUserList && (
-                  <UserList
-                    userProfile={userProfile}
-                    title={profileRenderingContext.userListTitle}
-                    editable={profileRenderingContext.userListEditable}
-                    minimized={profileRenderingContext.showVolunteerNotes}
-                  />
-                )}
-              </div>
-              {userProfile?.role === RoleEnum.VETERAN && (
-                <div style={{ width: "100%" }}>
-                  <VeteranDocuments uploader={userId} />
-                </div>
+      <div className={styles.userProfile}>
+        <div className={styles.loading}>Loading profile...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.userProfile}>
+        <div className={styles.error}>Error: {error}</div>
+      </div>
+    );
+  }
+
+  if (!userProfile) {
+    return (
+      <div className={styles.userProfile}>
+        <div className={styles.error}>Profile not found</div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {profileRenderingContext?.invalidContext ? (
+        <h1>Error: Invalid Profile Rendering Context</h1>
+      ) : (
+        <div className={styles.userProfile}>
+          {profileRenderingContext?.viewingPersonalProfile ? (
+            <div className={styles.profileHeading}>Profile Information</div>
+          ) : (
+            <NavigateBack />
+          )}
+          <div className={styles.userProfileContent}>
+            <ProfileHeader
+              firstName={userProfile.firstName}
+              lastName={userProfile.lastName}
+              role={userProfile.role}
+              assignedPrograms={userProfile.assignedPrograms}
+              yearJoined={userProfile.yearJoined}
+              age={userProfile.age}
+              phoneNumber={userProfile.phoneNumber}
+              gender={userProfile.roleSpecificInfo?.serviceInfo?.gender}
+              email={userProfile.email}
+              isPersonalProfile={profileRenderingContext.viewingPersonalProfile}
+              isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
+            />
+            <div className={styles.userProfileInnerContent}>
+              {profileRenderingContext.showVolunteerNotes && (
+                <VolunteerNotes userId={profileUserId} />
+              )}
+              {profileRenderingContext.showUserList && (
+                <UserList
+                  userProfile={userProfile}
+                  title={profileRenderingContext.userListTitle}
+                  editable={profileRenderingContext.userListEditable}
+                  minimized={profileRenderingContext.showVolunteerNotes}
+                />
               )}
             </div>
+            {userProfile.role === RoleEnum.VETERAN && (
+              <div style={{ width: "100%" }}>
+                <VeteranDocuments uploader={profileUserId} />
+              </div>
+            )}
           </div>
-        )}
-      </>
-    );
+        </div>
+      )}
+    </>
+  );
 }

@@ -2,17 +2,17 @@
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 
-import CustomDropdown from "./CustomDropdown";
-import styles from "./EditProfile.module.css";
-import NavigateBack from "./NavigateBack";
-
 import {
   Gender,
   UserProfile as UserProfileType,
   getUserProfile,
   updateUserProfile,
-} from "@/app/api/profileApi";
-import { Button } from "@/app/components/Button";
+} from "../api/profileApi";
+
+import { Button } from "./Button";
+import CustomDropdown from "./CustomDropdown";
+import styles from "./EditProfile.module.css";
+import NavigateBack from "./NavigateBack";
 
 function Field(params: { label: string; children: ReactNode }) {
   const { children, label } = params;
@@ -28,8 +28,9 @@ function Field(params: { label: string; children: ReactNode }) {
 
 export default function EditProfile({ userId }: { userId: string }) {
   const router = useRouter();
-  const [userProfile, setUserProfile] = useState<UserProfileType | undefined>(undefined);
+  const [userProfile, setUserProfile] = useState<UserProfileType | null>(null);
   const [genderSelectOpen, setGenderSelectOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -40,53 +41,61 @@ export default function EditProfile({ userId }: { userId: string }) {
     };
     fetchUserProfile()
       .then((res) => {
-        setUserProfile(res);
+        if (res) {
+          setUserProfile(res);
+        }
       })
       .catch((err: unknown) => {
         console.error(err);
+        setError("Failed to load profile");
       });
-  }, []);
+  }, [userId]);
 
-  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError(null);
 
-    const inputs: NodeListOf<HTMLInputElement> = document.querySelectorAll(
-      `input.${styles.fieldInput}`,
-    );
+    const formData = new FormData(event.currentTarget);
+    const firstName = formData.get("firstName") as string;
+    const lastName = formData.get("lastName") as string;
+    const email = formData.get("email") as string;
+    const phoneNumber = formData.get("phoneNumber") as string;
+    const age = Number(formData.get("age") as string);
+    const gender = userProfile?.roleSpecificInfo?.serviceInfo?.gender ?? "";
 
-    const formData = {
-      firstName: inputs[0]?.value,
-      lastName: inputs[1]?.value,
-      email: inputs[2]?.value,
-      phoneNumber: inputs[3]?.value,
-      age: Number(inputs[4]?.value),
-      gender: userProfile?.roleSpecificInfo?.serviceInfo?.gender ?? "",
-    };
-
-    const form = document.querySelector("form");
-    if (form && !form.reportValidity()) {
-      return; // Prevent navigation if validation fails
+    if (!firstName || !lastName || !email || !phoneNumber || !age) {
+      setError("Please fill in all required fields");
+      return;
     }
 
     const response = await updateUserProfile(
       userId,
-      formData?.firstName,
-      formData?.lastName,
-      formData?.email,
-      formData?.phoneNumber,
-      formData?.age,
-      formData?.gender,
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      age,
+      gender,
     );
 
     if (!response.success) {
-      return; // TODO: show some error UI
+      setError(response.error ?? "Failed to update profile");
+      return;
     }
 
     router.back();
   };
 
+  if (error) {
+    return (
+      <div className={styles.editProfile}>
+        <div className={styles.error}>{error}</div>
+      </div>
+    );
+  }
+
   return (
-    <form className={styles.editProfile}>
+    <form className={styles.editProfile} onSubmit={(e) => void handleSubmit(e)}>
       <NavigateBack />
       <div className={styles.editProfileHeader}>Edit profile information</div>
 
@@ -94,30 +103,34 @@ export default function EditProfile({ userId }: { userId: string }) {
         <div className={styles.editName}>
           <Field label="First Name">
             <input
+              name="firstName"
               defaultValue={userProfile?.firstName}
               required
               className={styles.fieldInput}
-            ></input>
+            />
           </Field>
           <Field label="Last Name">
             <input
+              name="lastName"
               defaultValue={userProfile?.lastName}
               required
               className={styles.fieldInput}
-            ></input>
+            />
           </Field>
         </div>
         <Field label="Email">
           <input
+            name="email"
             required
             defaultValue={userProfile?.email}
             type="email"
             className={styles.fieldInput}
-          ></input>
+          />
         </Field>
 
         <Field label="Phone Number">
           <input
+            name="phoneNumber"
             required
             defaultValue={userProfile?.phoneNumber ?? ""}
             placeholder="xxx-xxx-xxxx"
@@ -125,15 +138,16 @@ export default function EditProfile({ userId }: { userId: string }) {
             pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
             title="Please enter a phone number in the format: xxx-xxx-xxxx"
             className={styles.fieldInput}
-          ></input>
+          />
         </Field>
         <Field label="Age">
           <input
+            name="age"
             required
             className={styles.fieldInput}
             defaultValue={userProfile?.age ?? undefined}
             type="number"
-          ></input>
+          />
         </Field>
         <Field label="Gender">
           <CustomDropdown
@@ -145,22 +159,22 @@ export default function EditProfile({ userId }: { userId: string }) {
             fullWidth={true}
             onSelect={(option) => {
               setUserProfile((userProfileLocal) => {
-                return userProfileLocal
-                  ? {
-                      ...userProfileLocal,
-                      roleSpecificInfo: {
-                        ...userProfileLocal?.roleSpecificInfo,
-                        serviceInfo: {
-                          ...userProfileLocal?.roleSpecificInfo?.serviceInfo,
-                          gender: option as Gender,
-                        },
-                      },
-                    }
-                  : undefined;
+                if (!userProfileLocal) return null;
+                const updatedProfile: UserProfileType = {
+                  ...userProfileLocal,
+                  roleSpecificInfo: {
+                    ...userProfileLocal.roleSpecificInfo,
+                    serviceInfo: {
+                      ...userProfileLocal.roleSpecificInfo?.serviceInfo,
+                      gender: option as Gender,
+                    },
+                  },
+                };
+                return updatedProfile;
               });
             }}
             selected={userProfile?.roleSpecificInfo?.serviceInfo?.gender}
-          ></CustomDropdown>
+          />
         </Field>
       </div>
       <div className={styles.formControls}>
@@ -178,7 +192,7 @@ export default function EditProfile({ userId }: { userId: string }) {
               router.back();
             }}
           />
-          <Button label="Save" filled={true} onClick={handleSubmit} type="submit" />
+          <Button label="Save" filled={true} type="submit" />
         </div>
       </div>
     </form>

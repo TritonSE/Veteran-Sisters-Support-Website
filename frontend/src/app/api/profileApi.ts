@@ -1,4 +1,15 @@
-import { APIResult, get, handleAPIError, post } from "./requests";
+import { APIResult, get, handleAPIError, patch, post } from "./requests";
+
+export type ServiceInfo = {
+  dateServiceEnded?: Date;
+  branchOfService?: BranchOfService;
+  currentMilitaryStatus?: CurrentMilitaryStatus;
+  gender?: Gender;
+};
+
+export type RoleSpecificInfo = {
+  serviceInfo?: ServiceInfo;
+};
 
 export type UserProfile = {
   _id?: string;
@@ -8,14 +19,7 @@ export type UserProfile = {
   assignedPrograms: AssignedProgram[] | undefined;
   yearJoined?: number;
   age?: number;
-  roleSpecificInfo?: {
-    serviceInfo?: {
-      dateServiceEnded?: Date;
-      branchOfService?: BranchOfService;
-      currentMilitaryStatus?: CurrentMilitaryStatus;
-      gender?: Gender;
-    };
-  };
+  roleSpecificInfo?: RoleSpecificInfo;
   gender?: string;
   phoneNumber?: string;
   role: Role | undefined;
@@ -96,6 +100,7 @@ function parseProfileComment(comment: ProfileCommentRequest[]): ProfileComment[]
 export async function getUserProfile(userId: string): Promise<APIResult<UserProfile>> {
   try {
     const response = await get(`/users/id/${userId}`);
+    console.log(response);
     if (!response.ok) {
       return handleAPIError(response);
     }
@@ -116,17 +121,13 @@ export const updateUserProfile = async (
   gender: Gender,
 ) => {
   try {
-    const response = await fetch(`http://localhost:4000/api/users/id/${userId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
-        age,
-        gender,
-      }),
+    const response = await patch(`/users/id/${userId}`, {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      age,
+      gender,
     });
     if (!response.ok) {
       return { success: false, error: response.statusText };

@@ -12,6 +12,7 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { Comment, FileObject, editFileObject, getFileById } from "../api/fileApi";
 import { User, getUser } from "../api/userApi";
+import { useAuth } from "../contexts/AuthContext";
 
 import { DocumentComment } from "./DocumentComment";
 import styles from "./DocumentView.module.css";
@@ -36,6 +37,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
   const [currTitle, setCurrTitle] = useState<string>();
 
   const [currUser, setCurrUser] = useState<User>();
+  const { userId } = useAuth();
 
   useEffect(() => {
     getFileById(documentId)
@@ -58,17 +60,19 @@ export function DocumentView({ documentId }: DocumentViewProps) {
       .catch((error: unknown) => {
         console.log(error);
       });
-    getUser("67b2e046432b1fc7da8b533c")
-      .then((response) => {
-        if (response.success) {
-          setCurrUser(response.data);
-          console.log(response.data);
-        }
-      })
-      .catch((error: unknown) => {
-        console.log(error);
-      });
-  }, []);
+    if (userId) {
+      getUser(userId)
+        .then((response) => {
+          if (response.success) {
+            setCurrUser(response.data);
+            console.log(response.data);
+          }
+        })
+        .catch((error: unknown) => {
+          console.log(error);
+        });
+    }
+  }, [userId]);
 
   const changeTitleHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" && file) {

@@ -2,15 +2,17 @@
 
 import { useParams } from "next/navigation";
 
+import { NavBar } from "../../components/NavBar";
 import UserProfile from "../../components/UserProfile";
 
 import styles from "./page.module.css";
 
 export default function Page() {
-    const params = useParams();
+  const params = useParams();
   return (
     <div className={styles.profilePage}>
-      <UserProfile userId={params.userId as string} />
+      <NavBar />
+      <UserProfile profileUserId={params.userId as string} />
     </div>
   );
 }

@@ -7,7 +7,7 @@ import EditProfile from "../../../components/EditProfile";
 import styles from "./page.module.css";
 
 export default function Page() {
-    const params = useParams();
+  const params = useParams();
   return (
     <div className={styles.editProfilePage}>
       <EditProfile userId={params.userId as string} />

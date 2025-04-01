@@ -141,3 +141,4 @@ frontend/package-lock.json
 backend/package-lock.json
 
 .firebase/*
+package-lock.json
