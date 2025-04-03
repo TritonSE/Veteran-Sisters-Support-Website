@@ -21,7 +21,7 @@ export const NavBar = () => {
     <div className={styles.container}>
       <div className={styles.navMenu}>
         <div className={styles.profile}>
-          <Link href={`/profile/${userId}`}>
+          <Link href={{ pathname: "/profile", query: { userId } }}>
             <div className={styles.profileFrame}>
               <Image src="/profile_icon.svg" alt="Profile" width={24} height={24}></Image>
             </div>

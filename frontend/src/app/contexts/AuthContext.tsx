@@ -20,10 +20,10 @@ type ApiUserResponse = {
 
 const getUserIdAndRole = async (email: string): Promise<UserReturn> => {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
     console.log(`Fetching user data for email: ${email} from ${apiUrl}`);
 
-    const response = await fetch(`${apiUrl}/api/users/email/${encodeURIComponent(email)}`);
+    const response = await fetch(`${apiUrl}/users/email/${encodeURIComponent(email)}`);
 
     if (response.status === 404) {
       console.log(`User not found for email: ${email}`);

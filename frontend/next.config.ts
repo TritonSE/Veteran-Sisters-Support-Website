@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
 
     return config;
   },
+  images: {
+    unoptimized: true,
+  },
+  trailingSlash: true,
 };
 
 export default nextConfig;

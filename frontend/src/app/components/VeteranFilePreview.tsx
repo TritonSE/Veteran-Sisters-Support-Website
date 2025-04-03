@@ -71,7 +71,7 @@ export function VeteranFilePreview({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8, width: 220 }}>
-      <Link className={styles.documentPreview} href={`/document/${documentId}`}>
+      <Link className={styles.documentPreview} href={{ pathname: "/document", query: { documentId } }}>
         {fileURL ? (
           <Document
             className={styles.document}

@@ -27,7 +27,7 @@ export function AdminStaffUserItem({ user }: AdminStaffUserItemProp) {
 
   return (
     <div className={styles.container}>
-      <Link href={`/profile/${user._id}`} className={styles.link}>
+      <Link href={{ pathname: "/profile", query: { userId: user._id } }} className={styles.link}>
         <div className={styles.verticalDivider}></div>
         <div className={styles.name}>
           <div className={styles.nameFrame}>
