@@ -3,10 +3,12 @@
  * https://github.com/TritonSE/TSE-Fulcrum/blob/main/frontend/src/api.ts
  */
 
+import { getAuthHeaders } from "./authHeaders";
+
 /**
  * A custom type defining which HTTP methods we will handle in this file
  */
-type Method = "GET" | "POST" | "PUT" | "PATCH";
+type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 /**
  * The first part of the backend API URL, which we will automatically prepend to
@@ -38,7 +40,12 @@ async function fetchRequest(
 ): Promise<Response> {
   const hasBody = body !== undefined;
 
-  const newHeaders = { ...headers };
+  // Get the auth headers
+  const authHeaders = await getAuthHeaders();
+
+  // Merge the auth headers with the provided headers
+  const newHeaders = { ...authHeaders, ...headers };
+
   if (hasBody) {
     newHeaders["Content-Type"] = "application/json";
   }
@@ -143,6 +150,24 @@ export async function patch(
   headers: Record<string, string> = {},
 ): Promise<Response> {
   const response = await fetchRequest("PATCH", API_BASE_URL + url, body, headers);
+  void assertOk(response);
+  return response;
+}
+
+/**
+ * Sends a DELETE request to the provided API URL.
+ *
+ * @param url The URL to request
+ * @param body The body of the request, or undefined if there is none
+ * @param headers The headers of the request (optional)
+ * @returns The Response object returned by `fetch()`
+ */
+export async function del(
+  url: string,
+  body?: unknown,
+  headers: Record<string, string> = {},
+): Promise<Response> {
+  const response = await fetchRequest("DELETE", API_BASE_URL + url, body, headers);
   void assertOk(response);
   return response;
 }

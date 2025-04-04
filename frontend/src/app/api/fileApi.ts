@@ -1,4 +1,4 @@
-import { APIResult, get, handleAPIError, post, put } from "./requests";
+import { APIResult, del, get, handleAPIError, post, put } from "./requests";
 import { User } from "./userApi";
 
 export type Comment = {
@@ -130,12 +130,7 @@ export const editCommentObject = async (
 
 export const deleteCommentObject = async (id: string): Promise<APIResult<void>> => {
   try {
-    const response = await fetch(`http://localhost:4000/api/comment/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await del(`/comment/${id}`);
     if (!response.ok) {
       return handleAPIError(response);
     }

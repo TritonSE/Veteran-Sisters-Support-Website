@@ -2,6 +2,8 @@ import { User, onAuthStateChanged } from "firebase/auth";
 import React, { ReactNode, useContext, useEffect, useMemo, useState } from "react";
 
 import { auth } from "../../../firebase/firebase";
+import { setCurrentUserInfo } from "../api/authHeaders";
+import { get } from "../api/requests";
 
 type UserReturn = {
   id: string;
@@ -20,21 +22,13 @@ type ApiUserResponse = {
 
 const getUserIdAndRole = async (email: string): Promise<UserReturn> => {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
-    console.log(`Fetching user data for email: ${email} from ${apiUrl}`);
+    console.log(`Fetching user data for email: ${email}`);
 
-    const response = await fetch(`${apiUrl}/users/email/${encodeURIComponent(email)}`);
+    const response = await get(`/users/email/${encodeURIComponent(email)}`);
 
     if (response.status === 404) {
       console.log(`User not found for email: ${email}`);
       return { id: "", role: "" };
-    }
-
-    if (!response.ok) {
-      console.error(
-        `Failed to fetch user ID. Status: ${String(response.status)}, Status Text: ${response.statusText}`,
-      );
-      throw new Error(`Failed to fetch user ID: ${String(response.status)} ${response.statusText}`);
     }
 
     const data = (await response.json()) as ApiUserResponse;
@@ -84,6 +78,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setUserId(id);
           setUserRole(role);
           setLoading(false);
+          // Update the auth headers with the current user info
+          setCurrentUserInfo(id, role);
         });
       } else {
         // If no user is signed in, reset the state
@@ -91,6 +87,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUserId("");
         setUserRole("");
         setLoading(false);
+        // Clear the auth headers
+        setCurrentUserInfo("", "");
       }
     });
 

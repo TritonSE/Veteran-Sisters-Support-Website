@@ -1,5 +1,5 @@
 import { UserProfile } from "./profileApi";
-import { APIResult, get, handleAPIError, post, put } from "./requests"; // Update path as needed
+import { APIResult, del, get, handleAPIError, post, put } from "./requests"; // Update path as needed
 
 export type ActiveVolunteer = {
   assignedProgram: string;
@@ -12,14 +12,14 @@ export const getVolunteersByProgram = async (
   program: string,
 ): Promise<APIResult<UserProfile[]>> => {
   try {
-    const response = await get(`/users?assignedProgram=${program}`);
+    const response = await get(`/users?assignedProgram=${program}&role=staff&role=volunteer`);
     if (!response.ok) {
       return { success: false, error: response.statusText };
     }
     const data = (await response.json()) as UserProfile[];
     return { success: true, data };
-  } catch (error: unknown) {
-    return { success: false, error: (error as Error).message };
+  } catch (error) {
+    return handleAPIError(error);
   }
 };
 
@@ -72,13 +72,7 @@ export const removeVolunteerFromVeteran = async (
     };
 
     // First request to remove volunteer from activeVolunteer schema
-    const response = await fetch(`http://localhost:4000/api/activeVolunteers/${volunteerEmail}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBodyVolunteer),
-    });
+    const response = await del(`/activeVolunteers/${volunteerEmail}`, requestBodyVolunteer);
     if (!response.ok) {
       return handleAPIError(response);
     }
