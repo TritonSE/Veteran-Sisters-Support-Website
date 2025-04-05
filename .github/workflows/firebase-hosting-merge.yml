@@ -12,7 +12,7 @@ jobs:
         env:
           FIREBASE_FRONTEND: ${{ secrets.FIREBASE_FRONTEND_KEYS }}
         run: |
-          cd frontend/
+          cd frontend
           touch .env
           echo "NEXT_PUBLIC_FIREBASE=$FIREBASE_FRONTEND"
           echo "NEXT_PUBLIC_API_URL=/api"
@@ -24,7 +24,7 @@ jobs:
           MONGO_URL: ${{ secrets.MONGO_URL }}
           FIREBASE_SERVICE: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VETERAN_SISTERS }}
         run: |
-          cd backend/
+          cd backend
           touch .env
           echo "DATABASE_URL=$MONGO_URL" >> .env
           echo "BACKEND_FIREBASE_SERVICE_ACCOUNT=$FIREBASE_SERVICE" >> .env
