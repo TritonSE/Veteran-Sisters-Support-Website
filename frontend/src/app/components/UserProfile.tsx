@@ -119,8 +119,6 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log("UserProfile useEffect:", { profileUserId, userId, userRole });
-
     const fetchUserProfile = async () => {
       try {
         if (!profileUserId) {
@@ -130,10 +128,8 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
           return;
         }
 
-        console.log("Fetching profile for user:", profileUserId);
         const res = await getUserProfile(profileUserId);
         if (res.success) {
-          console.log("Successfully fetched profile:", res.data);
           setUserProfile(res.data);
           setProfileRenderingContext(
             getProfileRenderingContext(res.data.role, profileUserId, userRole, userId),
@@ -206,7 +202,7 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
             />
             <div className={styles.userProfileInnerContent}>
               {profileRenderingContext.showVolunteerNotes && (
-                <VolunteerNotes userId={profileUserId} />
+                <VolunteerNotes profileUserId={profileUserId} />
               )}
               {profileRenderingContext.showUserList && (
                 <UserList

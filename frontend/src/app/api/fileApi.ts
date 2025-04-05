@@ -45,7 +45,6 @@ export const createFileObject = async (
       return handleAPIError(response);
     }
     const data = (await response.json()) as FileObject;
-    console.log("Data: ", data);
     return { success: true, data };
   } catch (error: unknown) {
     return { success: false, error: (error as Error).message };
@@ -87,7 +86,6 @@ export const createCommentObject = async (
       return handleAPIError(response);
     }
     const data = (await response.json()) as Comment;
-    console.log("Data: ", data);
     return { success: true, data };
   } catch (error: unknown) {
     return { success: false, error: (error as Error).message };
@@ -104,7 +102,6 @@ export const editFileObject = async (
       return handleAPIError(response);
     }
     const data = (await response.json()) as FileObject;
-    console.log("Data: ", data);
     return { success: true, data };
   } catch (error: unknown) {
     return { success: false, error: (error as Error).message };
@@ -121,7 +118,6 @@ export const editCommentObject = async (
       return handleAPIError(response);
     }
     const data = (await response.json()) as Comment;
-    console.log("Data: ", data);
     return { success: true, data };
   } catch (error: unknown) {
     return { success: false, error: (error as Error).message };

@@ -21,7 +21,6 @@ export function VeteranFilesTable({ veteranId, refresh }: VeteranFilesTableProps
       .then((result) => {
         if (result.success) {
           setFileObjects(result.data);
-          console.log(result.data);
         } else {
           console.log(result.error);
         }

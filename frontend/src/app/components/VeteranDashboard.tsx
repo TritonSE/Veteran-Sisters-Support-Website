@@ -18,15 +18,11 @@ export function VeteranDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("Auth state:", { userId, authLoading });
-
     if (!authLoading && userId) {
-      console.log("Fetching user data for ID:", userId);
       setLoading(true);
       getUser(userId)
         .then((response) => {
           if (response.success) {
-            console.log("Successfully fetched user data:", response.data);
             setCurrVeteran(response.data);
           } else {
             console.error("Failed to fetch user data:", response.error);

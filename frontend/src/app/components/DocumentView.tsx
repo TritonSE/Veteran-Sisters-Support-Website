@@ -55,7 +55,6 @@ export function DocumentView({ documentId }: DocumentViewProps) {
     getDownloadURL(ref(storage, `files/${documentId}`))
       .then((url) => {
         setFileURL(url);
-        console.log(url);
       })
       .catch((error: unknown) => {
         console.log(error);
@@ -65,7 +64,6 @@ export function DocumentView({ documentId }: DocumentViewProps) {
         .then((response) => {
           if (response.success) {
             setCurrUser(response.data);
-            console.log(response.data);
           }
         })
         .catch((error: unknown) => {

@@ -12,7 +12,6 @@ export const NavBar = () => {
   const { userId } = useAuth();
 
   const handleLogout = async () => {
-    console.log("Logging out...");
     await auth.signOut();
     router.push("/login");
   };

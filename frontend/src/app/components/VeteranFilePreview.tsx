@@ -46,12 +46,10 @@ export function VeteranFilePreview({
     getDownloadURL(ref(storage, `files/${documentId}`))
       .then((url) => {
         setFileURL(url);
-        console.log(url);
       })
       .catch((error: unknown) => {
         console.log(error);
       });
-    console.log(latestComment);
   }, []);
 
   function onDocumentLoadSuccess({ numPages: totalPages }: { numPages: number }): void {

@@ -100,7 +100,6 @@ function parseProfileComment(comment: ProfileCommentRequest[]): ProfileComment[]
 export async function getUserProfile(userId: string): Promise<APIResult<UserProfile>> {
   try {
     const response = await get(`/users/id/${userId}`);
-    console.log(response);
     if (!response.ok) {
       return handleAPIError(response);
     }

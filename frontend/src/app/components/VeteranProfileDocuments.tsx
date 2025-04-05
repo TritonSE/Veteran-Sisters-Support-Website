@@ -38,10 +38,6 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
       .then((result) => {
         if (result.success) {
           setFileObjects(result.data);
-          console.log(
-            "Data: ",
-            result.data.filter((file) => file.programs.includes("OperationWellness")),
-          );
         } else {
           console.log(result.error);
         }

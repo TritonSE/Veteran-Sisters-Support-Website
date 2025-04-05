@@ -22,8 +22,6 @@ type ApiUserResponse = {
 
 const getUserIdAndRole = async (email: string): Promise<UserReturn> => {
   try {
-    console.log(`Fetching user data for email: ${email}`);
-
     const response = await get(`/users/email/${encodeURIComponent(email)}`);
 
     if (response.status === 404) {
@@ -32,7 +30,6 @@ const getUserIdAndRole = async (email: string): Promise<UserReturn> => {
     }
 
     const data = (await response.json()) as ApiUserResponse;
-    console.log(`Successfully fetched user data:`, data);
     return {
       id: data._id,
       role: data.role,
@@ -69,12 +66,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      console.log("Firebase auth state changed:", currentUser?.email);
       setUser(currentUser);
       if (currentUser?.email) {
         // Only make the API request if the user is signed in with Firebase
         void getUserIdAndRole(currentUser.email).then(({ id, role }) => {
-          console.log("Setting user data:", { id, role });
           setUserId(id);
           setUserRole(role);
           setLoading(false);
@@ -98,7 +93,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const value = useMemo(() => {
-    console.log("AuthContext value:", { user: user?.email, userId, userRole, loading });
     return {
       user,
       userId,
