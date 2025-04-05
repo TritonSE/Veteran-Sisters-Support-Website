@@ -40,5 +40,8 @@
     "husky": "^9.1.7",
     "prettier": "^3.4.2",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=22.13.0"
   }
 }
