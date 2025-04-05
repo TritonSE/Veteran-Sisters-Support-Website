@@ -38,5 +38,4 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VETERAN_SISTERS }}
           channelId: live
           projectId: veteran-sisters
-        env:
-          FIREBASE_CLI_EXPERIMENTS: webframeworks
+
