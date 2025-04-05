@@ -38,6 +38,3 @@ jobs:
           projectId: veteran-sisters
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
-    defaults:
-      run:
-        working-directory: frontend
