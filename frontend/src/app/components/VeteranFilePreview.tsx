@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
-import { storage } from "../../../firebase/firebase";
+import { storage } from "../../firebase/firebase";
 
 import styles from "./VeteranFilePreview.module.css";
 

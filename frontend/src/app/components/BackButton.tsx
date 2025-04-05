@@ -14,8 +14,8 @@ export const BackButton: React.FC<BackButtonProps> = ({ handlePrevious }) => {
         id="back"
         width={18}
         height={18}
-        src="backButton.svg"
-        alt=""
+        src="/backButton.svg"
+        alt="back"
         style={{ objectFit: "none" }}
         onClick={handlePrevious}
       ></Image>

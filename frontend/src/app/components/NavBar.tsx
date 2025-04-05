@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { auth } from "../../../firebase/firebase";
+import { auth } from "../../firebase/firebase";
 import { useAuth } from "../contexts/AuthContext";
 
 import styles from "./NavBar.module.css";

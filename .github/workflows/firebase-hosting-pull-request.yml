@@ -12,8 +12,30 @@ jobs:
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     steps:
+      steps:
       - uses: actions/checkout@v4
-      - run: npm ci
+      - name: Install frontend dependencies
+        env:
+          FIREBASE_FRONTEND: ${{ secrets.FIREBASE_FRONTEND_KEYS }}
+        run: |
+          cd frontend/
+          touch .env
+          echo "NEXT_PUBLIC_FIREBASE=$FIREBASE_FRONTEND"
+          echo "NEXT_PUBLIC_API_URL=/api"
+          cat .env
+          npm ci 
+          npm run build
+      - name: Install backend dependencies
+        env:
+          MONGO_URL: ${{ secrets.MONGO_URL }}
+          FIREBASE_SERVICE: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VETERAN_SISTERS }}
+        run: |
+          cd backend/
+          touch .env
+          echo "DATABASE_URL=$MONGO_URL" >> .env
+          echo "BACKEND_FIREBASE_SERVICE_ACCOUNT=$FIREBASE_SERVICE" >> .env
+          cat .env
+          npm ci
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}

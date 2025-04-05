@@ -4,7 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
 
-import { auth } from "../../../firebase/firebase";
+import { auth } from "../../firebase/firebase";
 import { Button } from "../components/Button";
 import SuccessNotification from "../components/SuccessNotification";
 

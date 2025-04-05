@@ -1,4 +1,4 @@
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 
 import { useAuth } from "./AuthContext";
@@ -7,26 +7,20 @@ type AuthContextWrapperProps = {
   children: ReactNode;
 };
 
-const PUBLIC_PATHS = ["/login", "/signup"];
-
 export function AuthContextWrapper({ children }: AuthContextWrapperProps) {
   const { loggedIn, loading } = useAuth();
   const router = useRouter();
-  const pathname = usePathname();
 
   useEffect(() => {
     // Don't redirect while loading
     if (loading) return;
 
-    // Allow access to public paths
-    if (PUBLIC_PATHS.includes(pathname)) return;
-
-    // Redirect to login if not logged in
+    // This is a protected route wrapper, so we don't need to check for public paths
+    // If user is not logged in, redirect to login
     if (!loggedIn) {
-      console.log("User not logged in, redirecting to login");
       router.push("/login");
     }
-  }, [loggedIn, loading, pathname, router]);
+  }, [loggedIn, loading, router]);
 
   // Show loading state
   if (loading) {
@@ -37,5 +31,6 @@ export function AuthContextWrapper({ children }: AuthContextWrapperProps) {
     );
   }
 
-  return <>{children}</>;
+  // Only render children if user is logged in
+  return loggedIn ? <>{children}</> : null;
 }

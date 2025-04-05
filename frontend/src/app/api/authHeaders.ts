@@ -1,4 +1,4 @@
-import { auth } from "../../../firebase/firebase";
+import { auth } from "../../firebase/firebase";
 
 // Store the current user's MongoDB ID and role
 let currentUserId = "";

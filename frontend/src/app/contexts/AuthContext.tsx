@@ -1,7 +1,7 @@
 import { User, onAuthStateChanged } from "firebase/auth";
 import React, { ReactNode, useContext, useEffect, useMemo, useState } from "react";
 
-import { auth } from "../../../firebase/firebase";
+import { auth } from "../../firebase/firebase";
 import { setCurrentUserInfo } from "../api/authHeaders";
 import { get } from "../api/requests";
 
@@ -78,7 +78,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         });
       } else {
         // If no user is signed in, reset the state
-        console.log("No user email available, resetting state");
         setUserId("");
         setUserRole("");
         setLoading(false);
