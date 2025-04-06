@@ -11,14 +11,14 @@ export const BackButton: React.FC<BackButtonProps> = ({ handlePrevious }) => {
   return (
     <div className={styles.backButton}>
       <Image
-        id="back"
+        src="/back_arrow_icon.svg"
         width={18}
         height={18}
-        src="/backButton.svg"
-        alt="back"
-        style={{ objectFit: "none" }}
-        onClick={handlePrevious}
-      ></Image>
+        alt="Go back"
+        onClick={() => {
+          handlePrevious();
+        }}
+      />
       <a
         href="#"
         onClick={(e) => {
