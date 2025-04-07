@@ -34,9 +34,9 @@ jobs:
           echo "BACKEND_FIREBASE_SERVICE_ACCOUNT=$FIREBASE_SERVICE" >> .env
           npm ci
       - uses: FirebaseExtended/action-hosting-deploy@v0
+        env:
+          BACKEND_FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VETERAN_SISTERS }}
         with:
-          env:
-            BACKEND_FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VETERAN_SISTERS }}
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VETERAN_SISTERS }}
           projectId: veteran-sisters
