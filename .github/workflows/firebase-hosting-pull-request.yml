@@ -26,7 +26,7 @@ jobs:
       - name: Install backend dependencies
         env:
           MONGO_URL: ${{ secrets.MONGO_URL }}
-          FIREBASE_SERVICE: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VETERAN_SISTERS }}
+          FIREBASE_SERVICE: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BACKEND }}
         run: |
           cd backend
           touch .env
