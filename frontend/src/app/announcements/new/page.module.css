@@ -1,0 +1,115 @@
+.container {
+  height: 100%;
+  background: var(--Neutral-Base-White, #fafafa);
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.page {
+  display: flex;
+  width: 100%;
+  padding: var(--Spacing-4xl, 80px) var(--Spacing-3xl, 64px);
+  justify-content: center;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+.frame {
+  display: flex;
+  max-width: 1024px;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 0 0;
+  top: 94px;
+  left: 156px;
+  padding-bottom: 100px;
+
+  gap: 40px;
+}
+
+.header {
+  color: var(--Text-3, #3a3c3d);
+
+  /* title large */
+  font-family: "Albert Sans";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  padding-bottom: 24px;
+  border-bottom: 1px solid #d0d7de;
+}
+
+.subheader {
+  font-family: "Albert Sans";
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+
+  width: 656px;
+  height: 38px;
+}
+
+.form {
+  font-family: "Albert Sans";
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputTitle {
+  width: 1024px;
+  height: 41px;
+  padding-top: 12.46px;
+  padding-bottom: 12.54px;
+  padding-left: 18.23px;
+  border-radius: 8px;
+  border-width: 1px;
+
+  border: 1px solid #d0d7de;
+  background: #ffffff;
+}
+
+.inputDetails {
+  width: 1024px;
+  height: 134px;
+  padding-top: 12.46px;
+  padding-left: 18.23px;
+  border-radius: 8px;
+  border-width: 1px;
+
+  border: 1px solid #d0d7de;
+  background: #ffffff;
+  resize: none;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 1024px;
+  gap: 24px;
+
+  font-family: "Albert Sans";
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
