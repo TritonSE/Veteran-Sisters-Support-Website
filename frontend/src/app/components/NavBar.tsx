@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 import { auth } from "../../../firebase/firebase";
 
@@ -8,6 +8,7 @@ import styles from "./NavBar.module.css";
 
 export const NavBar = () => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = async () => {
     console.log("Logging out...");
@@ -26,11 +27,30 @@ export const NavBar = () => {
           </Link>
         </div>
         <div className={styles.home}>
-          <Link href="/dummy?word=home">
+          <Link href="/">
             <div className={styles.homeFrame}>
-              <div className={styles.homeBackground}>
+              <div
+                className={
+                  pathname === "/" ||
+                  pathname === "/veteranDashboard" ||
+                  pathname === "/staffview" ||
+                  pathname === "/adminview" ||
+                  pathname === "/volunteerview"
+                    ? styles.selectedBackground
+                    : styles.unselectedBackground
+                }
+              >
                 <Image src="/home.svg" alt="Home" width={17.778} height={17.778}></Image>
               </div>
+            </div>
+          </Link>
+          <Link href="/reportform">
+            <div
+              className={
+                pathname === "/reportform" ? styles.selectedBackground : styles.unselectedBackground
+              }
+            >
+              <Image src="/reports.svg" alt="Home" width={17.778} height={17.778}></Image>
             </div>
           </Link>
         </div>
