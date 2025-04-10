@@ -9,7 +9,7 @@ import {
   getUserRole,
   updateUser,
   getVeteransByVolunteer,
-  updateUser
+  updateUserAssignment
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -30,6 +30,6 @@ router.delete("/users/:email", deleteUser);
 
 router.get("/users/role/:email", getUserRole);
 router.patch("/users/id/:id", updateUser);
-router.put("/users/:email", updateUser);
+router.put("/users/:email", updateUserAssignment);
 
 export default router;
