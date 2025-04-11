@@ -1,12 +1,33 @@
 import { APIResult } from "./fileApi";
-import { UserProfile } from "./profileApi";
+import { Role, UserProfile } from "./profileApi";
 
 export type ActiveVolunteer = {
   assignedProgram: string;
   assignedVeteran: string;
   volunteer: string;
   volunteerUser: UserProfile;
+  veteranUser: UserProfile;
 };
+
+export const getVeteransByProgram = async (
+  program: string,
+): Promise<APIResult<UserProfile[]>> => {
+  try {
+    const response = await fetch(`http://localhost:4000/api/users?role=veteran&assignedProgram=${program}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      return { success: false, error: response.statusText };
+    }
+    const data = (await response.json()) as UserProfile[];
+    return { success: true, data };
+  } catch (error: unknown) {
+    return { success: false, error: (error as Error).message };
+  }
+}
 
 export const getVolunteersByProgram = async (
   program: string,
@@ -28,18 +49,20 @@ export const getVolunteersByProgram = async (
   }
 };
 
-export const assignVolunteerToProgram = async (
+export const assignUserToProgram = async (
   volunteerEmail: string,
   veteranEmail: string,
   program: string,
   volunteerId: string,
+  veteranId: string,
 ): Promise<APIResult<ActiveVolunteer>> => {
   try {
     const requestBodyVolunteer = {
       userEmail: volunteerEmail,
       veteranEmail,
       program,
-      userId: volunteerId,
+      volunteerId,
+      veteranId,
     };
 
     // First fetch to add volunteer to activeVolunteer schema
@@ -50,6 +73,7 @@ export const assignVolunteerToProgram = async (
       },
       body: JSON.stringify(requestBodyVolunteer),
     });
+    console.log(requestBodyVolunteer)
 
     if (!response.ok) {
       console.log(response);
@@ -131,12 +155,14 @@ export const removeVolunteerFromVeteran = async (
   }
 };
 
-export const getVolunteersByVeteran = async (
-  veteranEmail: string,
+export const getAssignedUsers = async (
+  user: UserProfile
 ): Promise<APIResult<ActiveVolunteer[]>> => {
   try {
+    //fetch volunteers if user is veteran and vice versa
+    const query = `?${user.role === Role.VETERAN? `veteran=${user.email}` : `volunteer=${user.email}`}`;
     const response = await fetch(
-      `http://localhost:4000/api/activeVolunteers?veteran=${veteranEmail}`,
+      `http://localhost:4000/api/activeVolunteers${query}`,
       {
         method: "GET",
         headers: {
