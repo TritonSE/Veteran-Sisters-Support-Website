@@ -203,7 +203,7 @@ export const getVeteransByVolunteer = async (req, res) => {
   }
 };
 
-export const updateUser = async (req, res) => {
+export const updateUserId = async (req, res) => {
   try {
     const { id } = req.params;
     const { firstName, lastName, email, phoneNumber, age, gender } = req.body;
