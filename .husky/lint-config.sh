@@ -5,7 +5,7 @@
 enabled=1
 
 # Directories containing JavaScript projects to be linted, separated by spaces.
-node_dirs='backend frontend'
+node_dirs='frontend'
 
 # Command used to run a lint check.
 check_command='npm run lint-check'

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 import { Comment, FileObject, getFilesByUploader } from "../api/fileApi";
 
-import DocumentPreview from "./DocumentPreview";
 import { Tabs } from "./Tabs";
 import { VeteranFilePreview } from "./VeteranFilePreview";
 import styles from "./VeteranFilesTable.module.css";
@@ -22,7 +21,6 @@ export function VeteranFilesTable({ veteranId, refresh }: VeteranFilesTableProps
       .then((result) => {
         if (result.success) {
           setFileObjects(result.data);
-          console.log(result.data);
         } else {
           console.log(result.error);
         }

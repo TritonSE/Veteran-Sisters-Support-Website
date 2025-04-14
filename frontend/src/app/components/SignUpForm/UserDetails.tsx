@@ -141,8 +141,8 @@ export default function UserDetails({
             id="logo"
             width={142.288}
             height={16.66}
-            src="Logo.svg"
-            alt=""
+            src="/logo.svg"
+            alt="logo"
             style={{ objectFit: "contain" }}
           />
         </div>
@@ -280,7 +280,7 @@ export default function UserDetails({
               id="caret"
               width={20}
               height={20}
-              src="ic_caretdown.svg"
+              src="/ic_caretdown.svg"
               alt=""
               style={{
                 objectFit: "contain",

@@ -56,8 +56,8 @@ export default function OnboardingInterests({
             id="logo"
             width={142.288}
             height={16.66}
-            src="Logo.svg"
-            alt=""
+            src="/logo.svg"
+            alt="logo"
             style={{ objectFit: "contain" }}
           />
         </div>
@@ -76,7 +76,7 @@ export default function OnboardingInterests({
             <OnboardingOption
               isChecked={selectedOptions.includes("Get a battle buddy")}
               mainText={"Get a battle buddy"}
-              description={"Description about this option and why it’s good"}
+              description={"Description about this option and why it's good"}
               onClick={() => {
                 handleToggleOption("Get a battle buddy");
               }}
@@ -84,7 +84,7 @@ export default function OnboardingInterests({
             <OnboardingOption
               isChecked={selectedOptions.includes("Be a battle buddy")}
               mainText={"Be a battle buddy"}
-              description={"Description about this option and why it’s good"}
+              description={"Description about this option and why it's good"}
               onClick={() => {
                 handleToggleOption("Be a battle buddy");
               }}
@@ -92,7 +92,7 @@ export default function OnboardingInterests({
             <OnboardingOption
               isChecked={selectedOptions.includes("Get help filing for VA benefits")}
               mainText={"Get help filing for VA benefits"}
-              description={"Description about this option and why it’s good"}
+              description={"Description about this option and why it's good"}
               onClick={() => {
                 handleToggleOption("Get help filing for VA benefits");
               }}
@@ -100,7 +100,7 @@ export default function OnboardingInterests({
             <OnboardingOption
               isChecked={selectedOptions.includes("Get help filing for VA benefits")}
               mainText={"Get help filing for VA benefits"}
-              description={"Description about this option and why it’s good"}
+              description={"Description about this option and why it's good"}
               onClick={() => {
                 handleToggleOption("Get help filing for VA benefits");
               }}
@@ -110,7 +110,7 @@ export default function OnboardingInterests({
                 "Learn more about becoming a peer support specialist",
               )}
               mainText={"Learn more about becoming a peer support specialist"}
-              description={"Description about this option and why it’s good"}
+              description={"Description about this option and why it's good"}
               onClick={() => {
                 handleToggleOption("Learn more about becoming a peer support specialist");
               }}
@@ -118,7 +118,7 @@ export default function OnboardingInterests({
             <OnboardingOption
               isChecked={selectedOptions.includes("Wellness events")}
               mainText={"Wellness events"}
-              description={"Description about this option and why it’s good"}
+              description={"Description about this option and why it's good"}
               onClick={() => {
                 handleToggleOption("Wellness events");
               }}
@@ -126,7 +126,7 @@ export default function OnboardingInterests({
             <OnboardingOption
               isChecked={selectedOptions.includes("Social events")}
               mainText={"Social events"}
-              description={"Description about this option and why it’s good"}
+              description={"Description about this option and why it's good"}
               onClick={() => {
                 handleToggleOption("Social events");
               }}

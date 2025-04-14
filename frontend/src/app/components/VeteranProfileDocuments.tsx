@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-import { FileObject, getFilesByUploader } from "../api/fileApi";
+import { Comment, FileObject, getFilesByUploader } from "../api/fileApi";
 
-import DocumentPreview from "./DocumentPreview";
+import { VeteranFilePreview } from "./VeteranFilePreview";
 import styles from "./VeteranFilesTable.module.css";
 
 type VeteranDocumentProps = {
@@ -20,15 +20,24 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
 
   const [fileObjects, setFileObjects] = useState<FileObject[]>([]);
 
+  const getLatestComment = (comments: Comment[]) => {
+    let latest = new Date(Date.UTC(1900, 0, 1));
+    let changed = false;
+    for (const comment of comments) {
+      const date = new Date(comment.datePosted);
+      if (date > latest) {
+        latest = date;
+        changed = true;
+      }
+    }
+    return changed ? latest : undefined;
+  };
+
   useEffect(() => {
     getFilesByUploader(uploader)
       .then((result) => {
         if (result.success) {
           setFileObjects(result.data);
-          console.log(
-            "Data: ",
-            result.data.filter((file) => file.programs.includes("OperationWellness")),
-          );
         } else {
           console.log(result.error);
         }
@@ -55,12 +64,10 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
               .slice(0, 4)
               .map((file) => (
                 <div key={file._id}>
-                  <DocumentPreview
+                  <VeteranFilePreview
+                    documentId={file._id}
                     documentName={file.filename}
-                    fileType={
-                      file.filename.includes(".") ? (file.filename.split(".").pop() ?? "") : ""
-                    }
-                    component={true}
+                    latestComment={getLatestComment(file.comments)}
                   />
                 </div>
               ))}

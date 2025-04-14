@@ -42,8 +42,8 @@ export default function RoleSelection({
             id="logo"
             width={142.288}
             height={16.66}
-            src="Logo.svg"
-            alt=""
+            src="/logo.svg"
+            alt="logo"
             style={{ objectFit: "contain" }}
           />
         </div>
