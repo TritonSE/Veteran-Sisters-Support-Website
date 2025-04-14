@@ -6,19 +6,23 @@ import {
   getComments,
   postComment,
 } from "../api/profileApi";
+import { useAuth } from "../contexts/AuthContext";
 
 import { ProfilePicture } from "./ProfilePicture";
 import styles from "./VolunteerNotes.module.css";
 
-export function VolunteerNotes({ userId }: { userId: string }) {
+export function VolunteerNotes({ profileUserId }: { profileUserId: string }) {
   const [profileNotes, setProfileNotes] = useState<ProfileComment[] | undefined>([]);
   const [currentComment, setCurrentComment] = useState<string>("");
   // use this to trigger a re-fetch of the notes when new note posted
   const [profileNotesChanged, setProfileNotesChanged] = useState<boolean>(false);
+  const { userId } = useAuth();
 
   useEffect(() => {
     const fetchProfileNotes = async () => {
-      const res = await getComments(userId);
+      const res = await getComments(profileUserId);
+      console.log(res);
+      console.log(profileUserId);
       if (res.success) {
         return res.data;
       }
@@ -55,14 +59,13 @@ export function VolunteerNotes({ userId }: { userId: string }) {
             onClick={(event) => {
               event.preventDefault();
               const comment = {
-                profileId: userId,
-                commenterId: localStorage.getItem("viewerId") ?? "67a4255fc7beaa03529393dc",
+                profileId: profileUserId,
+                commenterId: userId,
                 comment: currentComment,
                 datePosted: new Date(),
               };
               postProfileNote(comment)
                 .then(() => {
-                  console.log("Comment posted");
                   setCurrentComment("");
                 })
                 .catch((err: unknown) => {

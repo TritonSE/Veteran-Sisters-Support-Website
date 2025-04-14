@@ -2,18 +2,17 @@
 
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
-import { auth } from "../../../firebase/firebase";
+import { auth } from "../../firebase/firebase";
+import { Button } from "../components/Button";
+import SuccessNotification from "../components/SuccessNotification";
 
 import styles from "./page.module.css";
 
-import { Button } from "@/app/components/Button";
-import SuccessNotification from "@/app/components/SuccessNotification";
-
 import "@fontsource/albert-sans";
 
-export default function LoginForm() {
+function LoginFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams(); // Search for query parameters
   const [showSuccess, setShowSuccess] = useState(false); // If user successfully signed up and was redirected
@@ -96,5 +95,13 @@ export default function LoginForm() {
       {showSuccess && <SuccessNotification message="User Created Successfully" />}
       {showLoggedin && <SuccessNotification message="User Logged In Successfully" />}
     </main>
+  );
+}
+
+export default function LoginForm() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginFormContent />
+    </Suspense>
   );
 }

@@ -10,7 +10,7 @@ import {
   editCommentObject,
   editFileObject,
 } from "../api/fileApi";
-import { User } from "../api/users";
+import { User } from "../api/userApi";
 
 import styles from "./DocumentComment.module.css";
 import { Program } from "./Program";
@@ -69,8 +69,8 @@ export function DocumentComment({
   const formatDate = (datePosted: string) => {
     const date = new Date(datePosted);
     const month = months[date.getMonth()];
-    const day = date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
-    const year = date.getFullYear();
+    const day = String(date.getDate()).padStart(2, "0");
+    const year = String(date.getFullYear());
     return `${month} ${day}, ${year}`;
   };
 
@@ -87,7 +87,7 @@ export function DocumentComment({
               setSelected(false);
             }
           })
-          .catch((error) => {
+          .catch((error: unknown) => {
             console.log(error);
           });
       } else {
@@ -108,12 +108,12 @@ export function DocumentComment({
                     setSelected(false);
                   }
                 })
-                .catch((error) => {
+                .catch((error: unknown) => {
                   console.log(error);
                 });
             }
           })
-          .catch((error) => {
+          .catch((error: unknown) => {
             console.log(error);
           });
       }
@@ -125,14 +125,18 @@ export function DocumentComment({
       .then((response) => {
         if (response.success && file) {
           const newCommentList = file.comments.slice(0, key).concat(file.comments.slice(key + 1));
-          editFileObject(file._id, { comments: newCommentList }).then((response2) => {
-            if (response2.success) {
-              setFile(response2.data);
-            }
-          });
+          editFileObject(file._id, { comments: newCommentList })
+            .then((response2) => {
+              if (response2.success) {
+                setFile(response2.data);
+              }
+            })
+            .catch((error: unknown) => {
+              console.log(error);
+            });
         }
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.log(error);
       });
   };
