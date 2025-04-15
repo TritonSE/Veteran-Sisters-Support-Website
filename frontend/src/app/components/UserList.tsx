@@ -21,8 +21,7 @@ export function UserList(params: {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogProgram, setDialogProgram] = useState("");
-  const [currentUsers, setCurrentUsers] =
-    useState<Record<string, UserProfileType[]>>(userPrograms);
+  const [currentUsers, setCurrentUsers] = useState<Record<string, UserProfileType[]>>(userPrograms);
 
   const openDialog = (program: string) => {
     setIsDialogOpen(true);
@@ -57,7 +56,7 @@ export function UserList(params: {
       }
 
       const users: [string, UserProfileType][] = res.data.map((profile) => {
-        const activeUser=
+        const activeUser =
           userProfile?.role === Role.VETERAN ? profile.volunteerUser : profile.veteranUser;
         return [profile.assignedProgram, activeUser];
       });
@@ -76,7 +75,6 @@ export function UserList(params: {
       console.error("Error fetching volunteer profiles:", error);
       throw new Error("Failed to fetch volunteers");
     }
-   
   };
 
   useEffect(() => {

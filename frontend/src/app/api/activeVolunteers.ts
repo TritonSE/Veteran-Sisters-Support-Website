@@ -9,9 +9,7 @@ export type ActiveVolunteer = {
   veteranUser: UserProfile;
 };
 
-export const getVeteransByProgram = async (
-  program: string,
-): Promise<APIResult<UserProfile[]>> => {
+export const getVeteransByProgram = async (program: string): Promise<APIResult<UserProfile[]>> => {
   try {
     const response = await get(`/users?role=veteran&assignedProgram=${program}`);
     if (!response.ok) {
@@ -22,7 +20,7 @@ export const getVeteransByProgram = async (
   } catch (error: unknown) {
     return handleAPIError(error);
   }
-}
+};
 
 export const getVolunteersByProgram = async (
   program: string,
@@ -113,11 +111,11 @@ export const removeVolunteerFromVeteran = async (
 };
 
 export const getAssignedUsers = async (
-  user: UserProfile
+  user: UserProfile,
 ): Promise<APIResult<ActiveVolunteer[]>> => {
   try {
     //fetch volunteers if user is veteran and vice versa
-    const query = `?${user.role === Role.VETERAN? `veteran=${user.email}` : `volunteer=${user.email}`}`;
+    const query = `?${user.role === Role.VETERAN ? `veteran=${user.email}` : `volunteer=${user.email}`}`;
     const response = await get(`/activeVolunteers${query}`);
     if (!response.ok) {
       return handleAPIError(response);

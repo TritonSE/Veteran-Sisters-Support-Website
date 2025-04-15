@@ -41,7 +41,7 @@ export const addVolunteer = async (req, res) => {
       assignedProgram: program,
       assignedVeteran: veteranEmail,
       volunteerUser: volunteerId,
-      veteranUser: veteranId
+      veteranUser: veteranId,
     }).exec();
 
     if (existingVolunteer) {
@@ -55,7 +55,7 @@ export const addVolunteer = async (req, res) => {
       assignedProgram: program,
       assignedVeteran: veteranEmail,
       volunteerUser: volunteerId,
-      veteranUser: veteranId
+      veteranUser: veteranId,
     });
 
     res.status(201).json(newVolunteer);
@@ -88,7 +88,7 @@ export const removeVolunteer = async (req, res) => {
     }
 
     // If a specific entry is found, delete it
-    await ActiveVolunteers.deleteOne({ volunteer: volunteerEntry.volunteer}).exec();
+    await ActiveVolunteers.deleteOne({ volunteer: volunteerEntry.volunteer }).exec();
 
     return res.status(200).json({ message: "Volunteer assignment removed successfully" });
   } catch (error) {

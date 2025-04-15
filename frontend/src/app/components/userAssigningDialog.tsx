@@ -3,7 +3,11 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
 
-import { assignUserToProgram, getVeteransByProgram, getVolunteersByProgram } from "../api/activeVolunteers";
+import {
+  assignUserToProgram,
+  getVeteransByProgram,
+  getVolunteersByProgram,
+} from "../api/activeVolunteers";
 import { Role as RoleEnum, UserProfile as UserProfileType } from "../api/profileApi";
 
 import { Program } from "./Program";
@@ -34,33 +38,33 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
     //if user is veteran, the dialog will show volunteers
     if (props.user.role === RoleEnum.VETERAN) {
       getVolunteersByProgram(props.program)
-      .then((response) => {
-        setIsLoading(false);
-        if (response.success) {
-          setVolunteers(response.data);
-        } else {
-          console.log(response.error);
-        }
-      })
-      .catch((err: unknown) => {
-        console.error(err);
-        setIsLoading(false);
-      });
+        .then((response) => {
+          setIsLoading(false);
+          if (response.success) {
+            setVolunteers(response.data);
+          } else {
+            console.log(response.error);
+          }
+        })
+        .catch((err: unknown) => {
+          console.error(err);
+          setIsLoading(false);
+        });
     } else if (props.user.role === RoleEnum.VOLUNTEER) {
       //if user is volunteer, the dialog will show veterans
       getVeteransByProgram(props.program)
-      .then((response) => {
-        setIsLoading(false);
-        if (response.success) {
-          setVolunteers(response.data);
-        } else {
-          console.log(response.error);
-        }
-      })
-      .catch((err: unknown) => {
-        console.error(err);
-        setIsLoading(false);
-      });
+        .then((response) => {
+          setIsLoading(false);
+          if (response.success) {
+            setVolunteers(response.data);
+          } else {
+            console.log(response.error);
+          }
+        })
+        .catch((err: unknown) => {
+          console.error(err);
+          setIsLoading(false);
+        });
     }
   };
 
@@ -68,25 +72,21 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
     if (!selectedVolunteerOption?.value._id || !props.user._id) {
       return null;
     }
-    const volunteerEmail = props.user.role === RoleEnum.VETERAN ? selectedVolunteerOption.value.email : props.user.email;
-    const veteranEmail = props.user.role === RoleEnum.VETERAN ? props.user.email : selectedVolunteerOption.value.email;
-    const volunteerId = props.user.role === RoleEnum.VETERAN ? selectedVolunteerOption.value._id : props.user._id;
-    const veteranId = props.user.role === RoleEnum.VETERAN ? props.user._id : selectedVolunteerOption.value._id;
+    const volunteerEmail =
+      props.user.role === RoleEnum.VETERAN ? selectedVolunteerOption.value.email : props.user.email;
+    const veteranEmail =
+      props.user.role === RoleEnum.VETERAN ? props.user.email : selectedVolunteerOption.value.email;
+    const volunteerId =
+      props.user.role === RoleEnum.VETERAN ? selectedVolunteerOption.value._id : props.user._id;
+    const veteranId =
+      props.user.role === RoleEnum.VETERAN ? props.user._id : selectedVolunteerOption.value._id;
 
-    assignUserToProgram(
-      volunteerEmail,
-      veteranEmail,
-      props.program,
-      volunteerId,
-      veteranId
-    )
+    assignUserToProgram(volunteerEmail, veteranEmail, props.program, volunteerId, veteranId)
       .then((response) => {
         if (response.success) {
           setMessage("Successfully assigned user!");
         } else {
-          setMessage(
-            "Failed to assign user. Ensure user is not already assigned to this person.",
-          );
+          setMessage("Failed to assign user. Ensure user is not already assigned to this person.");
         }
       })
       .catch((err: unknown) => {
@@ -120,7 +120,8 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
   const formattedOptions = volunteers.map((v) => ({
     value: v,
     label: `${v.firstName} ${v.lastName} - ${String(v.assignedUsers?.length ?? 0)} ${
-      props.user.role === RoleEnum.VETERAN ? "veterans" : "volunteers"}`,
+      props.user.role === RoleEnum.VETERAN ? "veterans" : "volunteers"
+    }`,
   }));
 
   const customLabel = (option: OptionType) => (
@@ -151,7 +152,9 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
 
         <div className={styles.searchBar}>
           <Select
-            placeholder={props.user.role === RoleEnum.VOLUNTEER ? "Choose a veteran" : "Choose a volunteer"}
+            placeholder={
+              props.user.role === RoleEnum.VOLUNTEER ? "Choose a veteran" : "Choose a volunteer"
+            }
             options={formattedOptions}
             menuPortalTarget={document.body}
             formatOptionLabel={customLabel}
@@ -188,7 +191,10 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
                 </span>
               </p>
             </div>
-            <a className={styles.profileLink} href={`/profile/${selectedVolunteerOption.value._id ?? ""}`}>
+            <a
+              className={styles.profileLink}
+              href={`/profile/${selectedVolunteerOption.value._id ?? ""}`}
+            >
               View Profile
             </a>
           </div>
