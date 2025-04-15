@@ -1,5 +1,6 @@
 "use client";
 
+import { AdminStaffUserItem } from "../components/AdminStaffUserItem";
 import { AdminStaffUserTable } from "../components/AdminStaffUserTable";
 import { NavBar } from "../components/NavBar";
 
