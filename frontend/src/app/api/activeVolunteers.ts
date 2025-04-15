@@ -6,6 +6,7 @@ export type ActiveVolunteer = {
   assignedVeteran: string;
   volunteer: string;
   volunteerUser: UserProfile;
+  veteranUser: UserProfile;
 };
 
 export const getVeteransByProgram = async (
