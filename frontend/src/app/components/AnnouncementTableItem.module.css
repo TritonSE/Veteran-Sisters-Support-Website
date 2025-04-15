@@ -4,8 +4,9 @@
   align-self: stretch;
 
   border-top: 1px solid var(--Stroke-1, #edf1f5);
-  border-bottom: 1px solid var(--Stroke-1, #edf1f5);
   background: var(--Background-1, #fff);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
   color: #4d5358;
   height: 64px;
 
@@ -24,8 +25,7 @@
   align-items: center;
   gap: 10px;
   align-self: stretch;
-
-  border-left: 1px solid var(--Stroke-2, #d0d7de);
+  border-radius: 0px 0px 0px var(--Spacing-s, 8px);
 }
 
 .announcement {
@@ -35,7 +35,7 @@
   align-items: center;
   gap: 10px;
   align-self: stretch;
-  border-right: 1px solid var(--Stroke-2, #d0d7de);
+  border-radius: 0px 0px var(--Spacing-s, 8px) 0px;
 }
 
 .announcementText {
@@ -53,8 +53,4 @@
   line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-}
-
-.lastElement {
-  border-radius: 0xp 0px var(--Spacing-s, 8px) var(--Spacing-s, 8px);
 }

@@ -7,6 +7,7 @@ import { Button } from "../components/Button";
 import { NavBar } from "../components/NavBar";
 
 import styles from "./page.module.css";
+import { AnnouncementTable } from "../components/AnnouncementTable";
 
 export default function Page() {
   const router = useRouter();
@@ -34,11 +35,14 @@ export default function Page() {
               router.push("announcements/new");
             }}
           />
+          <div className={styles.spacing}></div>
+          <AnnouncementTable />
+          {/* <br></br>
           <AnnouncementTableItem
             date="1/23/2023"
             announcement="asdasjdoaisjdoaisjdoaisjdoaisjdoaisjdaoisjdaoisjdaosijdaoisjdoaisjdoaisjdoaisjdoaiosjdoasjdoaisjdoaisjdoaisjdoaisjdoaijsdoaisjodiajsdoiajsodiajsoidjaosidjaosijdoaisjdoaijsdoaijsodijaosidjoaisjodaijsoiajdoaisjdoaisjdaosijdoaisjdoaisjdoaisjdoaijsdoaisjdoaijsdoaisjdoaisjdoaijsdoaisjdoiasjodiajsodiajsodiajsodijasoidjaosidjaosijdaosijdaosijdoaisjdoaaijsdoiajsodaijsdoiajsodaijsdoiasjodijaosidjaosidjaosidjaosijdaoisjdaoisjdaoisjdoaisjdoaisjdoaisjdoaisjdoaisjdoaisjdoaisjdo"
           />
-          <AnnouncementTableItem date="1/23/2023" announcement="asdasdasd" />
+          <AnnouncementTableItem date="1/23/2023" announcement="asdasdasd" /> */}
         </div>
       </div>
     </div>
