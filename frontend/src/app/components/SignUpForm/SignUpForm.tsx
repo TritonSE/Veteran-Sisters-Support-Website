@@ -5,7 +5,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import React, { MouseEvent, useState } from "react";
 
-import { auth } from "../../../../firebase/firebase";
+import { auth } from "../../../firebase/firebase";
 
 import OnboardingInterests from "./OnboardingInterests";
 import RoleSelection from "./RoleSelection";
@@ -123,7 +123,7 @@ export default function SignUpForm() {
           assignedVeterans: [],
         };
         await createUserImported(newUser);
-        router.push("/login?success=true");
+        router.push("/");
         console.log("User created successfully in MongoDB");
       } catch (error: unknown) {
         console.error("User creation failed:", error);

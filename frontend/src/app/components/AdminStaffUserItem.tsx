@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { User } from "../api/users";
+import { User } from "../api/userApi";
 
 import styles from "./AdminStaffUserItem.module.css";
 import { Program } from "./Program";
@@ -26,8 +26,7 @@ export function AdminStaffUserItem({ user }: AdminStaffUserItemProp) {
   }
   return (
     <div className={styles.container}>
-      {/* Placeholder link  */}
-      <Link href="/profile" className={styles.link}>
+      <Link href={{ pathname: "/profile", query: { userId: user._id } }} className={styles.link}>
         <div className={styles.name}>
           <div className={styles.nameFrame}>
             <span className={styles.nameText}>{`${user.firstName} ${user.lastName}`}</span>

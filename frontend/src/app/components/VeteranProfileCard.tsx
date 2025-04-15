@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { User } from "../api/users";
+import { User } from "../api/userApi";
 
 import styles from "./VeteranProfileCard.module.css";
 
@@ -12,7 +12,7 @@ export function VeteranProfileCard({ user }: VeteranProfileCardProp) {
   return (
     <div className={styles.container}>
       {/* Placeholder link  */}
-      <Link href={`/profile/${user._id}`} className={styles.link}>
+      <Link href={{ pathname: "/profile", query: { userId: user._id } }} className={styles.link}>
         <div className={styles.profile}>
           <span className={styles.p}>P</span>
         </div>

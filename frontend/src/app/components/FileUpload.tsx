@@ -2,7 +2,7 @@ import { ref, uploadBytes } from "firebase/storage";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 
-import { storage } from "../../../firebase/firebase";
+import { storage } from "../../firebase/firebase";
 import { CreateFileObjectRequest, createFileObject } from "../api/fileApi";
 
 import styles from "./FileUpload.module.css";
@@ -62,7 +62,6 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
       createFileObject(fileObjRequest)
         .then((result) => {
           if (result.success) {
-            console.log("file object created");
             const storageRef = ref(storage, `files/${result.data._id}`);
             uploadBytes(storageRef, file)
               .then(() => {
@@ -143,9 +142,6 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
             >
               <input
                 type="checkbox"
-                onChange={() => {
-                  console.log("clicked BattleBuddies");
-                }}
                 className={styles.checkBox}
                 checked={checkboxStates.BattleBuddies}
               />{" "}
@@ -159,9 +155,6 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
             >
               <input
                 type="checkbox"
-                onChange={() => {
-                  console.log("clicked Advocacy");
-                }}
                 className={styles.checkBox}
                 checked={checkboxStates.Advocacy}
               />{" "}
@@ -178,9 +171,6 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
             >
               <input
                 type="checkbox"
-                onChange={() => {
-                  console.log("clicked OperationWellness");
-                }}
                 className={styles.checkBox}
                 checked={checkboxStates.OperationWellness}
               />{" "}
