@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import React, { MouseEvent, useState } from "react";
 
 import { auth } from "../../../firebase/firebase";
+import { useAuth } from "../../contexts/AuthContext";
 
 import OnboardingInterests from "./OnboardingInterests";
 import RoleSelection from "./RoleSelection";
@@ -51,6 +52,7 @@ export default function SignUpForm() {
     service?: string; // On service page, all fields are required
     onboarding?: string; // At least one interest must be chosen on last page
   }>({});
+  const { setIsSigningUp } = useAuth();
 
   const handleNext = () => {
     setCurrentPage((prev) => {
@@ -91,6 +93,7 @@ export default function SignUpForm() {
     if (hasError) return;
 
     try {
+      setIsSigningUp(true);
       await createUserWithEmailAndPassword(auth, email, password);
       console.log("Firebase User created successfully!");
       // If successful, create user data in MongoDB
@@ -123,10 +126,12 @@ export default function SignUpForm() {
           assignedVeterans: [],
         };
         await createUserImported(newUser);
+        setIsSigningUp(false);
         router.push("/");
         console.log("User created successfully in MongoDB");
       } catch (error: unknown) {
         console.error("User creation failed:", error);
+        setIsSigningUp(false);
         alert("Something went wrong. Please try again.");
       }
     } catch (error: unknown) {
@@ -138,6 +143,7 @@ export default function SignUpForm() {
           }));
         }
       }
+      setIsSigningUp(false);
       return;
     }
   };
