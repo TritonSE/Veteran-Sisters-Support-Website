@@ -1,11 +1,11 @@
 import Link from "next/link";
 
-import { User } from "../api/userApi";
+import { UserProfile } from "../api/profileApi";
 
 import styles from "./VeteranProfileCard.module.css";
 
 type VeteranProfileCardProp = {
-  user: User;
+  user: UserProfile;
 };
 
 export function VeteranProfileCard({ user }: VeteranProfileCardProp) {

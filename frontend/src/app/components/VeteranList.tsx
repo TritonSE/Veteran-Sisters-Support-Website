@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 
-import { User, getVeteransByVolunteer } from "../api/userApi";
+import { ActiveVolunteer, getAssignedUsers } from "../api/activeVolunteers";
+import { UserProfile } from "../api/profileApi";
 
 import styles from "./VeteranList.module.css";
 import { VeteranProfileCard } from "./VeteranProfileCard";
 
 type VeteranListProp = {
-  volunteerId: string;
+  volunteer: UserProfile;
 };
 
-export function VeteranList({ volunteerId }: VeteranListProp) {
-  const [users, setUsers] = useState<User[]>([]);
+export function VeteranList({ volunteer }: VeteranListProp) {
+  const [users, setUsers] = useState<ActiveVolunteer[]>([]);
 
   useEffect(() => {
-    getVeteransByVolunteer(volunteerId)
+    getAssignedUsers(volunteer)
       .then((result) => {
         if (result.success) {
           setUsers(result.data);
@@ -33,15 +34,15 @@ export function VeteranList({ volunteerId }: VeteranListProp) {
       <div className={styles.table}>
         {users.map((user) => (
           <VeteranProfileCard
-            key={user._id}
+            key={user.veteranUser._id}
             user={{
-              _id: user._id,
-              email: user.email,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              role: user.role,
-              assignedPrograms: user.assignedPrograms,
-              assignedUsers: user.assignedUsers,
+              _id: user.veteranUser._id,
+              email: user.veteranUser.email,
+              firstName: user.veteranUser.firstName,
+              lastName: user.veteranUser.lastName,
+              role: user.veteranUser.role,
+              assignedPrograms: user.veteranUser.assignedPrograms,
+              assignedUsers: user.veteranUser.assignedUsers,
             }}
           />
         ))}
