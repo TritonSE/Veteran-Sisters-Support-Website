@@ -2,12 +2,11 @@
 
 import { useRouter } from "next/navigation";
 
-import { AnnouncementTableItem } from "../components/AnnouncementTableItem";
+import { AnnouncementTable } from "../components/AnnouncementTable";
 import { Button } from "../components/Button";
 import { NavBar } from "../components/NavBar";
 
 import styles from "./page.module.css";
-import { AnnouncementTable } from "../components/AnnouncementTable";
 
 export default function Page() {
   const router = useRouter();
@@ -27,15 +26,15 @@ export default function Page() {
               </span>
             </div>
           </div>
+          <div className={styles.spacing1}></div>
           <Button
             label="Create new announcement"
             filled={true}
-            className={styles.button}
             onClick={() => {
-              router.push("announcements/new");
+              router.push("/announcements/new");
             }}
           />
-          <div className={styles.spacing}></div>
+          <div className={styles.spacing2}></div>
           <AnnouncementTable />
           {/* <br></br>
           <AnnouncementTableItem

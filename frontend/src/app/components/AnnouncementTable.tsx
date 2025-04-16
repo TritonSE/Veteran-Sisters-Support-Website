@@ -81,13 +81,19 @@ export function AnnouncementTable() {
           </div>
         </div>
         <div className={styles.tableItems}>
-          {announcements.slice(page * pageSize, (page + 1) * pageSize).map((announcement) => (
-            <AnnouncementTableItem
-              key={announcement._id}
-              date={announcement.createdAt.toLocaleDateString()}
-              announcement={announcement.title}
-            />
-          ))}
+          {announcements.length === 0 ? (
+            <AnnouncementTableItem date="None" announcement="None" />
+          ) : (
+            announcements
+              .slice(page * pageSize, (page + 1) * pageSize)
+              .map((announcement) => (
+                <AnnouncementTableItem
+                  key={announcement._id}
+                  date={announcement.createdAt.toLocaleDateString()}
+                  announcement={announcement.title}
+                />
+              ))
+          )}
         </div>
       </div>
       {announcements.length > 8 && (

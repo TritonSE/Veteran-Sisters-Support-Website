@@ -104,7 +104,7 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  width: 1024px;
+  align-self: stretch;
   gap: 24px;
 
   font-family: "Albert Sans";
@@ -112,4 +112,97 @@
   font-size: 14px;
   line-height: 100%;
   letter-spacing: 0%;
+}
+
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  background: #25252533;
+  backdrop-filter: blur(8px);
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 48px;
+  width: 800px;
+  background-color: #ffffff;
+  gap: 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 0px 0px 0px #283f7a0f;
+  box-shadow: 0px 1px 1px 0px #283f7a0f;
+  box-shadow: 0px 3px 3px 0px #283f7a0f;
+  box-shadow: 0px 6px 6px 0px #283f7a0f;
+  box-shadow: 0px -1px 0px 0px #283f7a05;
+  border-radius: 8px;
+}
+
+.confirmText {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.confirmTextTitle {
+  font-family: Albert Sans;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.confirmTextSub {
+  font-family: Albert Sans;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.confirmHeader {
+  color: var(--Text-3, #3a3c3d);
+
+  /* title large */
+  font-family: "Albert Sans";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.confirmMessage {
+  width: 789px;
+  height: 248px;
+  gap: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.confirmMessageText {
+  font-family: Albert Sans;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+}
+
+.centerButtons {
+  display: flex;
+  gap: 48px;
 }
