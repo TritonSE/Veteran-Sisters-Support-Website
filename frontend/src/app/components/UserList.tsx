@@ -117,9 +117,9 @@ export function UserList(params: {
                 {editable && (
                   <div className={styles.addUser}>
                     <Image
-                      src="/pajamas_assignee_icon.svg"
-                      width={16}
-                      height={16}
+                      src="/add_icon.svg"
+                      width={14}
+                      height={14}
                       alt="Assign User"
                       onClick={() => {
                         openDialog(program);
