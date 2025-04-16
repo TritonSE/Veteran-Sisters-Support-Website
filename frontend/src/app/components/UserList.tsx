@@ -20,6 +20,7 @@ export function UserList(params: {
   ) as Record<string, UserProfileType[]>;
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [refreshFlag, setRefreshFlag] = useState(false);
   const [dialogProgram, setDialogProgram] = useState("");
   const [currentUsers, setCurrentUsers] = useState<Record<string, UserProfileType[]>>(userPrograms);
 
@@ -30,7 +31,7 @@ export function UserList(params: {
 
   const closeDialog = () => {
     setIsDialogOpen(false);
-    window.location.reload();
+    setRefreshFlag((prev) => !prev);
   };
 
   const removeVolunteer = (selectedEmail: string, program: string) => {
@@ -40,7 +41,7 @@ export function UserList(params: {
 
       removeVolunteerFromVeteran(volEmail, vetEmail, program)
         .then(() => {
-          window.location.reload();
+          setRefreshFlag((prev) => !prev);
         })
         .catch((err: unknown) => {
           console.error(err);
@@ -61,8 +62,10 @@ export function UserList(params: {
         return [profile.assignedProgram, activeUser];
       });
 
-      setCurrentUsers((prevUsers) => {
-        const updatedUsers = { ...prevUsers };
+      setCurrentUsers(() => {
+        const updatedUsers = Object.fromEntries(
+          (userProfile?.assignedPrograms ?? []).map((program) => [program, []]),
+        ) as Record<string, UserProfileType[]>;
 
         for (const [key, userObj] of users) {
           if (!updatedUsers[key].some((vol) => vol.email === userObj.email)) {
@@ -83,9 +86,8 @@ export function UserList(params: {
         await fetchUserProfiles(userProfile);
       }
     };
-
     void fetchProfiles();
-  }, []);
+  }, [refreshFlag]);
 
   const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(currentUsers)
     .slice()

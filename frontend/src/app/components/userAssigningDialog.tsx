@@ -132,7 +132,7 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
   );
 
   if (isLoading || !formattedOptions.length) {
-    return <div>Loading...</div>;
+    return;
   }
 
   return (
