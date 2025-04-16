@@ -2,14 +2,16 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
+import { useAuth } from "../../contexts/AuthContext";
 import { Button } from "../../components/Button";
 import { NavBar } from "../../components/NavBar";
+import { AuthContextWrapper } from "../../contexts/AuthContextWrapper";
 
 import styles from "./page.module.css";
 
-export default function Page() {
+function AnnouncementCreateContent() {
   const [cancelPopup, setCancelPopup] = useState<boolean>(false);
   const [confirmPage, setConfirmPage] = useState<boolean>(false);
   const router = useRouter();
@@ -121,5 +123,23 @@ export default function Page() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function AnnouncementCreate() {
+  const { userRole } = useAuth();
+  return (
+    <AuthContextWrapper>
+      <Suspense fallback={<div>Loading...</div>}>
+        {userRole === "admin" ? (
+          <AnnouncementCreateContent />
+        ) : (
+          <div className={styles.page}>
+            <NavBar />
+            <h1>Error: Invalid Permissions</h1>
+          </div>
+        )}
+      </Suspense>
+    </AuthContextWrapper>
   );
 }

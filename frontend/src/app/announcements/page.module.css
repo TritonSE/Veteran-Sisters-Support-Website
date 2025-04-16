@@ -41,7 +41,7 @@
 }
 
 .subheader {
-  font-family: Albert Sans;
+  font-family: "Albert Sans";
   font-weight: 500;
   font-size: 16px;
   line-height: 100%;
@@ -57,4 +57,13 @@
 
 .spacing2 {
   margin-top: 80px;
+}
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-self: stretch;
+  background: var(--Neutral-Base-White, #fafafa);
+  min-height: 100vh;
+  width: 100%;
 }

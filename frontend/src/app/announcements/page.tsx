@@ -1,14 +1,17 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 import { AnnouncementTable } from "../components/AnnouncementTable";
 import { Button } from "../components/Button";
 import { NavBar } from "../components/NavBar";
+import { useAuth } from "../contexts/AuthContext";
+import { AuthContextWrapper } from "../contexts/AuthContextWrapper";
 
 import styles from "./page.module.css";
 
-export default function Page() {
+function AnnouncementContent() {
   const router = useRouter();
   return (
     <div className={styles.container}>
@@ -45,5 +48,23 @@ export default function Page() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AnnouncementPage() {
+  const { userRole } = useAuth();
+  return (
+    <AuthContextWrapper>
+      <Suspense fallback={<div>Loading...</div>}>
+        {userRole === "admin" ? (
+          <AnnouncementContent />
+        ) : (
+          <div className={styles.page}>
+            <NavBar />
+            <h1>Error: Invalid Permissions</h1>
+          </div>
+        )}
+      </Suspense>
+    </AuthContextWrapper>
   );
 }

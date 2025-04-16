@@ -152,7 +152,7 @@
 }
 
 .confirmTextTitle {
-  font-family: Albert Sans;
+  font-family: "Albert Sans";
   font-weight: 500;
   font-size: 24px;
   line-height: 100%;
@@ -160,7 +160,7 @@
 }
 
 .confirmTextSub {
-  font-family: Albert Sans;
+  font-family: "Albert Sans";
   font-weight: 500;
   font-size: 16px;
   line-height: 100%;
@@ -194,7 +194,7 @@
 }
 
 .confirmMessageText {
-  font-family: Albert Sans;
+  font-family: "Albert Sans";
   font-weight: 500;
   font-size: 16px;
   line-height: 100%;
@@ -205,4 +205,13 @@
 .centerButtons {
   display: flex;
   gap: 48px;
+}
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-self: stretch;
+  background: var(--Neutral-Base-White, #fafafa);
+  min-height: 100vh;
+  width: 100%;
 }
