@@ -12,6 +12,7 @@ type VeteranFilePreviewProps = {
   documentId: string;
   documentName: string;
   latestComment?: Date;
+  lock?: boolean
 };
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -23,6 +24,7 @@ export function VeteranFilePreview({
   documentId,
   documentName,
   latestComment,
+  lock
 }: VeteranFilePreviewProps) {
   const [fileURL, setFileURL] = useState<string>();
   const [numPages, setNumPages] = useState<number>();
@@ -97,6 +99,8 @@ export function VeteranFilePreview({
           <Image src="/pdf_icon.svg" width={80} height={80} alt="pdf" />
         )}
       </Link>
+      {lock &&
+      <div className={styles.lock}/>}
       <div>
         <div
           style={{

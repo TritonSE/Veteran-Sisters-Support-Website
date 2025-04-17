@@ -14,16 +14,16 @@ type FileUploadProps = {
 };
 
 type CheckBoxStates = {
-  BattleBuddies: boolean;
-  Advocacy: boolean;
-  OperationWellness: boolean;
+  "battle buddies": boolean;
+  "advocacy": boolean;
+  "operation wellness": boolean;
 };
 
 export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
   const [checkboxStates, setCheckboxStates] = useState<CheckBoxStates>({
-    BattleBuddies: false,
-    Advocacy: false,
-    OperationWellness: false,
+    "battle buddies": false,
+    "advocacy": false,
+    "operation wellness": false,
   });
   const [comment, setComment] = useState<string>();
   const [file, setFile] = useState<File | null>(null);
@@ -45,9 +45,9 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
   const uploadFile = () => {
     if (
       file &&
-      (checkboxStates.BattleBuddies ||
-        checkboxStates.Advocacy ||
-        checkboxStates.OperationWellness) &&
+      (checkboxStates["battle buddies"] ||
+        checkboxStates["advocacy"] ||
+        checkboxStates["operation wellness"]) &&
       !uploading
     ) {
       setUploading(true);
@@ -136,27 +136,27 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
               onClick={() => {
                 setCheckboxStates({
                   ...checkboxStates,
-                  BattleBuddies: !checkboxStates.BattleBuddies,
+                  "battle buddies": !checkboxStates["battle buddies"],
                 });
               }}
             >
               <input
                 type="checkbox"
                 className={styles.checkBox}
-                checked={checkboxStates.BattleBuddies}
+                checked={checkboxStates["battle buddies"]}
               />{" "}
               <span>Battle Buddies</span>
             </div>
             <div
               className={styles.checkRow}
               onClick={() => {
-                setCheckboxStates({ ...checkboxStates, Advocacy: !checkboxStates.Advocacy });
+                setCheckboxStates({ ...checkboxStates, "advocacy": !checkboxStates["advocacy"] });
               }}
             >
               <input
                 type="checkbox"
                 className={styles.checkBox}
-                checked={checkboxStates.Advocacy}
+                checked={checkboxStates['advocacy']}
               />{" "}
               <span>Advocacy</span>
             </div>
@@ -165,14 +165,14 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
               onClick={() => {
                 setCheckboxStates({
                   ...checkboxStates,
-                  OperationWellness: !checkboxStates.OperationWellness,
+                  "operation wellness": !checkboxStates['operation wellness'],
                 });
               }}
             >
               <input
                 type="checkbox"
                 className={styles.checkBox}
-                checked={checkboxStates.OperationWellness}
+                checked={checkboxStates['operation wellness']}
               />{" "}
               <span>Operation Wellness</span>
             </div>

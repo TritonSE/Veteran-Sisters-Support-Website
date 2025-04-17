@@ -17,3 +17,13 @@
   overflow: hidden;
   align-items: center;
 }
+
+.lock{
+  height: 250px;
+  width: 220px;
+  position: absolute;
+  border-radius: 4px;
+  border: 1px solid var(--Stroke-3, #BDC9D2);
+  background: var(--Text-5, #252525);
+  filter: blur(2px);
+}

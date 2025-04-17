@@ -5,17 +5,22 @@ import { Comment, FileObject, getFilesByUploader } from "../api/fileApi";
 
 import { VeteranFilePreview } from "./VeteranFilePreview";
 import styles from "./VeteranFilesTable.module.css";
+import { useAuth } from "../contexts/AuthContext";
+import { User, getUser } from "../api/userApi";
 
 type VeteranDocumentProps = {
   uploader: string;
 };
 
 export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
-  const programs = ["OperationWellness", "BattleBuddies", "Advocacy"];
+  const { userId, userRole } = useAuth();
+  const [user, setUser] = useState<User>();
+
+  const programs = ["operation wellness", "battle buddies", "advocacy"];
   const programMap: Record<string, string> = {
-    OperationWellness: "Operation Wellness",
-    BattleBuddies: "Battle Buddies",
-    Advocacy: "Advocacy",
+    "operation wellness": "Operation Wellness",
+    "battle buddies": "Battle Buddies",
+    "advocacy": "Advocacy",
   };
 
   const [fileObjects, setFileObjects] = useState<FileObject[]>([]);
@@ -33,6 +38,14 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
     return changed ? latest : undefined;
   };
 
+  const shouldLock = (file: FileObject)=>{
+    if(user?.role==="volunteer" || user?.role==="staff"){
+      console.log(user?.assignedPrograms)
+      console.log(file.programs)
+      return !user?.assignedPrograms.some(element => file.programs.includes(element))
+    }
+  }
+
   useEffect(() => {
     getFilesByUploader(uploader)
       .then((result) => {
@@ -45,11 +58,20 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
       .catch((err: unknown) => {
         console.error(err);
       });
+    getUser(userId)
+      .then((response) => {
+        if (response.success) {
+          setUser(response.data);
+        }
+      })
+      .catch((error: unknown) => {
+        console.error(error);
+      });
   }, []);
 
   return (
     <div>
-      {programs.map((program, index) => (
+      {user && programs.map((program, index) => (
         <div
           key={index}
           style={{ marginBottom: 24, paddingTop: 30, borderTop: "1px solid #E0E0E0" }}
@@ -68,6 +90,7 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
                     documentId={file._id}
                     documentName={file.filename}
                     latestComment={getLatestComment(file.comments)}
+                    lock={shouldLock(file)}
                   />
                 </div>
               ))}
