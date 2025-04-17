@@ -4,9 +4,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 
-import { useAuth } from "../../contexts/AuthContext";
 import { Button } from "../../components/Button";
 import { NavBar } from "../../components/NavBar";
+import { useAuth } from "../../contexts/AuthContext";
 import { AuthContextWrapper } from "../../contexts/AuthContextWrapper";
 
 import styles from "./page.module.css";
