@@ -1,3 +1,4 @@
+import { UserProfile } from "./profileApi";
 import { APIResult, get, handleAPIError, post } from "./requests";
 
 export type CreateUserRequest = {
@@ -55,20 +56,20 @@ export const createUser = async (
   }
 };
 
-export async function getUser(userId: string): Promise<APIResult<User>> {
+export async function getUser(userId: string): Promise<APIResult<UserProfile>> {
   try {
     const response = await get(`/users/id/${userId}`);
     if (!response.ok) {
       return handleAPIError(response);
     }
-    const data = (await response.json()) as User;
+    const data = (await response.json()) as UserProfile;
     return { success: true, data };
   } catch (error: unknown) {
     return { success: false, error: (error as Error).message };
   }
 }
 
-export async function getNonAdminUsers(program?: string): Promise<APIResult<User[]>> {
+export async function getNonAdminUsers(program?: string): Promise<APIResult<UserProfile[]>> {
   try {
     const response = program
       ? await get(`/nonAdminUsers?assignedProgram=${program}`)
@@ -76,20 +77,22 @@ export async function getNonAdminUsers(program?: string): Promise<APIResult<User
     if (!response.ok) {
       return handleAPIError(response);
     }
-    const users = (await response.json()) as User[];
+    const users = (await response.json()) as UserProfile[];
     return { success: true, data: users };
   } catch (error) {
     return handleAPIError(error);
   }
 }
 
-export async function getVeteransByVolunteer(volunteerId: string): Promise<APIResult<User[]>> {
+export async function getVeteransByVolunteer(
+  volunteerId: string,
+): Promise<APIResult<UserProfile[]>> {
   try {
     const response = await get(`/veterans/${volunteerId}`);
     if (!response.ok) {
       return handleAPIError(response);
     }
-    const users = (await response.json()) as User[];
+    const users = (await response.json()) as UserProfile[];
     return { success: true, data: users };
   } catch (error) {
     return handleAPIError(error);

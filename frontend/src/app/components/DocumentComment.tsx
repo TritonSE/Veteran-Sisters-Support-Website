@@ -10,7 +10,7 @@ import {
   editCommentObject,
   editFileObject,
 } from "../api/fileApi";
-import { User } from "../api/userApi";
+import { AssignedProgram as ProgramEnum, UserProfile } from "../api/profileApi";
 
 import styles from "./DocumentComment.module.css";
 import { Program } from "./Program";
@@ -19,7 +19,7 @@ import { Role } from "./Role";
 type DocumentCommentProps = {
   comment: Comment;
   file: FileObject;
-  user: User;
+  user: UserProfile;
   commentKey: number;
   selected: boolean;
   setSelected: (selected: boolean) => void;
@@ -36,9 +36,9 @@ export function DocumentComment({
   setFile,
 }: DocumentCommentProps) {
   const borderColor =
-    comment.commenterId.assignedPrograms[0] === "battle buddies"
+    comment.commenterId.assignedPrograms?.[0] === ProgramEnum.BATTLE_BUDDIES
       ? "#0093EB"
-      : comment.commenterId.assignedPrograms[0] === "advocacy"
+      : comment.commenterId.assignedPrograms?.[0] === ProgramEnum.ADVOCACY
         ? "#3730A3"
         : "#337357";
   const name = `${comment.commenterId.firstName} ${comment.commenterId.lastName}`;
@@ -75,7 +75,7 @@ export function DocumentComment({
   };
 
   const postCommentHandler = () => {
-    if (tempCommentBody?.trim() && file && user) {
+    if (tempCommentBody?.trim() && file && user._id) {
       if (currComment.comment !== "") {
         editCommentObject(comment._id, tempCommentBody)
           .then((response) => {
@@ -92,7 +92,7 @@ export function DocumentComment({
           });
       } else {
         const newComment: CreateCommentRequest = {
-          commenterId: user?._id,
+          commenterId: user._id,
           comment: tempCommentBody,
         };
         createCommentObject(newComment)
@@ -152,7 +152,7 @@ export function DocumentComment({
             <div className={styles.profileIcon}>{name.trim().substring(0, 1).toUpperCase()}</div>
             <div style={{ maxWidth: 100 }}>{name}</div>
             <Role role={comment.commenterId.role} />
-            {comment.commenterId.assignedPrograms.map((program, i) => {
+            {comment.commenterId.assignedPrograms?.map((program, i) => {
               return <Program key={i} program={program} iconOnly />;
             })}
           </div>
@@ -191,7 +191,7 @@ export function DocumentComment({
             <div className={styles.profileIcon}>{name.trim().substring(0, 1).toUpperCase()}</div>
             <div style={{ maxWidth: 100 }}>{name}</div>
             <Role role={comment.commenterId.role} />
-            {comment.commenterId.assignedPrograms.map((program, i) => {
+            {comment.commenterId.assignedPrograms?.map((program, i) => {
               return <Program key={i} program={program} iconOnly />;
             })}
           </div>

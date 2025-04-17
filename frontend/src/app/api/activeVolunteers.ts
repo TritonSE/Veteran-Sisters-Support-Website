@@ -1,4 +1,4 @@
-import { UserProfile } from "./profileApi";
+import { Role, UserProfile } from "./profileApi";
 import { APIResult, del, get, handleAPIError, post, put } from "./requests"; // Update path as needed
 
 export type ActiveVolunteer = {
@@ -6,6 +6,20 @@ export type ActiveVolunteer = {
   assignedVeteran: string;
   volunteer: string;
   volunteerUser: UserProfile;
+  veteranUser: UserProfile;
+};
+
+export const getVeteransByProgram = async (program: string): Promise<APIResult<UserProfile[]>> => {
+  try {
+    const response = await get(`/users?role=veteran&assignedProgram=${program}`);
+    if (!response.ok) {
+      return { success: false, error: response.statusText };
+    }
+    const data = (await response.json()) as UserProfile[];
+    return { success: true, data };
+  } catch (error: unknown) {
+    return handleAPIError(error);
+  }
 };
 
 export const getVolunteersByProgram = async (
@@ -23,18 +37,20 @@ export const getVolunteersByProgram = async (
   }
 };
 
-export const assignVolunteerToProgram = async (
+export const assignUserToProgram = async (
   volunteerEmail: string,
   veteranEmail: string,
   program: string,
   volunteerId: string,
+  veteranId: string,
 ): Promise<APIResult<ActiveVolunteer>> => {
   try {
     const requestBodyVolunteer = {
       userEmail: volunteerEmail,
       veteranEmail,
       program,
-      userId: volunteerId,
+      volunteerId,
+      veteranId,
     };
 
     // First request to add volunteer to activeVolunteer schema
@@ -94,11 +110,13 @@ export const removeVolunteerFromVeteran = async (
   }
 };
 
-export const getVolunteersByVeteran = async (
-  veteranEmail: string,
+export const getAssignedUsers = async (
+  user: UserProfile,
 ): Promise<APIResult<ActiveVolunteer[]>> => {
   try {
-    const response = await get(`/activeVolunteers?veteran=${veteranEmail}`);
+    //fetch volunteers if user is veteran and vice versa
+    const query = `?${user.role === Role.VETERAN ? `veteran=${user.email}` : `volunteer=${user.email}`}`;
+    const response = await get(`/activeVolunteers${query}`);
     if (!response.ok) {
       return handleAPIError(response);
     }

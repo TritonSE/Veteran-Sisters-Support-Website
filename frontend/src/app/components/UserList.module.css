@@ -36,15 +36,12 @@
 
 .userList .addUser {
   display: flex;
-  height: 34px;
-  padding: var(--Spacing-sm, 16px) 12px;
+  height: 15px;
+  padding: var(--Spacing-sm, 16px) 9px;
   justify-content: center;
   align-items: center;
-  gap: 10px;
   width: fit-content;
-
   border-radius: var(--Spacing-sm, 16px);
-  border: 1px solid var(--Primary, #057e6f);
   background: var(--Primary, #057e6f);
 }
 
