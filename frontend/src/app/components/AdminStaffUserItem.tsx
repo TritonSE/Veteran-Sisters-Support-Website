@@ -24,11 +24,9 @@ export function AdminStaffUserItem({ user }: AdminStaffUserItemProp) {
   } else {
     assignedText = `${length.toString()} volunteer${length === 1 ? "" : "s"}`;
   }
-
   return (
     <div className={styles.container}>
       <Link href={{ pathname: "/profile", query: { userId: user._id } }} className={styles.link}>
-        <div className={styles.verticalDivider}></div>
         <div className={styles.name}>
           <div className={styles.nameFrame}>
             <span className={styles.nameText}>{`${user.firstName} ${user.lastName}`}</span>

@@ -4,7 +4,9 @@
   align-self: stretch;
 
   border-top: 1px solid var(--Stroke-1, #edf1f5);
-  border-bottom: 1px solid var(--Stroke-1, #edf1f5);
+  /* border-bottom: 1px solid var(--Stroke-1, #edf1f5); */
+  /* border-left: 1px solid var(--Stroke-2, #d0d7de);
+  border-right: 1px solid var(--Stroke-2, #d0d7de); */
 }
 
 .link {
@@ -27,7 +29,8 @@
   align-items: center;
   gap: 10px;
 
-  border-left: 1px solid var(--Stroke-2, #d0d7de);
+  /* border-left: 1px solid var(--Stroke-2, #d0d7de); */
+  border-radius: 0px 0px 0px var(--Spacing-s, 8px);
   background: var(--Background-1, #fff);
 }
 
@@ -39,6 +42,8 @@
   align-items: flex-start;
   gap: 4px;
   flex-shrink: 0;
+
+  /* border-radius: 0px 0px 0px var(--Spacing-s, 8px); */
 }
 
 .nameText {
@@ -107,8 +112,9 @@
   gap: 10px;
   flex: 1 0 0;
   align-self: stretch;
-  border-right: 1px solid var(--Stroke-2, #d0d7de);
+  /* border-right: 1px solid var(--Stroke-2, #d0d7de); */
   background: var(--Background-1, #fff);
+  border-radius: 0px 0px var(--Spacing-s, 8px) 0px;
 
   /* body medium */
   font-family: "Albert Sans";
