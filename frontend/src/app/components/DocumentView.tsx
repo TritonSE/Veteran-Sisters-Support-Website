@@ -37,7 +37,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
   const [currTitle, setCurrTitle] = useState<string>();
 
   const [currUser, setCurrUser] = useState<User>();
-  const { userId } = useAuth();
+  const { userId, userRole } = useAuth();
 
   useEffect(() => {
     getFileById(documentId)

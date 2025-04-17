@@ -121,24 +121,26 @@ export function DocumentComment({
   };
 
   const deleteCommentHandler = (id: string, key: number) => {
-    deleteCommentObject(id)
-      .then((response) => {
-        if (response.success && file) {
-          const newCommentList = file.comments.slice(0, key).concat(file.comments.slice(key + 1));
-          editFileObject(file._id, { comments: newCommentList })
-            .then((response2) => {
-              if (response2.success) {
-                setFile(response2.data);
-              }
-            })
-            .catch((error: unknown) => {
-              console.log(error);
-            });
-        }
-      })
-      .catch((error: unknown) => {
-        console.log(error);
-      });
+    if(user._id === comment.commenterId._id || user.role === "admin"){
+      deleteCommentObject(id)
+        .then((response) => {
+          if (response.success && file) {
+            const newCommentList = file.comments.slice(0, key).concat(file.comments.slice(key + 1));
+            editFileObject(file._id, { comments: newCommentList })
+              .then((response2) => {
+                if (response2.success) {
+                  setFile(response2.data);
+                }
+              })
+              .catch((error: unknown) => {
+                console.log(error);
+              });
+          }
+        })
+        .catch((error: unknown) => {
+          console.log(error);
+        });
+    }
   };
 
   return (
@@ -165,7 +167,7 @@ export function DocumentComment({
               <Image
                 style={{ cursor: "pointer" }}
                 onClick={() => {
-                  setSelected(true);
+                  if(user._id === comment.commenterId._id) setSelected(true);
                 }}
                 src="/pencil_icon_2.svg"
                 width={16}
