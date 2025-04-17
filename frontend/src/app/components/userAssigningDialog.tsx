@@ -19,6 +19,7 @@ type UserAssigningDialogProps = {
   isOpen: boolean;
   program: string;
   user: UserProfileType;
+  setMessage: (message: string) => void;
 };
 
 type OptionType = {
@@ -28,10 +29,10 @@ type OptionType = {
 
 export default function UserAssigningDialog(props: UserAssigningDialogProps) {
   const [hasMounted, setHasMounted] = useState(false);
-  const [message, setMessage] = useState("");
   const [volunteers, setVolunteers] = useState<UserProfileType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedVolunteerOption, setSelectedVolunteerOption] = useState<OptionType | null>(null);
+  props.setMessage("");
 
   const availableVolunteers = () => {
     setIsLoading(true);
@@ -68,7 +69,7 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
     }
   };
 
-  const assignVolunteer = () => {
+  const assignVolunteer = async () => {
     if (!selectedVolunteerOption?.value._id || !props.user._id) {
       return null;
     }
@@ -81,12 +82,16 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
     const veteranId =
       props.user.role === RoleEnum.VETERAN ? props.user._id : selectedVolunteerOption.value._id;
 
-    assignUserToProgram(volunteerEmail, veteranEmail, props.program, volunteerId, veteranId)
+    await assignUserToProgram(volunteerEmail, veteranEmail, props.program, volunteerId, veteranId)
       .then((response) => {
         if (response.success) {
-          setMessage("Successfully assigned user!");
+          props.setMessage(
+            `Successfully assigned ${selectedVolunteerOption?.value.firstName} to ${props.user.firstName}`,
+          );
         } else {
-          setMessage("Failed to assign user. Ensure user is not already assigned to this person.");
+          props.setMessage(
+            "Failed to assign user. Ensure user is not already assigned to this person.",
+          );
         }
       })
       .catch((err: unknown) => {
@@ -100,18 +105,6 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
       availableVolunteers();
     }
   }, []);
-
-  useEffect(() => {
-    if (message) {
-      const timer = setTimeout(() => {
-        setMessage("");
-      }, 2000);
-
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [message]);
 
   if (!hasMounted || !props.isOpen) {
     return null;
@@ -206,14 +199,14 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
           </button>
           <button
             disabled={!selectedVolunteerOption}
-            onClick={assignVolunteer}
+            onClick={() => {
+              void assignVolunteer().then(props.closeDialog);
+            }}
             className={styles.save}
           >
             Save
           </button>
         </div>
-
-        {message && <p className={styles.message}>{message}</p>}
       </div>
     </div>
   );

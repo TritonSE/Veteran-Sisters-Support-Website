@@ -13,6 +13,7 @@ export function UserList(params: {
   title: string;
   editable: boolean;
   minimized: boolean;
+  setMessage: (message: string) => void;
 }) {
   const { title, userProfile, editable, minimized } = params;
   const userPrograms = Object.fromEntries(
@@ -66,7 +67,6 @@ export function UserList(params: {
         const updatedUsers = Object.fromEntries(
           (userProfile?.assignedPrograms ?? []).map((program) => [program, []]),
         ) as Record<string, UserProfileType[]>;
-
         for (const [key, userObj] of users) {
           if (!updatedUsers[key].some((vol) => vol.email === userObj.email)) {
             updatedUsers[key].push(userObj);
@@ -101,6 +101,7 @@ export function UserList(params: {
           program={dialogProgram}
           user={userProfile}
           closeDialog={closeDialog}
+          setMessage={params.setMessage}
         />
       )}
       <div className={styles.userListHeader}>

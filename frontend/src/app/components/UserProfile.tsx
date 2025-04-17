@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import {
@@ -117,6 +118,7 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -210,12 +212,25 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
                   title={profileRenderingContext.userListTitle}
                   editable={profileRenderingContext.userListEditable}
                   minimized={profileRenderingContext.showVolunteerNotes}
+                  setMessage={setMessage}
                 />
               )}
             </div>
             {userProfile.role === RoleEnum.VETERAN && (
               <div style={{ width: "100%" }}>
                 <VeteranDocuments uploader={profileUserId} />
+              </div>
+            )}
+            {message && (
+              <div
+                className={`${styles.messageContainer} ${message.includes("Successfully") ? styles.messageSuccess : styles.messageError}`}
+              >
+                {message.includes("Successfully") ? (
+                  <Image src="/check.svg" alt="Check Symbol" width={20} height={20}></Image>
+                ) : (
+                  <Image src="/error_symbol.svg" alt="Error Symbol" width={20} height={20}></Image>
+                )}
+                <p>{message}</p>
               </div>
             )}
           </div>
