@@ -15,11 +15,7 @@ import styles from "./UserProfile.module.css";
 import { VeteranDocuments } from "./VeteranProfileDocuments";
 import { VolunteerNotes } from "./VolunteerNotes";
 
-<<<<<<< HEAD
-import { useAuth } from "@/contexts/AuthContext";
-=======
 import { useAuth } from "@/app/contexts/AuthContext";
->>>>>>> origin/main
 
 type ProfileRenderingContext = {
   invalidContext: boolean;
