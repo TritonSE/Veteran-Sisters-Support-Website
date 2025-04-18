@@ -7,7 +7,7 @@ import {
   getUserById,
   getUsersNonAdmins,
   getUserRole,
-  updateUserID,
+  updateUser,
   getVeteransByVolunteer,
   updateUserId,
 } from "../controllers/userController.js";
