@@ -2,18 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-import { auth } from "../../../firebase/firebase";
+import { auth } from "../../firebase/firebase";
+import { useAuth } from "../contexts/AuthContext";
 
 import styles from "./NavBar.module.css";
-
-import { useAuth } from "@/contexts/AuthContext";
 
 export const NavBar = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const { userId } = useAuth();
 
   const handleLogout = async () => {
-    console.log("Logging out...");
     await auth.signOut();
     router.push("/login");
   };
@@ -22,7 +21,7 @@ export const NavBar = () => {
     <div className={styles.container}>
       <div className={styles.navMenu}>
         <div className={styles.profile}>
-          <Link href="/dummy?word=profile">
+          <Link href={{ pathname: "/profile", query: { userId } }}>
             <div className={styles.profileFrame}>
               <Image src="/profile_icon.svg" alt="Profile" width={24} height={24}></Image>
             </div>
@@ -60,7 +59,7 @@ export const NavBar = () => {
       <button
         className={styles.logoutFrame}
         onClick={() => {
-          handleLogout();
+          void handleLogout();
         }}
       >
         <div>

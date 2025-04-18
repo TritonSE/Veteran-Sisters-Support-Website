@@ -1,4 +1,5 @@
 "use client";
+import axios from "axios";
 import { getDownloadURL, ref } from "firebase/storage";
 import fileDownload from "js-file-download";
 import Image from "next/image";
@@ -6,17 +7,16 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
-import { storage } from "../../../firebase/firebase";
+import { storage } from "../../firebase/firebase";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { Comment, FileObject, editFileObject, getFileById } from "../api/fileApi";
+import { UserProfile } from "../api/profileApi";
 import { getUser } from "../api/userApi";
-import { User } from "../api/users";
+import { useAuth } from "../contexts/AuthContext";
 
 import { DocumentComment } from "./DocumentComment";
 import styles from "./DocumentView.module.css";
-
-import axios from "axios";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -37,7 +37,8 @@ export function DocumentView({ documentId }: DocumentViewProps) {
   const [editingTitle, setEditingTitle] = useState<boolean>();
   const [currTitle, setCurrTitle] = useState<string>();
 
-  const [currUser, setCurrUser] = useState<User>();
+  const [currUser, setCurrUser] = useState<UserProfile>();
+  const { userId } = useAuth();
 
   useEffect(() => {
     getFileById(documentId)
@@ -49,28 +50,28 @@ export function DocumentView({ documentId }: DocumentViewProps) {
           console.log(response.error);
         }
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.log(error);
       });
     getDownloadURL(ref(storage, `files/${documentId}`))
       .then((url) => {
         setFileURL(url);
-        console.log(url);
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.log(error);
       });
-    getUser("67b2e046432b1fc7da8b533c")
-      .then((response) => {
-        if (response.success) {
-          setCurrUser(response.data);
-          console.log(response.data);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    if (userId) {
+      getUser(userId)
+        .then((response) => {
+          if (response.success) {
+            setCurrUser(response.data);
+          }
+        })
+        .catch((error: unknown) => {
+          console.log(error);
+        });
+    }
+  }, [userId]);
 
   const changeTitleHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" && file) {
@@ -84,7 +85,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
             setEditingTitle(false);
           }
         })
-        .catch((error) => {
+        .catch((error: unknown) => {
           console.log(error);
         });
     }
@@ -98,7 +99,10 @@ export function DocumentView({ documentId }: DocumentViewProps) {
           responseType: "blob",
         })
         .then((res) => {
-          fileDownload(res.data, file?.filename);
+          fileDownload(res.data as Blob, file?.filename);
+        })
+        .catch((error: unknown) => {
+          console.log(error);
         });
     }
   };
@@ -110,7 +114,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
           responseType: "blob",
         })
         .then((res) => {
-          const blobURL = URL.createObjectURL(res.data);
+          const blobURL = URL.createObjectURL(res.data as Blob);
           const iframe = document.createElement("iframe");
           document.body.appendChild(iframe);
 
@@ -122,18 +126,21 @@ export function DocumentView({ documentId }: DocumentViewProps) {
               if (iframe.contentWindow) iframe.contentWindow.print();
             }, 1);
           };
+        })
+        .catch((error: unknown) => {
+          console.log(error);
         });
     }
   };
 
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
-    setNumPages(numPages);
+  function onDocumentLoadSuccess({ numPages: totalPages }: { numPages: number }): void {
+    setNumPages(totalPages);
   }
 
   const HeaderBar = (filename: string) => {
     return (
       <div className={styles.header}>
-        <Link href="/veteranDashboard">
+        <Link href="/">
           <Image src="/logo_black.svg" width={143} height={32} alt="logo" />
         </Link>
         {editingTitle ? (

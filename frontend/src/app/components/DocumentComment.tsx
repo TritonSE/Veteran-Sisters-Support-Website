@@ -10,7 +10,7 @@ import {
   editCommentObject,
   editFileObject,
 } from "../api/fileApi";
-import { User } from "../api/users";
+import { AssignedProgram as ProgramEnum, UserProfile } from "../api/profileApi";
 
 import styles from "./DocumentComment.module.css";
 import { Program } from "./Program";
@@ -19,7 +19,7 @@ import { Role } from "./Role";
 type DocumentCommentProps = {
   comment: Comment;
   file: FileObject;
-  user: User;
+  user: UserProfile;
   commentKey: number;
   selected: boolean;
   setSelected: (selected: boolean) => void;
@@ -36,9 +36,9 @@ export function DocumentComment({
   setFile,
 }: DocumentCommentProps) {
   const borderColor =
-    comment.commenterId.assignedPrograms[0] === "battle buddies"
+    comment.commenterId.assignedPrograms?.[0] === ProgramEnum.BATTLE_BUDDIES
       ? "#0093EB"
-      : comment.commenterId.assignedPrograms[0] === "advocacy"
+      : comment.commenterId.assignedPrograms?.[0] === ProgramEnum.ADVOCACY
         ? "#3730A3"
         : "#337357";
   const name = `${comment.commenterId.firstName} ${comment.commenterId.lastName}`;
@@ -69,13 +69,13 @@ export function DocumentComment({
   const formatDate = (datePosted: string) => {
     const date = new Date(datePosted);
     const month = months[date.getMonth()];
-    const day = date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
-    const year = date.getFullYear();
+    const day = String(date.getDate()).padStart(2, "0");
+    const year = String(date.getFullYear());
     return `${month} ${day}, ${year}`;
   };
 
   const postCommentHandler = () => {
-    if (tempCommentBody?.trim() && file && user) {
+    if (tempCommentBody?.trim() && file && user._id) {
       if (currComment.comment !== "") {
         editCommentObject(comment._id, tempCommentBody)
           .then((response) => {
@@ -87,12 +87,12 @@ export function DocumentComment({
               setSelected(false);
             }
           })
-          .catch((error) => {
+          .catch((error: unknown) => {
             console.log(error);
           });
       } else {
         const newComment: CreateCommentRequest = {
-          commenterId: user?._id,
+          commenterId: user._id,
           comment: tempCommentBody,
         };
         createCommentObject(newComment)
@@ -108,12 +108,12 @@ export function DocumentComment({
                     setSelected(false);
                   }
                 })
-                .catch((error) => {
+                .catch((error: unknown) => {
                   console.log(error);
                 });
             }
           })
-          .catch((error) => {
+          .catch((error: unknown) => {
             console.log(error);
           });
       }
@@ -125,14 +125,18 @@ export function DocumentComment({
       .then((response) => {
         if (response.success && file) {
           const newCommentList = file.comments.slice(0, key).concat(file.comments.slice(key + 1));
-          editFileObject(file._id, { comments: newCommentList }).then((response2) => {
-            if (response2.success) {
-              setFile(response2.data);
-            }
-          });
+          editFileObject(file._id, { comments: newCommentList })
+            .then((response2) => {
+              if (response2.success) {
+                setFile(response2.data);
+              }
+            })
+            .catch((error: unknown) => {
+              console.log(error);
+            });
         }
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.log(error);
       });
   };
@@ -148,7 +152,7 @@ export function DocumentComment({
             <div className={styles.profileIcon}>{name.trim().substring(0, 1).toUpperCase()}</div>
             <div style={{ maxWidth: 100 }}>{name}</div>
             <Role role={comment.commenterId.role} />
-            {comment.commenterId.assignedPrograms.map((program, i) => {
+            {comment.commenterId.assignedPrograms?.map((program, i) => {
               return <Program key={i} program={program} iconOnly />;
             })}
           </div>
@@ -187,7 +191,7 @@ export function DocumentComment({
             <div className={styles.profileIcon}>{name.trim().substring(0, 1).toUpperCase()}</div>
             <div style={{ maxWidth: 100 }}>{name}</div>
             <Role role={comment.commenterId.role} />
-            {comment.commenterId.assignedPrograms.map((program, i) => {
+            {comment.commenterId.assignedPrograms?.map((program, i) => {
               return <Program key={i} program={program} iconOnly />;
             })}
           </div>

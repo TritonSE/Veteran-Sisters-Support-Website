@@ -1,78 +1,73 @@
-import { APIResult } from "./fileApi";
-import { UserProfile } from "./profileApi";
+import { Role, UserProfile } from "./profileApi";
+import { APIResult, del, get, handleAPIError, post, put } from "./requests"; // Update path as needed
 
 export type ActiveVolunteer = {
   assignedProgram: string;
   assignedVeteran: string;
   volunteer: string;
   volunteerUser: UserProfile;
+  veteranUser: UserProfile;
 };
 
-export const getVolunteersByProgram = async (
-  program: string,
-): Promise<APIResult<UserProfile[]>> => {
+export const getVeteransByProgram = async (program: string): Promise<APIResult<UserProfile[]>> => {
   try {
-    const response = await fetch(`http://localhost:4000/api/users?assignedProgram=${program}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await get(`/users?role=veteran&assignedProgram=${program}`);
     if (!response.ok) {
       return { success: false, error: response.statusText };
     }
     const data = (await response.json()) as UserProfile[];
     return { success: true, data };
   } catch (error: unknown) {
-    return { success: false, error: (error as Error).message };
+    return handleAPIError(error);
   }
 };
 
-export const assignVolunteerToProgram = async (
+export const getVolunteersByProgram = async (
+  program: string,
+): Promise<APIResult<UserProfile[]>> => {
+  try {
+    const response = await get(`/users?assignedProgram=${program}&role=staff&role=volunteer`);
+    if (!response.ok) {
+      return { success: false, error: response.statusText };
+    }
+    const data = (await response.json()) as UserProfile[];
+    return { success: true, data };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+};
+
+export const assignUserToProgram = async (
   volunteerEmail: string,
   veteranEmail: string,
   program: string,
   volunteerId: string,
+  veteranId: string,
 ): Promise<APIResult<ActiveVolunteer>> => {
   try {
     const requestBodyVolunteer = {
       userEmail: volunteerEmail,
       veteranEmail,
       program,
-      userId: volunteerId,
+      volunteerId,
+      veteranId,
     };
 
-    // First fetch to add volunteer to activeVolunteer schema
-    const response = await fetch(`http://localhost:4000/api/activeVolunteers`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBodyVolunteer),
-    });
-
+    // First request to add volunteer to activeVolunteer schema
+    const response = await post("/activeVolunteers", requestBodyVolunteer);
     if (!response.ok) {
-      console.log(response);
-      return { success: false, error: response.statusText };
+      return handleAPIError(response);
     }
-
     const data = (await response.json()) as ActiveVolunteer;
 
-    // Second fetch to update assigned veterans on User schema
+    // Second request to update assigned veterans on User schema
     const requestBodyVeteran = {
       veteranEmail,
     };
 
-    const userResponse = await fetch(`http://localhost:4000/api/users/${volunteerEmail}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBodyVeteran),
-    });
-
+    const userResponse = await put(`/users/${volunteerEmail}`, requestBodyVeteran);
     if (!userResponse.ok) {
-      return { success: false, error: userResponse.statusText };
+      return handleAPIError(userResponse);
     }
 
     return { success: true, data };
@@ -92,37 +87,21 @@ export const removeVolunteerFromVeteran = async (
       program,
     };
 
-    // First fetch to remove volunteer to activeVolunteer schema
-    const response = await fetch(`http://localhost:4000/api/activeVolunteers/${volunteerEmail}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBodyVolunteer),
-    });
-
+    // First request to remove volunteer from activeVolunteer schema
+    const response = await del(`/activeVolunteers/${volunteerEmail}`, requestBodyVolunteer);
     if (!response.ok) {
-      console.log(response);
-      return { success: false, error: response.statusText };
+      return handleAPIError(response);
     }
-
     const data = (await response.json()) as ActiveVolunteer;
 
-    // Second fetch to update assigned veterans on User schema
+    // Second request to update assigned veterans on User schema
     const requestBodyVeteran = {
       veteranEmail,
     };
 
-    const userResponse = await fetch(`http://localhost:4000/api/users/${volunteerEmail}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBodyVeteran),
-    });
-
+    const userResponse = await put(`/users/${volunteerEmail}`, requestBodyVeteran);
     if (!userResponse.ok) {
-      return { success: false, error: userResponse.statusText };
+      return handleAPIError(userResponse);
     }
 
     return { success: true, data };
@@ -131,21 +110,15 @@ export const removeVolunteerFromVeteran = async (
   }
 };
 
-export const getVolunteersByVeteran = async (
-  veteranEmail: string,
+export const getAssignedUsers = async (
+  user: UserProfile,
 ): Promise<APIResult<ActiveVolunteer[]>> => {
   try {
-    const response = await fetch(
-      `http://localhost:4000/api/activeVolunteers?veteran=${veteranEmail}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
+    //fetch volunteers if user is veteran and vice versa
+    const query = `?${user.role === Role.VETERAN ? `veteran=${user.email}` : `volunteer=${user.email}`}`;
+    const response = await get(`/activeVolunteers${query}`);
     if (!response.ok) {
-      return { success: false, error: response.statusText };
+      return handleAPIError(response);
     }
     const data = (await response.json()) as ActiveVolunteer[];
     return { success: true, data };

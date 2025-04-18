@@ -3,18 +3,23 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
 
-import { assignVolunteerToProgram, getVolunteersByProgram } from "../api/activeVolunteers";
-import { UserProfile as UserProfileType } from "../api/profileApi";
-import { Program } from "../components/Program";
-import { Role } from "../components/Role";
+import {
+  assignUserToProgram,
+  getVeteransByProgram,
+  getVolunteersByProgram,
+} from "../api/activeVolunteers";
+import { Role as RoleEnum, UserProfile as UserProfileType } from "../api/profileApi";
 
+import { Program } from "./Program";
+import { Role } from "./Role";
 import styles from "./veteranProfile.module.css";
 
-type VolunteerAssigningDialogProps = {
+type UserAssigningDialogProps = {
   closeDialog: () => void;
   isOpen: boolean;
   program: string;
-  veteran: UserProfileType;
+  user: UserProfileType;
+  setMessage: (message: string) => void;
 };
 
 type OptionType = {
@@ -22,47 +27,70 @@ type OptionType = {
   label: string;
 };
 
-export default function VolunteerAssigningDialog(props: VolunteerAssigningDialogProps) {
+export default function UserAssigningDialog(props: UserAssigningDialogProps) {
   const [hasMounted, setHasMounted] = useState(false);
-  const [message, setMessage] = useState("");
   const [volunteers, setVolunteers] = useState<UserProfileType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedVolunteerOption, setSelectedVolunteerOption] = useState<OptionType | null>(null);
+  props.setMessage("");
 
   const availableVolunteers = () => {
     setIsLoading(true);
-    getVolunteersByProgram(props.program)
-      .then((response) => {
-        setIsLoading(false);
-        if (response.success) {
-          setVolunteers(response.data);
-        } else {
-          console.log(response.error);
-        }
-      })
-      .catch((err: unknown) => {
-        console.error(err);
-        setIsLoading(false);
-      });
+    //if user is veteran, the dialog will show volunteers
+    if (props.user.role === RoleEnum.VETERAN) {
+      getVolunteersByProgram(props.program)
+        .then((response) => {
+          setIsLoading(false);
+          if (response.success) {
+            setVolunteers(response.data);
+          } else {
+            console.log(response.error);
+          }
+        })
+        .catch((err: unknown) => {
+          console.error(err);
+          setIsLoading(false);
+        });
+    } else if (props.user.role === RoleEnum.VOLUNTEER) {
+      //if user is volunteer, the dialog will show veterans
+      getVeteransByProgram(props.program)
+        .then((response) => {
+          setIsLoading(false);
+          if (response.success) {
+            setVolunteers(response.data);
+          } else {
+            console.log(response.error);
+          }
+        })
+        .catch((err: unknown) => {
+          console.error(err);
+          setIsLoading(false);
+        });
+    }
   };
 
-  const assignVolunteer = () => {
-    if (!selectedVolunteerOption?.value._id) {
+  const assignVolunteer = async () => {
+    if (!selectedVolunteerOption?.value._id || !props.user._id) {
       return null;
     }
+    const volunteerEmail =
+      props.user.role === RoleEnum.VETERAN ? selectedVolunteerOption.value.email : props.user.email;
+    const veteranEmail =
+      props.user.role === RoleEnum.VETERAN ? props.user.email : selectedVolunteerOption.value.email;
+    const volunteerId =
+      props.user.role === RoleEnum.VETERAN ? selectedVolunteerOption.value._id : props.user._id;
+    const veteranId =
+      props.user.role === RoleEnum.VETERAN ? props.user._id : selectedVolunteerOption.value._id;
 
-    assignVolunteerToProgram(
-      selectedVolunteerOption.value.email,
-      props.veteran.email,
-      props.program,
-      selectedVolunteerOption.value._id,
-    )
+    await assignUserToProgram(volunteerEmail, veteranEmail, props.program, volunteerId, veteranId)
       .then((response) => {
         if (response.success) {
-          setMessage("Successfully assigned volunteer!");
+          props.setMessage(
+            `Successfully assigned ${selectedVolunteerOption?.value.firstName} to ${props.user.firstName}`,
+          );
         } else {
-          setMessage(
-            "Failed to assign volunteer. Ensure volunteer is not already assigned to veteran.",
+          props.setMessage(
+            "Failed to assign user. Ensure user is not already assigned to this person.",
           );
         }
       })
@@ -78,25 +106,15 @@ export default function VolunteerAssigningDialog(props: VolunteerAssigningDialog
     }
   }, []);
 
-  useEffect(() => {
-    if (message) {
-      const timer = setTimeout(() => {
-        setMessage("");
-      }, 2000);
-
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [message]);
-
   if (!hasMounted || !props.isOpen) {
     return null;
   }
 
   const formattedOptions = volunteers.map((v) => ({
     value: v,
-    label: `${v.firstName} ${v.lastName} - ${String(v.assignedUsers?.length ?? 0)} veterans`,
+    label: `${v.firstName} ${v.lastName} - ${String(v.assignedUsers?.length ?? 0)} ${
+      props.user.role === RoleEnum.VETERAN ? "veterans" : "volunteers"
+    }`,
   }));
 
   const customLabel = (option: OptionType) => (
@@ -107,7 +125,7 @@ export default function VolunteerAssigningDialog(props: VolunteerAssigningDialog
   );
 
   if (isLoading || !formattedOptions.length) {
-    return <div>Loading...</div>;
+    return;
   }
 
   return (
@@ -115,19 +133,21 @@ export default function VolunteerAssigningDialog(props: VolunteerAssigningDialog
       <div className={styles.dialog}>
         <div className={styles.headerInfoContainer}>
           <div className={styles.headerInfo}>
-            {`Assign: ${props.veteran.firstName}`}
-            <Role role="veteran" />
+            {`Assign: ${props.user.firstName}`}
+            <Role role={props.user.role} />
             {selectedVolunteerOption
               ? ` to ${selectedVolunteerOption.value.firstName} ${selectedVolunteerOption.value.lastName}`
               : " to ..."}
-            {selectedVolunteerOption && <Role role="volunteer" />}
+            {selectedVolunteerOption && <Role role={selectedVolunteerOption.value.role} />}
           </div>
           <Program program={props.program} />
         </div>
 
         <div className={styles.searchBar}>
           <Select
-            placeholder="Choose a volunteer"
+            placeholder={
+              props.user.role === RoleEnum.VOLUNTEER ? "Choose a veteran" : "Choose a volunteer"
+            }
             options={formattedOptions}
             menuPortalTarget={document.body}
             formatOptionLabel={customLabel}
@@ -143,7 +163,7 @@ export default function VolunteerAssigningDialog(props: VolunteerAssigningDialog
             <div className={styles.volunteerInfo}>
               <div className={styles.headerInfo}>
                 {selectedVolunteerOption.value.firstName} {selectedVolunteerOption.value.lastName}
-                <Role role="volunteer" />
+                <Role role={selectedVolunteerOption.value.role} />
                 <Program program={props.program} />
               </div>
               <p>
@@ -164,8 +184,10 @@ export default function VolunteerAssigningDialog(props: VolunteerAssigningDialog
                 </span>
               </p>
             </div>
-            {/* TODO: link to volunteer profile page when done */}
-            <a className={styles.profileLink} href="google.com">
+            <a
+              className={styles.profileLink}
+              href={`/profile/${selectedVolunteerOption.value._id ?? ""}`}
+            >
               View Profile
             </a>
           </div>
@@ -177,14 +199,14 @@ export default function VolunteerAssigningDialog(props: VolunteerAssigningDialog
           </button>
           <button
             disabled={!selectedVolunteerOption}
-            onClick={assignVolunteer}
+            onClick={() => {
+              void assignVolunteer().then(props.closeDialog);
+            }}
             className={styles.save}
           >
             Save
           </button>
         </div>
-
-        {message && <p className={styles.message}>{message}</p>}
       </div>
     </div>
   );

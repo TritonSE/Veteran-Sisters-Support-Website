@@ -1,0 +1,37 @@
+{
+    "hosting": {
+      "public": "frontend/out",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+          {
+          "source": "/api/**",
+          "function": {
+              "functionId": "backend",
+              "pinTag": true
+          }
+          },
+          {
+            "source": "**",
+            "destination": "/index.html"
+          }
+      ]
+    },
+    "functions": [
+      {
+        "runtime": "nodejs22",
+        "source": "backend",
+        "codebase": "default",
+        "ignore": [
+          ".git",
+          "firebase-debug.log",
+          "firebase-debug.*.log",
+          "**/.*",
+          "**/node_modules/**"
+        ]
+      }
+    ]
+  }
