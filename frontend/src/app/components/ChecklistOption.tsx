@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 import styles from "./ChecklistOption.module.css";
 
@@ -15,8 +16,11 @@ const ChecklistOption: React.FC<ChecklistOptionProps> = ({ text, isChecked, onCl
   return (
     <div className={styles.flexContent} onClick={onClick}>
       <div className={styles.checkboxContainer}>
-        <img
+        <Image
           src={isChecked ? "/checkbox.checked.svg" : "/checkbox.unchecked.green.svg"}
+          alt="Checkbox"
+          width={24}
+          height={24}
           className={styles.checkbox}
         />
       </div>

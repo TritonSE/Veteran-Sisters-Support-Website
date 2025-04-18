@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 
 import { useAuth } from "../contexts/AuthContext";
 import { Button } from "../components/Button";
@@ -37,13 +38,13 @@ export default function ReportVeteran() {
     setActiveDropdown((prev) => (prev === id ? "" : id));
   };
 
-  const veteranOptions = [
+  const volunteerOptions = [
     "Veteran is unresponsive",
     "Veteran made offensive comment",
     "Proof of life requested",
     "Other, please specify",
   ];
-  const volunteerOptions = [
+  const veteranOptions = [
     "Volunteer doesn’t respond",
     "Volunteer made offensive comment",
     "Other, please specify",
@@ -109,7 +110,13 @@ export default function ReportVeteran() {
                     setShowDatePicker((prev) => !prev);
                   }}
                 >
-                  <img src="/calendar.svg" className={styles.calendarIcon} />
+                  <Image
+                    src="/calendar.svg"
+                    alt="Calendar Icon"
+                    width={24}
+                    height={24}
+                    className={styles.calendarIcon}
+                  />
                   <span className={styles.dateText}>
                     {proofOfLifeDate
                       ? proofOfLifeDate.toLocaleDateString("en-US", {
@@ -128,9 +135,12 @@ export default function ReportVeteran() {
                     borderColor: !isTimeValid && hasBlurred ? "#B93B3B" : "#bdc9d2",
                   }}
                 >
-                  <img
+                  <Image
                     src={!isTimeValid && hasBlurred ? "/clock-red.svg" : "/clock.svg"}
                     className={styles.calendarIcon}
+                    alt="clock icon"
+                    width={24}
+                    height={24}
                   />
                   <input
                     type="text"
