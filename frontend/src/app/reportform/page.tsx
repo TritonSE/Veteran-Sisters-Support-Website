@@ -19,7 +19,7 @@ type ReportVeteranProps = {
 };
 
 export default function ReportVeteran({}: ReportVeteranProps) {
-  const { role } = useAuth();
+  const { userRole } = useAuth();
   const [reportee, setReportee] = useState("");
   const [activeDropdown, setActiveDropdown] = useState("");
   const [proofOfLifeDate, setProofOfLifeDate] = useState<Date | null>(null);
@@ -65,21 +65,21 @@ export default function ReportVeteran({}: ReportVeteranProps) {
         <div className={styles.header}>
           <p className={styles.title}>Report</p>
           <p className={styles.subtitle}>
-            {role === "volunteer"
+            {userRole === "volunteer"
               ? "If you are encountering a problem with your veteran, file a report below to the admins. The admin will get back to you as soon as possible."
               : "If you are encountering a problem with your volunteer, file a report below to the admins. The admin will get back to you as soon as possible."}
           </p>
         </div>
         <form className={styles.questionPanel}>
           <p className={styles.question}>
-            {role === "volunteer"
+            {userRole === "volunteer"
               ? "Which veteran would you like to report?"
               : "Which volunteer would you like to report?"}
             <span className={styles.asterisk}> *</span>
           </p>
           <ReportDropdown
             options={
-              role === "volunteer" ? ["Veteran A", "Veteran B"] : ["Volunteer A", "Volunteer B"]
+              userRole === "volunteer" ? ["Veteran A", "Veteran B"] : ["Volunteer A", "Volunteer B"]
             }
             isOpen={activeDropdown === "selectReportee"}
             toggleDropdown={() => {
@@ -94,7 +94,7 @@ export default function ReportVeteran({}: ReportVeteranProps) {
             What type of situation is this? <span className={styles.asterisk}> *</span>
           </p>
           <Checklist
-            options={role === "volunteer" ? veteranOptions : volunteerOptions}
+            options={userRole === "volunteer" ? veteranOptions : volunteerOptions}
             onOptionClick={handleOptionClick}
             selectedOptions={selectedOptions}
           />
