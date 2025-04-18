@@ -17,7 +17,7 @@ const ChecklistOption: React.FC<ChecklistOptionProps> = ({ text, isChecked, onCl
     <div className={styles.flexContent} onClick={onClick}>
       <div className={styles.checkboxContainer}>
         <Image
-          src={isChecked ? "/checkbox.checked.svg" : "/checkbox.unchecked.green.svg"}
+          src={isChecked ? "/checkBox.checked.svg" : "/checkbox.unchecked.green.svg"}
           alt="Checkbox"
           width={24}
           height={24}
