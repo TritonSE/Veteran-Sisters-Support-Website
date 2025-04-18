@@ -13,6 +13,7 @@ import { UserList } from "./UserList";
 import styles from "./UserProfile.module.css";
 import { VeteranDocuments } from "./VeteranProfileDocuments";
 import { VolunteerNotes } from "./VolunteerNotes";
+
 import { useAuth } from "@/contexts/AuthContext";
 
 type ProfileRenderingContext = {

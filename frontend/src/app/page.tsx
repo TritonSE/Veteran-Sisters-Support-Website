@@ -2,12 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 
 import { useAuth } from "../contexts/AuthContext";
 
 import LoginForm from "./login/page";
-import styles from "./page.module.css";
 
 export default function Home() {
   const { loggedIn, role } = useAuth();

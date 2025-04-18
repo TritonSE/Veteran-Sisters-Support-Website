@@ -136,7 +136,7 @@ export const getUserRole = async (req, res) => {
   }
 };
 
-export const updateUser = async (req, res) => {
+export const updateUserEmail = async (req, res) => {
   try {
     const email = req.params.email;
     const { program, veteranEmail } = req.body;
@@ -203,7 +203,7 @@ export const getVeteransByVolunteer = async (req, res) => {
   }
 };
 
-export const updateUser = async (req, res) => {
+export const updateUserID = async (req, res) => {
   try {
     const { id } = req.params;
     const { firstName, lastName, email, phoneNumber, age, gender } = req.body;

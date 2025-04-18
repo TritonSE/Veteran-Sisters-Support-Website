@@ -1,10 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { auth } from "../../../firebase/firebase";
 
 import styles from "./NavBar.module.css";
+
+import { useAuth } from "@/contexts/AuthContext";
 
 export const NavBar = () => {
   const router = useRouter();
@@ -56,11 +58,12 @@ export const NavBar = () => {
         </div>
       </div>
       <button
+        className={styles.logoutFrame}
         onClick={() => {
           handleLogout();
         }}
       >
-        <div className={styles.logoutFrame}>
+        <div>
           <Image src="/logout.svg" alt="logout" width={20} height={20}></Image>
         </div>
       </button>
