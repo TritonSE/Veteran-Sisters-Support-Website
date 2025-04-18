@@ -38,13 +38,13 @@ export default function ReportVeteran() {
     setActiveDropdown((prev) => (prev === id ? "" : id));
   };
 
-  const volunteerOptions = [
+  const veteranOptions = [
     "Veteran is unresponsive",
     "Veteran made offensive comment",
     "Proof of life requested",
     "Other, please specify",
   ];
-  const veteranOptions = [
+  const volunteerOptions = [
     "Volunteer doesn’t respond",
     "Volunteer made offensive comment",
     "Other, please specify",
