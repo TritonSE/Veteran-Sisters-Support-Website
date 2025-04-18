@@ -11,14 +11,7 @@ import ReportDropdown from "../components/ReportDropdown";
 
 import styles from "./page.module.css";
 
-type ReportVeteranProps = {
-  reportee: string;
-  setReportee: (reportee: string) => void;
-  activeDropdown: string;
-  toggleDropdown: (id: string) => void;
-};
-
-export default function ReportVeteran({}: ReportVeteranProps) {
+export default function ReportVeteran() {
   const { userRole } = useAuth();
   const [reportee, setReportee] = useState("");
   const [activeDropdown, setActiveDropdown] = useState("");
