@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
 import Image from "next/image";
+import React, { useState } from "react";
 
-import { useAuth } from "../contexts/AuthContext";
 import { Button } from "../components/Button";
 import Checklist from "../components/Checklist";
 import CustomDatePicker from "../components/CustomDatePicker";
 import { NavBar } from "../components/NavBar";
 import ReportDropdown from "../components/ReportDropdown";
+import { useAuth } from "../contexts/AuthContext";
 
 import styles from "./page.module.css";
 

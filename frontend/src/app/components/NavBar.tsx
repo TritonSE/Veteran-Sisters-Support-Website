@@ -32,13 +32,7 @@ export const NavBar = () => {
             <div className={styles.homeFrame}>
               <div
                 className={
-                  pathname === "/" ||
-                  pathname === "/veteranDashboard" ||
-                  pathname === "/staffview" ||
-                  pathname === "/adminview" ||
-                  pathname === "/volunteerview"
-                    ? styles.selectedBackground
-                    : styles.unselectedBackground
+                  pathname === "/" ? styles.selectedBackground : styles.unselectedBackground
                 }
               >
                 <Image src="/home.svg" alt="Home" width={17.778} height={17.778}></Image>
@@ -48,7 +42,9 @@ export const NavBar = () => {
           <Link href="/reportform">
             <div
               className={
-                pathname === "/reportform" ? styles.selectedBackground : styles.unselectedBackground
+                pathname === "/reportform" || pathname === "/reportforms"
+                  ? styles.selectedBackground
+                  : styles.unselectedBackground
               }
             >
               <Image src="/reports.svg" alt="Home" width={17.778} height={17.778}></Image>
