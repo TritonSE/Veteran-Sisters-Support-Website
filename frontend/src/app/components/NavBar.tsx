@@ -42,7 +42,9 @@ export const NavBar = () => {
           <Link href={userRole === "admin" ? "/announcements" : "/reportform"}>
             <div
               className={
-                pathname === "/reportform" || pathname.startsWith("/announcements")
+                pathname === "/reportform" ||
+                pathname === "/announcements" ||
+                pathname.startsWith("/announcements/")
                   ? styles.selectedBackground
                   : styles.unselectedBackground
               }
