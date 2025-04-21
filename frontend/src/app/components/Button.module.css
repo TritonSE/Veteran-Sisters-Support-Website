@@ -25,7 +25,7 @@
   cursor: pointer;
 }
 
-.button.filled {
+.filled {
   background: var(--Primary, #057e6f);
 
   color: var(--Neutral-Base-White, #fafafa);
@@ -36,4 +36,9 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+
+.filled:hover {
+  background: #067164;
+  cursor: pointer;
 }
