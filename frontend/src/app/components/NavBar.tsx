@@ -42,7 +42,7 @@ export const NavBar = () => {
           <Link href="/reportform">
             <div
               className={
-                pathname === "/reportform" || pathname === "/reportforms"
+                pathname.startsWith("/reportform")
                   ? styles.selectedBackground
                   : styles.unselectedBackground
               }
