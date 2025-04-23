@@ -29,7 +29,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0px 2rem;
+  margin: 2rem 2rem;
+  font-size: 24px;
+  font-weight: 500;
 }
 
 .headerInfo {
@@ -107,4 +109,39 @@
   display: flex;
   justify-content: center;
   align-content: center;
+}
+
+.programSelectHeader {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: 2rem;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.programSelect {
+  margin-top: 2rem;
+}
+
+.optionsList {
+  gap: 6px;
+  line-height: 1.5;
+}
+
+.nameWithRole {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.multiHeaderInfo {
+  width: 100%;
+  font-size: 24px;
+  font-weight: 5px;
+}
+
+.userInfo {
+  display: flex;
+  gap: 0.5rem;
 }

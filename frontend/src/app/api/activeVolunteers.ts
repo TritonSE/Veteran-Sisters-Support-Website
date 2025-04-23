@@ -26,7 +26,7 @@ export const getVolunteersByProgram = async (
   program: string,
 ): Promise<APIResult<UserProfile[]>> => {
   try {
-    const response = await get(`/users?assignedProgram=${program}&role=staff&role=volunteer`);
+    const response = await get(`/users?assignedProgram=${program}&role=volunteer`);
     if (!response.ok) {
       return { success: false, error: response.statusText };
     }

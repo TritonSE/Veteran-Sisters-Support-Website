@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { AssignedProgram as ProgramEnum, Role as RoleEnum, UserProfile } from "../api/profileApi";
@@ -8,9 +9,10 @@ import { Role } from "./Role";
 
 type AdminStaffUserItemProp = {
   user: UserProfile;
+  openDialog: () => void;
 };
 
-export function AdminStaffUserItem({ user }: AdminStaffUserItemProp) {
+export function AdminStaffUserItem({ user, openDialog }: AdminStaffUserItemProp) {
   let assignedText;
   let assignedStyle = styles.assignedText;
   const length = user.assignedUsers ? user.assignedUsers.length : 0;
@@ -53,6 +55,21 @@ export function AdminStaffUserItem({ user }: AdminStaffUserItemProp) {
         </div>
         <div className={styles.assignedTo}>
           <span className={assignedStyle}>{assignedText}</span>
+          {user.role !== RoleEnum.STAFF && (user.assignedPrograms?.length ?? 0) > 0 && (
+            <div className={styles.addUserIcon}>
+              <Image
+                src="/add_icon.svg"
+                width={18}
+                height={18}
+                alt="Assign User"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  openDialog();
+                }}
+              ></Image>
+            </div>
+          )}
         </div>
       </Link>
     </div>

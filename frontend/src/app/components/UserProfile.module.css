@@ -53,6 +53,9 @@
   gap: 5px;
   font-family: "Albert Sans";
   font-weight: 500;
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
 }
 
 .messageError {

@@ -237,3 +237,54 @@
   border: 1px solid var(--Stroke-1, #edf1f5);
   background: #fff;
 }
+
+.filterSort {
+  display: flex;
+  align-items: center;
+  gap: var(--Spacing-sm, 16px);
+}
+
+.filterSortContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 1020px;
+}
+
+.messageContainer {
+  animation: fadeOut 5s forwards;
+  display: flex;
+  margin: auto;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 8px;
+  gap: 5px;
+  font-family: "Albert Sans";
+  font-weight: 500;
+  position: fixed;
+  bottom: 80px;
+}
+
+.messageError {
+  background-color: #851a1e1a;
+  border: 1px solid #851a1a33;
+}
+
+.messageSuccess {
+  background-color: #1a85381a;
+  border: 1px solid #1a853833;
+}
+
+.messageSuccess p {
+  color: #1a8538;
+}
+
+.messageError p {
+  color: #851a1a;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

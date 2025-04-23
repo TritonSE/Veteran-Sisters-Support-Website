@@ -125,3 +125,13 @@
 .unassignedText {
   color: var(--Danger-Emphasis, #b80037);
 }
+
+.addUserIcon {
+  height: 28px;
+  border-radius: 15px;
+  background: var(--Primary, #057e6f);
+  padding: 5px;
+  position: absolute;
+  right: 18%;
+  z-index: 0;
+}

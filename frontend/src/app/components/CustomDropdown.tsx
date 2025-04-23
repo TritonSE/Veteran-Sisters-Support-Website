@@ -10,6 +10,7 @@ type CustomDropdownProps = {
   onSelect: (option: string) => void;
   selected?: string;
   fullWidth?: boolean;
+  dropdownWidth?: string;
 };
 
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
@@ -19,6 +20,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   onSelect,
   selected,
   fullWidth,
+  dropdownWidth,
 }) => {
   const handleSelect = (option: string) => {
     toggleDropdown();
@@ -39,7 +41,10 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
       </div>
 
       {isOpen && (
-        <ul className={`${styles.customDropdown} ${fullWidth ? styles.fullWidth : ""}`}>
+        <ul
+          className={`${styles.customDropdown} ${fullWidth ? styles.fullWidth : ""}`}
+          style={{ width: dropdownWidth ? `${dropdownWidth}px` : "" }}
+        >
           {options.map((option, index) => (
             <li
               key={index}

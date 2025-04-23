@@ -6,7 +6,7 @@ import { Role, UserProfile as UserProfileType } from "../api/profileApi";
 
 import { Program } from "./Program";
 import styles from "./UserList.module.css";
-import UserAssigningDialog from "./userAssigningDialog";
+import UserAssigningDialog, { DialogContext } from "./userAssigningDialog";
 
 export function UserList(params: {
   userProfile: UserProfileType | undefined;
@@ -22,12 +22,12 @@ export function UserList(params: {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [refreshFlag, setRefreshFlag] = useState(false);
-  const [dialogProgram, setDialogProgram] = useState("");
+  const [dialogProgram, setDialogProgram] = useState<string[]>([]);
   const [currentUsers, setCurrentUsers] = useState<Record<string, UserProfileType[]>>(userPrograms);
 
   const openDialog = (program: string) => {
     setIsDialogOpen(true);
-    setDialogProgram(program);
+    setDialogProgram([program]);
   };
 
   const closeDialog = () => {
@@ -102,6 +102,7 @@ export function UserList(params: {
           user={userProfile}
           closeDialog={closeDialog}
           setMessage={params.setMessage}
+          context={DialogContext.USER_PROFILE}
         />
       )}
       <div className={styles.userListHeader}>

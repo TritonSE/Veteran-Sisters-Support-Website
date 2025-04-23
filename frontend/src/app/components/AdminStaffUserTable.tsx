@@ -11,13 +11,32 @@ import { getNonAdminUsers } from "../api/userApi";
 
 import { AdminStaffUserItem } from "./AdminStaffUserItem";
 import styles from "./AdminStaffUserTable.module.css";
+import CustomDropdown from "./CustomDropdown";
 import { Tabs } from "./Tabs";
+import UserAssigningDialog, { DialogContext } from "./userAssigningDialog";
 
 export function AdminStaffUserTable() {
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [allUsers, setAllUsers] = useState<UserProfile[]>([]);
   const [page, setPage] = useState<number>(0);
+  const [filterDropdownOpen, setFilterDropdownOpen] = useState(false);
+  const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
+  const [filterDropdownValue, setFilterDropdownValue] = useState("None");
+  const [sortDropdownValue, setSortDropdownValue] = useState("None");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [refreshFlag, setRefreshFlag] = useState(false);
+  const [message, setMessage] = useState("");
+  const [dialogUser, setDialogUsers] = useState<UserProfile>();
   const pageSize = 8;
+
+  const openDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+    setRefreshFlag((prev) => !prev);
+  };
 
   const handleChangeProgram = (program: ProgramEnum | undefined) => {
     if (!program) {
@@ -64,7 +83,7 @@ export function AdminStaffUserTable() {
       .catch((reason: unknown) => {
         console.error(reason);
       });
-  }, []);
+  }, [refreshFlag]);
 
   return (
     <div className={styles.container}>
@@ -74,20 +93,50 @@ export function AdminStaffUserTable() {
           <span>{allUsers.length}</span>
         </div>
       </div>
-      <Tabs
-        OnAll={() => {
-          handleChangeProgram(undefined);
-        }}
-        OnBattleBuddies={() => {
-          handleChangeProgram(AssignedProgram.BATTLE_BUDDIES);
-        }}
-        OnAdvocacy={() => {
-          handleChangeProgram(AssignedProgram.ADVOCACY);
-        }}
-        OnOperationWellness={() => {
-          handleChangeProgram(AssignedProgram.OPERATION_WELLNESS);
-        }}
-      />
+      <div className={styles.filterSortContainer}>
+        <Tabs
+          OnAll={() => {
+            handleChangeProgram(undefined);
+          }}
+          OnBattleBuddies={() => {
+            handleChangeProgram(AssignedProgram.BATTLE_BUDDIES);
+          }}
+          OnAdvocacy={() => {
+            handleChangeProgram(AssignedProgram.ADVOCACY);
+          }}
+          OnOperationWellness={() => {
+            handleChangeProgram(AssignedProgram.OPERATION_WELLNESS);
+          }}
+        />
+        <div className={styles.filterSort}>
+          <div>Filter by</div>
+          <CustomDropdown
+            options={["Role", "Program", "None"]}
+            toggleDropdown={() => {
+              setFilterDropdownOpen((prev) => !prev);
+            }}
+            isOpen={filterDropdownOpen}
+            onSelect={(option) => {
+              setFilterDropdownValue(option);
+            }}
+            selected={filterDropdownValue}
+            dropdownWidth="100"
+          />
+          <div>Sort by</div>
+          <CustomDropdown
+            options={["Assignment", "Program", "None"]}
+            toggleDropdown={() => {
+              setSortDropdownOpen((prev) => !prev);
+            }}
+            isOpen={sortDropdownOpen}
+            onSelect={(option) => {
+              setSortDropdownValue(option);
+            }}
+            selected={sortDropdownValue}
+            dropdownWidth="130"
+          />
+        </div>
+      </div>
       <div className={styles.table}>
         <div className={styles.tableContent}>
           <div className={styles.tableHeader}>
@@ -116,6 +165,10 @@ export function AdminStaffUserTable() {
                 role: user.role,
                 assignedPrograms: user.assignedPrograms,
                 assignedUsers: user.assignedUsers,
+              }}
+              openDialog={() => {
+                setDialogUsers(user);
+                openDialog();
               }}
             />
           ))}
@@ -159,6 +212,28 @@ export function AdminStaffUserTable() {
               <Image src="/caret_left.svg" alt="Left Arrow" width={20} height={20}></Image>
             </div>
           )}
+        </div>
+      )}
+      {isDialogOpen && dialogUser?.assignedPrograms && (
+        <UserAssigningDialog
+          isOpen={isDialogOpen}
+          program={dialogUser.assignedPrograms}
+          user={dialogUser}
+          closeDialog={closeDialog}
+          setMessage={setMessage}
+          context={DialogContext.ADMIN_DASHBOARD}
+        />
+      )}
+      {message && (
+        <div
+          className={`${styles.messageContainer} ${message.includes("Successfully") ? styles.messageSuccess : styles.messageError}`}
+        >
+          {message.includes("Successfully") ? (
+            <Image src="/check.svg" alt="Check Symbol" width={20} height={20}></Image>
+          ) : (
+            <Image src="/error_symbol.svg" alt="Error Symbol" width={20} height={20}></Image>
+          )}
+          <p>{message}</p>
         </div>
       )}
     </div>
