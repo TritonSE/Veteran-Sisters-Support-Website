@@ -46,6 +46,7 @@ type AuthContextType = {
   userRole: string;
   loading: boolean;
   loggedIn: boolean;
+  setIsSigningUp: (value: boolean) => void;
 };
 
 const AuthContext = React.createContext<AuthContextType>({
@@ -54,6 +55,9 @@ const AuthContext = React.createContext<AuthContextType>({
   userRole: "",
   loading: true,
   loggedIn: false,
+  setIsSigningUp: () => {
+    console.warn("setIsSigningUp called outside of AuthProvider");
+  },
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -63,12 +67,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userId, setUserId] = useState("");
   const [userRole, setUserRole] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isSigningUp, setIsSigningUp] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      if (currentUser?.email) {
-        // Only make the API request if the user is signed in with Firebase
+      if (currentUser?.email && !isSigningUp) {
+        // Only make the API request if the user is signed in with Firebase and not signing up
         void getUserIdAndRole(currentUser.email).then(({ id, role }) => {
           setUserId(id);
           setUserRole(role);
@@ -77,7 +82,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setCurrentUserInfo(id, role);
         });
       } else {
-        // If no user is signed in, reset the state
+        // If no user is signed in or is signing up, reset the state
         setUserId("");
         setUserRole("");
         setLoading(false);
@@ -89,7 +94,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [isSigningUp]);
 
   const value = useMemo(() => {
     return {
@@ -98,8 +103,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       userRole,
       loading,
       loggedIn: !!user,
+      setIsSigningUp,
     };
-  }, [user, userId, userRole, loading]);
+  }, [user, userId, userRole, loading, setIsSigningUp]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

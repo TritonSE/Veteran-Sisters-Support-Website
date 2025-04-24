@@ -42,9 +42,9 @@ export const NavBar = () => {
           <Link href={userRole === "admin" ? "/announcements" : "/reportform"}>
             <div
               className={
-                pathname === "/reportform" ||
                 pathname === "/announcements" ||
-                pathname.startsWith("/announcements/")
+                pathname.startsWith("/announcements/") ||
+                pathname.startsWith("/reportform")
                   ? styles.selectedBackground
                   : styles.unselectedBackground
               }
@@ -55,11 +55,12 @@ export const NavBar = () => {
         </div>
       </div>
       <button
+        className={styles.logoutFrame}
         onClick={() => {
           void handleLogout();
         }}
       >
-        <div className={styles.logoutFrame}>
+        <div>
           <Image src="/logout.svg" alt="logout" width={20} height={20}></Image>
         </div>
       </button>

@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import { User, getUser } from "../api/userApi";
+import { UserProfile } from "../api/profileApi";
+import { getUser } from "../api/userApi";
 import { FileUpload } from "../components/FileUpload";
 import { VeteranFilesTable } from "../components/VeteranFilesTable";
 import { useAuth } from "../contexts/AuthContext";
@@ -14,7 +15,7 @@ export function VeteranDashboard() {
   const [uploadPopup, setUploadPopup] = useState<boolean>(false);
   const [refreshDashboard, setRefreshDashboard] = useState<boolean>(false);
   const [showUploadConfirm, setShowUploadConfirm] = useState<boolean>(false);
-  const [currVeteran, setCurrVeteran] = useState<User>();
+  const [currVeteran, setCurrVeteran] = useState<UserProfile>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -53,7 +54,7 @@ export function VeteranDashboard() {
 
   return (
     <>
-      {currVeteran && (
+      {currVeteran?._id && (
         <div className={styles.page}>
           <div className={styles.topRow}>
             <h1>Welcome, {currVeteran?.firstName}!</h1>
@@ -70,12 +71,12 @@ export function VeteranDashboard() {
           <br />
           <br />
           <br />
-          <VeteranFilesTable veteranId={currVeteran?._id} refresh={refreshDashboard} />
+          <VeteranFilesTable veteranId={currVeteran._id} refresh={refreshDashboard} />
         </div>
       )}
-      {uploadPopup && currVeteran && (
+      {uploadPopup && currVeteran?._id && (
         <FileUpload
-          veteranId={currVeteran?._id}
+          veteranId={currVeteran._id}
           onClose={() => {
             setUploadPopup(false);
           }}

@@ -1,25 +1,25 @@
 import Link from "next/link";
 
-import { User } from "../api/userApi";
+import { AssignedProgram as ProgramEnum, Role as RoleEnum, UserProfile } from "../api/profileApi";
 
 import styles from "./AdminStaffUserItem.module.css";
 import { Program } from "./Program";
 import { Role } from "./Role";
 
 type AdminStaffUserItemProp = {
-  user: User;
+  user: UserProfile;
 };
 
 export function AdminStaffUserItem({ user }: AdminStaffUserItemProp) {
   let assignedText;
   let assignedStyle = styles.assignedText;
-  const length = user.assignedUsers.length;
-  if (user.role === "staff") {
+  const length = user.assignedUsers ? user.assignedUsers.length : 0;
+  if (user.role === RoleEnum.STAFF) {
     assignedText = "Not applicable";
   } else if (length === 0) {
     assignedText = "Unassigned";
     assignedStyle = styles.unassignedText;
-  } else if (user.role === "volunteer") {
+  } else if (user.role === RoleEnum.VOLUNTEER) {
     assignedText = `${length.toString()} veteran${length === 1 ? "" : "s"}`;
   } else {
     assignedText = `${length.toString()} volunteer${length === 1 ? "" : "s"}`;
@@ -38,11 +38,13 @@ export function AdminStaffUserItem({ user }: AdminStaffUserItemProp) {
         </div>
         <div className={styles.program}>
           <div className={styles.programList}>
-            {user.assignedPrograms.includes("battle buddies") && (
+            {user.assignedPrograms?.includes(ProgramEnum.BATTLE_BUDDIES) && (
               <Program program="battle buddies" />
             )}
-            {user.assignedPrograms.includes("advocacy") && <Program program="advocacy" />}
-            {user.assignedPrograms.includes("operation wellness") && (
+            {user.assignedPrograms?.includes(ProgramEnum.ADVOCACY) && (
+              <Program program="advocacy" />
+            )}
+            {user.assignedPrograms?.includes(ProgramEnum.OPERATION_WELLNESS) && (
               <Program program="operation wellness" />
             )}
           </div>

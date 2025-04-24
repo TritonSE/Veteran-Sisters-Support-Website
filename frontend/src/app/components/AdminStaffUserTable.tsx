@@ -1,38 +1,44 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import { User, getNonAdminUsers } from "../api/userApi";
+import {
+  AssignedProgram,
+  AssignedProgram as ProgramEnum,
+  Role as RoleEnum,
+  UserProfile,
+} from "../api/profileApi";
+import { getNonAdminUsers } from "../api/userApi";
 
 import { AdminStaffUserItem } from "./AdminStaffUserItem";
 import styles from "./AdminStaffUserTable.module.css";
 import { Tabs } from "./Tabs";
 
 export function AdminStaffUserTable() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserProfile[]>([]);
+  const [allUsers, setAllUsers] = useState<UserProfile[]>([]);
   const [page, setPage] = useState<number>(0);
   const pageSize = 8;
 
-  const handleChangeProgram = (program: string) => {
-    if (program === "all") {
+  const handleChangeProgram = (program: ProgramEnum | undefined) => {
+    if (!program) {
       setUsers(allUsers);
     } else {
-      setUsers(allUsers.filter((user) => user.assignedPrograms.includes(program)));
+      setUsers(allUsers.filter((user) => user.assignedPrograms?.includes(program)));
     }
     setPage(0);
   };
 
-  const compare = (a: User, b: User) => {
+  const compare = (a: UserProfile, b: UserProfile) => {
     if (a.firstName < b.firstName) return -1;
     if (a.firstName > b.firstName) return 1;
     return 0;
   };
 
-  const sortUsers = (userList: User[]) => {
-    const unassigned: User[] = [];
-    const assigned: User[] = [];
+  const sortUsers = (userList: UserProfile[]) => {
+    const unassigned: UserProfile[] = [];
+    const assigned: UserProfile[] = [];
     userList.forEach((user) => {
-      if (user.assignedUsers.length === 0 && user.role !== "staff") {
+      if (user.assignedUsers?.length === 0 && user.role !== RoleEnum.STAFF) {
         unassigned.push(user);
       } else {
         assigned.push(user);
@@ -70,16 +76,16 @@ export function AdminStaffUserTable() {
       </div>
       <Tabs
         OnAll={() => {
-          handleChangeProgram("all");
+          handleChangeProgram(undefined);
         }}
         OnBattleBuddies={() => {
-          handleChangeProgram("battle buddies");
+          handleChangeProgram(AssignedProgram.BATTLE_BUDDIES);
         }}
         OnAdvocacy={() => {
-          handleChangeProgram("advocacy");
+          handleChangeProgram(AssignedProgram.ADVOCACY);
         }}
         OnOperationWellness={() => {
-          handleChangeProgram("operation wellness");
+          handleChangeProgram(AssignedProgram.OPERATION_WELLNESS);
         }}
       />
       <div className={styles.table}>

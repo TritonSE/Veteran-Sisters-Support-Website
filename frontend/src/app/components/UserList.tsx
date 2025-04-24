@@ -1,18 +1,19 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import { getVolunteersByVeteran, removeVolunteerFromVeteran } from "../api/activeVolunteers";
-import { UserProfile as UserProfileType } from "../api/profileApi";
+import { getAssignedUsers, removeVolunteerFromVeteran } from "../api/activeVolunteers";
+import { Role, UserProfile as UserProfileType } from "../api/profileApi";
 
 import { Program } from "./Program";
 import styles from "./UserList.module.css";
-import VolunteerAssigningDialog from "./volunteerAssigningDialog";
+import UserAssigningDialog from "./userAssigningDialog";
 
 export function UserList(params: {
   userProfile: UserProfileType | undefined;
   title: string;
   editable: boolean;
   minimized: boolean;
+  setMessage: (message: string) => void;
 }) {
   const { title, userProfile, editable, minimized } = params;
   const userPrograms = Object.fromEntries(
@@ -20,9 +21,9 @@ export function UserList(params: {
   ) as Record<string, UserProfileType[]>;
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [refreshFlag, setRefreshFlag] = useState(false);
   const [dialogProgram, setDialogProgram] = useState("");
-  const [currentVolunteers, setCurrentVolunteers] =
-    useState<Record<string, UserProfileType[]>>(userPrograms);
+  const [currentUsers, setCurrentUsers] = useState<Record<string, UserProfileType[]>>(userPrograms);
 
   const openDialog = (program: string) => {
     setIsDialogOpen(true);
@@ -31,14 +32,17 @@ export function UserList(params: {
 
   const closeDialog = () => {
     setIsDialogOpen(false);
-    window.location.reload();
+    setRefreshFlag((prev) => !prev);
   };
 
-  const removeVolunteer = (volunteerEmail: string, program: string) => {
+  const removeVolunteer = (selectedEmail: string, program: string) => {
     if (userProfile) {
-      removeVolunteerFromVeteran(volunteerEmail, userProfile.email, program)
+      const vetEmail = userProfile.role === Role.VETERAN ? userProfile.email : selectedEmail;
+      const volEmail = userProfile.role === Role.VETERAN ? selectedEmail : userProfile.email;
+
+      removeVolunteerFromVeteran(volEmail, vetEmail, program)
         .then(() => {
-          window.location.reload();
+          setRefreshFlag((prev) => !prev);
         })
         .catch((err: unknown) => {
           console.error(err);
@@ -46,27 +50,29 @@ export function UserList(params: {
     }
   };
 
-  const fetchVolunteersProfiles = async (veteranEmail: string) => {
+  const fetchUserProfiles = async (user: UserProfileType) => {
     try {
-      const res = await getVolunteersByVeteran(veteranEmail);
+      const res = await getAssignedUsers(user);
       if (!res.success || !Array.isArray(res.data)) {
         throw new Error("Failed to fetch volunteers");
       }
 
-      const volunteerUsers: [string, UserProfileType][] = res.data.map((volunteer) => [
-        volunteer.assignedProgram,
-        volunteer.volunteerUser,
-      ]);
+      const users: [string, UserProfileType][] = res.data.map((profile) => {
+        const activeUser =
+          userProfile?.role === Role.VETERAN ? profile.volunteerUser : profile.veteranUser;
+        return [profile.assignedProgram, activeUser];
+      });
 
-      setCurrentVolunteers((prevVolunteers) => {
-        const updatedVolunteers = { ...prevVolunteers };
-
-        for (const [key, userObj] of volunteerUsers) {
-          if (!updatedVolunteers[key].some((user) => user.email === userObj.email)) {
-            updatedVolunteers[key].push(userObj);
+      setCurrentUsers(() => {
+        const updatedUsers = Object.fromEntries(
+          (userProfile?.assignedPrograms ?? []).map((program) => [program, []]),
+        ) as Record<string, UserProfileType[]>;
+        for (const [key, userObj] of users) {
+          if (!updatedUsers[key].some((vol) => vol.email === userObj.email)) {
+            updatedUsers[key].push(userObj);
           }
         }
-        return updatedVolunteers;
+        return updatedUsers;
       });
     } catch (error) {
       console.error("Error fetching volunteer profiles:", error);
@@ -77,61 +83,29 @@ export function UserList(params: {
   useEffect(() => {
     const fetchProfiles = async () => {
       if (userProfile?.email) {
-        await fetchVolunteersProfiles(userProfile.email);
+        await fetchUserProfiles(userProfile);
       }
     };
-
     void fetchProfiles();
-  }, []);
+  }, [refreshFlag]);
 
-  //Users for user list
-  // const emptyUserGroups: Record<string, UserProfileType[]> = (
-  //   userProfile?.assignedPrograms ?? []
-  // ).reduce((accumulator: Record<string, UserProfileType[]>, program: string) => {
-  //   accumulator[program] = [];
-  //   return accumulator;
-  // }, {});
-
-  // const assignedUsers = userProfile?.assignedUsers ?? [];
-  // const userGroups: Record<string, UserProfileType[]> = assignedUsers.reduce(
-  //   (accumulator, user) => {
-  //     (user?.assignedPrograms ?? []).forEach((program: string) => {
-  //       if (program in accumulator) {
-  //         accumulator[program].push(user);
-  //       }
-  //     });
-  //     return accumulator;
-  //   },
-  //   emptyUserGroups,
-  // );
-
-  const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(currentVolunteers)
+  const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(currentUsers)
     .slice()
     .sort();
-  // console.log(sortedUserGroups)
 
   return (
     <div className={`${styles.userList} ${minimized ? styles.minimized : ""}`}>
       {isDialogOpen && userProfile && (
-        <VolunteerAssigningDialog
+        <UserAssigningDialog
           isOpen={isDialogOpen}
           program={dialogProgram}
-          veteran={userProfile}
+          user={userProfile}
           closeDialog={closeDialog}
+          setMessage={params.setMessage}
         />
       )}
       <div className={styles.userListHeader}>
         <div className={styles.userListHeading}>{title}</div>
-        {editable && !minimized && (
-          <div className={styles.addUser}>
-            <Image
-              src="/pajamas_assignee_icon.svg"
-              width={16}
-              height={16}
-              alt="Assign User"
-            ></Image>
-          </div>
-        )}
       </div>
       <div className={styles.userListContent}>
         {sortedUserGroups.map(([program, users]) => {
@@ -141,12 +115,12 @@ export function UserList(params: {
                 <div className={styles.programSectionHeaderSectionInfo}>
                   <Program program={program} />
                 </div>
-                {editable && minimized && (
+                {editable && (
                   <div className={styles.addUser}>
                     <Image
-                      src="/pajamas_assignee_icon.svg"
-                      width={16}
-                      height={16}
+                      src="/add_icon.svg"
+                      width={14}
+                      height={14}
                       alt="Assign User"
                       onClick={() => {
                         openDialog(program);

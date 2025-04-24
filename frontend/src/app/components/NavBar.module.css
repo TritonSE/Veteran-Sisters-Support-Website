@@ -55,7 +55,6 @@
 
 .selectedBackground {
   display: flex;
-  padding: 7.111px;
   width: 32px;
   height: 32px;
   justify-content: center;
@@ -79,4 +78,6 @@
   cursor: pointer;
   width: 22px;
   height: 22px;
+  background: none;
+  border: none;
 }
