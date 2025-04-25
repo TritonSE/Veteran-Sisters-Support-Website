@@ -119,4 +119,26 @@ export async function markActivityRead(
   }
 }
 
+export const updateUserPrograms = async (
+  programs: string[],
+  email?: string,
+): Promise<APIResult<User>> => {
+  if (!email) {
+    return { success: false, error: "Email is undefined" };
+  }
+
+  // wrap the array in an object with the right key:
+  const body = { programs };
+
+  // pass a JSON header:
+  const response = await put(`/users/programs/${encodeURIComponent(email)}`, body, {
+    "Content-Type": "application/json",
+  });
+
+  if (!response.ok) {
+    return handleAPIError(response);
+  }
+  const data = (await response.json()) as User;
+  return { success: true, data };
+};
 export default createUser;

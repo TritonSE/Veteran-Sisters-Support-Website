@@ -25,6 +25,7 @@ type ProfileRenderingContext = {
   userListEditable: boolean;
   viewingPersonalProfile: boolean;
   isProgramAndRoleEditable: boolean;
+  isProfileEditable: boolean;
 };
 
 function getProfileRenderingContext(
@@ -41,10 +42,12 @@ function getProfileRenderingContext(
     userListEditable: false,
     viewingPersonalProfile: false,
     isProgramAndRoleEditable: false,
+    isProfileEditable: false,
   };
 
   const { ADMIN, STAFF, VOLUNTEER, VETERAN } = RoleEnum;
   const isPersonalView = viewerId === viewingId;
+
   // veteran personal profile view
   if (isPersonalView && viewerRole === VETERAN && viewingRole === VETERAN) {
     context.showUserList = true;
@@ -71,27 +74,44 @@ function getProfileRenderingContext(
     context.viewingPersonalProfile = true;
     return context;
   }
-  // admin views staff
+  // admin views staff - can edit their profile, role, and program
   else if (viewerRole === ADMIN && viewingRole === STAFF) {
     context.showUserList = true;
     context.userListTitle = "Veterans Under Point of Contact";
     context.isProgramAndRoleEditable = true;
+    context.isProfileEditable = true;
     return context;
-  }
-  // admin/staff view volunteer
-  else if ((viewerRole === ADMIN || viewerRole === STAFF) && viewingRole === VOLUNTEER) {
+    // admin views volunteer - can edit their profile, role, and program
+  } else if (viewerRole === ADMIN && viewingRole === VOLUNTEER) {
     context.showUserList = true;
     context.userListEditable = true;
     context.userListTitle = "Assigned Veterans";
     context.isProgramAndRoleEditable = true;
+    context.isProfileEditable = true;
     return context;
-  }
-  // admin/staff view veteran
-  else if ((viewerRole === ADMIN || viewerRole === STAFF) && viewingRole === VETERAN) {
+  } else if (viewerRole === ADMIN && viewingRole === VETERAN) {
     context.showUserList = true;
     context.userListEditable = true;
     context.userListTitle = "Assigned Volunteers";
     context.isProgramAndRoleEditable = true;
+    context.isProfileEditable = true;
+    context.showVolunteerNotes = true;
+    return context;
+  }
+  // staff view volunteer - can't edit program and role
+  else if (viewerRole === STAFF && viewingRole === VOLUNTEER) {
+    context.showUserList = true;
+    context.userListEditable = true;
+    context.userListTitle = "Assigned Veterans";
+    context.isProfileEditable = true;
+    return context;
+  }
+  // staff view veteran - can't edit program and role
+  else if (viewerRole === STAFF && viewingRole === VETERAN) {
+    context.showUserList = true;
+    context.userListEditable = true;
+    context.userListTitle = "Assigned Volunteers";
+    context.isProfileEditable = true;
     context.showVolunteerNotes = true;
     return context;
   }
@@ -114,7 +134,7 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
   const { userId, userRole } = useAuth();
   const [userProfile, setUserProfile] = useState<UserProfileType | undefined>(undefined);
   const [profileRenderingContext, setProfileRenderingContext] = useState(
-    getProfileRenderingContext(null, null, userId, userRole),
+    getProfileRenderingContext(null, null, userRole, userId),
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -201,6 +221,7 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
               email={userProfile.email}
               isPersonalProfile={profileRenderingContext.viewingPersonalProfile}
               isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
+              isProfileEditable={profileRenderingContext.isProfileEditable}
             />
             <div className={styles.userProfileInnerContent}>
               {profileRenderingContext.showVolunteerNotes && (

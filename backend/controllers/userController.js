@@ -165,7 +165,7 @@ export const updateUser = async (req, res) => {
       }
       const userIndex = veteran.assignedUsers.indexOf(email);
       const veteranIndex = user.assignedUsers.indexOf(veteranEmail);
-            
+
       if (veteranIndex > -1) {
         user.assignedUsers.splice(veteranIndex, 1);
       } else {
@@ -218,7 +218,7 @@ export const getVolunteersByProgram = async (req, res) => {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
 
 export const getVeteransByProgram = async (req, res) => {
   try {
@@ -229,8 +229,7 @@ export const getVeteransByProgram = async (req, res) => {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
-}
-
+};
 
 export const updateUserId = async (req, res) => {
   try {
@@ -276,5 +275,27 @@ export const markActivityRead = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ message: "Error marking activity as read", error: error.message });
+  }
+};
+
+export const updateUserPrograms = async (req, res) => {
+  const { programs } = req.body;
+  const email = req.params.email;
+  try {
+    const user = await User.findOne({ email }).exec();
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (programs) {
+      user.assignedPrograms = programs;
+    }
+
+    await user.save();
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
