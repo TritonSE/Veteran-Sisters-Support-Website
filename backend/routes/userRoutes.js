@@ -55,5 +55,5 @@ router.get(
 );
 router.delete("/users/:userId", authenticateUser, authenticateStaffOrAdmin, deleteUser);
 router.put("/users/activity/:id", authenticateUser, markActivityRead);
-router.put("/users/programs/:email", authenticateUser, updateUserPrograms); // Update user programs
+router.put("/users/programs/:email", authenticateUser, updateUserPrograms); // Update user programs/role
 export default router;

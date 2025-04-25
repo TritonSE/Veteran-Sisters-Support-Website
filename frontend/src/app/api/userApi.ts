@@ -1,5 +1,6 @@
 import { UserProfile } from "./profileApi";
 import { APIResult, get, handleAPIError, post, put } from "./requests";
+import { Role as RoleEnum } from "./profileApi";
 
 export type CreateUserRequest = {
   email: string;
@@ -119,8 +120,9 @@ export async function markActivityRead(
   }
 }
 
-export const updateUserPrograms = async (
+export const updateUserProgramsAndRole = async (
   programs: string[],
+  role: RoleEnum | undefined,
   email?: string,
 ): Promise<APIResult<User>> => {
   if (!email) {
@@ -128,7 +130,7 @@ export const updateUserPrograms = async (
   }
 
   // wrap the array in an object with the right key:
-  const body = { programs };
+  const body = { role, programs };
 
   // pass a JSON header:
   const response = await put(`/users/programs/${encodeURIComponent(email)}`, body, {

@@ -1,7 +1,8 @@
 // ChangeProgramDialog.tsx
 import React, { useEffect, useRef, useState } from "react";
 
-import { updateUserPrograms } from "../api/userApi";
+import { Role as RoleEnum } from "../api/profileApi";
+import { updateUserProgramsAndRole } from "../api/userApi";
 
 import styles from "./ChangeProgramDialog.module.css";
 
@@ -16,10 +17,11 @@ const AVAILABLE_PROGRAMS: ProgramOption[] = [
 type ChangeProgramDialogProps = {
   email: string | undefined;
   firstName?: string;
+  role: RoleEnum | undefined;
   callback: (show: boolean) => void;
 };
 
-const ChangeProgramDialog = ({ email, firstName, callback }: ChangeProgramDialogProps) => {
+const ChangeProgramDialog = ({ email, firstName, role, callback }: ChangeProgramDialogProps) => {
   const [programs, setPrograms] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -44,7 +46,7 @@ const ChangeProgramDialog = ({ email, firstName, callback }: ChangeProgramDialog
   };
 
   const savePrograms = async () => {
-    await updateUserPrograms(programs, email);
+    await updateUserProgramsAndRole(programs, role, email);
     callback(false);
   };
 

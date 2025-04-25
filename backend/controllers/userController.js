@@ -279,7 +279,7 @@ export const markActivityRead = async (req, res) => {
 };
 
 export const updateUserPrograms = async (req, res) => {
-  const { programs } = req.body;
+  const { role, programs } = req.body;
   const email = req.params.email;
   try {
     const user = await User.findOne({ email }).exec();
@@ -289,6 +289,10 @@ export const updateUserPrograms = async (req, res) => {
 
     if (programs) {
       user.assignedPrograms = programs;
+    }
+
+    if (role) {
+      user.role = role;
     }
 
     await user.save();
