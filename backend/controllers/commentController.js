@@ -16,11 +16,8 @@ export const queryComments = async (req, res, next) => {
       comment => comment.profileId && comment.commenterId
     );
     
-    if (validComments.length > 0) {
-      res.json(validComments);
-    } else {
-      res.status(404).json({ error: "Could not find comments" });
-    }
+    res.json(validComments);
+  
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });

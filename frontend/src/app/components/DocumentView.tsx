@@ -46,16 +46,17 @@ export function DocumentView({ documentId }: DocumentViewProps) {
         if (response.success) {
           setFile(response.data);
           setCurrTitle(response.data.filename);
+
+          getDownloadURL(ref(storage, `files/${documentId}`))
+            .then((url) => {
+              setFileURL(url);
+            })
+            .catch((error: unknown) => {
+              console.log(error);
+            });
         } else {
           console.log(response.error);
         }
-      })
-      .catch((error: unknown) => {
-        console.log(error);
-      });
-    getDownloadURL(ref(storage, `files/${documentId}`))
-      .then((url) => {
-        setFileURL(url);
       })
       .catch((error: unknown) => {
         console.log(error);
