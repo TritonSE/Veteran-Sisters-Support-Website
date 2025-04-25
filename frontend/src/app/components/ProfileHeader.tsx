@@ -6,6 +6,7 @@ import { AssignedProgram as AssignedProgramEnum, Role as RoleEnum } from "../api
 
 import { Button } from "./Button";
 import ChangeProgramDialog from "./ChangeProgramDialog";
+import ChangeRoleDialog from "./ChangeRoleDialog";
 import styles from "./ProfileHeader.module.css";
 import { ProfilePicture } from "./ProfilePicture";
 import { Program } from "./Program";
@@ -48,6 +49,15 @@ export function ProfileHeader(params: {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [showProgramChangeDialog, setShowProgramChangeDialog] = useState<boolean>(false);
+  const [showRoleChangeDialog, setShowRoleChangeDialog] = useState<boolean>(false);
+  const [selectedRole, setSelectedRole] = useState<RoleEnum | undefined>(role);
+
+  const handleRoleNext = (newRole: RoleEnum) => {
+    setSelectedRole(newRole); // remember it
+    setShowRoleChangeDialog(false); // hide role dialog
+    setShowProgramChangeDialog(true); // show program dialog
+  };
+
   return (
     <div className={styles.profileHeader}>
       <div className={styles.profileContent}>
@@ -93,15 +103,27 @@ export function ProfileHeader(params: {
                   setShowProgramChangeDialog(true);
                 }}
               />{" "}
-              <Button label={"Change Role"} /> <Button label={"Edit Profile"} />
+              <Button
+                label={"Change Role"}
+                onClick={() => {
+                  setShowRoleChangeDialog(true);
+                }}
+              />
             </>
           ) : isProgramAndRoleEditable ? (
             <>
-              <Button label={"Edit Program"} /> <Button label={"Change Role"} />
-            </>
-          ) : isProfileEditable ? (
-            <>
-              <Button label={"Edit Profile"} />
+              <Button
+                label={"Edit Program"}
+                onClick={() => {
+                  setShowProgramChangeDialog(true);
+                }}
+              />{" "}
+              <Button
+                label={"Change Role"}
+                onClick={() => {
+                  setShowRoleChangeDialog(true);
+                }}
+              />
             </>
           ) : (
             <></>
@@ -110,10 +132,22 @@ export function ProfileHeader(params: {
           <></>
         )}
       </div>
-      {showProgramChangeDialog && (
+      {showRoleChangeDialog && role && (
+        <ChangeRoleDialog
+          firstName={firstName}
+          email={email}
+          role={role}
+          onNext={handleRoleNext}
+          onCancel={() => {
+            setShowRoleChangeDialog(false);
+          }}
+        />
+      )}
+      {showProgramChangeDialog && role && (
         <ChangeProgramDialog
           firstName={firstName}
           email={email}
+          role={selectedRole}
           callback={setShowProgramChangeDialog}
         />
       )}

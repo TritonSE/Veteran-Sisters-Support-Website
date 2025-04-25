@@ -29,6 +29,6 @@ router.delete("/users/:email", authenticateUser, deleteUser);
 router.get("/users/role/:email", authenticateUser, getUserRole);
 router.patch("/users/id/:id", authenticateUser, updateUserId);
 router.put("/users/:email", authenticateUser, updateUser);
-router.put("/users/programs/:email", authenticateUser, updateUserPrograms); // Update user programs
+router.put("/users/programs/:email", authenticateUser, updateUserPrograms); // Update user programs/role
 
 export default router;
