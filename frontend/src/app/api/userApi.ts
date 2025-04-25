@@ -1,6 +1,5 @@
-import { UserProfile } from "./profileApi";
+import { Role as RoleEnum, UserProfile } from "./profileApi";
 import { APIResult, get, handleAPIError, post, put } from "./requests";
-import { Role as RoleEnum } from "./profileApi";
 
 export type CreateUserRequest = {
   email: string;
