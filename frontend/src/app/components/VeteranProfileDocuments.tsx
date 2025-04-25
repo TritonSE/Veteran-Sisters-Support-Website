@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from "react";
 
 import { Comment, FileObject, getFilesByUploader } from "../api/fileApi";
+import { User, getUser } from "../api/userApi";
+import { useAuth } from "../contexts/AuthContext";
 
 import { VeteranFilePreview } from "./VeteranFilePreview";
 import styles from "./VeteranFilesTable.module.css";
-import { useAuth } from "../contexts/AuthContext";
-import { User, getUser } from "../api/userApi";
 
 type VeteranDocumentProps = {
   uploader: string;
@@ -20,7 +20,7 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
   const programMap: Record<string, string> = {
     "operation wellness": "Operation Wellness",
     "battle buddies": "Battle Buddies",
-    "advocacy": "Advocacy",
+    advocacy: "Advocacy",
   };
 
   const [fileObjects, setFileObjects] = useState<FileObject[]>([]);
@@ -38,13 +38,13 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
     return changed ? latest : undefined;
   };
 
-  const shouldLock = (file: FileObject)=>{
-    if(user?.role==="volunteer" || user?.role==="staff"){
-      console.log(user?.assignedPrograms)
-      console.log(file.programs)
-      return !user?.assignedPrograms.some(element => file.programs.includes(element))
+  const shouldLock = (file: FileObject) => {
+    if (user?.role === "volunteer" || user?.role === "staff") {
+      console.log(user?.assignedPrograms);
+      console.log(file.programs);
+      return !user?.assignedPrograms.some((element) => file.programs.includes(element));
     }
-  }
+  };
 
   useEffect(() => {
     getFilesByUploader(uploader)
@@ -71,32 +71,33 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
 
   return (
     <div>
-      {user && programs.map((program, index) => (
-        <div
-          key={index}
-          style={{ marginBottom: 24, paddingTop: 30, borderTop: "1px solid #E0E0E0" }}
-        >
-          <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-            <div className={styles.programName}>{programMap[program]} Documents</div>
-            <p style={{ color: "#057E6F" }}>See all documents</p>
+      {user &&
+        programs.map((program, index) => (
+          <div
+            key={index}
+            style={{ marginBottom: 24, paddingTop: 30, borderTop: "1px solid #E0E0E0" }}
+          >
+            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+              <div className={styles.programName}>{programMap[program]} Documents</div>
+              <p style={{ color: "#057E6F" }}>See all documents</p>
+            </div>
+            <div className={styles.documentTable}>
+              {fileObjects
+                .filter((obj) => obj.programs.includes(program))
+                .slice(0, 4)
+                .map((file) => (
+                  <div key={file._id}>
+                    <VeteranFilePreview
+                      documentId={file._id}
+                      documentName={file.filename}
+                      latestComment={getLatestComment(file.comments)}
+                      lock={shouldLock(file)}
+                    />
+                  </div>
+                ))}
+            </div>
           </div>
-          <div className={styles.documentTable}>
-            {fileObjects
-              .filter((obj) => obj.programs.includes(program))
-              .slice(0, 4)
-              .map((file) => (
-                <div key={file._id}>
-                  <VeteranFilePreview
-                    documentId={file._id}
-                    documentName={file.filename}
-                    latestComment={getLatestComment(file.comments)}
-                    lock={shouldLock(file)}
-                  />
-                </div>
-              ))}
-          </div>
-        </div>
-      ))}
+        ))}
     </div>
   );
 }

@@ -121,24 +121,24 @@ export function DocumentComment({
   };
 
   const deleteCommentHandler = (id: string, key: number) => {
-      deleteCommentObject(id)
-        .then((response) => {
-          if (response.success && file) {
-            const newCommentList = file.comments.slice(0, key).concat(file.comments.slice(key + 1));
-            editFileObject(file._id, { comments: newCommentList })
-              .then((response2) => {
-                if (response2.success) {
-                  setFile(response2.data);
-                }
-              })
-              .catch((error: unknown) => {
-                console.log(error);
-              });
-          }
-        })
-        .catch((error: unknown) => {
-          console.log(error);
-        });
+    deleteCommentObject(id)
+      .then((response) => {
+        if (response.success && file) {
+          const newCommentList = file.comments.slice(0, key).concat(file.comments.slice(key + 1));
+          editFileObject(file._id, { comments: newCommentList })
+            .then((response2) => {
+              if (response2.success) {
+                setFile(response2.data);
+              }
+            })
+            .catch((error: unknown) => {
+              console.log(error);
+            });
+        }
+      })
+      .catch((error: unknown) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -164,26 +164,28 @@ export function DocumentComment({
             <div className={styles.commentBottomIcons}>
               {(user._id === comment.commenterId._id || user.role === "admin") && (
                 <>
-              <Image
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  if(user._id === comment.commenterId._id) setSelected(true);
-                }}
-                src="/pencil_icon_2.svg"
-                width={16}
-                height={16}
-                alt="edit"
-              />
-              <Image
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  deleteCommentHandler(comment._id, commentKey);
-                }}
-                src="/trash_icon.svg"
-                width={16}
-                height={16}
-                alt="trash"
-              /></>)}
+                  <Image
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      if (user._id === comment.commenterId._id) setSelected(true);
+                    }}
+                    src="/pencil_icon_2.svg"
+                    width={16}
+                    height={16}
+                    alt="edit"
+                  />
+                  <Image
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      deleteCommentHandler(comment._id, commentKey);
+                    }}
+                    src="/trash_icon.svg"
+                    width={16}
+                    height={16}
+                    alt="trash"
+                  />
+                </>
+              )}
             </div>
           </div>
         </div>

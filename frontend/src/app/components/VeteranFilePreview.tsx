@@ -12,7 +12,7 @@ type VeteranFilePreviewProps = {
   documentId: string;
   documentName: string;
   latestComment?: Date;
-  lock?: boolean
+  lock?: boolean;
 };
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -24,10 +24,12 @@ export function VeteranFilePreview({
   documentId,
   documentName,
   latestComment,
-  lock
+  lock,
 }: VeteranFilePreviewProps) {
   const [fileURL, setFileURL] = useState<string>();
   const [numPages, setNumPages] = useState<number>();
+
+  const [hovering, setHovering] = useState<boolean>(false);
 
   const months = [
     "Jan",
@@ -70,7 +72,9 @@ export function VeteranFilePreview({
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8, width: 220 }}>
+    <div
+      style={{ display: "flex", flexDirection: "column", gap: 8, width: 220, position: "relative" }}
+    >
       <Link
         className={styles.documentPreview}
         href={{ pathname: "/document", query: { documentId } }}
@@ -99,8 +103,31 @@ export function VeteranFilePreview({
           <Image src="/pdf_icon.svg" width={80} height={80} alt="pdf" />
         )}
       </Link>
-      {lock &&
-      <div className={styles.lock}/>}
+      {lock && (
+        <>
+          <div
+            className={hovering ? styles.coloredBlur : styles.blur}
+            onMouseEnter={() => {
+              setHovering(true);
+            }}
+            onMouseLeave={() => {
+              setHovering(false);
+            }}
+          />
+          {hovering ? (
+            <div
+              className={styles.requestButton}
+              onMouseEnter={() => {
+                setHovering(true);
+              }}
+            >
+              Request Access
+            </div>
+          ) : (
+            <Image className={styles.lock} src="/lock_icon.svg" width={32} height={42} alt="lock" />
+          )}
+        </>
+      )}
       <div>
         <div
           style={{

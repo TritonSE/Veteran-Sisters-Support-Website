@@ -15,14 +15,14 @@ type FileUploadProps = {
 
 type CheckBoxStates = {
   "battle buddies": boolean;
-  "advocacy": boolean;
+  advocacy: boolean;
   "operation wellness": boolean;
 };
 
 export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
   const [checkboxStates, setCheckboxStates] = useState<CheckBoxStates>({
     "battle buddies": false,
-    "advocacy": false,
+    advocacy: false,
     "operation wellness": false,
   });
   const [comment, setComment] = useState<string>();
@@ -46,7 +46,7 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
     if (
       file &&
       (checkboxStates["battle buddies"] ||
-        checkboxStates["advocacy"] ||
+        checkboxStates.advocacy ||
         checkboxStates["operation wellness"]) &&
       !uploading
     ) {
@@ -150,13 +150,13 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
             <div
               className={styles.checkRow}
               onClick={() => {
-                setCheckboxStates({ ...checkboxStates, "advocacy": !checkboxStates["advocacy"] });
+                setCheckboxStates({ ...checkboxStates, advocacy: !checkboxStates.advocacy });
               }}
             >
               <input
                 type="checkbox"
                 className={styles.checkBox}
-                checked={checkboxStates['advocacy']}
+                checked={checkboxStates.advocacy}
               />{" "}
               <span>Advocacy</span>
             </div>
@@ -165,14 +165,14 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
               onClick={() => {
                 setCheckboxStates({
                   ...checkboxStates,
-                  "operation wellness": !checkboxStates['operation wellness'],
+                  "operation wellness": !checkboxStates["operation wellness"],
                 });
               }}
             >
               <input
                 type="checkbox"
                 className={styles.checkBox}
-                checked={checkboxStates['operation wellness']}
+                checked={checkboxStates["operation wellness"]}
               />{" "}
               <span>Operation Wellness</span>
             </div>
