@@ -121,7 +121,6 @@ export function DocumentComment({
   };
 
   const deleteCommentHandler = (id: string, key: number) => {
-    if(user._id === comment.commenterId._id || user.role === "admin"){
       deleteCommentObject(id)
         .then((response) => {
           if (response.success && file) {
@@ -140,7 +139,6 @@ export function DocumentComment({
         .catch((error: unknown) => {
           console.log(error);
         });
-    }
   };
 
   return (
@@ -164,6 +162,8 @@ export function DocumentComment({
               className={styles.commentDate}
             >{`${formatDate(comment.datePosted)} ${comment.edited ? "(edited)" : ""}`}</div>
             <div className={styles.commentBottomIcons}>
+              {(user._id === comment.commenterId._id || user.role === "admin") && (
+                <>
               <Image
                 style={{ cursor: "pointer" }}
                 onClick={() => {
@@ -183,7 +183,7 @@ export function DocumentComment({
                 width={16}
                 height={16}
                 alt="trash"
-              />
+              /></>)}
             </div>
           </div>
         </div>
