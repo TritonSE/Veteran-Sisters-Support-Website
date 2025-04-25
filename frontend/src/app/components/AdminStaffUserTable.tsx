@@ -105,20 +105,22 @@ export function AdminStaffUserTable() {
               <span className={styles.tableHeaderText}>Assigned to</span>
             </div>
           </div>
-          {users.slice(page * pageSize, (page + 1) * pageSize).map((user) => (
-            <AdminStaffUserItem
-              key={user._id}
-              user={{
-                _id: user._id,
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                role: user.role,
-                assignedPrograms: user.assignedPrograms,
-                assignedUsers: user.assignedUsers,
-              }}
-            />
-          ))}
+          <div className={styles.tableItems}>
+            {users.slice(page * pageSize, (page + 1) * pageSize).map((user) => (
+              <AdminStaffUserItem
+                key={user._id}
+                user={{
+                  _id: user._id,
+                  email: user.email,
+                  firstName: user.firstName,
+                  lastName: user.lastName,
+                  role: user.role,
+                  assignedPrograms: user.assignedPrograms,
+                  assignedUsers: user.assignedUsers,
+                }}
+              />
+            ))}
+          </div>
         </div>
       </div>
       {users.length > 8 && (

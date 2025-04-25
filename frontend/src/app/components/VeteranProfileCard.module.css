@@ -22,7 +22,7 @@
 }
 
 .p {
-  font-family: Albert Sans;
+  font-family: "Albert Sans";
   font-weight: 500;
   font-size: 16px;
   line-height: 19.2px;
@@ -39,7 +39,7 @@
 }
 
 .firstName {
-  font-family: Albert Sans;
+  font-family: "Albert Sans";
   font-weight: 500;
   font-size: 14px;
   line-height: 16.8px;
@@ -51,7 +51,7 @@
 }
 
 .email {
-  font-family: Albert Sans;
+  font-family: "Albert Sans";
   font-weight: 400;
   font-size: 13px;
   line-height: 15.6px;
