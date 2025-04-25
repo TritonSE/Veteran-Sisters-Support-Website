@@ -1,14 +1,15 @@
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 import { AssignedProgram as AssignedProgramEnum, Role as RoleEnum } from "../api/profileApi";
 
+import { Button } from "./Button";
+import ChangeProgramDialog from "./ChangeProgramDialog";
 import styles from "./ProfileHeader.module.css";
-
-import { Button } from "@/app/components/Button";
-import { ProfilePicture } from "@/app/components/ProfilePicture";
-import { Program } from "@/app/components/Program";
-import { Role } from "@/app/components/Role";
+import { ProfilePicture } from "./ProfilePicture";
+import { Program } from "./Program";
+import { Role } from "./Role";
 
 export function ProfileHeader(params: {
   firstName: string | undefined;
@@ -21,6 +22,7 @@ export function ProfileHeader(params: {
   gender?: string | undefined;
   email: string | undefined;
   isProgramAndRoleEditable: boolean;
+  isProfileEditable: boolean;
   isPersonalProfile: boolean;
 }) {
   const {
@@ -34,6 +36,7 @@ export function ProfileHeader(params: {
     gender,
     email,
     isProgramAndRoleEditable,
+    isProfileEditable,
     isPersonalProfile,
   } = params;
   const fullName = `${firstName ?? "Unknown"} ${lastName ?? "Unknown"}`;
@@ -44,6 +47,7 @@ export function ProfileHeader(params: {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [showProgramChangeDialog, setShowProgramChangeDialog] = useState<boolean>(false);
   return (
     <div className={styles.profileHeader}>
       <div className={styles.profileContent}>
@@ -81,13 +85,38 @@ export function ProfileHeader(params: {
             }}
           />
         ) : isProgramAndRoleEditable ? (
-          <>
-            <Button label={"Edit Program"} /> <Button label={"Change Role"} />
-          </>
+          isProfileEditable ? (
+            <>
+              <Button
+                label={"Edit Program"}
+                onClick={() => {
+                  setShowProgramChangeDialog(true);
+                }}
+              />{" "}
+              <Button label={"Change Role"} /> <Button label={"Edit Profile"} />
+            </>
+          ) : isProgramAndRoleEditable ? (
+            <>
+              <Button label={"Edit Program"} /> <Button label={"Change Role"} />
+            </>
+          ) : isProfileEditable ? (
+            <>
+              <Button label={"Edit Profile"} />
+            </>
+          ) : (
+            <></>
+          )
         ) : (
           <></>
         )}
       </div>
+      {showProgramChangeDialog && (
+        <ChangeProgramDialog
+          firstName={firstName}
+          email={email}
+          callback={setShowProgramChangeDialog}
+        />
+      )}
     </div>
   );
 }

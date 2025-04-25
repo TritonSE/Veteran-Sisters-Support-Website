@@ -231,3 +231,25 @@ export const updateUserId = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const updateUserPrograms = async (req, res) => {
+  const { programs } = req.body;
+  const email = req.params.email;
+  try {
+    const user = await User.findOne({ email }).exec();
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (programs) {
+      user.assignedPrograms = programs;
+    }
+
+    await user.save();
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
