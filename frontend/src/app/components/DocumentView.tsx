@@ -11,7 +11,8 @@ import { storage } from "../../firebase/firebase";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { Comment, FileObject, editFileObject, getFileById } from "../api/fileApi";
-import { User, getUser } from "../api/userApi";
+import { UserProfile } from "../api/profileApi";
+import { getUser } from "../api/userApi";
 import { useAuth } from "../contexts/AuthContext";
 
 import { DocumentComment } from "./DocumentComment";
@@ -36,8 +37,8 @@ export function DocumentView({ documentId }: DocumentViewProps) {
   const [editingTitle, setEditingTitle] = useState<boolean>();
   const [currTitle, setCurrTitle] = useState<string>();
 
-  const [currUser, setCurrUser] = useState<User>();
-  const { userId, userRole } = useAuth();
+  const [currUser, setCurrUser] = useState<UserProfile>();
+  const { userId } = useAuth();
 
   useEffect(() => {
     getFileById(documentId)

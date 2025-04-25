@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { User, getUser } from "../api/userApi";
+import { UserProfile } from "../api/profileApi";
+import { getUser } from "../api/userApi";
 import { VeteranList } from "../components/VeteranList";
 
 import styles from "./VolunteerDashboard.module.css";
@@ -10,7 +11,7 @@ type VolunteerDashboardProp = {
 };
 
 export function VolunteerDashboard({ volunteerId }: VolunteerDashboardProp) {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<UserProfile>();
 
   useEffect(() => {
     getUser(volunteerId)
@@ -31,7 +32,7 @@ export function VolunteerDashboard({ volunteerId }: VolunteerDashboardProp) {
           <div className={styles.welcome}>
             <span>Welcome, {user?.firstName}!</span>
           </div>
-          <VeteranList volunteerId={volunteerId} />
+          {user && <VeteranList volunteer={user} />}
         </div>
       </div>
     </div>

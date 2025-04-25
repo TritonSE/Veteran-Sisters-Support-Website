@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { User, getUser } from "../api/userApi";
+import { UserProfile } from "../api/profileApi";
+import { getUser } from "../api/userApi";
 import { AdminStaffUserTable } from "../components/AdminStaffUserTable";
 
 import styles from "./StaffDashboard.module.css";
@@ -10,7 +11,7 @@ type StaffDashboardProp = {
 };
 
 export function StaffDashboard({ staffId }: StaffDashboardProp) {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<UserProfile>();
 
   useEffect(() => {
     getUser(staffId)

@@ -3,7 +3,7 @@ import { ActiveVolunteers } from "../models/activeVolunteers.js";
 //query active volunteers by program, veteran, or get all active volunteers
 export const queryActiveVolunteers = async (req, res) => {
   try {
-    const { program, veteran } = req.query;
+    const { program, veteran, volunteer } = req.query;
     let query = {};
 
     if (program) {
@@ -15,8 +15,13 @@ export const queryActiveVolunteers = async (req, res) => {
       query.assignedVeteran = veteran;
     }
 
+    if (volunteer) {
+      query.volunteer = volunteer;
+    }
+
     const filteredVolunteers = await ActiveVolunteers.find(query)
       .populate("volunteerUser", "firstName lastName email")
+      .populate("veteranUser", "firstName lastName email")
       .exec();
 
     res.json(filteredVolunteers);
@@ -29,13 +34,14 @@ export const queryActiveVolunteers = async (req, res) => {
 //add a volunteer using their user email, program, and assigned veteran email
 export const addVolunteer = async (req, res) => {
   try {
-    const { userEmail, program, veteranEmail, userId } = req.body;
+    const { userEmail, program, veteranEmail, volunteerId, veteranId } = req.body;
 
     const existingVolunteer = await ActiveVolunteers.findOne({
       volunteer: userEmail,
       assignedProgram: program,
       assignedVeteran: veteranEmail,
-      volunteerUser: userId
+      volunteerUser: volunteerId,
+      veteranUser: veteranId,
     }).exec();
 
     if (existingVolunteer) {
@@ -48,7 +54,8 @@ export const addVolunteer = async (req, res) => {
       volunteer: userEmail,
       assignedProgram: program,
       assignedVeteran: veteranEmail,
-      volunteerUser: userId
+      volunteerUser: volunteerId,
+      veteranUser: veteranId,
     });
 
     res.status(201).json(newVolunteer);
@@ -81,7 +88,7 @@ export const removeVolunteer = async (req, res) => {
     }
 
     // If a specific entry is found, delete it
-    await ActiveVolunteers.deleteOne({ volunteer: volunteerEntry.volunteer}).exec();
+    await ActiveVolunteers.deleteOne({ volunteer: volunteerEntry.volunteer }).exec();
 
     return res.status(200).json({ message: "Volunteer assignment removed successfully" });
   } catch (error) {

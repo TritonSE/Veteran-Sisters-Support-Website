@@ -1,10 +1,10 @@
+import { UserProfile } from "./profileApi";
 import { APIResult, del, get, handleAPIError, post, put } from "./requests";
-import { User } from "./userApi";
 
 export type Comment = {
   _id: string;
   comment: string;
-  commenterId: User;
+  commenterId: UserProfile;
   datePosted: string;
   edited?: boolean;
 };

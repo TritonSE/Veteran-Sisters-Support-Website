@@ -1,0 +1,27 @@
+.checkbox {
+  height: 24px;
+  width: 24px;
+}
+
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.flexContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.text {
+  color: var(--Text-3, #3a3c3d);
+  /* body small */
+  font-family: "Albert Sans";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+}
