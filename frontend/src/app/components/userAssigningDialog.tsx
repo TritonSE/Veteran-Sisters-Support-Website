@@ -127,7 +127,7 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
         );
 
         if (response.success) {
-          messages.push(`Successfully assigned ${user.firstName} to ${props.user.firstName}`);
+          messages.push(`Successfully assigned ${user.firstName} to ${props.user.firstName}.`);
         } else {
           messages.push(`Failed to assign ${user.firstName}. They may already be assigned.`);
         }

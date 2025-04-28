@@ -19,7 +19,8 @@ export function AdminStaffUserItem({ user, openDialog }: AdminStaffUserItemProp)
   if (user.role === RoleEnum.STAFF) {
     assignedText = "Not applicable";
   } else if (length === 0) {
-    assignedText = "Unassigned";
+    assignedText =
+      user.role === RoleEnum.VETERAN ? "No volunteers assigned" : "No veterans assigned";
     assignedStyle = styles.unassignedText;
   } else if (user.role === RoleEnum.VOLUNTEER) {
     assignedText = `${length.toString()} veteran${length === 1 ? "" : "s"}`;

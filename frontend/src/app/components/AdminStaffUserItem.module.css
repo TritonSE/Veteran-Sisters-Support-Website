@@ -12,7 +12,7 @@
   align-items: flex-start;
   align-self: stretch;
 
-  width: 1024px;
+  width: 1100px;
 }
 
 .verticalDivider {
@@ -104,7 +104,7 @@
   display: flex;
   padding: var(--Spacing-sm, 16px) 24px;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
   flex: 1 0 0;
   align-self: stretch;
   border-right: 1px solid var(--Stroke-2, #d0d7de);
@@ -123,7 +123,9 @@
 }
 
 .unassignedText {
-  color: var(--Danger-Emphasis, #b80037);
+  color: var(--Text-1, #60696f);
+  font-style: italic;
+  font-weight: 400;
 }
 
 .addUserIcon {
@@ -131,7 +133,4 @@
   border-radius: 15px;
   background: var(--Primary, #057e6f);
   padding: 5px;
-  position: absolute;
-  right: 18%;
-  z-index: 0;
 }

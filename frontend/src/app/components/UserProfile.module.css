@@ -46,7 +46,6 @@
 .messageContainer {
   animation: fadeOut 5s forwards;
   display: flex;
-  margin: auto;
   padding: 8px;
   font-size: 14px;
   border-radius: 8px;
@@ -55,7 +54,7 @@
   font-weight: 500;
   position: fixed;
   bottom: 80px;
-  left: 50%;
+  left: 40%;
 }
 
 .messageError {
