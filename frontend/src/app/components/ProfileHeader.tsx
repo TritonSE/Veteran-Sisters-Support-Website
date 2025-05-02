@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { AssignedProgram as AssignedProgramEnum, Role as RoleEnum } from "../api/profileApi";
 
@@ -43,6 +43,7 @@ export function ProfileHeader(params: {
   assignedPrograms?.sort();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   return (
     <div className={styles.profileHeader}>
       <div className={styles.profileContent}>
@@ -75,7 +76,8 @@ export function ProfileHeader(params: {
           <Button
             label="Edit profile"
             onClick={() => {
-              router.push(`${pathname}/edit`);
+              const linkSearchParams = new URLSearchParams(searchParams);
+              router.push(`${pathname}/edit?${linkSearchParams.toString()}`);
             }}
           />
         ) : isProgramAndRoleEditable ? (

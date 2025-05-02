@@ -53,16 +53,31 @@
   gap: 8px;
 }
 
-.homeBackground {
+.selectedBackground {
   display: flex;
-  padding: 7.111px;
+  width: 32px;
+  height: 32px;
+  justify-content: center;
   align-items: center;
   gap: 7.111px;
   border-radius: var(--Spacing-s, 8px);
   background: var(--Background-4, #d6dade);
 }
 
+.unselectedBackground {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  align-items: center;
+  gap: 7.111px;
+  border-radius: var(--Spacing-s, 8px);
+}
+
 .logoutFrame {
+  cursor: pointer;
   width: 22px;
   height: 22px;
+  background: none;
+  border: none;
 }

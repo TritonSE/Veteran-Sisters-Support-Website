@@ -1,55 +1,111 @@
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
-import { UserProfile as UserProfileType } from "../api/profileApi";
+import { getAssignedUsers, removeVolunteerFromVeteran } from "../api/activeVolunteers";
+import { Role, UserProfile as UserProfileType } from "../api/profileApi";
 
 import { Program } from "./Program";
 import styles from "./UserList.module.css";
+import UserAssigningDialog from "./userAssigningDialog";
 
 export function UserList(params: {
   userProfile: UserProfileType | undefined;
   title: string;
   editable: boolean;
   minimized: boolean;
+  setMessage: (message: string) => void;
 }) {
   const { title, userProfile, editable, minimized } = params;
+  const userPrograms = Object.fromEntries(
+    userProfile?.assignedPrograms?.map((program) => [program, []]) ?? [],
+  ) as Record<string, UserProfileType[]>;
 
-  // Users for user list
-  const emptyUserGroups: Record<string, UserProfileType[]> = (
-    userProfile?.assignedPrograms ?? []
-  ).reduce((accumulator: Record<string, UserProfileType[]>, program: string) => {
-    accumulator[program] = [];
-    return accumulator;
-  }, {});
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [refreshFlag, setRefreshFlag] = useState(false);
+  const [dialogProgram, setDialogProgram] = useState("");
+  const [currentUsers, setCurrentUsers] = useState<Record<string, UserProfileType[]>>(userPrograms);
 
-  const assignedUsers = userProfile?.assignedUsers ?? [];
-  const userGroups: Record<string, UserProfileType[]> = assignedUsers.reduce(
-    (accumulator, user) => {
-      (user?.assignedPrograms ?? []).forEach((program: string) => {
-        if (program in accumulator) {
-          accumulator[program].push(user);
-        }
+  const openDialog = (program: string) => {
+    setIsDialogOpen(true);
+    setDialogProgram(program);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+    setRefreshFlag((prev) => !prev);
+  };
+
+  const removeVolunteer = (selectedEmail: string, program: string) => {
+    if (userProfile) {
+      const vetEmail = userProfile.role === Role.VETERAN ? userProfile.email : selectedEmail;
+      const volEmail = userProfile.role === Role.VETERAN ? selectedEmail : userProfile.email;
+
+      removeVolunteerFromVeteran(volEmail, vetEmail, program)
+        .then(() => {
+          setRefreshFlag((prev) => !prev);
+        })
+        .catch((err: unknown) => {
+          console.error(err);
+        });
+    }
+  };
+
+  const fetchUserProfiles = async (user: UserProfileType) => {
+    try {
+      const res = await getAssignedUsers(user);
+      if (!res.success || !Array.isArray(res.data)) {
+        throw new Error("Failed to fetch volunteers");
+      }
+
+      const users: [string, UserProfileType][] = res.data.map((profile) => {
+        const activeUser =
+          userProfile?.role === Role.VETERAN ? profile.volunteerUser : profile.veteranUser;
+        return [profile.assignedProgram, activeUser];
       });
-      return accumulator;
-    },
-    emptyUserGroups,
-  );
 
-  const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(userGroups).slice().sort();
+      setCurrentUsers(() => {
+        const updatedUsers = Object.fromEntries(
+          (userProfile?.assignedPrograms ?? []).map((program) => [program, []]),
+        ) as Record<string, UserProfileType[]>;
+        for (const [key, userObj] of users) {
+          if (!updatedUsers[key].some((vol) => vol.email === userObj.email)) {
+            updatedUsers[key].push(userObj);
+          }
+        }
+        return updatedUsers;
+      });
+    } catch (error) {
+      console.error("Error fetching volunteer profiles:", error);
+      throw new Error("Failed to fetch volunteers");
+    }
+  };
+
+  useEffect(() => {
+    const fetchProfiles = async () => {
+      if (userProfile?.email) {
+        await fetchUserProfiles(userProfile);
+      }
+    };
+    void fetchProfiles();
+  }, [refreshFlag]);
+
+  const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(currentUsers)
+    .slice()
+    .sort();
 
   return (
     <div className={`${styles.userList} ${minimized ? styles.minimized : ""}`}>
+      {isDialogOpen && userProfile && (
+        <UserAssigningDialog
+          isOpen={isDialogOpen}
+          program={dialogProgram}
+          user={userProfile}
+          closeDialog={closeDialog}
+          setMessage={params.setMessage}
+        />
+      )}
       <div className={styles.userListHeader}>
         <div className={styles.userListHeading}>{title}</div>
-        {editable && !minimized && (
-          <div className={styles.addUser}>
-            <Image
-              src="/pajamas_assignee_icon.svg"
-              width={16}
-              height={16}
-              alt="Assign User"
-            ></Image>
-          </div>
-        )}
       </div>
       <div className={styles.userListContent}>
         {sortedUserGroups.map(([program, users]) => {
@@ -59,13 +115,16 @@ export function UserList(params: {
                 <div className={styles.programSectionHeaderSectionInfo}>
                   <Program program={program} />
                 </div>
-                {editable && minimized && (
+                {editable && (
                   <div className={styles.addUser}>
                     <Image
-                      src="/pajamas_assignee_icon.svg"
-                      width={16}
-                      height={16}
+                      src="/add_icon.svg"
+                      width={14}
+                      height={14}
                       alt="Assign User"
+                      onClick={() => {
+                        openDialog(program);
+                      }}
                     ></Image>
                   </div>
                 )}
@@ -81,11 +140,14 @@ export function UserList(params: {
                       </div>
                       {editable && (
                         <Image
-                          src="/trash_icon.svg"
+                          src="/trash_icon_3.svg"
                           width={20}
                           height={20}
                           alt="Remove User"
                           className={styles.removeUser}
+                          onClick={() => {
+                            removeVolunteer(user.email, program);
+                          }}
                         ></Image>
                       )}
                     </div>

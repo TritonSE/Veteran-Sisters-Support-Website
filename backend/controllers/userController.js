@@ -60,8 +60,6 @@ export const addUser = async (req, res) => {
       firstName,
       lastName,
       role,
-      assignedPrograms,
-      assignedUsers,
       yearJoined,
       age,
       gender,
@@ -69,6 +67,8 @@ export const addUser = async (req, res) => {
       zipCode,
       address,
       roleSpecificInfo,
+      assignedPrograms,
+      assignedUsers,
     } = req.body;
     const existingUser = await User.findOne({ email }).exec();
     if (existingUser) {
@@ -85,10 +85,6 @@ export const addUser = async (req, res) => {
         roleSpecificInfo,
         assignedPrograms,
         assignedUsers,
-        yearJoined,
-        age,
-        gender,
-        phoneNumber,
       });
       res.status(201).json(newUser);
     }
@@ -126,11 +122,73 @@ export const getUsersNonAdmins = async (req, res) => {
   }
 };
 
+export const getUserRole = async (req, res) => {
+  try {
+    const email = req.params.email;
+    const user = await User.findOne({ email }).exec();
+    if (user) {
+      res.json({ role: user.role });
+    } else {
+      res.status(404).json({ error: "User not found" });
+    }
+  } catch (error) {
+    console.error("getUserRole Error:", error);
+  }
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    const email = req.params.email;
+    const { program, veteranEmail } = req.body;
+
+    const user = await User.findOne({ email }).exec();
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (program) {
+      const programIndex = user.assignedPrograms.indexOf(program);
+      if (programIndex > -1) {
+        user.assignedPrograms.splice(programIndex, 1);
+      } else {
+        user.assignedPrograms.push(program);
+      }
+    }
+
+    if (veteranEmail) {
+      //updates assignedUsers on both users involved
+      const veteran = await User.findOne({ email: veteranEmail }).exec();
+      const userIndex = veteran.assignedUsers.indexOf(email);
+      const veteranIndex = user.assignedUsers.indexOf(veteranEmail);
+      if (veteranIndex > -1) {
+        user.assignedUsers.splice(veteranIndex, 1);
+      } else {
+        user.assignedUsers.push(veteranEmail);
+      }
+
+      if (userIndex > -1) {
+        veteran.assignedUsers.splice(userIndex, 1);
+      } else {
+        veteran.assignedUsers.push(email);
+      }
+
+      await veteran.save();
+    }
+
+    await user.save();
+
+    res.status(200).json({ message: "User updated successfully", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 export const getVeteransByVolunteer = async (req, res) => {
   try {
     const { volunteerId } = req.params;
     const user = await User.findById(volunteerId);
-    const users = await User.find({ assignedUsers: { $in: [user.email] } }).sort({
+    const users = await User.find({ email: { $in: user.assignedUsers } }).sort({
       firstName: "asc",
     });
 
@@ -139,6 +197,35 @@ export const getVeteransByVolunteer = async (req, res) => {
     } else {
       res.status(404).json({ error: "Could not find users" });
     }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const updateUserId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { firstName, lastName, email, phoneNumber, age, gender } = req.body;
+
+    const update = {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      age,
+      roleSpecificInfo: {
+        serviceInfo: {
+          gender,
+        },
+      },
+    };
+
+    const updatedUser = await User.findByIdAndUpdate(id, update, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json(updatedUser);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });

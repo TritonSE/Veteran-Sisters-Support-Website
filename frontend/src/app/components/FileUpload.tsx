@@ -2,12 +2,13 @@ import { ref, uploadBytes } from "firebase/storage";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 
-import { storage } from "../../../firebase/firebase";
+import { storage } from "../../firebase/firebase";
 import { CreateFileObjectRequest, createFileObject } from "../api/fileApi";
 
 import styles from "./FileUpload.module.css";
 
 type FileUploadProps = {
+  veteranId: string;
   onClose: () => void;
   onUpload: () => void;
 };
@@ -18,13 +19,13 @@ type CheckBoxStates = {
   OperationWellness: boolean;
 };
 
-export function FileUpload({ onClose, onUpload }: FileUploadProps) {
+export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
   const [checkboxStates, setCheckboxStates] = useState<CheckBoxStates>({
     BattleBuddies: false,
     Advocacy: false,
     OperationWellness: false,
   });
-  const [comments, setComments] = useState<string>();
+  const [comment, setComment] = useState<string>();
   const [file, setFile] = useState<File | null>(null);
   const [sizeError, setSizeError] = useState<boolean>(false);
   const [uploading, setUploading] = useState<boolean>(false);
@@ -52,8 +53,8 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
       setUploading(true);
       const fileObjRequest: CreateFileObjectRequest = {
         filename: file.name,
-        uploader: "67a6322b3fcd070a8e0d2c71", //Note: Hardcoded user ID for testing
-        comments: comments ? [comments] : [],
+        uploaderId: veteranId,
+        comment: comment ?? "",
         programs: Object.keys(checkboxStates).filter(
           (key) => checkboxStates[key as keyof CheckBoxStates],
         ),
@@ -61,9 +62,7 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
       createFileObject(fileObjRequest)
         .then((result) => {
           if (result.success) {
-            console.log("file object created");
-            const extension = file.name.includes(".") ? (file.name.split(".").pop() ?? "") : "";
-            const storageRef = ref(storage, `files/${result.data._id}.${extension}`);
+            const storageRef = ref(storage, `files/${result.data._id}`);
             uploadBytes(storageRef, file)
               .then(() => {
                 setUploading(false);
@@ -89,14 +88,14 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
       <div className={styles.modal}>
         <div className={styles.xwrapper}>
           <div onClick={onClose} className={styles.xbutton}>
-            <Image src="./close_button.svg" width={24} height={24} alt="close_button" />
+            <Image src="/close_button.svg" width={24} height={24} alt="close_button" />
           </div>
         </div>
         <div className={styles.uploadWrapper}>
           <div className={styles.iconWrapper}>
-            <Image src="./pdf_icon.svg" width={83} height={83} alt="pdf" />
+            <Image src="/pdf_icon.svg" width={83} height={83} alt="pdf" />
             <span>or</span>
-            <Image src="./doc_icon.svg" width={83} height={83} alt="doc" />
+            <Image src="/doc_icon.svg" width={83} height={83} alt="doc" />
           </div>
           {!file ? (
             <>
@@ -120,7 +119,7 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
                 }}
                 className={styles.xbutton}
               >
-                <Image src="./close_button.svg" width={24} height={24} alt="close_button" />
+                <Image src="/close_button.svg" width={24} height={24} alt="close_button" />
               </div>
             </div>
           )}
@@ -143,9 +142,6 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
             >
               <input
                 type="checkbox"
-                onChange={() => {
-                  console.log("clicked BattleBuddies");
-                }}
                 className={styles.checkBox}
                 checked={checkboxStates.BattleBuddies}
               />{" "}
@@ -159,9 +155,6 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
             >
               <input
                 type="checkbox"
-                onChange={() => {
-                  console.log("clicked Advocacy");
-                }}
                 className={styles.checkBox}
                 checked={checkboxStates.Advocacy}
               />{" "}
@@ -178,9 +171,6 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
             >
               <input
                 type="checkbox"
-                onChange={() => {
-                  console.log("clicked OperationWellness");
-                }}
                 className={styles.checkBox}
                 checked={checkboxStates.OperationWellness}
               />{" "}
@@ -193,7 +183,7 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
               placeholder="Add a comment..."
               className={styles.commentsBox}
               onChange={(e) => {
-                setComments(e.target.value);
+                setComment(e.target.value);
               }}
             />
           </div>
@@ -210,7 +200,7 @@ export function FileUpload({ onClose, onUpload }: FileUploadProps) {
         </div>
         {sizeError && (
           <div className={styles.error}>
-            <Image src="./error_symbol.svg" alt="error" width={20} height={20} /> File size was too
+            <Image src="/error_symbol.svg" alt="error" width={20} height={20} /> File size was too
             big, please upload one smaller than 1 GB!
           </div>
         )}

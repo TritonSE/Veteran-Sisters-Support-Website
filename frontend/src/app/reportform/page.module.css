@@ -1,0 +1,153 @@
+.page {
+  height: 100%;
+  width: 100%;
+  padding-left: 188px;
+  padding-right: 156px;
+  padding-top: 94px;
+  padding-bottom: 57px;
+}
+
+.header {
+  border-bottom: #d0d7de solid 1px;
+}
+.title {
+  /* title large */
+  font-family: "Albert Sans";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  color: #3a3c3d;
+}
+
+.subtitle {
+  /* body large */
+  font-family: "Albert Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  width: 656px;
+  padding-top: var(--Spacing-sm, 16px);
+  padding-bottom: var(--Spacing-md, 24px);
+  color: #3a3c3d;
+}
+
+.questionPanel {
+  width: 596px;
+}
+
+.question {
+  padding-top: var(--Spacing-xl, 40px);
+  padding-bottom: 20px;
+  font-family: "Albert Sans";
+  font-size: 20px;
+}
+
+.asterisk {
+  color: #b80037;
+}
+
+.buttonRow {
+  padding-top: var(--Spacing-xl, 40px);
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+}
+
+.situationTextBox {
+  width: 596px;
+  height: 134px;
+  padding: 18.23px 12.46px 18.23px;
+  background-color: white;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  color: var(--Text-2, #60696f);
+  font-family: "Albert Sans";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%;
+  resize: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: text;
+  outline: none;
+}
+
+.otherTextBox {
+  width: 596px;
+  height: 32px;
+  background-color: white;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  color: var(--Text-2, #60696f);
+  font-family: "Albert Sans";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%;
+  padding-left: 12px;
+  resize: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: text;
+  outline: none;
+
+  margin-top: 8px;
+}
+
+.dateTimeContainer {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--Spacing-l, 32px);
+}
+
+.dateTimeDropdownButton {
+  display: flex;
+  padding: 8px 16px;
+  align-items: center;
+  gap: 16px;
+  align-self: stretch;
+
+  border-radius: 4px;
+  border: 1px solid var(--Stroke-3, #bdc9d2);
+  background: var(--Background-1, #fff);
+
+  cursor: pointer;
+}
+
+.timeInput {
+  border: none;
+  resize: none;
+  outline: none;
+  width: 100%;
+}
+
+.timeInput::placeholder {
+  text-align: middle;
+  color: var(--Neutral-Base-Black, #252525);
+
+  /* body small */
+  font-family: "Albert Sans";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.dateText {
+  color: var(--Neutral-Base-Black, #252525);
+
+  /* body small */
+  font-family: "Albert Sans";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}

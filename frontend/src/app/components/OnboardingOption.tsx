@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React, { useState } from "react";
 
 import styles from "./OnboardingOption.module.css";
@@ -38,8 +39,11 @@ const OnboardingOption: React.FC<OnboardingOptionProps> = ({
           <div className={styles.description}>{description}</div>
         </div>
         <div className={styles.checkboxContainer}>
-          <img
-            src={checked ? "/checkbox.checked.svg" : "/checkbox.unchecked.svg"}
+          <Image
+            src={checked ? "/checkBox.checked.svg" : "/checkBox.unchecked.svg"}
+            alt="checkbox"
+            width={21}
+            height={21}
             className={styles.checkbox}
           />
         </div>

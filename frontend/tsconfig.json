@@ -27,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "firebase/firebase.ts"
+    "src/firebase/firebase.ts"
   ],
   "exclude": ["node_modules"]
 }

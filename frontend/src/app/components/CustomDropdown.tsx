@@ -9,6 +9,7 @@ type CustomDropdownProps = {
   toggleDropdown: () => void;
   onSelect: (option: string) => void;
   selected?: string;
+  fullWidth?: boolean;
 };
 
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
@@ -17,27 +18,28 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   toggleDropdown,
   onSelect,
   selected,
+  fullWidth,
 }) => {
   const handleSelect = (option: string) => {
     toggleDropdown();
     onSelect(option);
   };
   return (
-    <div>
+    <div className={`${styles.customDropdownWrapper} ${fullWidth ? styles.fullWidth : ""}`}>
       <div className={styles.selectBox} onClick={toggleDropdown}>
         {selected ?? "Please Select"}
         <Image
           id="arrowUp"
           width={35}
           height={35}
-          src="ic_round-arrow-drop-up.svg"
+          src="/ic_round-arrow-drop-up.svg"
           alt=""
           style={{ objectFit: "contain", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}
         ></Image>
       </div>
 
       {isOpen && (
-        <ul className={styles.customDropdown}>
+        <ul className={`${styles.customDropdown} ${fullWidth ? styles.fullWidth : ""}`}>
           {options.map((option, index) => (
             <li
               key={index}
