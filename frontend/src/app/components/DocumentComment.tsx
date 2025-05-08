@@ -10,7 +10,7 @@ import {
   editCommentObject,
   editFileObject,
 } from "../api/fileApi";
-import { AssignedProgram as ProgramEnum, UserProfile } from "../api/profileApi";
+import { AssignedProgram as ProgramEnum, Role as RoleEnum, UserProfile } from "../api/profileApi";
 
 import styles from "./DocumentComment.module.css";
 import { Program } from "./Program";
@@ -162,7 +162,7 @@ export function DocumentComment({
               className={styles.commentDate}
             >{`${formatDate(comment.datePosted)} ${comment.edited ? "(edited)" : ""}`}</div>
             <div className={styles.commentBottomIcons}>
-              {(user._id === comment.commenterId._id || user.role === "admin") && (
+              {(user._id === comment.commenterId._id || user.role === RoleEnum.ADMIN) && (
                 <>
                   <Image
                     style={{ cursor: "pointer" }}

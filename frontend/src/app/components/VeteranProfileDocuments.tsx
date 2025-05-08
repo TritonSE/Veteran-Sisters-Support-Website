@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from "react";
 
 import { Comment, FileObject, getFilesByUploader } from "../api/fileApi";
-import { User, getUser } from "../api/userApi";
+import { Role as RoleEnum, UserProfile } from "../api/profileApi";
+import { getUser } from "../api/userApi";
 import { useAuth } from "../contexts/AuthContext";
 
 import { VeteranFilePreview } from "./VeteranFilePreview";
@@ -13,8 +14,8 @@ type VeteranDocumentProps = {
 };
 
 export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
-  const { userId, userRole } = useAuth();
-  const [user, setUser] = useState<User>();
+  const { userId } = useAuth();
+  const [user, setUser] = useState<UserProfile>();
 
   const programs = ["operation wellness", "battle buddies", "advocacy"];
   const programMap: Record<string, string> = {
@@ -39,10 +40,15 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
   };
 
   const shouldLock = (file: FileObject) => {
-    if (user?.role === "volunteer" || user?.role === "staff") {
-      console.log(user?.assignedPrograms);
-      console.log(file.programs);
-      return !user?.assignedPrograms.some((element) => file.programs.includes(element));
+    if (user?.role === RoleEnum.VOLUNTEER || user?.role === RoleEnum.STAFF) {
+      for (const assignedUser of user.assignedUsers ?? []) {
+        if (assignedUser._id === file.uploader._id) {
+          return !user.assignedPrograms?.some((element) => file.programs.includes(element));
+        }
+      }
+      return true;
+    } else {
+      return false;
     }
   };
 
