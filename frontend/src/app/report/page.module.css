@@ -1,0 +1,32 @@
+.page {
+  height: 100%;
+  width: 100%;
+  padding-left: 188px;
+  padding-right: 156px;
+  padding-top: 94px;
+  padding-bottom: 57px;
+}
+
+.title {
+  /* title large */
+  font-family: "Albert Sans";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  color: #3a3c3d;
+}
+
+.subtitle {
+  /* body large */
+  font-family: "Albert Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  width: 656px;
+  padding-top: var(--Spacing-sm, 16px);
+  padding-bottom: 28px;
+  color: #3a3c3d;
+}

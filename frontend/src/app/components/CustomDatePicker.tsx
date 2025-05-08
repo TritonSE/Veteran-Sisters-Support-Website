@@ -74,7 +74,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ date, onChange }) =
     <div className={styles.calendarContainer}>
       <div className={styles.calendarHeader}>
         <img
-          src="../green-caret-left.svg"
+          src="/green-caret-left.svg"
           style={{ cursor: "pointer" }}
           onClick={handlePrevMonth}
         ></img>
@@ -82,7 +82,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ date, onChange }) =
           {currentDate.toLocaleString("default", { month: "long", year: "numeric" })}
         </span>
         <img
-          src="../green-caret-right.svg"
+          src="/green-caret-right.svg"
           style={{ cursor: "pointer" }}
           onClick={handleNextMonth}
         ></img>

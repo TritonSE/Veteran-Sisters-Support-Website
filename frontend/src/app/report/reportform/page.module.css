@@ -151,3 +151,48 @@
   font-weight: 400;
   line-height: normal;
 }
+
+.centerButtons {
+  display: flex;
+  gap: 48px;
+}
+
+.confirmMessage {
+  width: 789px;
+  height: 248px;
+  gap: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 185px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.confirmText {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.confirmTextTitle {
+  font-family: "Albert Sans";
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.confirmTextSub {
+  width: 543.297px;
+  color: #000;
+  text-align: center;
+
+  /* body large */
+  font-family: "Albert Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
