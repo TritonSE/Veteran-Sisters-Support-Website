@@ -7,19 +7,19 @@ import {
   UserProfile as UserProfileType,
   getUserProfile,
 } from "../api/profileApi";
+import { useAuth } from "../contexts/AuthContext";
 
 import NavigateBack from "./NavigateBack";
 import { ProfileHeader } from "./ProfileHeader";
+import ProfileInterests from "./ProfileInterests";
 import { UserList } from "./UserList";
 import styles from "./UserProfile.module.css";
-import { VeteranDocuments } from "./VeteranProfileDocuments";
 import { VolunteerNotes } from "./VolunteerNotes";
-
-import { useAuth } from "@/app/contexts/AuthContext";
 
 type ProfileRenderingContext = {
   invalidContext: boolean;
   showVolunteerNotes: boolean;
+  showProfileInterests: boolean;
   showUserList: boolean;
   userListTitle: string;
   userListEditable: boolean;
@@ -38,6 +38,7 @@ function getProfileRenderingContext(
     invalidContext: false,
     showVolunteerNotes: false,
     showUserList: false,
+    showProfileInterests: false,
     userListTitle: "",
     userListEditable: false,
     viewingPersonalProfile: false,
@@ -92,6 +93,7 @@ function getProfileRenderingContext(
   } else if (viewerRole === ADMIN && viewingRole === VETERAN) {
     context.showUserList = true;
     context.userListEditable = true;
+    context.showProfileInterests = true;
     context.userListTitle = "Assigned Volunteers";
     context.isProgramAndRoleEditable = true;
     context.isProfileEditable = true;
@@ -101,6 +103,7 @@ function getProfileRenderingContext(
   // staff view volunteer - can't edit program and role
   else if (viewerRole === STAFF && viewingRole === VOLUNTEER) {
     context.showUserList = true;
+    context.showProfileInterests = true;
     context.userListEditable = true;
     context.userListTitle = "Assigned Veterans";
     context.isProfileEditable = true;
@@ -118,6 +121,7 @@ function getProfileRenderingContext(
   // volunteer view veteran
   else if (viewerRole === VOLUNTEER && viewingRole === VETERAN) {
     context.showUserList = true;
+    context.showProfileInterests = true;
     context.userListTitle = "Assigned Volunteers";
     context.showVolunteerNotes = true;
     return context;
@@ -152,6 +156,7 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
 
         const res = await getUserProfile(profileUserId);
         if (res.success) {
+          console.log("Response data: ", res.data);
           setUserProfile(res.data);
           setProfileRenderingContext(
             getProfileRenderingContext(res.data.role, profileUserId, userRole, userId),
@@ -197,6 +202,13 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
     );
   }
 
+  console.log("User PRofile: ", userProfile);
+  console.log("Zip code: ", userProfile.zipCode);
+  console.log(
+    "military status: ",
+    userProfile.roleSpecificInfo?.serviceInfo?.currentMilitaryStatus,
+  );
+
   return (
     <>
       {profileRenderingContext?.invalidContext ? (
@@ -212,36 +224,40 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
             <ProfileHeader
               firstName={userProfile.firstName}
               lastName={userProfile.lastName}
+              zipcode={userProfile.zipCode}
               role={userProfile.role}
               assignedPrograms={userProfile.assignedPrograms}
               yearJoined={userProfile.yearJoined}
               age={userProfile.age}
+              branchOfService={userProfile.roleSpecificInfo?.serviceInfo?.branchOfService}
+              currentMilitaryStatus={
+                userProfile.roleSpecificInfo?.serviceInfo?.currentMilitaryStatus
+              }
               phoneNumber={userProfile.phoneNumber}
               gender={userProfile.roleSpecificInfo?.serviceInfo?.gender}
               email={userProfile.email}
               isPersonalProfile={profileRenderingContext.viewingPersonalProfile}
               isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
-              isProfileEditable={profileRenderingContext.isProfileEditable}
             />
             <div className={styles.userProfileInnerContent}>
+              <div className={styles.userProfileRow2}>
+                {profileRenderingContext.showProfileInterests && (
+                  <ProfileInterests interests={userProfile.roleSpecificInfo?.interests} />
+                )}
+                {profileRenderingContext.showUserList && (
+                  <UserList
+                    userProfile={userProfile}
+                    title={profileRenderingContext.userListTitle}
+                    editable={profileRenderingContext.userListEditable}
+                    minimized={profileRenderingContext.showVolunteerNotes}
+                    setMessage={setMessage}
+                  />
+                )}
+              </div>
               {profileRenderingContext.showVolunteerNotes && (
                 <VolunteerNotes profileUserId={profileUserId} />
               )}
-              {profileRenderingContext.showUserList && (
-                <UserList
-                  userProfile={userProfile}
-                  title={profileRenderingContext.userListTitle}
-                  editable={profileRenderingContext.userListEditable}
-                  minimized={profileRenderingContext.showVolunteerNotes}
-                  setMessage={setMessage}
-                />
-              )}
             </div>
-            {userProfile.role === RoleEnum.VETERAN && (
-              <div style={{ width: "100%" }}>
-                <VeteranDocuments uploader={profileUserId} />
-              </div>
-            )}
             {message && (
               <div
                 className={`${styles.messageContainer} ${message.includes("Successfully") ? styles.messageSuccess : styles.messageError}`}

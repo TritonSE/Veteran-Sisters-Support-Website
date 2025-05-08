@@ -1,5 +1,5 @@
 .container {
-  display: flex;
+  display: inline-flex;
   padding: 4px 8px;
   flex-direction: column;
   justify-content: center;

@@ -5,6 +5,7 @@ import { Role as RoleEnum } from "../api/profileApi";
 import { updateUserProgramsAndRole } from "../api/userApi";
 
 import styles from "./ChangeProgramDialog.module.css";
+import { Role } from "./Role";
 
 type ProgramOption = { label: string; value: string };
 
@@ -52,7 +53,10 @@ const ChangeProgramDialog = ({ email, firstName, role, callback }: ChangeProgram
 
   return (
     <div className={styles.dialog}>
-      <h2 className={styles.title}>{firstName ? `${firstName}'s Programs` : "Programs"}</h2>
+      <h2 className={styles.title}>
+        {firstName ? firstName : ""} <Role role={role} />
+        {"'s Programs"}
+      </h2>
 
       <div className={styles.dropdownWrapper} ref={containerRef}>
         <button
