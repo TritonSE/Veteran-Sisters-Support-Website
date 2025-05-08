@@ -10,7 +10,7 @@ import styles from "./NavBar.module.css";
 export const NavBar = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { userId } = useAuth();
+  const { userId, userRole } = useAuth();
 
   const handleLogout = async () => {
     await auth.signOut();
@@ -39,10 +39,12 @@ export const NavBar = () => {
               </div>
             </div>
           </Link>
-          <Link href="/report">
+          <Link href={userRole === "admin" ? "/announcements" : "/reportform"}>
             <div
               className={
-                pathname.startsWith("/report")
+                pathname === "/announcements" ||
+                pathname.startsWith("/announcements/") ||
+                pathname.startsWith("/reportform")
                   ? styles.selectedBackground
                   : styles.unselectedBackground
               }
