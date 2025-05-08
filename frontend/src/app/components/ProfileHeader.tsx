@@ -2,11 +2,14 @@ import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-import { AssignedProgram as AssignedProgramEnum, Role as RoleEnum } from "../api/profileApi";
+import {
+  AssignedProgram as AssignedProgramEnum,
+  BranchOfService,
+  CurrentMilitaryStatus,
+  Role as RoleEnum,
+} from "../api/profileApi";
 
-import { Button } from "./Button";
-import ChangeProgramDialog from "./ChangeProgramDialog";
-import ChangeRoleDialog from "./ChangeRoleDialog";
+import ProfileActions from "./EditProfileDialog";
 import styles from "./ProfileHeader.module.css";
 import { ProfilePicture } from "./ProfilePicture";
 import { Program } from "./Program";
@@ -16,46 +19,49 @@ export function ProfileHeader(params: {
   firstName: string | undefined;
   lastName: string | undefined;
   role: RoleEnum | undefined;
+  zipcode: number;
   assignedPrograms: AssignedProgramEnum[] | undefined;
   yearJoined?: number | undefined;
   age?: number | undefined;
+  branchOfService?: BranchOfService;
+  currentMilitaryStatus?: CurrentMilitaryStatus;
   phoneNumber?: string | undefined;
   gender?: string | undefined;
   email: string | undefined;
   isProgramAndRoleEditable: boolean;
-  isProfileEditable: boolean;
   isPersonalProfile: boolean;
 }) {
   const {
     firstName,
     lastName,
     role,
+    zipcode,
     assignedPrograms,
     yearJoined,
     age,
+    branchOfService,
+    currentMilitaryStatus,
     phoneNumber,
     gender,
     email,
     isProgramAndRoleEditable,
-    isProfileEditable,
     isPersonalProfile,
   } = params;
   const fullName = `${firstName ?? "Unknown"} ${lastName ?? "Unknown"}`;
-  const joinedText = `Joined: ${yearJoined?.toString() ?? "Unknown"}`;
+  const joinedText = yearJoined?.toString() ?? "Unknown";
   const ageText = `Age: ${age?.toString() ?? "Unknown"}`;
-  const genderText = `Gender: ${gender ?? "Unknown"}`;
+  const genderText = gender ?? "Unknown";
+  const zipCodeText = zipcode?.toString() ?? "Unknown";
   assignedPrograms?.sort();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [showProgramChangeDialog, setShowProgramChangeDialog] = useState<boolean>(false);
-  const [showRoleChangeDialog, setShowRoleChangeDialog] = useState<boolean>(false);
   const [selectedRole, setSelectedRole] = useState<RoleEnum | undefined>(role);
+  const [openProfileEdit, setOpenProfileEdit] = useState<boolean>(false);
 
   const handleRoleNext = (newRole: RoleEnum) => {
     setSelectedRole(newRole); // remember it
-    setShowRoleChangeDialog(false); // hide role dialog
-    setShowProgramChangeDialog(true); // show program dialog
+    console.log(ageText);
   };
 
   return (
@@ -66,15 +72,25 @@ export function ProfileHeader(params: {
           <div className={styles.userInfoHeader}>
             <div className={styles.userFullName}>{fullName}</div>
             <Role role={role} />
-            {assignedPrograms?.map((program) => <Program program={program} key={program} />)}
           </div>
           <div className={styles.userMetadata}>
+            <span style={{ display: "flex", flexDirection: "row", gap: "8px" }}>
+              {assignedPrograms && assignedPrograms.length > 0 ? (
+                assignedPrograms.map((program) => <Program program={program} key={program} />)
+              ) : (
+                <Program program={"unassigned"} textOnly={true} />
+              )}
+            </span>
             <div className={styles.metadataSubsection}>
+              <div>{genderText}</div>
+              <Image src="/vertical_divider.svg" width={20} height={20} alt="divider" />
               <div>{joinedText}</div>
               <Image src="/vertical_divider.svg" width={20} height={20} alt="divider" />
-              <div>{ageText}</div>
+              <div>{zipCodeText}</div>
               <Image src="/vertical_divider.svg" width={20} height={20} alt="divider" />
-              <div>{genderText}</div>
+              <div>{branchOfService}</div>
+              <Image src="/vertical_divider.svg" width={20} height={20} alt="divider" />
+              <div>{currentMilitaryStatus}</div>
             </div>
 
             <div className={styles.metadataSubsection}>
@@ -86,71 +102,22 @@ export function ProfileHeader(params: {
         </div>
       </div>
       <div className={styles.profileContentControls}>
-        {isPersonalProfile ? (
-          <Button
-            label="Edit profile"
-            onClick={() => {
-              const linkSearchParams = new URLSearchParams(searchParams);
-              router.push(`${pathname}/edit?${linkSearchParams.toString()}`);
-            }}
-          />
-        ) : isProgramAndRoleEditable ? (
-          isProfileEditable ? (
-            <>
-              <Button
-                label={"Edit Program"}
-                onClick={() => {
-                  setShowProgramChangeDialog(true);
-                }}
-              />{" "}
-              <Button
-                label={"Change Role"}
-                onClick={() => {
-                  setShowRoleChangeDialog(true);
-                }}
-              />
-            </>
-          ) : isProgramAndRoleEditable ? (
-            <>
-              <Button
-                label={"Edit Program"}
-                onClick={() => {
-                  setShowProgramChangeDialog(true);
-                }}
-              />{" "}
-              <Button
-                label={"Change Role"}
-                onClick={() => {
-                  setShowRoleChangeDialog(true);
-                }}
-              />
-            </>
-          ) : (
-            <></>
-          )
-        ) : (
-          <></>
-        )}
-      </div>
-      {showRoleChangeDialog && role && (
-        <ChangeRoleDialog
+        <ProfileActions
+          isPersonalProfile={isPersonalProfile}
+          isProgramAndRoleEditable={isProgramAndRoleEditable}
+          searchParams={searchParams}
+          router={router}
+          pathname={pathname}
           firstName={firstName}
           email={email}
           role={role}
-          onNext={handleRoleNext}
-          onCancel={() => {
-            setShowRoleChangeDialog(false);
+          selectedRole={selectedRole}
+          handleRoleNext={handleRoleNext}
+          callback={() => {
+            setOpenProfileEdit(!openProfileEdit);
           }}
         />
-      )}
-      {showProgramChangeDialog && role && (
-        <ChangeProgramDialog
-          firstName={firstName}
-          email={email}
-          role={selectedRole}
-          callback={setShowProgramChangeDialog}
-        />
-      )}
+      </div>
     </div>
   );
 }

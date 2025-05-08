@@ -1,0 +1,76 @@
+/* Wrapper should surround the trigger (the three-dots icon) */
+.profileActionsWrapper {
+  position: relative; /* anchor for the absolutely-positioned card */
+}
+
+/* Smaller card that opens **left** of the three dots */
+.profileActionsCard {
+  /* position & size (unchanged) */
+  position: absolute;
+  top: 0;
+  width: 165px;
+  height: 88px;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  background: #fff;
+  padding: 0.75rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+
+  /* ⬇️ updated left-hand placement */
+  top: calc(25% + 2px); /* just 2 px below the row        */
+  right: calc(1%); /* 4 px to the **left** of the row */
+}
+/* Action buttons */
+.profileActionsButton {
+  font-size: 16px; /* keep original type scale */
+  font-weight: 500;
+  color: #374151; /* slate-700 */
+  background: #fff;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  padding: 0; /* reset default button padding */
+}
+
+/* Backdrop that blurs page content and centers the dialog */
+.modalOverlay {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  background: rgba(0, 0, 0, 0.2); /* subtle dim */
+  backdrop-filter: blur(4px); /* ⬅️ blur underlying content */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.headerTopRight {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
+}
+
+.documentView {
+  color: #057e6f;
+  font-family: Albert Sans;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+/* Add a divider between items */
+.profileActionsButton:not(:last-child) {
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.profileActionsButton:hover,
+.profileActionsButton:focus {
+  color: #111827; /* slate-900 */
+  outline: none;
+}

@@ -2,6 +2,10 @@
   display: flex;
   width: 1024px;
   justify-content: space-between;
+  border-radius: 8px;
+  border: 1px solid var(--Stroke-2, #d0d7de);
+  background: #fff;
+  padding: 24px 24px var(--Spacing-l, 32px) 24px;
 }
 
 .profileHeader .profileContent {
@@ -56,8 +60,13 @@
   line-height: normal;
 }
 
-.profileHeader .userMetadata .smallMetadata {
+.profileHeader .userMetadata {
   font-size: 14px;
+}
+
+.profileHeader .smallMetadata {
+  font-size: 14px;
+  color: green;
 }
 
 .profileHeader .profileContentControls {
