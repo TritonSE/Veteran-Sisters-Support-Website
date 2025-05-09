@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Comment, FileObject, getFilesByUploader } from "../api/fileApi";
 
+import { NoDocuments } from "./EmptyStates";
 import { Tabs } from "./Tabs";
 import { VeteranFilePreview } from "./VeteranFilePreview";
 import styles from "./VeteranFilesTable.module.css";
@@ -70,15 +71,19 @@ export function VeteranFilesTable({ veteranId, refresh }: VeteranFilesTableProps
       />
 
       <div className={styles.documentTable}>
-        {filteredFiles.map((obj) => (
-          <div key={obj._id}>
-            <VeteranFilePreview
-              documentId={obj._id}
-              documentName={obj.filename}
-              latestComment={getLatestComment(obj.comments)}
-            />
-          </div>
-        ))}
+        {filteredFiles.length === 0 ? (
+          <NoDocuments />
+        ) : (
+          filteredFiles.map((obj) => (
+            <div key={obj._id}>
+              <VeteranFilePreview
+                documentId={obj._id}
+                documentName={obj.filename}
+                latestComment={getLatestComment(obj.comments)}
+              />
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
