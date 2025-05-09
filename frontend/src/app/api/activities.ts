@@ -1,4 +1,4 @@
-import { APIResult, get, handleAPIError, post } from "./requests";
+import { APIResult, get } from "./requests";
 
 export type ActivityObject = {
   _id: string;

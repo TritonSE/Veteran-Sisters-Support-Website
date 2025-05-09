@@ -1,4 +1,3 @@
-import { act } from "react";
 import { UserProfile } from "./profileApi";
 import { APIResult, get, handleAPIError, post, put } from "./requests";
 
