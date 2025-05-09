@@ -260,7 +260,7 @@
 }
 
 .messageContainer {
-  animation: fadeOut 5s forwards;
+  /* animation: fadeOut 5s forwards; */
   display: flex;
   margin: auto;
   padding: 8px;
@@ -269,8 +269,10 @@
   gap: 5px;
   font-family: "Albert Sans";
   font-weight: 500;
-  position: fixed;
   bottom: 80px;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .messageError {
