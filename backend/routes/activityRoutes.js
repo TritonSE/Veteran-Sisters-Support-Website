@@ -4,13 +4,14 @@ import {
   createActivity,
   markActivityRead,
 } from "../controllers/activityController.js";
+import { authenticateUser } from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get("/activities", getUnreadActivities);
+router.get("/activities/:userId", authenticateUser, getUnreadActivities);
 
-router.post("/activities", createActivity);
+router.post("/activities", authenticateUser, createActivity);
 
-router.post("/activities/:activityId", markActivityRead);
+router.post("/activities/:activityId", authenticateUser, markActivityRead);
 
 export default router;

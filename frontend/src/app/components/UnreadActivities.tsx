@@ -6,16 +6,22 @@ import { ActivityObject, getUnreadActivities, markActivityRead } from "../api/ac
 import styles from "./UnreadActivities.module.css";
 
 type UnreadActivitiesProps = {
+  userId: string;
   isOpen: boolean;
   toggleDropdown: () => void;
 };
 
-export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({ isOpen, toggleDropdown }) => {
+export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
+  userId,
+  isOpen,
+  toggleDropdown,
+}) => {
   const [activities, setActivities] = useState<ActivityObject[]>([]);
   const [totalUnreadCount, setTotalUnreadCount] = useState<number>(0);
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
-    getUnreadActivities()
+    getUnreadActivities(userId)
       .then((result) => {
         if (result.success) {
           setActivities(result.data.recentUnread);
@@ -27,21 +33,22 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({ isOpen, togg
       .catch((err: unknown) => {
         console.error(err);
       });
-  });
+  }, [refresh]);
 
   const handleSelect = (option: string) => {
     // Mark activity as read when selected
     markActivityRead(option).catch((err: unknown) => {
       console.error("Error marking activity as read:", err);
     });
+    setRefresh(!refresh);
   };
 
   const getActivityMessage = (activity: ActivityObject) => {
     switch (activity.type) {
       case "document":
-        return `${activity.firstName} uploaded a new document named "${activity.documentName}" to "${activity.programName?.join(", ")}"`;
+        return `${activity.uploader.firstName} uploaded a new document named "${activity.documentName}" to "${activity.programName?.join(", ")}"`;
       case "comment":
-        return `${activity.firstName} made a comment on "${activity.documentName}"`;
+        return `${activity.uploader.firstName} made a comment on "${activity.documentName}"`;
       case "assignment":
         return `You've been assigned a new veteran!`;
       case "report":
@@ -50,8 +57,10 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({ isOpen, togg
         return `You received access to "${activity.documentName}"`;
       case "announcement":
         return String(activity.title);
+      case "signup":
+        return `${activity.uploader.firstName} has signed up as a ${activity.uploader.role}`;
       default:
-        return `Unknown Activity by ${activity.firstName}`;
+        return `Unknown Activity by ${activity.uploader.firstName}`;
     }
   };
 
@@ -95,7 +104,9 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({ isOpen, togg
                       ? "Requests"
                       : activity.type === "comment"
                         ? "New Comment"
-                        : ""}
+                        : activity.type === "signup"
+                          ? "Sign Up"
+                          : ""}
               <div>
                 {activity.type === "announcement" && (
                   <div className={styles.urgentButton}>Urgent</div>
@@ -111,9 +122,10 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({ isOpen, togg
                   ></Image>
                   <div className={styles.horizontalDiv}>
                     <div className={styles.subtitle}>
-                      {activity.firstName}{" "}
+                      {activity.uploader.firstName}{" "}
                       <span className={styles.label}>
-                        {activity.role.charAt(0).toUpperCase() + activity.role.slice(1)}
+                        {activity.uploader.role.charAt(0).toUpperCase() +
+                          activity.uploader.role.slice(1)}
                       </span>
                     </div>
                     <div style={{ fontWeight: "14px" }}>{activity.relativeTime}</div>

@@ -2,10 +2,8 @@ import { APIResult, get, handleAPIError, post } from "./requests";
 
 export type ActivityObject = {
   _id: string;
-  firstName: string;
-  lastName: string;
-  role: string;
-  type: "document" | "comment" | "assignment" | "report" | "request" | "announcement";
+  uploader: { firstName: string; lastName: string; role: string };
+  type: "document" | "comment" | "assignment" | "report" | "request" | "announcement" | "signup";
   title: string;
   description: string;
   documentName: string;
@@ -42,11 +40,11 @@ const setRelativeTime = (timestamp: string | Date): string => {
 };
 
 // Get unread activities
-export const getUnreadActivities = async (): Promise<
-  APIResult<{ recentUnread: ActivityObject[]; totalUnread: number }>
-> => {
+export const getUnreadActivities = async (
+  userId: string,
+): Promise<APIResult<{ recentUnread: ActivityObject[]; totalUnread: number }>> => {
   try {
-    const response = await get("/api/activities");
+    const response = await get(`/activities/${userId}`);
     if (response.ok) {
       const activities = (await response.json()) as {
         recentUnread: ActivityObject[];
@@ -72,7 +70,7 @@ export const getUnreadActivities = async (): Promise<
 // Mark activity as read
 export const markActivityRead = async (activityId: string) => {
   try {
-    await post(`/api/activities/${activityId}`, { activityId });
+    await post(`/activities/${activityId}`, { activityId });
     return { success: true };
   } catch (error) {
     return handleAPIError(error);

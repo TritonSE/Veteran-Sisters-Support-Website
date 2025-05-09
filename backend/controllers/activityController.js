@@ -1,20 +1,52 @@
 import Activity from "../models/activityModel.js";
 import { User } from "../models/userModel.js";
+import { ActiveVolunteers } from "../models/activeVolunteers.js";
 
 // Return a. Recent 3 unread activities, b. Total count of unread activities
 export const getUnreadActivities = async (req, res) => {
   try {
-    const totalUnreadCount = await Activity.countDocuments({ isRead: false });
+    const { userId } = req.params;
+    const user = await User.findById(userId);
     const announcements = await Activity.find({ isRead: false, type: "announcement" })
+      .populate("uploader", "firstName lastName role")
       .sort({ createdAt: -1 })
-      .limit(3)
       .lean();
 
-    const otherActivities = await Activity.find({ isRead: false, type: { $ne: "announcement" } })
-      .sort({ createdAt: -1 })
-      .limit(3)
-      .lean();
-
+    let otherActivities;
+    if (user.role == "admin") {
+      otherActivities = await Activity.find({
+        isRead: false,
+        type: { $ne: "announcement" },
+        $or: [{ receivers: user.email }, { type: "report" }, { type: "signup" }],
+      })
+        .populate("uploader", "firstName lastName role")
+        .sort({ createdAt: -1 })
+        .lean();
+    } else if (user.role == "staff") {
+      otherActivities = await Activity.find({
+        isRead: false,
+        type: { $ne: "announcement" },
+        $or: [
+          { receivers: user.email },
+          { type: "request" },
+          { type: "signup" },
+          { programName: { $in: user.assignedPrograms } },
+        ],
+      })
+        .populate("uploader", "firstName lastName role")
+        .sort({ createdAt: -1 })
+        .lean();
+    } else {
+      otherActivities = await Activity.find({
+        isRead: false,
+        receivers: user.email,
+        type: { $ne: "announcement" },
+      })
+        .populate("uploader", "firstName lastName role")
+        .sort({ createdAt: -1 })
+        .lean();
+    }
+    const totalUnreadCount = announcements.length + otherActivities.length;
     const activities = [...announcements, ...otherActivities].slice(0, 3);
 
     res.status(200).json({
@@ -29,7 +61,8 @@ export const getUnreadActivities = async (req, res) => {
 // Helper function: Create new activity
 export const createActivity = async (activityData) => {
   try {
-    const { uploader, type, title, description, documentName, programName } = activityData;
+    const { uploader, type, receivers, title, description, documentName, programName } =
+      activityData;
 
     if (!uploader || !type) {
       return res.status(400).json({ message: "Uploader ID, and type are required" });
@@ -55,17 +88,16 @@ export const createActivity = async (activityData) => {
       return res.status(400).json({ message: "title is required for Announcement type" });
     }
 
-    // Find uploader's user details
+    // // Find uploader's user details
     const user = await User.findById(uploader);
     if (!user) {
       return res.status(404).json({ message: "Uploader not found" });
     }
 
     const newActivity = new Activity({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      role: user.role,
+      uploader: uploader,
       type,
+      receivers,
       title,
       description,
       documentName,
@@ -86,9 +118,20 @@ export const createActivity = async (activityData) => {
 export const createDocument = async ({ uploader, filename, programs }) => {
   try {
     // Create unread activity
+    const lowercasePrograms = programs.map((program) => {
+      if (program === "BattleBuddies") return "battle buddies";
+      else if (program === "Advocacy") return "advocacy";
+      else return "operation wellness";
+    });
+    const activeVolunteer = await ActiveVolunteers.find({
+      veteranUser: uploader,
+      assignedProgram: { $in: lowercasePrograms },
+    });
+    const receivers = activeVolunteer.map((item) => item.volunteer);
     const newActivity = {
       uploader,
       type: "document",
+      receivers: receivers,
       documentName: filename,
       programName: programs,
     };

@@ -25,7 +25,7 @@ export const uploadFile = async (req, res, next) => {
     });
 
     // Create unread activity
-    await createDocument({ uploader: uploader, filename: filename, programs: programs });
+    await createDocument({ uploader: uploaderId, filename: filename, programs: programs });
 
     return res.status(201).json(fileObject);
   } catch (error) {

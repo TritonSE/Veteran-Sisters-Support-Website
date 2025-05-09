@@ -75,7 +75,7 @@ export function VeteranDashboard() {
             </div>
           </div>
 
-          <UnreadActivities isOpen={dropdownOpen} toggleDropdown={toggleDropdown} />
+          <UnreadActivities userId={userId} isOpen={dropdownOpen} toggleDropdown={toggleDropdown} />
 
           <br />
           <br />

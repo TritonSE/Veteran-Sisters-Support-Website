@@ -2,13 +2,19 @@ import mongoose from "mongoose";
 
 const activitySchema = new mongoose.Schema(
   {
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    role: { type: String, required: true }, // "Veteran" or "Volunteer"
+    uploader: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     type: {
       type: String,
-      enum: ["document", "comment", "assignment", "report", "request", "announcement"], // Restrict values
+      enum: ["document", "comment", "assignment", "report", "request", "announcement", "signup"], // Restrict values
       required: true,
+    },
+    receivers: {
+      type: [String],
+      required: false,
     },
     title: {
       type: String,
