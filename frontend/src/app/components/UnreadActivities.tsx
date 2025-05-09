@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import { ActivityObject, getUnreadActivities, markActivityRead } from "../api/activities";
+import { ActivityObject, getUnreadActivities } from "../api/activities";
+import { markActivityRead } from "../api/userApi";
 
 import styles from "./UnreadActivities.module.css";
 
@@ -27,7 +28,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
           setActivities(result.data.recentUnread);
           setTotalUnreadCount(result.data.totalUnread);
         } else {
-          console.log(result.error);
+          console.error(result.error);
         }
       })
       .catch((err: unknown) => {
@@ -37,16 +38,25 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
 
   const handleSelect = (option: string) => {
     // Mark activity as read when selected
-    markActivityRead(option).catch((err: unknown) => {
-      console.error("Error marking activity as read:", err);
-    });
-    setRefresh(!refresh);
+    markActivityRead(userId, option)
+      .then(() => {
+        setRefresh(!refresh);
+      })
+      .catch((err: unknown) => {
+        console.error("Error marking activity as read:", err);
+      });
   };
 
   const getActivityMessage = (activity: ActivityObject) => {
     switch (activity.type) {
       case "document":
-        return `${activity.uploader.firstName} uploaded a new document named "${activity.documentName}" to "${activity.programName?.join(", ")}"`;
+        return `${activity.uploader.firstName} uploaded a new document named "${activity.documentName}" to "${activity.programName
+          ?.map((program) => {
+            if (program === "battle buddies") return "Battle Buddies";
+            else if (program === "advocacy") return "Advocacy";
+            else return "Operation Wellness";
+          })
+          .join(", ")}"`;
       case "comment":
         return `${activity.uploader.firstName} made a comment on "${activity.documentName}"`;
       case "assignment":

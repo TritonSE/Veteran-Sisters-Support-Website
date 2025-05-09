@@ -40,7 +40,6 @@ const activitySchema = new mongoose.Schema(
         return this.type === "document";
       },
     },
-    isRead: { type: Boolean, default: false },
   },
   { timestamps: true }, // Will create createdAt timestamp
 );

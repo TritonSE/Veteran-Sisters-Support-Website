@@ -5,47 +5,68 @@ import { ActiveVolunteers } from "../models/activeVolunteers.js";
 // Return a. Recent 3 unread activities, b. Total count of unread activities
 export const getUnreadActivities = async (req, res) => {
   try {
+    // Commented for future use maybe
+    // const announcements = await Activity.find({ isRead: false, type: "announcement" })
+    //   .populate("uploader", "firstName lastName role")
+    //   .sort({ createdAt: -1 })
+    //   .lean();
+
+    // let otherActivities;
+    // if (user.role == "admin") {
+    //   otherActivities = await Activity.find({
+    //     isRead: false,
+    //     type: { $ne: "announcement" },
+    //     $or: [{ receivers: user._id.toString() }, { type: "report" }, { type: "signup" }],
+    //   })
+    //     .populate("uploader", "firstName lastName role")
+    //     .sort({ createdAt: -1 })
+    //     .lean();
+    // } else if (user.role == "staff") {
+    //   otherActivities = await Activity.find({
+    //     isRead: false,
+    //     type: { $ne: "announcement" },
+    //     $or: [
+    //       { receivers: user._id.toString() },
+    //       { type: "request" },
+    //       { type: "signup" },
+    //       { programName: { $in: user.assignedPrograms } },
+    //     ],
+    //   })
+    //     .populate("uploader", "firstName lastName role")
+    //     .sort({ createdAt: -1 })
+    //     .lean();
+    // } else {
+    //   otherActivities = await Activity.find({
+    //     isRead: false,
+    //     receivers: user._id.toString(),
+    //     type: { $ne: "announcement" },
+    //   })
+    //     .populate("uploader", "firstName lastName role")
+    //     .sort({ createdAt: -1 })
+    //     .lean();
+    // }
+    // const totalUnreadCount = announcements.length + otherActivities.length;
+    // const activities = [...announcements, ...otherActivities].slice(0, 3);
+
     const { userId } = req.params;
     const user = await User.findById(userId);
-    const announcements = await Activity.find({ isRead: false, type: "announcement" })
+
+    const announcements = await Activity.find({
+      _id: { $in: user.unreadActivities },
+      type: "announcement",
+    })
       .populate("uploader", "firstName lastName role")
       .sort({ createdAt: -1 })
       .lean();
 
-    let otherActivities;
-    if (user.role == "admin") {
-      otherActivities = await Activity.find({
-        isRead: false,
-        type: { $ne: "announcement" },
-        $or: [{ receivers: user.email }, { type: "report" }, { type: "signup" }],
-      })
-        .populate("uploader", "firstName lastName role")
-        .sort({ createdAt: -1 })
-        .lean();
-    } else if (user.role == "staff") {
-      otherActivities = await Activity.find({
-        isRead: false,
-        type: { $ne: "announcement" },
-        $or: [
-          { receivers: user.email },
-          { type: "request" },
-          { type: "signup" },
-          { programName: { $in: user.assignedPrograms } },
-        ],
-      })
-        .populate("uploader", "firstName lastName role")
-        .sort({ createdAt: -1 })
-        .lean();
-    } else {
-      otherActivities = await Activity.find({
-        isRead: false,
-        receivers: user.email,
-        type: { $ne: "announcement" },
-      })
-        .populate("uploader", "firstName lastName role")
-        .sort({ createdAt: -1 })
-        .lean();
-    }
+    const otherActivities = await Activity.find({
+      _id: { $in: user.unreadActivities },
+      type: { $ne: "announcement" },
+    })
+      .populate("uploader", "firstName lastName role")
+      .sort({ createdAt: -1 })
+      .lean();
+
     const totalUnreadCount = announcements.length + otherActivities.length;
     const activities = [...announcements, ...otherActivities].slice(0, 3);
 
@@ -102,7 +123,6 @@ export const createActivity = async (activityData) => {
       description,
       documentName,
       programName,
-      isRead: false,
       createdAt: new Date(),
       type,
     });
@@ -127,16 +147,21 @@ export const createDocument = async ({ uploader, filename, programs }) => {
       veteranUser: uploader,
       assignedProgram: { $in: lowercasePrograms },
     });
-    const receivers = activeVolunteer.map((item) => item.volunteer);
+    const receivers = activeVolunteer.map((item) => item.volunteerUser.toString());
+
     const newActivity = {
       uploader,
       type: "document",
       receivers: receivers,
       documentName: filename,
-      programName: programs,
+      programName: lowercasePrograms,
     };
 
     const savedActivity = await createActivity(newActivity);
+    await User.updateMany(
+      { _id: { $in: receivers } },
+      { $push: { unreadActivities: savedActivity._id.toString() } },
+    );
     return savedActivity;
   } catch (error) {
     throw new Error("Error creating Document activity: " + error.message);
@@ -220,26 +245,5 @@ export const createRequest = async ({ uploader, documentName }) => {
     return savedActivity;
   } catch (error) {
     throw new Error("Error creating Request activity: " + error.message);
-  }
-};
-
-// Mark activity as read
-export const markActivityRead = async (req, res) => {
-  try {
-    const { activityId } = req.params;
-
-    const updatedActivity = await Activity.findByIdAndUpdate(
-      activityId,
-      { isRead: true },
-      { new: true },
-    );
-
-    if (!updatedActivity) {
-      return res.status(404).json({ message: "Activity not found" });
-    }
-
-    res.status(200).json(updatedActivity);
-  } catch (error) {
-    res.status(500).json({ message: "Error marking activity as read", error: error.message });
   }
 };

@@ -1,5 +1,6 @@
+import { act } from "react";
 import { UserProfile } from "./profileApi";
-import { APIResult, get, handleAPIError, post } from "./requests";
+import { APIResult, get, handleAPIError, post, put } from "./requests";
 
 export type CreateUserRequest = {
   email: string;
@@ -94,6 +95,26 @@ export async function getVeteransByVolunteer(
     }
     const users = (await response.json()) as UserProfile[];
     return { success: true, data: users };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+// Mark activity as read
+export async function markActivityRead(
+  userId: string,
+  activityId: string,
+): Promise<APIResult<UserProfile>> {
+  try {
+    const requestBody = {
+      activityId,
+    };
+    const response = await put(`/users/activity/${userId}`, requestBody);
+    if (!response.ok) {
+      return handleAPIError(response);
+    }
+    const user = (await response.json()) as UserProfile;
+    return { success: true, data: user };
   } catch (error) {
     return handleAPIError(error);
   }

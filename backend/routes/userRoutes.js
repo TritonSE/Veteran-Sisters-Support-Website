@@ -10,6 +10,7 @@ import {
   updateUser,
   getVeteransByVolunteer,
   updateUserId,
+  markActivityRead,
 } from "../controllers/userController.js";
 import { authenticateUser } from "../middleware/auth.js";
 
@@ -28,5 +29,6 @@ router.delete("/users/:email", authenticateUser, deleteUser);
 router.get("/users/role/:email", authenticateUser, getUserRole);
 router.patch("/users/id/:id", authenticateUser, updateUserId);
 router.put("/users/:email", authenticateUser, updateUser);
+router.put("/users/activity/:id", authenticateUser, markActivityRead);
 
 export default router;

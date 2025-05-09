@@ -66,13 +66,3 @@ export const getUnreadActivities = async (
     return { success: false, error: (error as Error).message };
   }
 };
-
-// Mark activity as read
-export const markActivityRead = async (activityId: string) => {
-  try {
-    await post(`/activities/${activityId}`, { activityId });
-    return { success: true };
-  } catch (error) {
-    return handleAPIError(error);
-  }
-};
