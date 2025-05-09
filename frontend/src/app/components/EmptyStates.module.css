@@ -1,0 +1,39 @@
+.emptyStateContainer {
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+  width: 420px;
+  margin: auto;
+  margin-top: 10%;
+}
+
+.emptyStateContainerNoNotes {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 420px;
+  margin: auto;
+  margin-left: 30%;
+  opacity: 0.6;
+}
+
+.emptyStateContainerNoNotes img {
+  height: 70px;
+  width: 70px;
+}
+
+.emptyStateContainer h3 {
+  font-size: 24px;
+  font-weight: 500;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+
+.emptyStateContainer p {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 500;
+  opacity: 0.5;
+}
