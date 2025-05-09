@@ -9,6 +9,7 @@ import {
 } from "../api/profileApi";
 import { useAuth } from "../contexts/AuthContext";
 
+import ChangeProgramDialog from "./ChangeProgramDialog";
 import NavigateBack from "./NavigateBack";
 import { ProfileHeader } from "./ProfileHeader";
 import ProfileInterests from "./ProfileInterests";
@@ -143,6 +144,7 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState("");
+  const [openProgramChange, setOpenProgramChange] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -248,6 +250,7 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
                   <UserList
                     userProfile={userProfile}
                     title={profileRenderingContext.userListTitle}
+                    callback={setOpenProgramChange}
                     editable={profileRenderingContext.userListEditable}
                     minimized={profileRenderingContext.showVolunteerNotes}
                     setMessage={setMessage}
@@ -270,6 +273,28 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
                 <p>{message}</p>
               </div>
             )}
+          </div>
+        </div>
+      )}
+      {openProgramChange && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => {
+            setOpenProgramChange(false);
+          }}
+        >
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <ChangeProgramDialog
+              firstName={userProfile?.firstName}
+              email={userProfile?.email}
+              role={userProfile?.role}
+              userPrograms={userProfile?.assignedPrograms ?? []}
+              callback={setOpenProgramChange}
+            />
           </div>
         </div>
       )}
