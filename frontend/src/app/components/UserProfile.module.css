@@ -46,13 +46,15 @@
 .messageContainer {
   animation: fadeOut 5s forwards;
   display: flex;
-  margin: auto;
   padding: 8px;
   font-size: 14px;
   border-radius: 8px;
   gap: 5px;
   font-family: "Albert Sans";
   font-weight: 500;
+  position: fixed;
+  bottom: 80px;
+  left: 40%;
 }
 
 .messageError {
