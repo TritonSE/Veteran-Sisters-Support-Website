@@ -111,6 +111,9 @@ export function ProfileHeader(params: {
           firstName={firstName}
           email={email}
           role={role}
+          userPrograms={
+            assignedPrograms ? assignedPrograms.map((program) => program.toString()) : []
+          }
           selectedRole={selectedRole}
           handleRoleNext={handleRoleNext}
           callback={() => {

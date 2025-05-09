@@ -17,6 +17,7 @@ type ProfileActionsProps = {
   email: string | undefined;
   role: RoleEnum | undefined;
   selectedRole: RoleEnum | undefined;
+  userPrograms: string[];
   handleRoleNext: (newRole: RoleEnum) => void;
   callback: () => void;
 };
@@ -31,6 +32,7 @@ const ProfileActions = ({
   email,
   role,
   selectedRole,
+  userPrograms,
   handleRoleNext,
   callback, // optional: parent can listen when menu toggles
 }: ProfileActionsProps) => {
@@ -156,6 +158,7 @@ const ProfileActions = ({
               firstName={firstName}
               email={email}
               role={selectedRole}
+              userPrograms={userPrograms}
               callback={setShowProgramChangeDialog}
             />
           </div>

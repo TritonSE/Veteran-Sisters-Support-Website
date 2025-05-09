@@ -19,11 +19,18 @@ type ChangeProgramDialogProps = {
   email: string | undefined;
   firstName?: string;
   role: RoleEnum | undefined;
+  userPrograms: string[];
   callback: (show: boolean) => void;
 };
 
-const ChangeProgramDialog = ({ email, firstName, role, callback }: ChangeProgramDialogProps) => {
-  const [programs, setPrograms] = useState<string[]>([]);
+const ChangeProgramDialog = ({
+  email,
+  firstName,
+  userPrograms,
+  role,
+  callback,
+}: ChangeProgramDialogProps) => {
+  const [programs, setPrograms] = useState<string[]>(userPrograms);
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -39,6 +46,10 @@ const ChangeProgramDialog = ({ email, firstName, role, callback }: ChangeProgram
       document.removeEventListener("mousedown", onClick);
     };
   }, []);
+
+  useEffect(() => {
+    setPrograms(userPrograms);
+  }, [userPrograms]);
 
   const handleCheckboxChange = (value: string) => {
     setPrograms((prev) =>
