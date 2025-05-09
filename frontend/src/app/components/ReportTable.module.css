@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: flex-start;
   padding-top: 80px;
-  /* padding-right: 188px; */
+  width: 180px;
 }
 
 .header {
@@ -28,7 +28,7 @@
 
 .tableHeader {
   display: flex;
-  width: 1200px;
+  width: 1024px;
   border-radius: var(--Spacing-s, 8px) var(--Spacing-s, 8px) 0px 0px;
   border-top: 1px solid var(--Stroke-2, #d0d7de);
   border-right: 1px solid var(--Stroke-2, #d0d7de);
@@ -36,9 +36,18 @@
   background: var(--Background-2, #f5f5f5);
 }
 
+.tableItems {
+  border-left: 1px solid var(--Stroke-2, #d0d7de);
+  border-right: 1px solid var(--Stroke-2, #d0d7de);
+  border-bottom: 1px solid var(--Stroke-2, #d0d7de);
+  border-radius: 0px 0px var(--Spacing-s, 8px) var(--Spacing-s, 8px);
+  background: #fff;
+  width: 1024px;
+}
+
 .date {
   display: flex;
-  flex: 0 0 180px;
+  width: 180px;
   padding: var(--Spacing-sm, 16px) 24px;
   align-items: center;
   gap: 10px;
@@ -54,14 +63,16 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  width: 180px;
 }
 
 .reportAgainst {
-  flex: 0 0 260px;
   display: flex;
   width: 260px;
   padding: var(--Spacing-sm, 16px) 24px;
   align-items: center;
+  gap: 10px;
+  align-self: stretch;
 
   overflow: hidden;
   color: var(--Text-2, #4d5358);

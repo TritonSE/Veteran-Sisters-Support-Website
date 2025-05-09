@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  align-items: flex-start;
+  align-self: stretch;
+
+  border-top: 1px solid var(--Stroke-1, #edf1f5);
+  background: var(--Background-1, #fff);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  color: #4d5358;
+  height: 64px;
+
+  font-family: "Albert Sans";
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  vertical-align: middle;
+}
+
+.date {
+  display: flex;
+  width: 180px;
+  padding: var(--Spacing-sm, 16px) 24px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 0px 0px 0px var(--Spacing-s, 8px);
+}
+
+.reportee {
+  display: flex;
+  width: 260px;
+  padding: var(--Spacing-sm, 16px) 24px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 0px 0px var(--Spacing-s, 8px) 0px;
+}
+
+.situation {
+  display: flex;
+  width: 700px;
+  padding: var(--Spacing-sm, 16px) 24px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 0px 0px var(--Spacing-s, 8px) 0px;
+}

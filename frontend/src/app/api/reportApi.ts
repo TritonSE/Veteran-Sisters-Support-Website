@@ -4,8 +4,8 @@ export type ReportRequest = {
   reporterId: string;
   reporteeId: string;
   situation: string[];
-  proofOfLifeDate: string | null;
-  proofOfLifeTime: string;
+  proofOfLifeDate: Date | null;
+  proofOfLifeTime: string | null;
   explanation: string;
 };
 
@@ -18,7 +18,6 @@ export type Report = {
   proofOfLifeTime: string;
   explanation: string;
   datePosted: string;
-  statusResolved: boolean;
 };
 
 export async function createReport(report: ReportRequest): Promise<APIResult<Report>> {
@@ -36,7 +35,7 @@ export async function createReport(report: ReportRequest): Promise<APIResult<Rep
 
 export async function getReportsByReporter(reporterId: string): Promise<APIResult<Report[]>> {
   try {
-    const response = await get(`/report?reporterId=${reporterId}`);
+    const response = await get(`/report/user/${reporterId}`);
     if (!response.ok) {
       return handleAPIError(response);
     }

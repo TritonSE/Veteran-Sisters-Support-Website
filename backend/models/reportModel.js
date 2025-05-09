@@ -21,13 +21,13 @@ const reportSchema = new Schema({
   proofOfLifeDate: {
     type: Date,
     required: function () {
-      return this.situation.contains("Proof of life requested");
+      return Array.isArray(this.situation) && this.situation.includes("Proof of life requested");
     },
   },
   proofOfLifeTime: {
     type: String,
     required: function () {
-      return this.situation.contains("Proof of life requested");
+      return Array.isArray(this.situation) && this.situation.includes("Proof of life requested");
     },
   },
   explanation: {

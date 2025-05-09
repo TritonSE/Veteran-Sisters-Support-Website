@@ -1,5 +1,4 @@
-import Report from "../models/reportModel.js";
-import mongoose from "mongoose";
+import { Report } from "../models/reportModel.js";
 
 export const addReport = async (req, res) => {
   try {
@@ -13,11 +12,21 @@ export const addReport = async (req, res) => {
       proofOfLifeTime,
       explanation,
       datePosted: new Date(Date.now()),
-      statusResolved: false,
     });
     res.status(201).json(newReport);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getReportsByUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const reports = await Report.find({ reporterId: userId }).sort({ datePosted: -1 });
+    return res.status(200).json(reports);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };

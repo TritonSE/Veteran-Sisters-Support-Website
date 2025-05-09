@@ -10,15 +10,17 @@ import CustomDatePicker from "../../components/CustomDatePicker";
 import { NavBar } from "../../components/NavBar";
 import ReportDropdown from "../../components/ReportDropdown";
 import { useAuth } from "../../contexts/AuthContext";
+import { UserProfile } from "../../api/profileApi";
+import { createReport, ReportRequest } from "../../api/reportApi";
+import { getUser } from "../../api/userApi";
 
 import styles from "./page.module.css";
 import { AuthContextWrapper } from "@/app/contexts/AuthContextWrapper";
-import { User } from "@/app/api/userApi";
+import { APIResult } from "@/app/api/requests";
 
 function ReportFormContent() {
   const router = useRouter();
-  const { userRole } = useAuth();
-  const [reportee, setReportee] = useState("");
+  const { userId, userRole, loading } = useAuth();
   const [activeDropdown, setActiveDropdown] = useState("");
   const [proofOfLifeDate, setProofOfLifeDate] = useState<Date | null>(null);
   const [proofOfLifeTime, setProofOfLifeTime] = useState("");
@@ -28,7 +30,40 @@ function ReportFormContent() {
   const [isTimeValid, setIsTimeValid] = useState(true);
   const [hasBlurred, setHasBlurred] = useState(false);
   const [confirmPage, setConfirmPage] = useState<boolean>(false);
-  const [assignedUsers, setAssignedUsers] = useState<User[]>([]);
+  const [assignedUsersProfiles, setAssignedUsersProfiles] = useState<UserProfile[]>([]);
+  const [selectedReporteeName, setSelectedReporteeName] = useState<string>("");
+  const [selectedReporteeProfile, setSelectedReporteeProfile] = useState<UserProfile | null>(null);
+
+  const resetForm = () => {
+    setSelectedReporteeName("");
+    setActiveDropdown("");
+    setProofOfLifeDate(null);
+    setProofOfLifeTime("");
+    setShowDatePicker(false);
+    setExplanation("");
+    setSelectedOptions([]);
+    setIsTimeValid(true);
+    setHasBlurred(false);
+  };
+
+  const dropdownOptions = assignedUsersProfiles.map((u) => ({
+    label: `${u.firstName} ${u.lastName}`,
+    value: u._id as string,
+  }));
+
+  const veteranOptions = [
+    "Veteran is unresponsive",
+    "Veteran made offensive comment",
+    "Proof of life requested",
+    "Other, please specify",
+  ];
+  const volunteerOptions = [
+    "Volunteer doesn’t respond",
+    "Volunteer made offensive comment",
+    "Other, please specify",
+  ];
+
+  const validTimeRegex = /^(1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm])$/;
 
   const handleOptionClick = (option: string) => {
     setSelectedOptions((prev) =>
@@ -45,7 +80,7 @@ function ReportFormContent() {
   };
 
   const handleSubmit = async () => {
-    if (reportee == "" || explanation == "" || selectedOptions.length === 0) {
+    if (selectedReporteeName == "" || explanation == "" || selectedOptions.length === 0) {
       return;
     }
 
@@ -58,34 +93,51 @@ function ReportFormContent() {
       }
     }
 
-    setConfirmPage(true);
+    try {
+      const res = await createReport({
+        reporterId: userId,
+        reporteeId: selectedReporteeProfile?._id ?? "",
+        situation: selectedOptions,
+        proofOfLifeDate: proofOfLifeDate ? proofOfLifeDate : null,
+        proofOfLifeTime: proofOfLifeTime ? proofOfLifeTime : null,
+        explanation,
+      });
+      if (!res.success) {
+        console.error("Failed to create report:", res.error);
+        return;
+      }
+      setConfirmPage(true);
+    } catch (err) {
+      console.error("Unexpected error creating report:", err);
+    }
   };
 
-  const resetForm = () => {
-    setReportee("");
-    setActiveDropdown("");
-    setProofOfLifeDate(null);
-    setProofOfLifeTime("");
-    setShowDatePicker(false);
-    setExplanation("");
-    setSelectedOptions([]);
-    setIsTimeValid(true);
-    setHasBlurred(false);
-  };
+  useEffect(() => {
+    if (loading || !userId) return;
 
-  const veteranOptions = [
-    "Veteran is unresponsive",
-    "Veteran made offensive comment",
-    "Proof of life requested",
-    "Other, please specify",
-  ];
-  const volunteerOptions = [
-    "Volunteer doesn’t respond",
-    "Volunteer made offensive comment",
-    "Other, please specify",
-  ];
+    getUser(userId)
+      .then((res: APIResult<UserProfile>) => {
+        if (!res.success) {
+          console.error("Error loading current user:", res.error);
+          return;
+        }
+        const me = res.data;
+        if (!me.assignedUsers?.length) {
+          setAssignedUsersProfiles([]);
+          return;
+        }
 
-  const validTimeRegex = /^(1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm])$/;
+        return Promise.all(
+          me.assignedUsers.map((assignedUser) => getUser(assignedUser._id as string)),
+        ).then((results) => {
+          const profiles = results
+            .filter((r): r is APIResult<UserProfile> & { success: true } => r.success)
+            .map((r) => r.data);
+          setAssignedUsersProfiles(profiles);
+        });
+      })
+      .catch(console.error);
+  }, [loading, userId]);
 
   return (
     <>
@@ -109,19 +161,17 @@ function ReportFormContent() {
                 <span className={styles.asterisk}> *</span>
               </p>
               <ReportDropdown
-                options={
-                  userRole === "volunteer"
-                    ? ["Veteran A", "Veteran B"]
-                    : ["Volunteer A", "Volunteer B"]
-                }
+                options={dropdownOptions}
                 isOpen={activeDropdown === "selectReportee"}
                 toggleDropdown={() => {
                   toggleDropdown("selectReportee");
                 }}
                 onSelect={(option) => {
-                  setReportee(option);
+                  setSelectedReporteeName(option.label);
+                  const profile = assignedUsersProfiles.find((u) => u._id === option.value) || null;
+                  setSelectedReporteeProfile(profile);
                 }}
-                selected={reportee}
+                selected={selectedReporteeName}
               />
               <p className={styles.question}>
                 What type of situation is this? <span className={styles.asterisk}> *</span>
@@ -310,8 +360,8 @@ function ReportFormContent() {
             <div className={styles.confirmMessage}>
               <Image src="/check_primary.svg" alt="Check" width={92} height={92}></Image>
               <span className={styles.confirmTextSub}>
-                Submitted successfully against {reportee}! The admin will contact you and your
-                volunteer through email or text message.{" "}
+                Submitted successfully against {selectedReporteeName}! The admin will contact you
+                and your volunteer through email or text message.{" "}
               </span>
               <div className={styles.centerButtons}>
                 <Button
@@ -347,7 +397,7 @@ export default function ReportFormPage() {
         ) : (
           <div className={styles.page}>
             <NavBar />
-            <h1>Error: Invalid Permissions</h1>
+            <h1>Error: Invalid Permissions Report</h1>
           </div>
         )}
       </Suspense>
