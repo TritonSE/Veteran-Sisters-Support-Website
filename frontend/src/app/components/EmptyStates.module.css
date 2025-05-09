@@ -5,7 +5,6 @@
   text-align: center;
   width: 420px;
   margin: auto;
-  opacity: 0.5;
   margin-top: 10%;
 }
 
@@ -15,8 +14,13 @@
   text-align: center;
   width: 420px;
   margin: auto;
-  opacity: 0.5;
   margin-left: 30%;
+  opacity: 0.6;
+}
+
+.emptyStateContainerNoNotes img {
+  height: 70px;
+  width: 70px;
 }
 
 .emptyStateContainer h3 {
@@ -24,10 +28,12 @@
   font-weight: 500;
   margin-top: 16px;
   margin-bottom: 8px;
+  opacity: 0.5;
 }
 
 .emptyStateContainer p {
   font-size: 14px;
   line-height: 1.5;
   font-weight: 500;
+  opacity: 0.5;
 }

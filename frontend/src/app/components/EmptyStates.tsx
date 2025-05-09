@@ -16,7 +16,7 @@ const EmptyState = ({ title, subtitle, icon, alt }: EmptyStateProps) => (
       title.includes("No notes") ? styles.emptyStateContainerNoNotes : styles.emptyStateContainer
     }
   >
-    <Image src={icon} alt={alt} width={60} height={60} className="empty-icon" />
+    <Image src={icon} alt={alt} width={170} height={150} className="empty-icon" />
     <h3>{title}</h3>
     <p>{subtitle}</p>
   </div>
@@ -26,8 +26,8 @@ export const NoVeterans = () => (
   <EmptyState
     title="No veterans assigned yet"
     subtitle="Admins will assign you a veteran soon! You’ll receive a notification in your activities panel once assigned."
-    icon="/pdf_icon.svg"
-    alt="add_icon.svg"
+    icon="/building_icon.png"
+    alt="no veterans icon"
   />
 );
 
@@ -35,11 +35,11 @@ export const NoDocuments = () => (
   <EmptyState
     title="No documents yet"
     subtitle="Start uploading documents for volunteers to view!"
-    icon="/pdf_icon.svg"
-    alt="Folder icon"
+    icon="/document_icon.png"
+    alt="no documents icon"
   />
 );
 
 export const NoNotes = () => (
-  <EmptyState title="No notes yet" subtitle="" icon="/pdf_icon.svg" alt="Notes icon" />
+  <EmptyState title="No notes yet" subtitle="" icon="/clipboard_icon.png" alt="no notes icon" />
 );
