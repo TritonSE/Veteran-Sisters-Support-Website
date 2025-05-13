@@ -178,7 +178,7 @@ export function AdminStaffUserTable() {
       </div>
       {users.length > 8 && (
         <div className={styles.pageSelect}>
-          {page === Math.floor(users.length / pageSize) ? (
+          {page === Math.floor((users.length - 1) / pageSize) ? (
             <div className={styles.arrowBoxDisabled}>
               <Image
                 src="/caret_right_disabled.svg"
