@@ -20,6 +20,7 @@ import { VolunteerNotes } from "./VolunteerNotes";
 type ProfileRenderingContext = {
   invalidContext: boolean;
   showVolunteerNotes: boolean;
+  showVeteranDocuments: boolean;
   showProfileInterests: boolean;
   showUserList: boolean;
   userListTitle: string;
@@ -38,6 +39,7 @@ function getProfileRenderingContext(
   const context: ProfileRenderingContext = {
     invalidContext: false,
     showVolunteerNotes: false,
+    showVeteranDocuments: false,
     showUserList: false,
     showProfileInterests: false,
     userListTitle: "",
@@ -55,6 +57,7 @@ function getProfileRenderingContext(
     context.showUserList = true;
     context.userListTitle = "Assigned Volunteers";
     context.viewingPersonalProfile = true;
+    context.showVeteranDocuments = true;
     return context;
   }
   // volunteer personal profile view
@@ -99,6 +102,7 @@ function getProfileRenderingContext(
     context.isProgramAndRoleEditable = true;
     context.isProfileEditable = true;
     context.showVolunteerNotes = true;
+    context.showVeteranDocuments = true;
     return context;
   }
   // staff view volunteer - can't edit program and role
@@ -117,6 +121,7 @@ function getProfileRenderingContext(
     context.userListTitle = "Assigned Volunteers";
     context.isProfileEditable = true;
     context.showVolunteerNotes = true;
+    context.showVeteranDocuments = true;
     return context;
   }
   // volunteer view veteran
@@ -125,6 +130,7 @@ function getProfileRenderingContext(
     context.showProfileInterests = true;
     context.userListTitle = "Assigned Volunteers";
     context.showVolunteerNotes = true;
+    context.showVeteranDocuments = true;
     return context;
   }
   // veteran view volunteer
@@ -224,20 +230,9 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
           )}
           <div className={styles.userProfileContent}>
             <ProfileHeader
-              firstName={userProfile.firstName}
-              lastName={userProfile.lastName}
-              zipcode={userProfile.zipCode}
-              role={userProfile.role}
-              assignedPrograms={userProfile.assignedPrograms}
-              yearJoined={userProfile.yearJoined}
-              age={userProfile.age}
-              branchOfService={userProfile.roleSpecificInfo?.serviceInfo?.branchOfService}
-              currentMilitaryStatus={
-                userProfile.roleSpecificInfo?.serviceInfo?.currentMilitaryStatus
-              }
-              phoneNumber={userProfile.phoneNumber}
-              gender={userProfile.roleSpecificInfo?.serviceInfo?.gender}
-              email={userProfile.email}
+              userProfile={userProfile}
+              minimized={false}
+              showDocuments={profileRenderingContext.showVeteranDocuments}
               isPersonalProfile={profileRenderingContext.viewingPersonalProfile}
               isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
             />

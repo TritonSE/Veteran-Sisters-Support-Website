@@ -10,6 +10,8 @@ import styles from "./EditProfileDialog.module.css";
 type ProfileActionsProps = {
   isPersonalProfile: boolean;
   isProgramAndRoleEditable: boolean;
+  minimized: boolean;
+  showDocuments: boolean;
   searchParams: URLSearchParams;
   router: { push: (url: string) => void };
   pathname: string;
@@ -25,6 +27,8 @@ type ProfileActionsProps = {
 const ProfileActions = ({
   isPersonalProfile,
   isProgramAndRoleEditable,
+  minimized,
+  showDocuments,
   searchParams,
   router,
   pathname,
@@ -56,6 +60,14 @@ const ProfileActions = ({
     const linkSearchParams = new URLSearchParams(searchParams);
     router.push(`${pathname}/edit?${linkSearchParams.toString()}`);
     setMenuOpen(false); // close menu after navigation
+  };
+
+  const handleDocumentView = () => {
+    const linkSearchParams = new URLSearchParams(searchParams);
+    router.push(`${pathname}/documentView?${linkSearchParams.toString()}`);
+    if (menuOpen) {
+      setMenuOpen(false);
+    }
   };
 
   // Build action list ---------------------------------------------------
@@ -92,17 +104,23 @@ const ProfileActions = ({
   return (
     <div className={styles.profileActionsWrapper}>
       {/* Three‑dots trigger */}
-      <div className={styles.headerTopRight}>
-        <p className={styles.documentView}>View all documents</p>
-        <Image
-          src="/meatball_menu.svg"
-          width={20}
-          height={20}
-          alt="Open actions menu"
-          onClick={toggleMenu}
-          className="cursor-pointer"
-        />
-      </div>
+      {!minimized && showDocuments ? (
+        <div className={styles.headerTopRight}>
+          <p className={styles.documentView} onClick={handleDocumentView}>
+            View all documents
+          </p>
+          <Image
+            src="/meatball_menu.svg"
+            width={20}
+            height={20}
+            alt="Open actions menu"
+            onClick={toggleMenu}
+            className={styles.meatballMenu}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
 
       {/* Dropdown card (conditionally rendered) */}
       {menuOpen && (

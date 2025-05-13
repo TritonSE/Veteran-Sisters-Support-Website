@@ -13,8 +13,8 @@ export function UserList(params: {
   title: string;
   editable: boolean;
   minimized: boolean;
-  setMessage: (message: string) => void;
-  callback: (openProgramChange: boolean) => void;
+  setMessage?: (message: string) => void;
+  callback?: (openProgramChange: boolean) => void;
 }) {
   const { title, userProfile, callback, editable, minimized } = params;
   const userPrograms = Object.fromEntries(
@@ -102,7 +102,7 @@ export function UserList(params: {
           program={dialogProgram}
           user={userProfile}
           closeDialog={closeDialog}
-          setMessage={params.setMessage}
+          setMessage={params.setMessage ? params.setMessage : () => undefined}
           context={DialogContext.USER_PROFILE}
         />
       )}
@@ -169,7 +169,7 @@ export function UserList(params: {
             <button
               className={styles.progUnassignedButton}
               onClick={() => {
-                callback(true);
+                callback?.(true);
               }}
             >
               Assign a program

@@ -46,6 +46,10 @@
   z-index: 1000;
 }
 
+.meatballMenu {
+  cursor: pointer;
+}
+
 .headerTopRight {
   display: flex;
   flex-direction: row;
@@ -60,6 +64,7 @@
   font-size: 14px;
   line-height: 100%;
   letter-spacing: 0%;
+  cursor: pointer;
 }
 
 /* Add a divider between items */
