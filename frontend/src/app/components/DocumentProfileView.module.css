@@ -1,0 +1,12 @@
+.profileView {
+  width: 100%;
+  display: flex;
+  flex-direction: row; /*left div and right div */
+  justify-content: space-between;
+  align-items: center;
+}
+
+.leftDiv {
+  display: flex;
+  flex-direction: column;
+}

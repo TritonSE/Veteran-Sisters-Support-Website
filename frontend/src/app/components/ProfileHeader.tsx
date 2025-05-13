@@ -1,13 +1,9 @@
+"use client";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-import {
-  AssignedProgram as AssignedProgramEnum,
-  BranchOfService,
-  CurrentMilitaryStatus,
-  Role as RoleEnum,
-} from "../api/profileApi";
+import { Role as RoleEnum, UserProfile as UserProfileType } from "../api/profileApi";
 
 import ProfileActions from "./EditProfileDialog";
 import styles from "./ProfileHeader.module.css";
@@ -16,47 +12,24 @@ import { Program } from "./Program";
 import { Role } from "./Role";
 
 export function ProfileHeader(params: {
-  firstName: string | undefined;
-  lastName: string | undefined;
-  role: RoleEnum | undefined;
-  zipcode: number;
-  assignedPrograms: AssignedProgramEnum[] | undefined;
-  yearJoined?: number | undefined;
-  age?: number | undefined;
-  branchOfService?: BranchOfService;
-  currentMilitaryStatus?: CurrentMilitaryStatus;
-  phoneNumber?: string | undefined;
-  gender?: string | undefined;
-  email: string | undefined;
+  userProfile?: UserProfileType;
+  showDocuments: boolean;
+  minimized: boolean;
   isProgramAndRoleEditable: boolean;
   isPersonalProfile: boolean;
 }) {
-  const {
-    firstName,
-    lastName,
-    role,
-    zipcode,
-    assignedPrograms,
-    yearJoined,
-    age,
-    branchOfService,
-    currentMilitaryStatus,
-    phoneNumber,
-    gender,
-    email,
-    isProgramAndRoleEditable,
-    isPersonalProfile,
-  } = params;
-  const fullName = `${firstName ?? "Unknown"} ${lastName ?? "Unknown"}`;
-  const joinedText = yearJoined?.toString() ?? "Unknown";
-  const ageText = `Age: ${age?.toString() ?? "Unknown"}`;
-  const genderText = gender ?? "Unknown";
-  const zipCodeText = zipcode?.toString() ?? "Unknown";
-  assignedPrograms?.sort();
+  const { userProfile, showDocuments, minimized, isProgramAndRoleEditable, isPersonalProfile } =
+    params;
+  const fullName = `${userProfile?.firstName ?? "Unknown"} ${userProfile?.lastName ?? "Unknown"}`;
+  const joinedText = userProfile?.yearJoined?.toString() ?? "Unknown";
+  const ageText = `Age: ${userProfile?.age?.toString() ?? "Unknown"}`;
+  const genderText = userProfile?.gender ?? "Unknown";
+  const zipCodeText = userProfile?.zipCode?.toString() ?? "Unknown";
+  const assignedPrograms = userProfile?.assignedPrograms?.sort();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [selectedRole, setSelectedRole] = useState<RoleEnum | undefined>(role);
+  const [selectedRole, setSelectedRole] = useState<RoleEnum | undefined>(userProfile?.role);
   const [openProfileEdit, setOpenProfileEdit] = useState<boolean>(false);
 
   const handleRoleNext = (newRole: RoleEnum) => {
@@ -67,11 +40,11 @@ export function ProfileHeader(params: {
   return (
     <div className={styles.profileHeader}>
       <div className={styles.profileContent}>
-        <ProfilePicture firstName={firstName} />
+        <ProfilePicture firstName={userProfile?.firstName} />
         <div className={styles.userInfo}>
           <div className={styles.userInfoHeader}>
             <div className={styles.userFullName}>{fullName}</div>
-            <Role role={role} />
+            <Role role={userProfile?.role} />
           </div>
           <div className={styles.userMetadata}>
             <span style={{ display: "flex", flexDirection: "row", gap: "8px" }}>
@@ -88,15 +61,15 @@ export function ProfileHeader(params: {
               <Image src="/vertical_divider.svg" width={20} height={20} alt="divider" />
               <div>{zipCodeText}</div>
               <Image src="/vertical_divider.svg" width={20} height={20} alt="divider" />
-              <div>{branchOfService}</div>
+              <div>{userProfile?.roleSpecificInfo?.serviceInfo?.branchOfService}</div>
               <Image src="/vertical_divider.svg" width={20} height={20} alt="divider" />
-              <div>{currentMilitaryStatus}</div>
+              <div>{userProfile?.roleSpecificInfo?.serviceInfo?.currentMilitaryStatus}</div>
             </div>
 
             <div className={styles.metadataSubsection}>
-              <div className={styles.smallMetadata}>{email}</div>
+              <div className={styles.smallMetadata}>{userProfile?.email}</div>
               <Image src="/vertical_divider.svg" width={20} height={20} alt="divider" />
-              <div className={styles.smallMetadata}>{phoneNumber}</div>
+              <div className={styles.smallMetadata}>{userProfile?.phoneNumber}</div>
             </div>
           </div>
         </div>
@@ -105,12 +78,14 @@ export function ProfileHeader(params: {
         <ProfileActions
           isPersonalProfile={isPersonalProfile}
           isProgramAndRoleEditable={isProgramAndRoleEditable}
+          minimized={minimized}
+          showDocuments={showDocuments}
           searchParams={searchParams}
           router={router}
           pathname={pathname}
-          firstName={firstName}
-          email={email}
-          role={role}
+          firstName={userProfile?.firstName}
+          email={userProfile?.email}
+          role={userProfile?.role}
           userPrograms={
             assignedPrograms ? assignedPrograms.map((program) => program.toString()) : []
           }
