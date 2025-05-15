@@ -2,10 +2,9 @@ import Comment from "../models/commentModel.js";
 
 export const queryComments = async (req, res, next) => {
   try {
-    const profileId = req.params.profileId;
-    console.log(profileId);
+    const userId = req.params.userId;
     const comments = await Comment.find({ 
-      profileId
+      profileId: userId
     })
       .populate("profileId", "firstName lastName")
       .populate("commenterId", "firstName lastName")

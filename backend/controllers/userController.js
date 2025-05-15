@@ -38,8 +38,8 @@ export const getUserByEmail = async (req, res) => {
 
 export const getUserById = async (req, res) => {
   try {
-    const { id } = req.params;
-    const user = await User.findById(id).exec();
+    const { userId } = req.params;
+    const user = await User.findById(userId).exec();
     if (!user) {
       return res.status(404).json({ error: "Could not find user" });
     }
@@ -158,8 +158,12 @@ export const updateUser = async (req, res) => {
     if (veteranEmail) {
       //updates assignedUsers on both users involved
       const veteran = await User.findOne({ email: veteranEmail }).exec();
+      if (!veteran) {
+        return res.status(404).json({ error: "Veteran not found" });
+      }
       const userIndex = veteran.assignedUsers.indexOf(email);
       const veteranIndex = user.assignedUsers.indexOf(veteranEmail);
+            
       if (veteranIndex > -1) {
         user.assignedUsers.splice(veteranIndex, 1);
       } else {
@@ -203,9 +207,32 @@ export const getVeteransByVolunteer = async (req, res) => {
   }
 };
 
+export const getVolunteersByProgram = async (req, res) => {
+  try {
+    const { program } = req.params;
+    const users = await User.find({ assignedPrograms: program, role: "volunteer" }).exec();
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export const getVeteransByProgram = async (req, res) => {
+  try {
+    const { program } = req.params;
+    const users = await User.find({ assignedPrograms: program, role: "veteran" }).exec();
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+
 export const updateUserId = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { userId } = req.params;
     const { firstName, lastName, email, phoneNumber, age, gender } = req.body;
 
     const update = {
@@ -221,7 +248,7 @@ export const updateUserId = async (req, res) => {
       },
     };
 
-    const updatedUser = await User.findByIdAndUpdate(id, update, {
+    const updatedUser = await User.findByIdAndUpdate(userId, update, {
       new: true,
       runValidators: true,
     });
