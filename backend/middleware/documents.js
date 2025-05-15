@@ -17,9 +17,9 @@ export const authenticateDocumentPermissions = async (req, res, next) => {
                 }   
                 break;
             case "volunteer":
-                if(!user.assignedPrograms.some(element => document.programs.includes(element))){
-                    return res.status(500).json({ error: "You do not have permission to view this document!" });
-                }
+                // if(!user.assignedPrograms.some(element => document.programs.includes(element))){
+                //     return res.status(500).json({ error: "You do not have permission to view this document!" });
+                // }
                 if(!user.assignedUsers.includes(document.uploader.email)){
                     return res.status(500).json({ error: "You do not have permission to view this document!" });
                 }
