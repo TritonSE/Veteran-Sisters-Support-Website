@@ -104,7 +104,7 @@ const ProfileActions = ({
   return (
     <div className={styles.profileActionsWrapper}>
       {/* Three‑dots trigger */}
-      {!minimized && showDocuments ? (
+      {!minimized && showDocuments && isProgramAndRoleEditable ? (
         <div className={styles.headerTopRight}>
           <p className={styles.documentView} onClick={handleDocumentView}>
             View all documents
@@ -117,6 +117,23 @@ const ProfileActions = ({
             onClick={toggleMenu}
             className={styles.meatballMenu}
           />
+        </div>
+      ) : isProgramAndRoleEditable ? (
+        <div className={styles.headerTopRight}>
+          <Image
+            src="/meatball_menu.svg"
+            width={20}
+            height={20}
+            alt="Open actions menu"
+            onClick={toggleMenu}
+            className={styles.meatballMenu}
+          />
+        </div>
+      ) : showDocuments ? (
+        <div className={styles.headerTopRight}>
+          <p className={styles.documentView} onClick={handleDocumentView}>
+            View all documents
+          </p>
         </div>
       ) : (
         <></>

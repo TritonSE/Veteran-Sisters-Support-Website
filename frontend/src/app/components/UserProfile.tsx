@@ -58,6 +58,7 @@ function getProfileRenderingContext(
     context.userListTitle = "Assigned Volunteers";
     context.viewingPersonalProfile = true;
     context.showVeteranDocuments = true;
+    context.isProfileEditable = true;
     return context;
   }
   // volunteer personal profile view
@@ -65,6 +66,7 @@ function getProfileRenderingContext(
     context.showUserList = true;
     context.userListTitle = "Assigned Veterans";
     context.viewingPersonalProfile = true;
+    context.isProfileEditable = true;
     return context;
   }
   // staff personal profile view
@@ -72,11 +74,13 @@ function getProfileRenderingContext(
     context.showUserList = true;
     context.userListTitle = "Veterans Under Point of Contact";
     context.viewingPersonalProfile = true;
+    context.isProfileEditable = true;
     return context;
   }
   // admin personal profile view
   else if (isPersonalView && viewerRole === ADMIN && viewingRole === ADMIN) {
     context.viewingPersonalProfile = true;
+    context.isProfileEditable = true;
     return context;
   }
   // admin views staff - can edit their profile, role, and program
@@ -112,6 +116,7 @@ function getProfileRenderingContext(
     context.userListEditable = true;
     context.userListTitle = "Assigned Veterans";
     context.isProfileEditable = true;
+    context.isProgramAndRoleEditable = true;
     return context;
   }
   // staff view veteran - can't edit program and role
@@ -122,6 +127,7 @@ function getProfileRenderingContext(
     context.isProfileEditable = true;
     context.showVolunteerNotes = true;
     context.showVeteranDocuments = true;
+    context.isProgramAndRoleEditable = true;
     return context;
   }
   // volunteer view veteran
@@ -210,13 +216,6 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
     );
   }
 
-  console.log("User PRofile: ", userProfile);
-  console.log("Zip code: ", userProfile.zipCode);
-  console.log(
-    "military status: ",
-    userProfile.roleSpecificInfo?.serviceInfo?.currentMilitaryStatus,
-  );
-
   return (
     <>
       {profileRenderingContext?.invalidContext ? (
@@ -239,15 +238,18 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
             <div className={styles.userProfileInnerContent}>
               <div className={styles.userProfileRow2}>
                 {profileRenderingContext.showProfileInterests && (
-                  <ProfileInterests interests={userProfile.roleSpecificInfo?.interests} />
+                  <ProfileInterests
+                    minimized={false}
+                    interests={userProfile.roleSpecificInfo?.interests}
+                  />
                 )}
                 {profileRenderingContext.showUserList && (
                   <UserList
                     userProfile={userProfile}
                     title={profileRenderingContext.userListTitle}
                     callback={setOpenProgramChange}
+                    isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
                     editable={profileRenderingContext.userListEditable}
-                    minimized={profileRenderingContext.showVolunteerNotes}
                     setMessage={setMessage}
                   />
                 )}

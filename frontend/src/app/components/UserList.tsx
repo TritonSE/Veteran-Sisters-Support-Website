@@ -12,11 +12,11 @@ export function UserList(params: {
   userProfile: UserProfileType | undefined;
   title: string;
   editable: boolean;
-  minimized: boolean;
+  isProgramAndRoleEditable: boolean;
   setMessage?: (message: string) => void;
   callback?: (openProgramChange: boolean) => void;
 }) {
-  const { title, userProfile, callback, editable, minimized } = params;
+  const { title, userProfile, callback, isProgramAndRoleEditable, editable } = params;
   const userPrograms = Object.fromEntries(
     userProfile?.assignedPrograms?.map((program) => [program, []]) ?? [],
   ) as Record<string, UserProfileType[]>;
@@ -68,6 +68,7 @@ export function UserList(params: {
         const updatedUsers = Object.fromEntries(
           (userProfile?.assignedPrograms ?? []).map((program) => [program, []]),
         ) as Record<string, UserProfileType[]>;
+        console.log("Updated users: ", updatedUsers);
         for (const [key, userObj] of users) {
           if (!updatedUsers[key].some((vol) => vol.email === userObj.email)) {
             updatedUsers[key].push(userObj);
@@ -85,17 +86,19 @@ export function UserList(params: {
     const fetchProfiles = async () => {
       if (userProfile?.email) {
         await fetchUserProfiles(userProfile);
+        console.log("User PRof: ", userProfile);
       }
     };
     void fetchProfiles();
-  }, [refreshFlag]);
+  }, [userProfile?.email, refreshFlag]);
 
   const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(currentUsers)
     .slice()
     .sort();
 
   return (
-    <div className={`${styles.userList} ${minimized ? styles.minimized : ""}`}>
+    // <div className={`${styles.userList} ${minimized ? styles.minimized : ""}`}>
+    <div className={styles.userList}>
       {isDialogOpen && userProfile && (
         <UserAssigningDialog
           isOpen={isDialogOpen}
@@ -110,71 +113,69 @@ export function UserList(params: {
         <div className={styles.userListHeading}>{title}</div>
       </div>
       <div className={styles.userListContent}>
-        {userProfile?.assignedPrograms && userProfile.assignedPrograms.length > 0 ? (
-          sortedUserGroups.map(([program, users]: [string, UserProfileType[]]) => {
-            return (
-              <div key={program} className={styles.programSection}>
-                <div className={styles.programSectionHeader}>
-                  <div className={styles.programSectionHeaderSectionInfo}>
-                    <Program program={program} />
-                  </div>
-                  {editable && (
-                    <div className={styles.addUser}>
-                      <Image
-                        src="/add_icon.svg"
-                        width={14}
-                        height={14}
-                        alt="Assign User"
-                        onClick={() => {
-                          openDialog(program);
-                        }}
-                      ></Image>
-                    </div>
-                  )}
+        {userProfile?.assignedPrograms && userProfile?.assignedPrograms?.length > 0 ? (
+          /* 1) We have programs → render each program section as before */
+          sortedUserGroups.map(([program, users]) => (
+            <div key={program} className={styles.programSection}>
+              <div className={styles.programSectionHeader}>
+                <div className={styles.programSectionHeaderSectionInfo}>
+                  <Program program={program} />
                 </div>
-                {users.length > 0 ? (
-                  users.map((user: UserProfileType, ind: number) => {
-                    const fullName = `${user.firstName} ${user.lastName}`;
-                    return (
-                      <div key={ind} className={styles.userInfo}>
-                        <div>
-                          <div className={styles.fullName}>{fullName}</div>
-                          <div className={styles.email}>{user.email}</div>
-                        </div>
-                        {editable && (
-                          <Image
-                            src="/trash_icon_3.svg"
-                            width={20}
-                            height={20}
-                            alt="Remove User"
-                            className={styles.removeUser}
-                            onClick={() => {
-                              removeVolunteer(user.email, program);
-                            }}
-                          ></Image>
-                        )}
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div className={styles.unassigned}>Unassigned</div>
+                {editable && (
+                  <div className={styles.addUser}>
+                    <Image
+                      src="/add_icon.svg"
+                      width={14}
+                      height={14}
+                      alt="Assign User"
+                      onClick={() => {
+                        openDialog(program);
+                      }}
+                    />
+                  </div>
                 )}
               </div>
-            );
-          })
-        ) : (
+              {users.length > 0 ? (
+                users.map((user, idx) => {
+                  const fullName = `${user.firstName} ${user.lastName}`;
+                  return (
+                    <div key={idx} className={styles.userInfo}>
+                      <div>
+                        <div className={styles.fullName}>{fullName}</div>
+                        <div className={styles.email}>{user.email}</div>
+                      </div>
+                      {editable && (
+                        <Image
+                          src="/trash_icon_3.svg"
+                          width={20}
+                          height={20}
+                          alt="Remove User"
+                          className={styles.removeUser}
+                          onClick={() => {
+                            removeVolunteer(user.email, program);
+                          }}
+                        />
+                      )}
+                    </div>
+                  );
+                })
+              ) : (
+                <div className={styles.unassigned}>Unassigned</div>
+              )}
+            </div>
+          ))
+        ) : isProgramAndRoleEditable ? (
+          /* 2) No programs, but editable → show “assign program” call-to-action */
           <div className={styles.programUnassignedWrapper}>
-            <div className={styles.progUnassignedHeader}>No assigments yet</div>
+            <div className={styles.progUnassignedHeader}>No assignments yet</div>
             <div className={styles.progUnassignedText}>Assign member a program to begin</div>
-            <button
-              className={styles.progUnassignedButton}
-              onClick={() => {
-                callback?.(true);
-              }}
-            >
+            <button className={styles.progUnassignedButton} onClick={() => callback?.(true)}>
               Assign a program
             </button>
           </div>
+        ) : (
+          /* 3) No programs, not editable → simple text */
+          <div className={styles.unassigned}>No assigned programs</div>
         )}
       </div>
     </div>

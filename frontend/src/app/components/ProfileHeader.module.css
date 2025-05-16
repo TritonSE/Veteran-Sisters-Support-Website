@@ -74,3 +74,33 @@
   padding: var(--Spacing-s, 8px) 0px;
   gap: var(--Spacing-s, 8px);
 }
+
+/* minimized overrides */
+.profileHeader.minimized {
+  /* override the 1024px */
+  width: 100%;
+
+  /* shrink padding */
+  padding: 12px;
+
+  /* allow it to size to its sidebar container */
+  max-width: none;
+}
+
+.profileHeader.minimized .profileContent {
+  gap: 12px;
+}
+
+.profileHeader.minimized .userFullName {
+  font-size: 18px;
+}
+
+.profileHeader.minimized .userMetadata,
+.profileHeader.minimized .userMetadata .metadataSubsection * {
+  font-size: 12px;
+}
+
+.profileHeader.minimized img {
+  width: 12px !important;
+  height: 12px !important;
+}

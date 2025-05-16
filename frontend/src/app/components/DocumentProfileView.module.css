@@ -1,12 +1,31 @@
+/* DocumentProfileView.module.css */
+
+/* 1. Outer wrapper: fixed size, centered */
 .profileView {
-  width: 100%;
   display: flex;
-  flex-direction: row; /*left div and right div */
-  justify-content: space-between;
+  flex-direction: row;
+  justify-content: space-between; /* push leftDiv and mainDiv apart */
   align-items: center;
+  width: 1024px;
+  height: 735.6px;
+  margin: 0 auto; /* center on viewport */
+  gap: var(--Spacing-md, 24px);
+  box-sizing: border-box;
+  padding: 16px 0; /* optional top/bottom breathing room */
 }
 
+/* 2. Sidebar: fixed 255px wide, vertical stack */
 .leftDiv {
   display: flex;
   flex-direction: column;
+  gap: var(--Spacing-md, 24px);
+  width: 255px;
+  box-sizing: border-box;
+}
+
+/* 4. Main area: fixed size next to sidebar */
+.mainDiv {
+  width: 729px;
+  gap: var(--Spacing-md, 24px);
+  overflow: auto; /* allow scrolling if content exceeds height */
 }

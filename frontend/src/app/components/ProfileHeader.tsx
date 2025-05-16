@@ -38,9 +38,11 @@ export function ProfileHeader(params: {
   };
 
   return (
-    <div className={styles.profileHeader}>
+    <div
+      className={minimized ? `${styles.profileHeader} ${styles.minimized}` : styles.profileHeader}
+    >
       <div className={styles.profileContent}>
-        <ProfilePicture firstName={userProfile?.firstName} />
+        <ProfilePicture firstName={userProfile?.firstName} size={minimized ? "small" : "large"} />
         <div className={styles.userInfo}>
           <div className={styles.userInfoHeader}>
             <div className={styles.userFullName}>{fullName}</div>
