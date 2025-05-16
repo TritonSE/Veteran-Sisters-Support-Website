@@ -11,11 +11,6 @@
   background: #fff;
 }
 
-.userList.minimized {
-  width: 256px;
-  min-width: 256px;
-}
-
 .userList .userListHeader {
   display: flex;
   justify-content: space-between;

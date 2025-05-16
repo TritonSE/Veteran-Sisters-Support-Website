@@ -13,7 +13,7 @@ function ProfileDocWrapper() {
 
   return (
     <div className={styles.documentView}>
-      <DocumentProfileView userId={userId} />
+      <DocumentProfileView profileId={userId} />
     </div>
   );
 }

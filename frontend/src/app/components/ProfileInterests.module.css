@@ -5,8 +5,33 @@
   max-width: 400px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
 }
 
+/* modifier when minimized=true */
+.containerMinimized {
+  width: 100%;
+  padding: 10px;
+}
+
+.title {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+/* make the title smaller when minimized */
+.titleMinimized {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.interestsWrapper {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* each tag shrinks in minimized mode */
 .interestTag {
   display: block;
   margin: 8px 0;
@@ -16,11 +41,10 @@
   font-weight: 500;
   font-size: 14px;
   line-height: 100%;
-  letter-spacing: 0%;
 }
 
-.interestsWrapper {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.interestTagMinimized {
+  margin: 4px 0;
+  padding: 4px;
+  font-size: 12px;
 }
