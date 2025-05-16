@@ -20,7 +20,7 @@ router.post("/users", addUser); // Signup endpoint
 // Protected routes (authentication required)
 router.get("/users/id/:userId", authenticateUser, authenticateProfilePermissions, getUserById);
 router.get("/nonAdminUsers", authenticateUser, authenticateStaffOrAdmin, getUsersNonAdmins);
-router.get("/veterans/:volunteerId", authenticateUser, getVeteransByVolunteer);
+router.get("/veterans/:volunteerId", authenticateUser, authenticateProfilePermissions, getVeteransByVolunteer);
 router.patch("/users/id/:userId", authenticateUser, authenticateProfilePermissions, updateUserId);
 router.get("/users/email/:email", authenticateUser, authenticateProfilePermissionsByEmail, getUserByEmail);
 router.put("/users/:email", authenticateUser, authenticateStaffOrAdmin, updateUser);
