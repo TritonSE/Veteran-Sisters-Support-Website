@@ -95,8 +95,8 @@ export const addUser = async (req, res) => {
 };
 
 export const deleteUser = async (req, res) => {
-  const email = req.params.email;
-  const deleteStatus = await User.deleteMany({ email }).exec();
+  const userId = req.params.userId;
+  const deleteStatus = await User.deleteMany({ _id: userId }).exec();
   res.json(deleteStatus);
   try {
   } catch (error) {

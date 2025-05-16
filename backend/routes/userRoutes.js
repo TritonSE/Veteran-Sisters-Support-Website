@@ -9,6 +9,7 @@ import {
   updateUserId,
   getVolunteersByProgram,
   getVeteransByProgram,
+  deleteUser,
 } from "../controllers/userController.js";
 import { authenticateUser } from "../middleware/auth.js";
 import { authenticateProfilePermissions, authenticateStaffOrAdmin, authenticateProfilePermissionsByEmail } from "../middleware/profile.js";
@@ -26,4 +27,5 @@ router.get("/users/email/:email", authenticateUser, authenticateProfilePermissio
 router.put("/users/:email", authenticateUser, authenticateStaffOrAdmin, updateUser);
 router.get("/users/volunteersByProgram/:program", authenticateUser, authenticateStaffOrAdmin, getVolunteersByProgram);
 router.get("/users/veteransByProgram/:program", authenticateUser, authenticateStaffOrAdmin,getVeteransByProgram);
+router.delete("/users/:userId", authenticateUser, authenticateStaffOrAdmin, deleteUser);
 export default router;
