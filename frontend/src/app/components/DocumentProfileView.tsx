@@ -8,11 +8,11 @@ import {
 import { useAuth } from "../contexts/AuthContext";
 
 import styles from "./DocumentProfileView.module.css";
+import NavigateBack from "./NavigateBack";
 import { ProfileHeader } from "./ProfileHeader";
 import ProfileInterests from "./ProfileInterests";
 import { UserList } from "./UserList";
 import { VeteranFilesTable } from "./VeteranFilesTable";
-import NavigateBack from "./NavigateBack";
 
 type DocumentProfileViewProps = {
   profileId: string;
