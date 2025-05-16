@@ -98,6 +98,9 @@ const userSchema = new Schema({
   assignedUsers: [String],
   yearJoined: { type: Number },
   age: { type: Number },
+  unreadActivities: {
+    type: [String],
+  },
 });
 
 export const User = model("User", userSchema);

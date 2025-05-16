@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { UserProfile } from "../api/profileApi";
 import { getUser } from "../api/userApi";
+import { UnreadActivities } from "../components/UnreadActivities";
 import { VeteranList } from "../components/VeteranList";
 
 import styles from "./VolunteerDashboard.module.css";
@@ -12,6 +13,11 @@ type VolunteerDashboardProp = {
 
 export function VolunteerDashboard({ volunteerId }: VolunteerDashboardProp) {
   const [user, setUser] = useState<UserProfile>();
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(true);
+
+  const toggleDropdown = () => {
+    setDropdownOpen((prev) => !prev);
+  };
 
   useEffect(() => {
     getUser(volunteerId)
@@ -31,6 +37,11 @@ export function VolunteerDashboard({ volunteerId }: VolunteerDashboardProp) {
         <div className={styles.frame}>
           <div className={styles.welcome}>
             <span>Welcome, {user?.firstName}!</span>
+            <UnreadActivities
+              userId={volunteerId}
+              isOpen={dropdownOpen}
+              toggleDropdown={toggleDropdown}
+            />
           </div>
           {user && <VeteranList volunteer={user} />}
         </div>

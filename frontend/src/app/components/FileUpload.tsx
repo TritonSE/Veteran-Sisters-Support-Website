@@ -143,6 +143,7 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
               <input
                 type="checkbox"
                 className={styles.checkBox}
+                readOnly
                 checked={checkboxStates.BattleBuddies}
               />{" "}
               <span>Battle Buddies</span>
@@ -156,6 +157,7 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
               <input
                 type="checkbox"
                 className={styles.checkBox}
+                readOnly
                 checked={checkboxStates.Advocacy}
               />{" "}
               <span>Advocacy</span>
@@ -172,6 +174,7 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
               <input
                 type="checkbox"
                 className={styles.checkBox}
+                readOnly
                 checked={checkboxStates.OperationWellness}
               />{" "}
               <span>Operation Wellness</span>

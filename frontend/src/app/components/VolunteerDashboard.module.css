@@ -19,12 +19,15 @@
   max-width: 1024px;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--Spacing-2xl, 48px);
+  gap: 80px;
   flex: 1 0 0;
 }
 
 .welcome {
   color: var(--Text-3, #3a3c3d);
+  display: flex;
+  flex-direction: column;
+  width: 1024px;
 
   /* title large */
   font-family: "Albert Sans";
