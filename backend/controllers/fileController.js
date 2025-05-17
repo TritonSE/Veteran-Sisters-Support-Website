@@ -3,7 +3,7 @@ import FileObject from "../models/fileModel.js";
 import mongoose from "mongoose";
 
 export const uploadFile = async (req, res, next) => {
-  const { filename, uploaderId, comment, programs } = req.body;
+  const { filename, userId, comment, programs } = req.body;
 
   try {
     let commentObject = null;
@@ -17,7 +17,7 @@ export const uploadFile = async (req, res, next) => {
 
     const fileObject = await FileObject.create({
       filename: filename,
-      uploader: uploaderId,
+      uploader: userId,
       comments: commentObject ? [commentObject._id] : [],
       programs: programs,
     });
@@ -41,9 +41,9 @@ export const getFileById = async (req, res, next) => {
 };
 
 export const getFileByUploader = async (req, res, next) => {
-  const { id } = req.params;
+  const { userId } = req.params;
   try {
-    const files = await FileObject.find({ uploader: id }).populate("uploader").populate("comments");
+    const files = await FileObject.find({ uploader: userId }).populate("uploader").populate("comments");
     res.status(200).json(files);
   } catch (error) {
     res.status(400).json({ error: "Internal Server Error" });
