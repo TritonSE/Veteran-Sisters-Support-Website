@@ -190,8 +190,8 @@ export const updateUser = async (req, res) => {
 
 export const getVeteransByVolunteer = async (req, res) => {
   try {
-    const { volunteerId } = req.params;
-    const user = await User.findById(volunteerId);
+    const { userId } = req.params;
+    const user = await User.findById(userId);
     const users = await User.find({ email: { $in: user.assignedUsers } }).sort({
       firstName: "asc",
     });
