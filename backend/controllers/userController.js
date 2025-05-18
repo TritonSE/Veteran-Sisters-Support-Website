@@ -1,4 +1,5 @@
 import { User } from "../models/userModel.js";
+import mongoose from "mongoose";
 export const queryUsers = async (req, res) => {
   try {
     const { assignedProgram, assignedVeteran, ...userQuery } = req.query;
@@ -85,6 +86,7 @@ export const addUser = async (req, res) => {
         roleSpecificInfo,
         assignedPrograms,
         assignedUsers,
+        unreadActivities: [],
       });
       res.status(201).json(newUser);
     }
@@ -256,5 +258,23 @@ export const updateUserId = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+// Mark activity as read
+export const markActivityRead = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { activityId } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(userId, {
+      $pull: { unreadActivities: activityId },
+    });
+    if (updatedUser) {
+      res.status(200).json(updatedUser);
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error marking activity as read", error: error.message });
   }
 };
