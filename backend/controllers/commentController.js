@@ -2,10 +2,9 @@ import Comment from "../models/commentModel.js";
 
 export const queryComments = async (req, res, next) => {
   try {
-    const profileId = req.params.profileId;
-    console.log(profileId);
+    const userId = req.params.userId;
     const comments = await Comment.find({ 
-      profileId
+      profileId: userId
     })
       .populate("profileId", "firstName lastName")
       .populate("commenterId", "firstName lastName")
@@ -45,25 +44,27 @@ export const addComment = async (req, res, next) => {
 
 export const editComment = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { commentId } = req.params;
     const { comment } = req.body;
     const newComment = await Comment.findOneAndUpdate(
-      { _id: id },
+      { _id: commentId },
       { comment, datePosted: new Date(Date.now()), edited: true },
       { new: true },
     ).populate("commenterId");
     res.status(200).json(newComment);
   } catch (error) {
-    next(error);
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
 export const deleteComment = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const response = await Comment.findByIdAndDelete(id);
+    const { commentId } = req.params;
+    const response = await Comment.findByIdAndDelete(commentId);
     res.status(204).json(response);
   } catch (error) {
-    next(error);
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
