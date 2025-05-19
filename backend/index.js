@@ -9,6 +9,7 @@ import userRoutes from "./routes/userRoutes.js";
 import activeVolunteersRoute from "./routes/activeVolunteersRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
+import activityRoutes from "./routes/activityRoutes.js";
 import { onRequest } from "firebase-functions/v2/https";
 
 // import { CustomError, InternalError } from "./errors.js";
@@ -66,6 +67,8 @@ app.use("/api", activeVolunteersRoute);
 app.use("/api", commentRoutes);
 
 app.use("/api", reportRoutes);
+
+app.use("/api", activityRoutes);
 
 app.use(errorHandler);
 

@@ -8,6 +8,7 @@ import {
 } from "../api/profileApi";
 import { useAuth } from "../contexts/AuthContext";
 
+import { NoNotes } from "./EmptyStates";
 import { ProfilePicture } from "./ProfilePicture";
 import styles from "./VolunteerNotes.module.css";
 
@@ -103,7 +104,7 @@ export function VolunteerNotes({ profileUserId }: { profileUserId: string }) {
                 );
               })
           ) : (
-            <div>No notes</div>
+            <NoNotes />
           )}
         </div>
       </div>
