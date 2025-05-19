@@ -1,19 +1,22 @@
 "use client";
 
 import Image from "next/image";
-
 import { useEffect, useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
-import styles from "./ReportTable.module.css";
+
 import { getReportsByReporter } from "../api/reportApi";
-import { APIResult } from "../api/requests";
+import { getUser } from "../api/userApi";
+import { useAuth } from "../contexts/AuthContext";
+
+import styles from "./ReportTable.module.css";
 import { ReportTableItem } from "./ReportTableItem";
 
 type ReportObject = {
   _id: string;
   reporteeId: string;
+  reporteeName: string;
   situation: string[];
   datePosted: Date;
+  status: string;
 };
 
 export default function ReportTable() {
@@ -25,25 +28,39 @@ export default function ReportTable() {
   useEffect(() => {
     if (loading || !userId) return;
 
-    getReportsByReporter(userId).then((res: APIResult<any[]>) => {
+    void (async () => {
+      const res = await getReportsByReporter(userId);
       if (!res.success) {
-        console.error("Failed to load reports:", res.error);
+        console.error(res.error);
         return;
       }
 
-      const data: ReportObject[] = res.data.map((r) => ({
-        _id: r._id,
-        reporteeId: r.reporteeId,
-        situation: r.situation,
-        datePosted: new Date(r.datePosted),
-      }));
-      setReports(data);
-    });
-  }, [loading, userId]);
+      let withNames: ReportObject[] = [];
+      try {
+        withNames = await Promise.all(
+          res.data.map(async (report) => {
+            const userRes = await getUser(report.reporteeId);
+            const firstName = userRes.success ? userRes.data.firstName : "Unknown";
+            const lastName = userRes.success ? userRes.data.lastName : "";
 
-  const start = page * pageSize;
-  const end = (page + 1) * pageSize;
-  const visible = reports.slice(start, end);
+            return {
+              _id: report._id,
+              reporteeId: report.reporteeId,
+              reporteeName: `${firstName} ${lastName}`,
+              situation: report.situation,
+              datePosted: new Date(report.datePosted),
+              status: report.status,
+            };
+          }),
+        );
+      } catch (err) {
+        console.error(err);
+        withNames = [];
+      }
+
+      setReports(withNames);
+    })();
+  }, [loading, userId]);
 
   return (
     <div className={styles.container}>
@@ -67,35 +84,43 @@ export default function ReportTable() {
         </div>
 
         <div className={styles.tableItems}>
-          {visible.length === 0 ? (
-            <ReportTableItem key="none" date="None" reportee="None" situation="" />
+          {reports.length === 0 ? (
+            <ReportTableItem key="none" date="None" reportee="" situation="" status="" />
           ) : (
-            visible.map((r) => (
-              <ReportTableItem
-                key={r._id}
-                date={r.datePosted.toLocaleDateString()}
-                reportee={"Name"}
-                situation={r.situation.join(", ")}
-              />
-            ))
+            reports
+              .slice(page * pageSize, (page + 1) * pageSize)
+              .map((report) => (
+                <ReportTableItem
+                  key={report._id}
+                  date={report.datePosted.toLocaleDateString()}
+                  reportee={report.reporteeName}
+                  situation={report.situation.join(", ")}
+                  status={report.status}
+                />
+              ))
           )}
         </div>
       </div>
 
-      {reports.length > pageSize && (
+      {reports.length > 8 && (
         <div className={styles.pageSelect}>
           {page === Math.floor(reports.length / pageSize) ? (
             <div className={styles.arrowBoxDisabled}>
               <Image src="/caret_right_disabled.svg" alt="Right Arrow" width={20} height={20} />
             </div>
           ) : (
-            <div className={styles.arrowBox} onClick={() => setPage(page + 1)}>
+            <div
+              className={styles.arrowBox}
+              onClick={() => {
+                setPage(page + 1);
+              }}
+            >
               <Image src="/caret_right.svg" alt="Right Arrow" width={20} height={20} />
             </div>
           )}
 
           <span className={styles.pageNumber}>
-            {`${page + 1} of ${Math.ceil(reports.length / pageSize)}`}
+            {`${(page + 1).toString()} of ${Math.ceil(reports.length / pageSize).toString()}`}
           </span>
 
           {page === 0 ? (
@@ -103,7 +128,12 @@ export default function ReportTable() {
               <Image src="/caret_left_disabled.svg" alt="Left Arrow" width={20} height={20} />
             </div>
           ) : (
-            <div className={styles.arrowBox} onClick={() => setPage(page - 1)}>
+            <div
+              className={styles.arrowBox}
+              onClick={() => {
+                setPage(page - 1);
+              }}
+            >
               <Image src="/caret_left.svg" alt="Left Arrow" width={20} height={20} />
             </div>
           )}

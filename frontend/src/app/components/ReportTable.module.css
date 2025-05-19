@@ -1,22 +1,16 @@
 .container {
+  width: 1024px;
   display: flex;
-  padding-bottom: 100px;
   flex-direction: column;
-  align-items: flex-start;
-  padding-top: 80px;
-  width: 180px;
+  gap: 28px;
 }
 
 .header {
-  padding-bottom: 28px;
-  color: var(--Text-3, #3a3c3d);
-
-  /* title medium */
   font-family: "Albert Sans";
-  font-size: 24px;
-  font-style: normal;
   font-weight: 500;
-  line-height: normal;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
 }
 
 .table {
@@ -28,12 +22,58 @@
 
 .tableHeader {
   display: flex;
-  width: 1024px;
+  align-self: stretch;
   border-radius: var(--Spacing-s, 8px) var(--Spacing-s, 8px) 0px 0px;
   border-top: 1px solid var(--Stroke-2, #d0d7de);
   border-right: 1px solid var(--Stroke-2, #d0d7de);
   border-left: 1px solid var(--Stroke-2, #d0d7de);
   background: var(--Background-2, #f5f5f5);
+
+  overflow: hidden;
+  color: var(--Text-2, #4d5358);
+  text-overflow: ellipsis;
+
+  font-family: "Albert Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.date {
+  display: flex;
+  width: 180px;
+  padding: var(--Spacing-sm, 16px) 24px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+}
+
+.reportAgainst {
+  display: flex;
+  width: 260px;
+  padding: var(--Spacing-sm, 16px) 24px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+}
+
+.situationType {
+  display: flex;
+  padding: var(--Spacing-sm, 16px) 24px;
+  align-items: center;
+  gap: 10px;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+
+.status {
+  display: flex;
+  width: 136px;
+  padding: var(--Spacing-sm, 16px) 24px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
 }
 
 .tableItems {
@@ -45,81 +85,49 @@
   width: 1024px;
 }
 
-.date {
+.pageSelect {
   display: flex;
-  width: 180px;
-  padding: var(--Spacing-sm, 16px) 24px;
+  align-items: center;
+  gap: var(--Spacing-sm, 16px);
+  flex-direction: row-reverse;
+  align-self: stretch;
+}
+
+.pageNumber {
+  color: var(--Text-1, #60696f);
+
+  /* body medium */
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.arrowBox {
+  display: flex;
+  padding: 8px var(--Spacing-s, 8px);
+  justify-content: center;
   align-items: center;
   gap: 10px;
-  align-self: stretch;
 
-  overflow: hidden;
-  color: var(--Text-2, #4d5358);
-  text-overflow: ellipsis;
-
-  /* body large */
-  font-family: "Albert Sans";
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  width: 180px;
+  border-radius: 8px;
+  border: 1px solid var(--Stroke-2, #d0d7de);
+  background: #fff;
 }
 
-.reportAgainst {
+.arrowBox:hover {
+  cursor: pointer;
+}
+
+.arrowBoxDisabled {
   display: flex;
-  width: 260px;
-  padding: var(--Spacing-sm, 16px) 24px;
+  padding: 8px var(--Spacing-s, 8px);
+  justify-content: center;
   align-items: center;
   gap: 10px;
-  align-self: stretch;
 
-  overflow: hidden;
-  color: var(--Text-2, #4d5358);
-  text-overflow: ellipsis;
-
-  /* body large */
-  font-family: "Albert Sans";
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-}
-
-.situationType {
-  flex: 1;
-  display: flex;
-  width: 700px;
-  padding: var(--Spacing-sm, 16px) 24px;
-  align-items: center;
-
-  overflow: hidden;
-  color: var(--Text-2, #4d5358);
-  text-overflow: ellipsis;
-
-  /* body large */
-  font-family: "Albert Sans";
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-}
-
-.status {
-  margin-left: auto;
-  display: flex;
-  flex: 0 0 136px;
-  padding: var(--Spacing-sm, 16px) 24px;
-  align-items: center;
-
-  overflow: hidden;
-  color: var(--Text-2, #4d5358);
-  text-overflow: ellipsis;
-
-  /* body large */
-  font-family: "Albert Sans";
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
+  border-radius: 8px;
+  border: 1px solid var(--Stroke-1, #edf1f5);
+  background: #fff;
 }

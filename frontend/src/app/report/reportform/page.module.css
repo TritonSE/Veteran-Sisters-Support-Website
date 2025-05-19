@@ -1,15 +1,33 @@
-.page {
+.container {
   height: 100%;
+  background: var(--Neutral-Base-White, #fafafa);
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.page {
+  display: flex;
   width: 100%;
-  padding-left: 188px;
-  padding-right: 156px;
-  padding-top: 94px;
-  padding-bottom: 57px;
+  padding: var(--Spacing-4xl, 80px) var(--Spacing-3xl, 64px);
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.frame {
+  display: flex;
+  max-width: 1024px;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 0 0;
+  top: 94px;
+  left: 156px;
+  padding-bottom: 100px;
 }
 
 .header {
   border-bottom: #d0d7de solid 1px;
 }
+
 .title {
   /* title large */
   font-family: "Albert Sans";
@@ -158,7 +176,6 @@
 }
 
 .confirmMessage {
-  width: 789px;
   height: 248px;
   gap: 48px;
   display: flex;

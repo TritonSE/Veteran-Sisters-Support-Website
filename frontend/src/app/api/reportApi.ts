@@ -1,4 +1,4 @@
-import { APIResult, get, post, handleAPIError } from "./requests";
+import { APIResult, get, handleAPIError, post } from "./requests";
 
 export type ReportRequest = {
   reporterId: string;
@@ -17,7 +17,8 @@ export type Report = {
   proofOfLifeDate: string | null;
   proofOfLifeTime: string;
   explanation: string;
-  datePosted: string;
+  status: string;
+  datePosted: Date;
 };
 
 export async function createReport(report: ReportRequest): Promise<APIResult<Report>> {
@@ -48,7 +49,7 @@ export async function getReportsByReporter(reporterId: string): Promise<APIResul
 
 export async function getReportsAgainst(reporteeId: string): Promise<APIResult<Report[]>> {
   try {
-    const response = await get(`/report?reporteeId=${reporteeId}`);
+    const response = await get(`/report/user/${reporteeId}`);
     if (!response.ok) {
       return handleAPIError(response);
     }

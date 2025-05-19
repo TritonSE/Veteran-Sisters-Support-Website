@@ -7,15 +7,8 @@ const reportSchema = new Schema({
   situation: [
     {
       type: String,
-      enum: [
-        "Veteran is unresponsive",
-        "Veteran made offensive comment",
-        "Proof of life requested",
-        "Other, please specify",
-        "Volunteer doesn’t respond",
-        "Volunteer made offensive comment",
-        "Other, please specify",
-      ],
+      enum: ["Unresponsive", "Offensive comment", "Proof of life", "Other", "Doesn’t respond"],
+      required: true,
     },
   ],
   proofOfLifeDate: {
@@ -32,6 +25,15 @@ const reportSchema = new Schema({
   },
   explanation: {
     type: String,
+    required: true,
+  },
+  datePosted: {
+    type: Date,
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ["Pending", "Resolved"],
     required: true,
   },
 });

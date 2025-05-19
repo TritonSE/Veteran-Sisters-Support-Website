@@ -4,9 +4,10 @@ type ReportTableItemProps = {
   date: string;
   reportee: string;
   situation: string;
+  status: string;
 };
 
-export function ReportTableItem({ date, reportee, situation }: ReportTableItemProps) {
+export function ReportTableItem({ date, reportee, situation, status }: ReportTableItemProps) {
   return (
     <div className={styles.container}>
       <div className={styles.date}>
@@ -18,9 +19,16 @@ export function ReportTableItem({ date, reportee, situation }: ReportTableItemPr
       <div className={styles.situation}>
         <span>{situation}</span>
       </div>
-      {/* <div className={statusPending ? styles.statusPending : styles.statusResolved}>
-        <span>{statusPending}</span>
-      </div> */}
+      {status === "Pending" ? (
+        <div className={styles.statusPending}>
+          <span>{status}</span>
+        </div>
+      ) : null}
+      {status === "Resolved" ? (
+        <div className={styles.statusResolved}>
+          <span>{status}</span>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -12,6 +12,7 @@ export const addReport = async (req, res) => {
       proofOfLifeTime,
       explanation,
       datePosted: new Date(Date.now()),
+      status: "Pending",
     });
     res.status(201).json(newReport);
   } catch (error) {

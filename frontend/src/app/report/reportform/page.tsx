@@ -1,22 +1,23 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
 
+import { UserProfile } from "../../api/profileApi";
+import { createReport } from "../../api/reportApi";
+import { getUser } from "../../api/userApi";
 import { Button } from "../../components/Button";
 import Checklist from "../../components/Checklist";
 import CustomDatePicker from "../../components/CustomDatePicker";
 import { NavBar } from "../../components/NavBar";
 import ReportDropdown from "../../components/ReportDropdown";
 import { useAuth } from "../../contexts/AuthContext";
-import { UserProfile } from "../../api/profileApi";
-import { createReport, ReportRequest } from "../../api/reportApi";
-import { getUser } from "../../api/userApi";
 
 import styles from "./page.module.css";
-import { AuthContextWrapper } from "@/app/contexts/AuthContextWrapper";
+
 import { APIResult } from "@/app/api/requests";
+import { AuthContextWrapper } from "@/app/contexts/AuthContextWrapper";
 
 function ReportFormContent() {
   const router = useRouter();
@@ -48,7 +49,7 @@ function ReportFormContent() {
 
   const dropdownOptions = assignedUsersProfiles.map((u) => ({
     label: `${u.firstName} ${u.lastName}`,
-    value: u._id as string,
+    value: u._id ?? "",
   }));
 
   const veteranOptions = [
@@ -62,6 +63,18 @@ function ReportFormContent() {
     "Volunteer made offensive comment",
     "Other, please specify",
   ];
+
+  const situationEnumMap: Record<
+    string,
+    "Unresponsive" | "Offensive comment" | "Proof of life" | "Other" | "Doesn’t respond"
+  > = {
+    "Veteran is unresponsive": "Unresponsive",
+    "Volunteer doesn’t respond": "Doesn’t respond",
+    "Veteran made offensive comment": "Offensive comment",
+    "Volunteer made offensive comment": "Offensive comment",
+    "Proof of life requested": "Proof of life",
+    "Other, please specify": "Other",
+  };
 
   const validTimeRegex = /^(1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm])$/;
 
@@ -80,7 +93,7 @@ function ReportFormContent() {
   };
 
   const handleSubmit = async () => {
-    if (selectedReporteeName == "" || explanation == "" || selectedOptions.length === 0) {
+    if (selectedReporteeName === "" || explanation === "" || selectedOptions.length === 0) {
       return;
     }
 
@@ -93,11 +106,18 @@ function ReportFormContent() {
       }
     }
 
+    const mappedSituation = selectedOptions.map((opt) => situationEnumMap[opt]);
+
+    const others = mappedSituation.filter((v) => v === "Other");
+    const core = mappedSituation.filter((v) => v !== "Other");
+
+    const orderedSituations = [...core, ...others];
+
     try {
       const res = await createReport({
         reporterId: userId,
         reporteeId: selectedReporteeProfile?._id ?? "",
-        situation: selectedOptions,
+        situation: orderedSituations,
         proofOfLifeDate: proofOfLifeDate ? proofOfLifeDate : null,
         proofOfLifeTime: proofOfLifeTime ? proofOfLifeTime : null,
         explanation,
@@ -111,6 +131,10 @@ function ReportFormContent() {
       console.error("Unexpected error creating report:", err);
     }
   };
+
+  function hasStringId(u: UserProfile): u is UserProfile & { _id: string } {
+    return typeof u._id === "string";
+  }
 
   useEffect(() => {
     if (loading || !userId) return;
@@ -127,24 +151,26 @@ function ReportFormContent() {
           return;
         }
 
-        return Promise.all(
-          me.assignedUsers.map((assignedUser) => getUser(assignedUser._id as string)),
-        ).then((results) => {
-          const profiles = results
-            .filter((r): r is APIResult<UserProfile> & { success: true } => r.success)
-            .map((r) => r.data);
-          setAssignedUsersProfiles(profiles);
-        });
+        const validUsers = me.assignedUsers.filter(hasStringId);
+
+        return Promise.all(validUsers.map((assignedUser) => getUser(assignedUser._id)))
+          .then((results) => {
+            const profiles = results
+              .filter((r): r is APIResult<UserProfile> & { success: true } => r.success)
+              .map((r) => r.data);
+            setAssignedUsersProfiles(profiles);
+          })
+          .catch(console.error);
       })
       .catch(console.error);
   }, [loading, userId]);
 
   return (
-    <>
+    <div className={styles.container}>
       <NavBar />
       <div className={styles.page}>
         {!confirmPage && (
-          <div>
+          <div className={styles.frame}>
             <div className={styles.header}>
               <p className={styles.title}>Report</p>
               <p className={styles.subtitle}>
@@ -168,7 +194,7 @@ function ReportFormContent() {
                 }}
                 onSelect={(option) => {
                   setSelectedReporteeName(option.label);
-                  const profile = assignedUsersProfiles.find((u) => u._id === option.value) || null;
+                  const profile = assignedUsersProfiles.find((u) => u._id === option.value) ?? null;
                   setSelectedReporteeProfile(profile);
                 }}
                 selected={selectedReporteeName}
@@ -347,7 +373,7 @@ function ReportFormContent() {
                   label={"Submit"}
                   filled={true}
                   onClick={() => {
-                    handleSubmit();
+                    void handleSubmit();
                   }}
                 ></Button>
               </div>
@@ -355,7 +381,7 @@ function ReportFormContent() {
           </div>
         )}
         {confirmPage && (
-          <div>
+          <div className={styles.frame}>
             <p className={styles.title}>Report</p>
             <div className={styles.confirmMessage}>
               <Image src="/check_primary.svg" alt="Check" width={92} height={92}></Image>
@@ -383,7 +409,7 @@ function ReportFormContent() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 
