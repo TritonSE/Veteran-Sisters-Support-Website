@@ -1,32 +1,57 @@
 import express from "express";
 import {
-  queryUsers,
   getUserByEmail,
   addUser,
-  deleteUser,
   getUserById,
   getUsersNonAdmins,
-  getUserRole,
   updateUser,
   getVeteransByVolunteer,
   updateUserId,
+  getVolunteersByProgram,
+  getVeteransByProgram,
+  deleteUser,
+  markActivityRead,
 } from "../controllers/userController.js";
 import { authenticateUser } from "../middleware/auth.js";
-
+import {
+  authenticateProfilePermissions,
+  authenticateStaffOrAdmin,
+  authenticateProfilePermissionsByEmail,
+} from "../middleware/profile.js";
 const router = express.Router();
 
 // Public routes (no authentication required)
 router.post("/users", addUser); // Signup endpoint
 
 // Protected routes (authentication required)
-router.get("/users", authenticateUser, queryUsers);
-router.get("/users/email/:email", authenticateUser, getUserByEmail);
-router.get("/users/id/:id", authenticateUser, getUserById);
-router.get("/nonAdminUsers", authenticateUser, getUsersNonAdmins);
-router.get("/veterans/:volunteerId", authenticateUser, getVeteransByVolunteer);
-router.delete("/users/:email", authenticateUser, deleteUser);
-router.get("/users/role/:email", authenticateUser, getUserRole);
-router.patch("/users/id/:id", authenticateUser, updateUserId);
-router.put("/users/:email", authenticateUser, updateUser);
-
+router.get("/users/id/:userId", authenticateUser, authenticateProfilePermissions, getUserById);
+router.get("/nonAdminUsers", authenticateUser, authenticateStaffOrAdmin, getUsersNonAdmins);
+router.get(
+  "/veterans/:userId",
+  authenticateUser,
+  authenticateProfilePermissions,
+  getVeteransByVolunteer,
+);
+router.patch("/users/id/:userId", authenticateUser, authenticateProfilePermissions, updateUserId);
+router.get(
+  "/users/email/:email",
+  authenticateUser,
+  authenticateProfilePermissionsByEmail,
+  getUserByEmail,
+);
+router.put("/users/:email", authenticateUser, authenticateStaffOrAdmin, updateUser);
+router.get(
+  "/users/volunteersByProgram/:program",
+  authenticateUser,
+  authenticateStaffOrAdmin,
+  getVolunteersByProgram,
+);
+router.get(
+  "/users/veteransByProgram/:program",
+  authenticateUser,
+  authenticateStaffOrAdmin,
+  getVeteransByProgram,
+);
+router.delete("/users/:userId", authenticateUser, authenticateStaffOrAdmin, deleteUser);
+router.put("/users/activity/:id", authenticateUser, markActivityRead);
 export default router;
