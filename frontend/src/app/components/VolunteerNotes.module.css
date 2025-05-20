@@ -26,10 +26,20 @@
 .volunteerNotes .noteSection {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: var(--Spacing-md, 24px);
   align-self: stretch;
+  align-items: flex-start;
 }
+
+.volunteerNotes .noteSectionMissing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--Spacing-md, 24px);
+  align-self: stretch;
+  height: 256px;
+  align-items: center;
+}
+
 .volunteerNotes .postNoteSection {
   display: flex;
   align-items: flex-start;
@@ -76,14 +86,31 @@
 .volunteerNotes .postedNotes {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: var(--Spacing-sm, 16px);
+  height: fit-content;
+  align-items: flex-start;
 }
+
+.volunteerNotes .postedNotesMissing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--Spacing-sm, 16px);
+  height: 256px;
+  align-items: center;
+  justify-content: center;
+}
+
 .volunteerNotes .postedNote {
   display: flex;
   align-items: flex-start;
   gap: 8px;
 }
+
+.volunteerNotes .noNotes {
+  text-align: center;
+  font-size: 20px;
+}
+
 .volunteerNotes .noteContent {
   display: flex;
   flex-direction: column;

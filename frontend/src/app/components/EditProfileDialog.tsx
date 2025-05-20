@@ -118,7 +118,7 @@ const ProfileActions = ({
             className={styles.meatballMenu}
           />
         </div>
-      ) : isProgramAndRoleEditable ? (
+      ) : isProgramAndRoleEditable || isPersonalProfile ? (
         <div className={styles.headerTopRight}>
           <Image
             src="/meatball_menu.svg"
