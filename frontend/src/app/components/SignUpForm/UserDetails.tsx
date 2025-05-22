@@ -3,12 +3,15 @@
 import Image from "next/image";
 import React, { MouseEvent, useEffect, useState } from "react";
 
+import { Role } from "../Role";
+
 import styles from "./page.module.css";
 
+import { Role as RoleEnum } from "@/app/api/profileApi";
+import { getUserProfileByEmail } from "@/app/api/profileApi";
 import { BackButton } from "@/app/components/BackButton";
 import { Button } from "@/app/components/Button";
 import ProgressBar from "@/app/components/ProgressBar";
-import { getUserProfileByEmail } from "@/app/api/profileApi";
 
 type UserDetailsProps = {
   email: string;
@@ -41,6 +44,7 @@ type UserDetailsProps = {
   setFormErrors: React.Dispatch<React.SetStateAction<Record<string, string | undefined>>>;
   onNext: () => void;
   onPrevious: () => void;
+  isVeteran: boolean;
 };
 
 export default function UserDetails({
@@ -72,6 +76,7 @@ export default function UserDetails({
   setFormErrors,
   onNext,
   onPrevious,
+  isVeteran,
 }: UserDetailsProps) {
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
@@ -160,6 +165,9 @@ export default function UserDetails({
           <div style={{ marginBottom: "24px" }}>
             <BackButton handlePrevious={onPrevious} />
             <ProgressBar percentCompleted={25} />
+          </div>
+          <div style={{ width: "80px", marginBottom: "20px" }}>
+            <Role role={isVeteran ? RoleEnum.VETERAN : RoleEnum.VOLUNTEER} />
           </div>
           <div className={styles.subtitle}>Create a membership account</div>
           {formErrors.requiredFields && <p className={styles.error}>{formErrors.requiredFields}</p>}
@@ -388,9 +396,11 @@ export default function UserDetails({
             onClick={(e) => {
               void handleContinue(e);
             }}
+            filled={true}
+            width="88%"
           />
           <div className={styles.subtitle2}>
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center", marginTop: "16px" }}>
               Already have an account?
               <a href="/login" style={{ color: "#057E6F" }}>
                 {" "}
