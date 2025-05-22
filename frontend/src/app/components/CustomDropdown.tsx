@@ -11,6 +11,7 @@ type CustomDropdownProps = {
   selected?: string;
   fullWidth?: boolean;
   dropdownWidth?: string;
+  marginLeft?: string;
 };
 
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
@@ -21,6 +22,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   selected,
   fullWidth,
   dropdownWidth,
+  marginLeft,
 }) => {
   const handleSelect = (option: string) => {
     toggleDropdown();
@@ -36,7 +38,11 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
           height={35}
           src="/ic_round-arrow-drop-up.svg"
           alt=""
-          style={{ objectFit: "contain", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+          style={{
+            objectFit: "contain",
+            marginLeft: marginLeft ?? undefined,
+            transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+          }}
         ></Image>
       </div>
 

@@ -126,6 +126,7 @@ export default function ServiceDetails({
               setBranch(option);
             }}
             selected={branch}
+            marginLeft="90%"
           />
           <label htmlFor="status" className={styles.formEntry}>
             Current military status<a style={{ color: "#B80037" }}> *</a>
@@ -147,6 +148,7 @@ export default function ServiceDetails({
               setMilitaryStatus(option);
             }}
             selected={militaryStatus}
+            marginLeft="90%"
           />
           <label htmlFor="gender" className={styles.formEntry}>
             Gender<a style={{ color: "#B80037" }}> *</a>
@@ -161,10 +163,17 @@ export default function ServiceDetails({
               setGender(option);
             }}
             selected={gender}
+            marginLeft="90%"
           />
-          <Button label="Continue" className={styles.continueButton} onClick={handleContinue} />
+          <Button
+            label="Continue"
+            className={styles.continueButton}
+            onClick={handleContinue}
+            filled={true}
+            width="88%"
+          />
           <div className={styles.subtitle2}>
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center", marginTop: "20px" }}>
               Already have an account?
               <a href="/login" style={{ color: "#057E6F" }}>
                 {" "}

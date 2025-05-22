@@ -46,6 +46,7 @@ type AuthContextType = {
   userRole: string;
   loading: boolean;
   loggedIn: boolean;
+  isSigningUp: boolean;
   setIsSigningUp: (value: boolean) => void;
 };
 
@@ -55,6 +56,7 @@ const AuthContext = React.createContext<AuthContextType>({
   userRole: "",
   loading: true,
   loggedIn: false,
+  isSigningUp: false,
   setIsSigningUp: () => {
     console.warn("setIsSigningUp called outside of AuthProvider");
   },
@@ -103,9 +105,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       userRole,
       loading,
       loggedIn: !!user,
+      isSigningUp,
       setIsSigningUp,
     };
-  }, [user, userId, userRole, loading, setIsSigningUp]);
+  }, [user, userId, userRole, loading, isSigningUp, setIsSigningUp]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

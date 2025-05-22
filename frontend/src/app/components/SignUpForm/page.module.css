@@ -221,3 +221,37 @@
   margin-bottom: 4px;
   margin-top: 8px;
 }
+
+.loadingText h1 {
+  color: #057e6f;
+  font-family: "Albert Sans";
+  font-size: 24px;
+  font-weight: 600;
+  margin-left: 10%;
+}
+
+.loadingText p {
+  color: #60696f;
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 50px;
+  margin-top: 8px;
+  margin-left: 10%;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #ccc;
+  border-top: 2px solid #057e6f;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 50px auto 25px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
