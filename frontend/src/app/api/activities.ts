@@ -44,7 +44,7 @@ export const getUnreadActivities = async (
   userId: string,
 ): Promise<APIResult<{ recentUnread: ActivityObject[]; totalUnread: number }>> => {
   try {
-    const response = await get(`/activities/${userId}`);
+    const response = await get(`/activities/unread/${userId}`);
     if (response.ok) {
       const activities = (await response.json()) as {
         recentUnread: ActivityObject[];
@@ -56,6 +56,25 @@ export const getUnreadActivities = async (
         activity.relativeTime = setRelativeTime(activity.createdAt);
       });
 
+      return { success: true, data: activities };
+    } else {
+      // Handle response errors if the API call is not successful
+      const errorMessage = `Error: ${response.statusText}`;
+      return { success: false, error: errorMessage };
+    }
+  } catch (error: unknown) {
+    return { success: false, error: (error as Error).message };
+  }
+};
+
+export const getActivities = async (userId: string): Promise<APIResult<ActivityObject[]>> => {
+  try {
+    const response = await get(`/activities/${userId}`);
+    if (response.ok) {
+      const activities = (await response.json()) as ActivityObject[];
+      activities.forEach((activity: ActivityObject) => {
+        activity.relativeTime = setRelativeTime(activity.createdAt);
+      });
       return { success: true, data: activities };
     } else {
       // Handle response errors if the API call is not successful
