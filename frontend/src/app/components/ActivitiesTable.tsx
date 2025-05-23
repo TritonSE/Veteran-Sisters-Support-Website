@@ -59,7 +59,6 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
   }
 
   useEffect(() => {
-    console.log(refresh);
     getActivities(userId)
       .then((result) => {
         if (result.success) {
