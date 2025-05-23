@@ -3,20 +3,17 @@ import Comment from "../models/commentModel.js";
 export const queryComments = async (req, res, next) => {
   try {
     const userId = req.params.userId;
-    const comments = await Comment.find({ 
-      profileId: userId
+    const comments = await Comment.find({
+      profileId: userId,
     })
       .populate("profileId", "firstName lastName")
       .populate("commenterId", "firstName lastName")
       .sort({ createdAt: -1 })
       .exec();
-    
-    const validComments = comments.filter(
-      comment => comment.profileId && comment.commenterId
-    );
-    
+
+    const validComments = comments.filter((comment) => comment.profileId && comment.commenterId);
+
     res.json(validComments);
-  
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
