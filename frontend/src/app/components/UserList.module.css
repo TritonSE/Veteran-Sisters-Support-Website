@@ -28,6 +28,17 @@
   text-overflow: ellipsis;
 }
 
+.userListHeadingMin {
+  color: var(--Text-3, #3a3c3d);
+  font-family: "Albert Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .userList .addUser {
   display: flex;
   height: 15px;
