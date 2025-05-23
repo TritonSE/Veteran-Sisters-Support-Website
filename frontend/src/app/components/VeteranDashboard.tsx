@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { UserProfile } from "../api/profileApi";
 import { getUser } from "../api/userApi";
 import { FileUpload } from "../components/FileUpload";
+import { UnreadActivities } from "../components/UnreadActivities";
 import { VeteranFilesTable } from "../components/VeteranFilesTable";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -17,6 +18,11 @@ export function VeteranDashboard() {
   const [showUploadConfirm, setShowUploadConfirm] = useState<boolean>(false);
   const [currVeteran, setCurrVeteran] = useState<UserProfile>();
   const [loading, setLoading] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(true);
+
+  const toggleDropdown = () => {
+    setDropdownOpen((prev) => !prev);
+  };
 
   useEffect(() => {
     if (!authLoading && userId) {
@@ -68,6 +74,9 @@ export function VeteranDashboard() {
               Upload document
             </div>
           </div>
+
+          <UnreadActivities userId={userId} isOpen={dropdownOpen} toggleDropdown={toggleDropdown} />
+
           <br />
           <br />
           <br />

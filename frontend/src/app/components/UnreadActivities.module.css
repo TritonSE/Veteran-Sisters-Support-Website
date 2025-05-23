@@ -1,0 +1,135 @@
+.component {
+  margin-top: 24px;
+}
+
+.customDropdown {
+  width: 100%;
+  background-color: white;
+  border: 1px solid;
+  border-image: linear-gradient(180deg, #e1ecf7 0%, #a2e3ff 50%, #acb9ff 100%) 1;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
+  margin: 0;
+  list-style: none;
+}
+
+.selectBox {
+  padding: 24px;
+
+  color: var(--Text-2, #3a3c3d);
+  font-family: "Albert Sans";
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  justify-content: space-between;
+}
+
+.dropdownItem {
+  margin: 0px 24px;
+  padding: 24px 0px;
+  color: #4d5358;
+  border-top: 1px solid #d0d7de;
+
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19.2px;
+  letter-spacing: 0%;
+
+  transition: background 0.2s;
+}
+
+.subtitle {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 15.6px;
+  letter-spacing: 0%;
+  margin: 16px 0px 8px 0px;
+
+  color: #4d5358;
+}
+
+.description {
+  font-weight: 500;
+  font-size: 14px;
+  margin-left: 56px;
+
+  color: #60696f;
+}
+
+.activityCount {
+  background-color: #fce5ec;
+  color: #b80037;
+  border-radius: 50%;
+  /* padding: 4px 8px; */
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: "Albert Sans";
+  text-align: center;
+
+  margin-left: 8px;
+}
+
+.button {
+  background-color: white;
+  color: #4d5358;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.8px;
+  display: inline-block;
+  width: 116;
+  height: 33;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  padding: 8px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #f0f0f0;
+}
+
+.urgentButton {
+  background-color: #f9a825;
+  margin-left: "0px";
+  font-weight: "500";
+  color: #4d5358;
+  font-size: 14px;
+  line-height: 16.8px;
+  display: inline-block;
+  width: 116;
+  height: 33;
+  border-radius: 8px;
+  padding: 4px 8px;
+  margin-bottom: 16px;
+}
+
+.horizontalDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  font-weight: 500;
+  padding: 4px 8px;
+  margin-left: 4px;
+  color: #80a4ed;
+  border: 1px solid #80a4ed;
+  border-radius: 16px;
+}
+
+.announcement {
+  background-color: #f9a8251a;
+  border: 1px dashed #f9a825;
+  border-radius: 4px;
+  padding: 8px 16px;
+}

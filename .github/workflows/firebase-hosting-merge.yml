@@ -20,7 +20,7 @@ jobs:
           npm run build
       - name: Install backend dependencies
         env:
-          MONGO_URL: ${{ secrets.MONGO_URL }}
+          MONGO_URL: ${{ secrets.MONGO_URL_PRODUCTION }}
           FIREBASE_SERVICE: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BACKEND }}
         run: |
           cd backend

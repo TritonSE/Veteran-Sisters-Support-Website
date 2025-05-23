@@ -11,7 +11,7 @@ export type ActiveVolunteer = {
 
 export const getVeteransByProgram = async (program: string): Promise<APIResult<UserProfile[]>> => {
   try {
-    const response = await get(`/users?role=veteran&assignedProgram=${program}`);
+    const response = await get(`/users/veteransByProgram/${program}`);
     if (!response.ok) {
       return { success: false, error: response.statusText };
     }
@@ -26,7 +26,7 @@ export const getVolunteersByProgram = async (
   program: string,
 ): Promise<APIResult<UserProfile[]>> => {
   try {
-    const response = await get(`/users?assignedProgram=${program}&role=staff&role=volunteer`);
+    const response = await get(`/users/volunteersByProgram/${program}`);
     if (!response.ok) {
       return { success: false, error: response.statusText };
     }
@@ -115,8 +115,8 @@ export const getAssignedUsers = async (
 ): Promise<APIResult<ActiveVolunteer[]>> => {
   try {
     //fetch volunteers if user is veteran and vice versa
-    const query = `?${user.role === Role.VETERAN ? `veteran=${user.email}` : `volunteer=${user.email}`}`;
-    const response = await get(`/activeVolunteers${query}`);
+    const query = user.role === Role.VETERAN ? `veteran` : `volunteer`;
+    const response = await get(`/activeVolunteers/${query}/${user.email}`);
     if (!response.ok) {
       return handleAPIError(response);
     }

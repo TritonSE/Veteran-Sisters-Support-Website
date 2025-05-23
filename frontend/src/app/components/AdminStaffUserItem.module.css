@@ -4,15 +4,16 @@
   align-self: stretch;
 
   border-top: 1px solid var(--Stroke-1, #edf1f5);
-  border-bottom: 1px solid var(--Stroke-1, #edf1f5);
+  /* border-bottom: 1px solid var(--Stroke-1, #edf1f5); */
+  /* border-left: 1px solid var(--Stroke-2, #d0d7de);
+  border-right: 1px solid var(--Stroke-2, #d0d7de); */
 }
 
 .link {
   display: flex;
   align-items: flex-start;
   align-self: stretch;
-
-  width: 1024px;
+  width: 1100px;
 }
 
 .verticalDivider {
@@ -27,7 +28,8 @@
   align-items: center;
   gap: 10px;
 
-  border-left: 1px solid var(--Stroke-2, #d0d7de);
+  /* border-left: 1px solid var(--Stroke-2, #d0d7de); */
+  border-radius: 0px 0px 0px var(--Spacing-s, 8px);
   background: var(--Background-1, #fff);
 }
 
@@ -39,6 +41,8 @@
   align-items: flex-start;
   gap: 4px;
   flex-shrink: 0;
+
+  /* border-radius: 0px 0px 0px var(--Spacing-s, 8px); */
 }
 
 .nameText {
@@ -104,11 +108,12 @@
   display: flex;
   padding: var(--Spacing-sm, 16px) 24px;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
   flex: 1 0 0;
   align-self: stretch;
-  border-right: 1px solid var(--Stroke-2, #d0d7de);
+  /* border-right: 1px solid var(--Stroke-2, #d0d7de); */
   background: var(--Background-1, #fff);
+  border-radius: 0px 0px var(--Spacing-s, 8px) 0px;
 
   /* body medium */
   font-family: "Albert Sans";
@@ -123,5 +128,14 @@
 }
 
 .unassignedText {
-  color: var(--Danger-Emphasis, #b80037);
+  color: var(--Text-1, #60696f);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.addUserIcon {
+  height: 28px;
+  border-radius: 15px;
+  background: var(--Primary, #057e6f);
+  padding: 5px;
 }
