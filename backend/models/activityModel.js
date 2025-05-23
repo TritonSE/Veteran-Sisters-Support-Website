@@ -12,6 +12,7 @@ const activitySchema = new mongoose.Schema(
       enum: ["document", "comment", "assignment", "report", "request", "announcement", "signup"], // Restrict values
       required: true,
     },
+    // list of user id string
     receivers: {
       type: [String],
       required: false,

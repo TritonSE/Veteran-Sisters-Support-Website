@@ -56,20 +56,22 @@ export function VeteranFilesTable({ veteranId, refresh }: VeteranFilesTableProps
     <div>
       <div style={{ fontSize: 20, marginBottom: 20, fontWeight: 500 }}>Documents</div>
       <Tabs
-        OnAll={() => {
-          setSelectedProgram("All");
-        }}
-        OnBattleBuddies={() => {
-          setSelectedProgram("BattleBuddies");
-        }}
-        OnAdvocacy={() => {
-          setSelectedProgram("Advocacy");
-        }}
-        OnOperationWellness={() => {
-          setSelectedProgram("OperationWellness");
-        }}
+        tabs={["All", "Battle Buddies", "Advocacy", "Operation Wellness"]}
+        handlers={[
+          () => {
+            setSelectedProgram("All");
+          },
+          () => {
+            setSelectedProgram("BattleBuddies");
+          },
+          () => {
+            setSelectedProgram("Advocacy");
+          },
+          () => {
+            setSelectedProgram("OperationWellness");
+          },
+        ]}
       />
-
       <div className={styles.documentTable}>
         {filteredFiles.length === 0 ? (
           <NoDocuments />

@@ -2,54 +2,62 @@ import Activity from "../models/activityModel.js";
 import { User } from "../models/userModel.js";
 import { ActiveVolunteers } from "../models/activeVolunteers.js";
 
+export const getActivities = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    let activities;
+    if (user.role == "admin") {
+      activities = await Activity.find({
+        $or: [
+          { receivers: user._id.toString() },
+          { type: "announcement" },
+          { type: "report" },
+          { type: "signup" },
+        ],
+      })
+        .populate("uploader", "firstName lastName role")
+        .sort({ createdAt: -1 })
+        .lean();
+    } else if (user.role == "staff") {
+      activities = await Activity.find({
+        $or: [
+          { receivers: user._id.toString() },
+          { type: "announcement" },
+          { type: "request" },
+          { type: "signup" },
+          { programName: { $in: user.assignedPrograms } },
+        ],
+      })
+        .populate("uploader", "firstName lastName role")
+        .sort({ createdAt: -1 })
+        .lean();
+    } else {
+      activities = await Activity.find({
+        $or: [{ receivers: user._id.toString() }, { type: "announcement" }],
+      })
+        .populate("uploader", "firstName lastName role")
+        .sort({ createdAt: -1 })
+        .lean();
+    }
+    res.status(200).json(activities);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching activities", error: error.message });
+  }
+};
+
 // Return a. Recent 3 unread activities, b. Total count of unread activities
 export const getUnreadActivities = async (req, res) => {
   try {
-    // Commented for future use maybe
-    // const announcements = await Activity.find({ isRead: false, type: "announcement" })
-    //   .populate("uploader", "firstName lastName role")
-    //   .sort({ createdAt: -1 })
-    //   .lean();
-
-    // let otherActivities;
-    // if (user.role == "admin") {
-    //   otherActivities = await Activity.find({
-    //     isRead: false,
-    //     type: { $ne: "announcement" },
-    //     $or: [{ receivers: user._id.toString() }, { type: "report" }, { type: "signup" }],
-    //   })
-    //     .populate("uploader", "firstName lastName role")
-    //     .sort({ createdAt: -1 })
-    //     .lean();
-    // } else if (user.role == "staff") {
-    //   otherActivities = await Activity.find({
-    //     isRead: false,
-    //     type: { $ne: "announcement" },
-    //     $or: [
-    //       { receivers: user._id.toString() },
-    //       { type: "request" },
-    //       { type: "signup" },
-    //       { programName: { $in: user.assignedPrograms } },
-    //     ],
-    //   })
-    //     .populate("uploader", "firstName lastName role")
-    //     .sort({ createdAt: -1 })
-    //     .lean();
-    // } else {
-    //   otherActivities = await Activity.find({
-    //     isRead: false,
-    //     receivers: user._id.toString(),
-    //     type: { $ne: "announcement" },
-    //   })
-    //     .populate("uploader", "firstName lastName role")
-    //     .sort({ createdAt: -1 })
-    //     .lean();
-    // }
-    // const totalUnreadCount = announcements.length + otherActivities.length;
-    // const activities = [...announcements, ...otherActivities].slice(0, 3);
-
     const { userId } = req.params;
     const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
     const announcements = await Activity.find({
       _id: { $in: user.unreadActivities },

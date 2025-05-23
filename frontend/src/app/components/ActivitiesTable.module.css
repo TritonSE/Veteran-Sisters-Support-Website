@@ -1,0 +1,105 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: 24px;
+  flex: 1 0 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.refreshButton:hover {
+  cursor: pointer;
+}
+
+.titleText {
+  color: var(--Text-2, #4d5358);
+
+  /* title medium */
+  font-family: "Albert Sans";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  align-self: stretch;
+  border-radius: var(--Spacing-s, 8px);
+  border: 1px solid var(--Stroke-2, #d0d7de);
+  background: #ffffff;
+  /* border-left: 1px solid var(--Stroke-2, #d0d7de);
+  border-right: 1px solid var(--Stroke-2, #d0d7de);
+  border-bottom: 1px solid var(--Stroke-2, #d0d7de); */
+}
+
+.tableContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.tableItems {
+  border-left: 1px solid var(--Stroke-2, #d0d7de);
+  border-right: 1px solid var(--Stroke-2, #d0d7de);
+  border-bottom: 1px solid var(--Stroke-2, #d0d7de);
+  border-radius: 0px 0px var(--Spacing-s, 8px) var(--Spacing-s, 8px);
+  width: 1100px;
+  background: #fff;
+}
+
+.pageSelect {
+  display: flex;
+  align-items: center;
+  gap: var(--Spacing-sm, 16px);
+  flex-direction: row-reverse;
+  align-self: stretch;
+}
+
+.pageNumber {
+  color: var(--Text-1, #60696f);
+
+  /* body medium */
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.arrowBox {
+  display: flex;
+  padding: 8px var(--Spacing-s, 8px);
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  border-radius: 8px;
+  border: 1px solid var(--Stroke-2, #d0d7de);
+  background: #fff;
+}
+
+.arrowBox:hover {
+  cursor: pointer;
+}
+
+.arrowBoxDisabled {
+  display: flex;
+  padding: 8px var(--Spacing-s, 8px);
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  border-radius: 8px;
+  border: 1px solid var(--Stroke-1, #edf1f5);
+  background: #fff;
+}
