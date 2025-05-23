@@ -40,27 +40,34 @@ export function ActivitiesTableItem({ activityObject, last }: ActivitiesTableIte
 
   return (
     <div className={last ? styles.lastContainer : styles.container}>
-      <div className={styles.info}>
-        <Image
-          id="pfp"
-          width={40}
-          height={40}
-          src="/Veteran.svg"
-          alt="Profile Photo"
-          style={{ float: "left" }}
-        ></Image>
-        <div className={styles.horizontalDiv}>
-          <div className={styles.subtitle}>
-            <span>{activityObject.uploader.firstName}</span>
-            <Role role={activityObject.uploader.role} />
+      {activityObject.type === ActivityType.ANNOUNCEMENT && (
+        <div className={styles.urgentButton}>Urgent</div>
+      )}
+      <div
+        className={`${styles.content} ${activityObject.type === ActivityType.ANNOUNCEMENT ? styles.announcement : ""}`}
+      >
+        <div className={styles.info}>
+          <Image
+            id="pfp"
+            width={40}
+            height={40}
+            src="/Veteran.svg"
+            alt="Profile Photo"
+            style={{ float: "left" }}
+          ></Image>
+          <div className={styles.horizontalDiv}>
+            <div className={styles.subtitle}>
+              <span>{activityObject.uploader.firstName}</span>
+              <Role role={activityObject.uploader.role} />
+            </div>
+            <div>{getActivityMessage(activityObject)}</div>
+            {[ActivityType.REPORT, ActivityType.ANNOUNCEMENT].includes(activityObject.type) && (
+              <p className={styles.description}>{activityObject.description}</p>
+            )}
           </div>
-          <div>{getActivityMessage(activityObject)}</div>
-          {[ActivityType.REPORT, ActivityType.ANNOUNCEMENT].includes(activityObject.type) && (
-            <p className={styles.description}>{activityObject.description}</p>
-          )}
         </div>
+        <div style={{ fontWeight: "14px" }}>{activityObject.relativeTime}</div>
       </div>
-      <div style={{ fontWeight: "14px" }}>{activityObject.relativeTime}</div>
     </div>
   );
 }
