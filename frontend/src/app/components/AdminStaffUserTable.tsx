@@ -110,18 +110,6 @@ export function AdminStaffUserTable() {
               handleChangeProgram(AssignedProgram.OPERATION_WELLNESS);
             },
           ]}
-          // OnAll={() => {
-          //   handleChangeProgram(undefined);
-          // }}
-          // OnBattleBuddies={() => {
-          //   handleChangeProgram(AssignedProgram.BATTLE_BUDDIES);
-          // }}
-          // OnAdvocacy={() => {
-          //   handleChangeProgram(AssignedProgram.ADVOCACY);
-          // }}
-          // OnOperationWellness={() => {
-          //   handleChangeProgram(AssignedProgram.OPERATION_WELLNESS);
-          // }}
         />
         <div className={styles.filterSort}>
           <div>Filter by</div>

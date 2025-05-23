@@ -3,7 +3,7 @@ import { APIResult, get } from "./requests";
 export type ActivityObject = {
   _id: string;
   uploader: { firstName: string; lastName: string; role: string };
-  type: "document" | "comment" | "assignment" | "report" | "request" | "announcement" | "signup";
+  type: ActivityType;
   title: string;
   description: string;
   documentName: string;
@@ -12,6 +12,16 @@ export type ActivityObject = {
   createdAt: Date;
   relativeTime: string;
 };
+
+export enum ActivityType {
+  DOCUMENT = "document",
+  COMMENT = "comment",
+  ASSIGNMENT = "assignment",
+  REPORT = "report",
+  REQUEST = "request",
+  ANNOUNCEMENT = "announcement",
+  SIGNUP = "signup",
+}
 
 // Set the relative time (Today OR # days ago OR Dec 12) based on timestamp
 const setRelativeTime = (timestamp: string | Date): string => {

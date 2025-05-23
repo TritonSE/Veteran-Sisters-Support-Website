@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { ActivityObject } from "../api/activities";
+import { ActivityObject, ActivityType } from "../api/activities";
 
 import styles from "./ActivitiesTableItem.module.css";
 import { Role } from "./Role";
@@ -13,7 +13,7 @@ type ActivitiesTableItemProp = {
 export function ActivitiesTableItem({ activityObject, last }: ActivitiesTableItemProp) {
   const getActivityMessage = (activity: ActivityObject) => {
     switch (activity.type) {
-      case "document":
+      case ActivityType.DOCUMENT:
         return `${activity.uploader.firstName} uploaded a new document named "${activity.documentName}" to "${activity.programName
           ?.map((program) => {
             if (program === "battle buddies") return "Battle Buddies";
@@ -21,17 +21,17 @@ export function ActivitiesTableItem({ activityObject, last }: ActivitiesTableIte
             else return "Operation Wellness";
           })
           .join(", ")}"`;
-      case "comment":
+      case ActivityType.COMMENT:
         return `${activity.uploader.firstName} made a comment on "${activity.documentName}"`;
-      case "assignment":
+      case ActivityType.ASSIGNMENT:
         return `You've been assigned a new veteran!`;
-      case "report":
+      case ActivityType.REPORT:
         return `Your report has been resolved.`;
-      case "request":
+      case ActivityType.REQUEST:
         return `You received access to "${activity.documentName}"`;
-      case "announcement":
+      case ActivityType.ANNOUNCEMENT:
         return String(activity.title);
-      case "signup":
+      case ActivityType.SIGNUP:
         return `${activity.uploader.firstName} has signed up as a ${activity.uploader.role}`;
       default:
         return `Unknown Activity by ${activity.uploader.firstName}`;
@@ -55,7 +55,7 @@ export function ActivitiesTableItem({ activityObject, last }: ActivitiesTableIte
             <Role role={activityObject.uploader.role} />
           </div>
           <div>{getActivityMessage(activityObject)}</div>
-          {["report", "announcement"].includes(activityObject.type) && (
+          {[ActivityType.REPORT, ActivityType.ANNOUNCEMENT].includes(activityObject.type) && (
             <p className={styles.description}>{activityObject.description}</p>
           )}
         </div>

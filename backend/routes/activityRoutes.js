@@ -9,6 +9,6 @@ import { authenticateUser } from "../middleware/auth.js";
 const router = express.Router();
 
 router.get("/activities/unread/:userId", authenticateUser, getUnreadActivities);
-router.get("/activities/:userId", /*authenticateUser,*/ getActivities);
+router.get("/activities/:userId", authenticateUser, getActivities);
 
 export default router;

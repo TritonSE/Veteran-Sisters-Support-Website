@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import { ActivityObject, getActivities } from "../api/activities";
+import { ActivityObject, ActivityType, getActivities } from "../api/activities";
 
 import styles from "./ActivitiesTable.module.css";
 import { ActivitiesTableItem } from "./ActivitiesTableItem";
@@ -16,18 +16,50 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
   const [activities, setActivities] = useState<ActivityObject[]>([]);
   const [allActivities, setAllActivities] = useState<ActivityObject[]>([]);
   const [page, setPage] = useState<number>(0);
+  const [refresh, setRefresh] = useState<boolean>(false);
   const pageSize = 4;
+
+  const handleChangeType = (type: ActivityType | undefined) => {
+    if (!type) {
+      setActivities(allActivities);
+    } else {
+      setActivities(allActivities.filter((activity) => activity.type === type));
+    }
+    setPage(0);
+  };
+
   let tabs;
   let handlers;
   if (role === "admin" || role === "staff") {
     tabs = ["All", "Reports", "Requests"];
-    handlers = [() => {}, () => {}, () => {}];
+    handlers = [
+      () => {
+        handleChangeType(undefined);
+      },
+      () => {
+        handleChangeType(ActivityType.REPORT);
+      },
+      () => {
+        handleChangeType(ActivityType.REQUEST);
+      },
+    ];
   } else {
     tabs = ["All", "Documents", "Assignments"];
-    handlers = [() => {}, () => {}, () => {}];
+    handlers = [
+      () => {
+        handleChangeType(undefined);
+      },
+      () => {
+        handleChangeType(ActivityType.DOCUMENT);
+      },
+      () => {
+        handleChangeType(ActivityType.ASSIGNMENT);
+      },
+    ];
   }
 
   useEffect(() => {
+    console.log(refresh);
     getActivities(userId)
       .then((result) => {
         if (result.success) {
@@ -40,20 +72,30 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
       .catch((reason: unknown) => {
         console.error(reason);
       });
-  }, []);
+  }, [refresh]);
 
   return (
     <div className={styles.container}>
-      <div>
+      <div className={styles.header}>
         <span className={styles.titleText}>Activity</span>
+        <Image
+          src="/refresh.svg"
+          alt="Refresh"
+          width={20}
+          height={20}
+          className={styles.refreshButton}
+          onClick={() => {
+            setRefresh(!refresh);
+          }}
+        />
       </div>
       <Tabs tabs={tabs} handlers={handlers} />
       <div className={styles.table}>
-        {activities.slice(page * pageSize, (page + 1) * pageSize).map((activity, idx) => (
+        {activities.slice(page * pageSize, (page + 1) * pageSize).map((activity, idx, list) => (
           <ActivitiesTableItem
             key={activity._id}
             activityObject={activity}
-            last={(idx + 1) % pageSize === 0}
+            last={(idx + 1) % pageSize === 0 || idx === list.length - 1}
           />
         ))}
       </div>

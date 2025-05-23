@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { Suspense, useState } from "react";
+// import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 import { ActivitiesTable } from "../components/ActivitiesTable";
 import { NavBar } from "../components/NavBar";

@@ -7,6 +7,16 @@
   flex: 1 0 0;
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.refreshButton:hover {
+  cursor: pointer;
+}
+
 .titleText {
   color: var(--Text-2, #4d5358);
 
