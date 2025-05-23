@@ -246,6 +246,7 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
                 {profileRenderingContext.showUserList && (
                   <UserList
                     userProfile={userProfile}
+                    minimized={false}
                     title={profileRenderingContext.userListTitle}
                     callback={setOpenProgramChange}
                     isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}

@@ -282,7 +282,7 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
                 </div>
                 <a
                   className={styles.profileLink}
-                  href={`/profile/${selectedVolunteerOption[0].value._id ?? ""}`}
+                  href={`/profile/?userId=${selectedVolunteerOption[0].value._id ?? ""}`}
                 >
                   View Profile
                 </a>

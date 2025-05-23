@@ -5,10 +5,12 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between; /* push leftDiv and mainDiv apart */
-  align-items: center;
   width: 1024px;
   height: 735.6px;
-  margin: 0 auto; /* center on viewport */
+  position: fixed;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%);
   gap: var(--Spacing-md, 24px);
   box-sizing: border-box;
   padding: 16px 0; /* optional top/bottom breathing room */

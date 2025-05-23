@@ -8,6 +8,7 @@ import {
 import { useAuth } from "../contexts/AuthContext";
 
 import styles from "./DocumentProfileView.module.css";
+import { NavBar } from "./NavBar";
 import NavigateBack from "./NavigateBack";
 import { ProfileHeader } from "./ProfileHeader";
 import ProfileInterests from "./ProfileInterests";
@@ -200,27 +201,31 @@ export function DocumentProfileView({ profileId }: DocumentProfileViewProps) {
   }
 
   return (
-    <div className={styles.profileView}>
-      <NavigateBack />
-      <div className={styles.leftDiv}>
-        <ProfileHeader
-          userProfile={userProfile}
-          showDocuments={false}
-          minimized={true}
-          isPersonalProfile={false}
-          isProgramAndRoleEditable={false}
-        />
-        <UserList
-          userProfile={userProfile}
-          title="Assigned Volunteers"
-          isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
-          editable={false}
-        />
-        <ProfileInterests minimized={true} interests={userProfile?.roleSpecificInfo?.interests} />
+    <>
+      <NavBar />
+      <div className={styles.profileView}>
+        <div className={styles.leftDiv}>
+          <NavigateBack />
+          <ProfileHeader
+            userProfile={userProfile}
+            showDocuments={false}
+            minimized={true}
+            isPersonalProfile={false}
+            isProgramAndRoleEditable={false}
+          />
+          <UserList
+            userProfile={userProfile}
+            minimized={true}
+            title="Assigned Volunteers"
+            isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
+            editable={false}
+          />
+          <ProfileInterests minimized={true} interests={userProfile?.roleSpecificInfo?.interests} />
+        </div>
+        <div className={styles.mainDiv}>
+          <VeteranFilesTable veteranId={userId} refresh={false} />
+        </div>
       </div>
-      <div className={styles.mainDiv}>
-        <VeteranFilesTable veteranId={userId} refresh={false} />
-      </div>
-    </div>
+    </>
   );
 }

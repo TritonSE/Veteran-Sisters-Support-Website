@@ -12,11 +12,12 @@ export function UserList(params: {
   userProfile: UserProfileType | undefined;
   title: string;
   editable: boolean;
+  minimized: boolean;
   isProgramAndRoleEditable: boolean;
   setMessage?: (message: string) => void;
   callback?: (openProgramChange: boolean) => void;
 }) {
-  const { title, userProfile, callback, isProgramAndRoleEditable, editable } = params;
+  const { title, userProfile, callback, isProgramAndRoleEditable, editable, minimized } = params;
   const userPrograms = Object.fromEntries(
     userProfile?.assignedPrograms?.map((program) => [program, []]) ?? [],
   ) as Record<string, UserProfileType[]>;
@@ -110,7 +111,9 @@ export function UserList(params: {
         />
       )}
       <div className={styles.userListHeader}>
-        <div className={styles.userListHeading}>{title}</div>
+        <div className={!minimized ? styles.userListHeading : styles.userListHeadingMin}>
+          {title}
+        </div>
       </div>
       <div className={styles.userListContent}>
         {userProfile?.assignedPrograms && userProfile?.assignedPrograms?.length > 0 ? (

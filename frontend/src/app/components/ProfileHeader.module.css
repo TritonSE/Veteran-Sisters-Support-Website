@@ -75,32 +75,38 @@
   gap: var(--Spacing-s, 8px);
 }
 
-/* minimized overrides */
-.profileHeader.minimized {
-  /* override the 1024px */
-  width: 100%;
-
-  /* shrink padding */
-  padding: 12px;
-
-  /* allow it to size to its sidebar container */
-  max-width: none;
+.minLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px; /* space between each “row” */
+  align-items: flex-start;
+  border-radius: 8px;
+  border: 1px solid var(--Stroke-2, #d0d7de);
+  padding: 20px;
 }
 
-.profileHeader.minimized .profileContent {
-  gap: 12px;
+.minLayout .userFullName {
+  color: var(--Text-3, #3a3c3d);
+
+  /* title medium */
+  font-family: "Albert Sans";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
-.profileHeader.minimized .userFullName {
-  font-size: 18px;
+/* each “row” in minimized view */
+.minRow {
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  align-items: center;
+  font-size: 13px;
 }
 
-.profileHeader.minimized .userMetadata,
-.profileHeader.minimized .userMetadata .metadataSubsection * {
-  font-size: 12px;
-}
-
-.profileHeader.minimized img {
-  width: 12px !important;
-  height: 12px !important;
+.rowElement {
+  font-size: 13px;
 }
