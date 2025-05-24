@@ -12,7 +12,7 @@ export type Comment = {
 export type FileObject = {
   _id: string;
   filename: string;
-  uploaderId: string;
+  uploader: UserProfile;
   comments: Comment[];
   programs: string[];
 };

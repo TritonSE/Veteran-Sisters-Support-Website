@@ -19,21 +19,21 @@ export const queryActiveVolunteersVeteranByEmail = async (req, res) => {
 };
 
 export const queryActiveVolunteersVolunteerByEmail = async (req, res) => {
-    try {
-      const { email } = req.params;
-      let query = { volunteer: email };
-  
-      const filteredVolunteers = await ActiveVolunteers.find(query)
-        .populate("volunteerUser", "firstName lastName email")
-        .populate("veteranUser", "firstName lastName email")
-        .exec();
-  
-      res.json(filteredVolunteers);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  };
+  try {
+    const { email } = req.params;
+    let query = { volunteer: email };
+
+    const filteredVolunteers = await ActiveVolunteers.find(query)
+      .populate("volunteerUser", "firstName lastName email")
+      .populate("veteranUser", "firstName lastName email")
+      .exec();
+
+    res.json(filteredVolunteers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 //add a volunteer using their user email, program, and assigned veteran email
 export const addVolunteer = async (req, res) => {

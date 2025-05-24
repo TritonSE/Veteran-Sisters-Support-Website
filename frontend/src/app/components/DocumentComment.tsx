@@ -10,7 +10,7 @@ import {
   editCommentObject,
   editFileObject,
 } from "../api/fileApi";
-import { AssignedProgram as ProgramEnum, UserProfile } from "../api/profileApi";
+import { AssignedProgram as ProgramEnum, Role as RoleEnum, UserProfile } from "../api/profileApi";
 
 import styles from "./DocumentComment.module.css";
 import { Program } from "./Program";
@@ -162,26 +162,30 @@ export function DocumentComment({
               className={styles.commentDate}
             >{`${formatDate(comment.datePosted)} ${comment.edited ? "(edited)" : ""}`}</div>
             <div className={styles.commentBottomIcons}>
-              <Image
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  setSelected(true);
-                }}
-                src="/pencil_icon_2.svg"
-                width={16}
-                height={16}
-                alt="edit"
-              />
-              <Image
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  deleteCommentHandler(comment._id, commentKey);
-                }}
-                src="/trash_icon.svg"
-                width={16}
-                height={16}
-                alt="trash"
-              />
+              {(user._id === comment.commenterId._id || user.role === RoleEnum.ADMIN) && (
+                <>
+                  <Image
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      if (user._id === comment.commenterId._id) setSelected(true);
+                    }}
+                    src="/pencil_icon_2.svg"
+                    width={16}
+                    height={16}
+                    alt="edit"
+                  />
+                  <Image
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      deleteCommentHandler(comment._id, commentKey);
+                    }}
+                    src="/trash_icon.svg"
+                    width={16}
+                    height={16}
+                    alt="trash"
+                  />
+                </>
+              )}
             </div>
           </div>
         </div>

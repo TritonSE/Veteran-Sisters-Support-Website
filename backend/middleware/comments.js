@@ -20,8 +20,8 @@ export const authenticateCommentPermissions = async (req, res, next) => {
     const isCommentCreator = comment.commenterId.toString() === user._id.toString();
 
     if (!isAdmin && !isCommentCreator) {
-      return res.status(403).json({ 
-        error: "Unauthorized: Only the comment creator or an admin can perform this action" 
+      return res.status(403).json({
+        error: "Unauthorized: Only the comment creator or an admin can perform this action",
       });
     }
     next();

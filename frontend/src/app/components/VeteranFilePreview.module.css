@@ -17,3 +17,53 @@
   overflow: hidden;
   align-items: center;
 }
+
+.blur {
+  height: 250px;
+  width: 220px;
+  position: absolute;
+  border-radius: 4px;
+  border: 1px solid var(--Stroke-3, #bdc9d2);
+  /* background: rgb(190, 188, 188); */
+  background: rgba(155, 156, 156, 0.4);
+  backdrop-filter: blur(2px);
+}
+
+.coloredBlur {
+  /* cursor: pointer; */
+  height: 250px;
+  width: 220px;
+  position: absolute;
+  border-radius: 4px;
+  border: 1px solid var(--Stroke-3, #bdc9d2);
+  /* background: rgb(190, 188, 188); */
+  background: rgba(5, 126, 111, 0.4);
+  backdrop-filter: blur(2px);
+}
+
+.lock {
+  position: absolute;
+  left: 94px;
+  top: 100px;
+}
+
+.requestButton {
+  position: absolute;
+  left: 45px;
+  top: 110px;
+  display: flex;
+  padding: 8px var(--Spacing-sm, 16px);
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  background: var(--Primary, #057e6f);
+  color: var(--Neutral-Base-White, #fafafa);
+  /* body medium */
+  font-family: "Albert Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  cursor: pointer;
+}
