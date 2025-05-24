@@ -44,8 +44,7 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
     if (user?.role === RoleEnum.VOLUNTEER || user?.role === RoleEnum.STAFF) {
       for (const assignedUser of assignedUsers ?? []) {
         if (assignedUser.veteranUser._id === file.uploader._id) {
-          console.log(file.programs);
-          return file.programs.includes(assignedUser.assignedProgram);
+          return !file.programs.includes(assignedUser.assignedProgram);
         }
       }
       return true;
