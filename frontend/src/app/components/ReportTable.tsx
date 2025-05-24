@@ -104,7 +104,7 @@ export default function ReportTable() {
 
       {reports.length > 8 && (
         <div className={styles.pageSelect}>
-          {page === Math.floor(reports.length / pageSize) ? (
+          {page === Math.floor((reports.length - 1) / pageSize) ? (
             <div className={styles.arrowBoxDisabled}>
               <Image src="/caret_right_disabled.svg" alt="Right Arrow" width={20} height={20} />
             </div>
