@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React, { useState } from "react";
 
 import styles from "./CustomDatePicker.module.css";
@@ -73,19 +74,25 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ date, onChange }) =
   return (
     <div className={styles.calendarContainer}>
       <div className={styles.calendarHeader}>
-        <img
-          src="../green-caret-left.svg"
+        <Image
+          src="/green-caret-left.svg"
+          alt="Left Arrow"
+          width={12}
+          height={13}
           style={{ cursor: "pointer" }}
           onClick={handlePrevMonth}
-        ></img>
+        ></Image>
         <span className={styles.monthName}>
           {currentDate.toLocaleString("default", { month: "long", year: "numeric" })}
         </span>
-        <img
-          src="../green-caret-right.svg"
+        <Image
+          src="/green-caret-right.svg"
+          alt="Right Arrow"
+          width={12}
+          height={13}
           style={{ cursor: "pointer" }}
           onClick={handleNextMonth}
-        ></img>
+        ></Image>
       </div>
       <hr className={styles.horizontalLine}></hr>
       <div className={styles.dayLine}>

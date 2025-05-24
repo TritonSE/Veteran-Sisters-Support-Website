@@ -29,6 +29,7 @@
   background: var(--Primary, #057e6f);
 
   color: var(--Neutral-Base-White, #fafafa);
+  border: none;
 
   /* body medium */
   font-family: "Albert Sans";
