@@ -31,8 +31,14 @@ const ChangeRoleDialog = ({ email, firstName, role, onNext, onCancel }: ChangeRo
 
   // update available roles based on initial role
   useEffect(() => {
-    if (role === RoleEnum.STAFF || role === RoleEnum.VETERAN) {
-      setAvailableRoles(AVAILABLE_ROLES.filter((opt) => opt.label === "Volunteer"));
+    if (role === RoleEnum.STAFF) {
+      setAvailableRoles(
+        AVAILABLE_ROLES.filter((opt) => opt.label === "Veteran" || opt.label === "Volunteer"),
+      );
+    } else if (role === RoleEnum.VETERAN) {
+      setAvailableRoles(
+        AVAILABLE_ROLES.filter((opt) => opt.label === "Volunteer" || opt.label === "Staff"),
+      );
     } else if (role === RoleEnum.VOLUNTEER) {
       setAvailableRoles(
         AVAILABLE_ROLES.filter((opt) => opt.label === "Veteran" || opt.label === "Staff"),
