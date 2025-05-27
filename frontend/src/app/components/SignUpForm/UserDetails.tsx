@@ -8,7 +8,7 @@ import { Role } from "../Role";
 import styles from "./page.module.css";
 
 import { Role as RoleEnum } from "@/app/api/profileApi";
-import { getUserProfileByEmail } from "@/app/api/profileApi";
+import { checkIfUserEmailExists } from "@/app/api/profileApi";
 import { BackButton } from "@/app/components/BackButton";
 import { Button } from "@/app/components/Button";
 import ProgressBar from "@/app/components/ProgressBar";
@@ -98,9 +98,9 @@ export default function UserDetails({
       setFormErrors((prev) => ({ ...prev, email: "Please enter a valid email address." }));
       hasError = true;
     }
-    const doesEmailExist = await getUserProfileByEmail(email);
+    const doesEmailExist = await checkIfUserEmailExists(email);
     // User email already exists in mongo DB
-    if (doesEmailExist.success) {
+    if (doesEmailExist.success && doesEmailExist.data) {
       setFormErrors((prevErrors) => ({
         ...prevErrors,
         alreadyExists: "An account with this email already exists.",
