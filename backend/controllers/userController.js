@@ -165,7 +165,7 @@ export const updateUser = async (req, res) => {
       }
       const userIndex = veteran.assignedUsers.indexOf(email);
       const veteranIndex = user.assignedUsers.indexOf(veteranEmail);
-            
+
       if (veteranIndex > -1) {
         user.assignedUsers.splice(veteranIndex, 1);
       } else {
@@ -218,7 +218,7 @@ export const getVolunteersByProgram = async (req, res) => {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
 
 export const getVeteransByProgram = async (req, res) => {
   try {
@@ -229,8 +229,7 @@ export const getVeteransByProgram = async (req, res) => {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
-}
-
+};
 
 export const updateUserId = async (req, res) => {
   try {
@@ -264,7 +263,7 @@ export const updateUserId = async (req, res) => {
 // Mark activity as read
 export const markActivityRead = async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userId = req.params.userId;
     const { activityId } = req.body;
     const updatedUser = await User.findByIdAndUpdate(userId, {
       $pull: { unreadActivities: activityId },

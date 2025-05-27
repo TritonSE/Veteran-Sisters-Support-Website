@@ -5,10 +5,16 @@ import {
   getActivities,
 } from "../controllers/activityController.js";
 import { authenticateUser } from "../middleware/auth.js";
+import { authenticateProfilePermissions } from "../middleware/profile.js";
 
 const router = express.Router();
 
-router.get("/activities/unread/:userId", authenticateUser, getUnreadActivities);
-router.get("/activities/:userId", authenticateUser, getActivities);
+router.get(
+  "/activities/unread/:userId",
+  authenticateUser,
+  authenticateProfilePermissions,
+  getUnreadActivities,
+);
+router.get("/activities/:userId", authenticateUser, authenticateProfilePermissions, getActivities);
 
 export default router;
