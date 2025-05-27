@@ -20,6 +20,7 @@ type OnboardingInterestsProps = {
   setFormErrors: React.Dispatch<React.SetStateAction<Record<string, string | undefined>>>;
   onSubmit: (e: MouseEvent<HTMLButtonElement>) => void;
   onPrevious: () => void;
+  isVeteran: boolean;
 };
 
 export default function OnboardingInterests({
@@ -29,6 +30,7 @@ export default function OnboardingInterests({
   setFormErrors,
   onSubmit,
   onPrevious,
+  isVeteran,
 }: OnboardingInterestsProps) {
   const handleToggleOption = (option: string) => {
     setSelectedOptions((prevOptions: string[]) => {
@@ -69,7 +71,7 @@ export default function OnboardingInterests({
             <BackButton handlePrevious={onPrevious} />
             <ProgressBar percentCompleted={75} />
             <div style={{ width: "80px", marginBottom: "20px" }}>
-              <Role role={RoleEnum.VOLUNTEER} />
+              <Role role={isVeteran ? RoleEnum.VETERAN : RoleEnum.VOLUNTEER} />
             </div>
             <div className={styles.title}>
               What are your interests? <a style={{ color: "#B80037" }}> *</a>

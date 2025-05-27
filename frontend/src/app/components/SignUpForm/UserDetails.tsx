@@ -310,7 +310,7 @@ export default function UserDetails({
           {formErrors.zip && <p className={styles.error}>{formErrors.zip}</p>}
           {formErrors.zipValid && <p className={styles.error}>{formErrors.zipValid}</p>}
           {showDropdown && (
-            <div style={{ marginTop: "16px" }}>
+            <div>
               <label htmlFor="address" className={styles.formEntry}>
                 Street address
               </label>

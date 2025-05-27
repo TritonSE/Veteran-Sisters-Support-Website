@@ -234,6 +234,7 @@ export default function SignUpForm() {
             setFormErrors={setFormErrors}
             onSubmit={(e) => void handleSignup(e)}
             onPrevious={handlePrevious}
+            isVeteran={isVeteran}
           />
         );
       default:

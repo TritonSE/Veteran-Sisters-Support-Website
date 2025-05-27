@@ -3,8 +3,11 @@
 import Image from "next/image";
 import React, { MouseEvent, useEffect, useRef, useState } from "react";
 
+import { Role } from "../Role";
+
 import styles from "./page.module.css";
 
+import { Role as RoleEnum } from "@/app/api/profileApi";
 import { BackButton } from "@/app/components/BackButton";
 import { Button } from "@/app/components/Button";
 import CustomDropdown from "@/app/components/CustomDropdown";
@@ -84,6 +87,9 @@ export default function ServiceDetails({
             <BackButton handlePrevious={onPrevious} />
             <ProgressBar percentCompleted={50} />
           </div>
+          <div style={{ width: "80px", marginBottom: "20px" }}>
+            <Role role={RoleEnum.VETERAN} />
+          </div>
           <div className={styles.title}>Tell Us About Your Service</div>
           <div className={styles.description}>
             This helps us match you with the right benefits and community.
@@ -126,7 +132,6 @@ export default function ServiceDetails({
               setBranch(option);
             }}
             selected={branch}
-            marginLeft="90%"
           />
           <label htmlFor="status" className={styles.formEntry}>
             Current military status<a style={{ color: "#B80037" }}> *</a>
@@ -148,7 +153,6 @@ export default function ServiceDetails({
               setMilitaryStatus(option);
             }}
             selected={militaryStatus}
-            marginLeft="90%"
           />
           <label htmlFor="gender" className={styles.formEntry}>
             Gender<a style={{ color: "#B80037" }}> *</a>
@@ -163,7 +167,6 @@ export default function ServiceDetails({
               setGender(option);
             }}
             selected={gender}
-            marginLeft="90%"
           />
           <Button
             label="Continue"
