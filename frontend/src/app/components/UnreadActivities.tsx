@@ -152,7 +152,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                     </button>
                   </div>
 
-                  {["report", "announcement"].includes(activity.type) && (
+                  {["report", "announcement", "comment"].includes(activity.type) && (
                     <p className={styles.description}>{activity.description}</p>
                   )}
                 </div>

@@ -99,10 +99,10 @@ export const createActivity = async (activityData) => {
       return res.status(400).json({ message: "programName is required for Document type" });
     }
 
-    if (["report", "announcement"].includes(type) && !description) {
+    if (["report", "announcement", "comment"].includes(type) && !description) {
       return res
         .status(400)
-        .json({ message: "description is required for Report and Announcement type" });
+        .json({ message: "description is required for Report, Announcement, and Comment type" });
     }
 
     if (type === "announcement" && !title) {
@@ -127,6 +127,12 @@ export const createActivity = async (activityData) => {
       type,
     });
     const savedActivity = await newActivity.save();
+    if (!!receivers) {
+      await User.updateMany(
+        { _id: { $in: receivers } },
+        { $push: { unreadActivities: savedActivity._id.toString() } },
+      );
+    }
     return savedActivity;
     // res.status(201).json(newActivity);
   } catch (error) {
@@ -158,10 +164,6 @@ export const createDocument = async ({ uploader, filename, programs }) => {
     };
 
     const savedActivity = await createActivity(newActivity);
-    await User.updateMany(
-      { _id: { $in: receivers } },
-      { $push: { unreadActivities: savedActivity._id.toString() } },
-    );
     return savedActivity;
   } catch (error) {
     throw new Error("Error creating Document activity: " + error.message);
@@ -186,12 +188,14 @@ export const createAnnouncement = async ({ uploader, title, description }) => {
 };
 
 // Create activity type "comment" by calling createActivity
-export const createComment = async ({ uploader, documentName }) => {
+export const createComment = async ({ comment, documentName, documentUploader }) => {
   try {
     const newActivity = {
-      uploader,
+      uploader: comment.commenterId,
       type: "comment",
+      receivers: [documentUploader],
       documentName,
+      description: comment.comment,
     };
 
     const savedActivity = await createActivity(newActivity);

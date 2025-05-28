@@ -25,7 +25,7 @@ const activitySchema = new mongoose.Schema(
     description: {
       type: String,
       required: function () {
-        return ["report", "announcement"].includes(this.type);
+        return ["report", "announcement", "comment"].includes(this.type);
       },
     },
     documentName: {
