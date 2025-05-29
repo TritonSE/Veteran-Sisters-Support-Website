@@ -48,7 +48,7 @@ export const NavBar = () => {
                     : styles.unselectedBackground
                 }
               >
-                <Image src="/home.svg" alt="Home" width={17.778} height={17.778}></Image>
+                <Image src="/bell.svg" alt="Home" width={32} height={32}></Image>
               </div>
             </div>
           </Link>

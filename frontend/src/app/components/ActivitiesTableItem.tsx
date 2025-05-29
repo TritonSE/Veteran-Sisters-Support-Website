@@ -61,9 +61,9 @@ export function ActivitiesTableItem({ activityObject, last }: ActivitiesTableIte
               <Role role={activityObject.uploader.role} />
             </div>
             <div>{getActivityMessage(activityObject)}</div>
-            {[ActivityType.REPORT, ActivityType.ANNOUNCEMENT].includes(activityObject.type) && (
-              <p className={styles.description}>{activityObject.description}</p>
-            )}
+            {[ActivityType.REPORT, ActivityType.ANNOUNCEMENT, ActivityType.COMMENT].includes(
+              activityObject.type,
+            ) && <p className={styles.description}>{activityObject.description}</p>}
           </div>
         </div>
         <div style={{ fontWeight: "14px" }}>{activityObject.relativeTime}</div>
