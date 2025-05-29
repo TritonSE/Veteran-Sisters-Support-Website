@@ -83,7 +83,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
               id="arrowUp"
               width={35}
               height={35}
-              src="ic_round-arrow-drop-up.svg"
+              src="/ic_round-arrow-drop-up.svg"
               alt="Dropdown arrow"
               style={{
                 objectFit: "contain",
