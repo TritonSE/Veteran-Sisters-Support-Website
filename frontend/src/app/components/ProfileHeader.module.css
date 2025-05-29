@@ -51,7 +51,7 @@
 
 .profileHeader .userMetadata .metadataSubsection * {
   width: fit-content;
-  color: var(--Text-1, #60696f);
+  /* color: var(--Text-1, #60696f); */
   /* body large */
   font-family: "Albert Sans";
   font-size: 16px;
@@ -66,7 +66,7 @@
 
 .profileHeader .smallMetadata {
   font-size: 14px;
-  color: green;
+  color: #057e6f;
 }
 
 .profileHeader .profileContentControls {
@@ -85,6 +85,7 @@
   border-radius: 8px;
   border: 1px solid var(--Stroke-2, #d0d7de);
   padding: 20px;
+  background-color: #fff;
 }
 
 .minLayout .userFullName {

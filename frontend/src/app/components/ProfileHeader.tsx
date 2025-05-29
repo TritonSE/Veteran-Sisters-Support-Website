@@ -70,12 +70,12 @@ export function ProfileHeader(params: {
           </div>
 
           {/* 5) Email */}
-          <div className={styles.minRow} style={{ color: "green" }}>
+          <div className={styles.minRow} style={{ color: "#057E6F" }}>
             {userProfile?.email}
           </div>
 
           {/* 6) Phone */}
-          <div className={styles.minRow} style={{ color: "green" }}>
+          <div className={styles.minRow} style={{ color: "#057E6F" }}>
             {userProfile?.phoneNumber}
           </div>
         </div>
