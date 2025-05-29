@@ -5,15 +5,18 @@ import { ActivityObject, getUnreadActivities } from "../api/activities";
 import { markActivityRead } from "../api/userApi";
 
 import styles from "./UnreadActivities.module.css";
+import { Role } from "../api/profileApi";
 
 type UnreadActivitiesProps = {
   userId: string;
+  userRole: Role;
   isOpen: boolean;
   toggleDropdown: () => void;
 };
 
 export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
   userId,
+  userRole,
   isOpen,
   toggleDropdown,
 }) => {
@@ -132,11 +135,25 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                   ></Image>
                   <div className={styles.horizontalDiv}>
                     <div className={styles.subtitle}>
-                      {activity.uploader.firstName}{" "}
-                      <span className={styles.label}>
-                        {activity.uploader.role.charAt(0).toUpperCase() +
-                          activity.uploader.role.slice(1)}
-                      </span>
+                      {activity.type !== "assignment" ? (
+                        <>
+                          {activity.uploader.firstName}{" "}
+                          <span className={styles.label}>
+                            {activity.uploader.role.charAt(0).toUpperCase() +
+                              activity.uploader.role.slice(1)}
+                          </span>
+                        </>
+                      ) : userRole === Role.VOLUNTEER ? (
+                        <>
+                          {activity.assignmentInfo.veteranId.firstName}{" "}
+                          <span className={styles.label}>Veteran</span>
+                        </>
+                      ) : (
+                        <>
+                          {activity.assignmentInfo.volunteerId.firstName}{" "}
+                          <span className={styles.label}>Volunteer</span>
+                        </>
+                      )}
                     </div>
                     <div style={{ fontWeight: "14px" }}>{activity.relativeTime}</div>
                   </div>

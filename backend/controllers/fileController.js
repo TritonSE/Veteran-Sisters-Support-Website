@@ -65,17 +65,20 @@ export const editFileById = async (req, res, next) => {
     const file = await FileObject.findOneAndUpdate({ _id: id }, update, { new: true })
       .populate("uploader")
       .populate([{ path: "comments", populate: [{ path: "commenterId" }] }]);
+
     if (!!update.comments && update.comments.length > originalFile.comments.length) {
       const originalComments = originalFile.comments.map((comment) => comment.toString());
       const newComments = update.comments.filter(
         (comment) => !originalComments.includes(comment._id),
       );
       newComments.forEach((comment) => {
-        createComment({
-          comment: comment,
-          documentName: file.filename,
-          documentUploader: file.uploader._id.toString(),
-        });
+        if (comment.commenterId !== file.uploader._id.toString()) {
+          createComment({
+            comment: comment,
+            documentName: file.filename,
+            documentUploader: file.uploader._id.toString(),
+          });
+        }
       });
     }
     res.status(200).json(file);

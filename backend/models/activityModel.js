@@ -40,6 +40,22 @@ const activitySchema = new mongoose.Schema(
         return this.type === "document";
       },
     },
+    assignmentInfo: {
+      volunteerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: function () {
+          this.type === "assignment";
+        },
+      },
+      veteranId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: function () {
+          this.type === "assignment";
+        },
+      },
+    },
   },
   { timestamps: true }, // Will create createdAt timestamp
 );

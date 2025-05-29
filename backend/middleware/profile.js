@@ -58,6 +58,7 @@ export const authenticateStaffOrAdmin = async (req, res, next) => {
     if (user.role !== "staff" && user.role !== "admin") {
       return res.status(403).json({ error: "You do not have permission!" });
     }
+    req.user.userId = user._id.toString();
     next();
   } catch (error) {
     console.error("Authentication error:", error);

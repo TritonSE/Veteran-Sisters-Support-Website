@@ -64,6 +64,8 @@ export const getUnreadActivities = async (req, res) => {
       type: { $ne: "announcement" },
     })
       .populate("uploader", "firstName lastName role")
+      .populate("assignmentInfo.volunteerId", "firstName lastName")
+      .populate("assignmentInfo.veteranId", "firstName lastName")
       .sort({ createdAt: -1 })
       .lean();
 
@@ -82,8 +84,16 @@ export const getUnreadActivities = async (req, res) => {
 // Helper function: Create new activity
 export const createActivity = async (activityData) => {
   try {
-    const { uploader, type, receivers, title, description, documentName, programName } =
-      activityData;
+    const {
+      uploader,
+      type,
+      receivers,
+      title,
+      description,
+      documentName,
+      programName,
+      assignmentInfo,
+    } = activityData;
 
     if (!uploader || !type) {
       return res.status(400).json({ message: "Uploader ID, and type are required" });
@@ -123,6 +133,7 @@ export const createActivity = async (activityData) => {
       description,
       documentName,
       programName,
+      assignmentInfo,
       createdAt: new Date(),
       type,
     });
@@ -206,11 +217,16 @@ export const createComment = async ({ comment, documentName, documentUploader })
 };
 
 // Create activity type "assignment" by calling createActivity
-export const createAssignment = async ({ uploader }) => {
+export const createAssignment = async ({ uploader, veteranId, volunteerId }) => {
   try {
     const newActivity = {
       uploader,
       type: "assignment",
+      receivers: [veteranId, volunteerId],
+      assignmentInfo: {
+        veteranId: veteranId,
+        volunteerId: volunteerId,
+      },
     };
 
     const savedActivity = await createActivity(newActivity);

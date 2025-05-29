@@ -1,4 +1,5 @@
 import { ActiveVolunteers } from "../models/activeVolunteers.js";
+import { createAssignment } from "./activityController.js";
 
 //query active volunteers by program, veteran, or get all active volunteers
 export const queryActiveVolunteersVeteranByEmail = async (req, res) => {
@@ -19,21 +20,21 @@ export const queryActiveVolunteersVeteranByEmail = async (req, res) => {
 };
 
 export const queryActiveVolunteersVolunteerByEmail = async (req, res) => {
-    try {
-      const { email } = req.params;
-      let query = { volunteer: email };
-  
-      const filteredVolunteers = await ActiveVolunteers.find(query)
-        .populate("volunteerUser", "firstName lastName email")
-        .populate("veteranUser", "firstName lastName email")
-        .exec();
-  
-      res.json(filteredVolunteers);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  };
+  try {
+    const { email } = req.params;
+    let query = { volunteer: email };
+
+    const filteredVolunteers = await ActiveVolunteers.find(query)
+      .populate("volunteerUser", "firstName lastName email")
+      .populate("veteranUser", "firstName lastName email")
+      .exec();
+
+    res.json(filteredVolunteers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 //add a volunteer using their user email, program, and assigned veteran email
 export const addVolunteer = async (req, res) => {
@@ -60,6 +61,12 @@ export const addVolunteer = async (req, res) => {
       assignedVeteran: veteranEmail,
       volunteerUser: volunteerId,
       veteranUser: veteranId,
+    });
+
+    await createAssignment({
+      uploader: req.user.userId,
+      veteranId: veteranId,
+      volunteerId: volunteerId,
     });
 
     res.status(201).json(newVolunteer);
