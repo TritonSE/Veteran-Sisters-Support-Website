@@ -20,11 +20,18 @@ export function ProfileHeader(params: {
 }) {
   const { userProfile, showDocuments, minimized, isProgramAndRoleEditable, isPersonalProfile } =
     params;
+  const branchOfService = userProfile?.roleSpecificInfo?.serviceInfo?.branchOfService;
+  console.log("Branch of service: ", branchOfService);
+  const militaryStatus = userProfile?.roleSpecificInfo?.serviceInfo?.currentMilitaryStatus;
+  console.log("Miliary status: ", militaryStatus);
   const fullName = `${userProfile?.firstName ?? "Unknown"} ${userProfile?.lastName ?? "Unknown"}`;
-  const joinedText = userProfile?.yearJoined?.toString() ?? "Unknown";
-  const ageText = `Age: ${userProfile?.age?.toString() ?? "Unknown"}`;
-  const genderText = userProfile?.gender ?? "Unknown";
-  const zipCodeText = userProfile?.zipCode?.toString() ?? "Unknown";
+  const joinedText = userProfile?.yearJoined?.toString() ?? "Year Joined: Unknown";
+  const ageText = `Age: ${userProfile?.age?.toString() ?? " Age: Unknown"}`;
+  const genderText =
+    userProfile?.gender && userProfile.gender !== "" ? userProfile.gender : "Gender: Unknown";
+  const zipCodeText = userProfile?.zipCode?.toString() ?? "Zipcode: Unknown";
+  const serviceBranchText = branchOfService ?? "Service Branch: Unknown";
+  const militaryStatusText = militaryStatus ?? "Military Status: Unknown";
   const assignedPrograms = userProfile?.assignedPrograms?.sort();
   const router = useRouter();
   const pathname = usePathname();
@@ -60,13 +67,9 @@ export function ProfileHeader(params: {
           <div className={styles.minRow}>
             <div className={styles.rowElement}>{zipCodeText}</div>
             <Image src="/vertical_divider.svg" width={20} height={20} alt="divider" />
-            <div className={styles.rowElement}>
-              {userProfile?.roleSpecificInfo?.serviceInfo?.branchOfService}
-            </div>
+            <div className={styles.rowElement}>{serviceBranchText}</div>
             <Image src="/vertical_divider.svg" width={20} height={20} alt="divider" />
-            <div className={styles.rowElement}>
-              {userProfile?.roleSpecificInfo?.serviceInfo?.currentMilitaryStatus}
-            </div>
+            <div className={styles.rowElement}>{militaryStatusText}</div>
           </div>
 
           {/* 5) Email */}
