@@ -8,7 +8,6 @@ import {
 } from "../api/profileApi";
 import { useAuth } from "../contexts/AuthContext";
 
-import { NoNotes } from "./EmptyStates";
 import { ProfilePicture } from "./ProfilePicture";
 import styles from "./VolunteerNotes.module.css";
 
@@ -43,10 +42,14 @@ export function VolunteerNotes({ profileUserId }: { profileUserId: string }) {
       setProfileNotesChanged(!profileNotesChanged);
     }
   };
+
+  const hasNotes = Array.isArray(profileNotes) && profileNotes.length > 0;
+  console.log("Has notes: ", hasNotes);
+
   return (
     <div className={styles.volunteerNotes}>
       <div className={styles.noteHeader}>Notes from Volunteers</div>
-      <div className={styles.noteSection}>
+      <div className={hasNotes ? styles.noteSection : styles.noteSectionMissing}>
         <div className={styles.postNoteSection}>
           <input
             className={styles.postNoteInputField}
@@ -78,8 +81,8 @@ export function VolunteerNotes({ profileUserId }: { profileUserId: string }) {
             Post
           </button>
         </div>
-        <div className={styles.postedNotes}>
-          {profileNotes && profileNotes.length > 0 ? (
+        <div className={hasNotes ? styles.postedNotes : styles.postedNotesMissing}>
+          {hasNotes ? (
             profileNotes
               .slice()
               .reverse()
@@ -104,7 +107,7 @@ export function VolunteerNotes({ profileUserId }: { profileUserId: string }) {
                 );
               })
           ) : (
-            <NoNotes />
+            <p className={styles.noNotes}>No notes yet</p>
           )}
         </div>
       </div>
