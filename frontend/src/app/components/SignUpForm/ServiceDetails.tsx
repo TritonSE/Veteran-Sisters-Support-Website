@@ -121,7 +121,7 @@ export default function ServiceDetails({
               "National Guard",
               "Marine Corps",
               "Space Force",
-              "First responder",
+              "First Responder",
               "Navy",
             ]}
             isOpen={activeDropdown === "select1"}
@@ -143,7 +143,7 @@ export default function ServiceDetails({
               "Veteran",
               "Veteran Medically Retired",
               "Veteran 20+ years Retired",
-              "First responder (no military service)",
+              "First Responder (no military service)",
             ]}
             isOpen={activeDropdown === "select2"}
             toggleDropdown={() => {
