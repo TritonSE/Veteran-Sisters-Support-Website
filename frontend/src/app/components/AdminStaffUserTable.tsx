@@ -163,6 +163,7 @@ export function AdminStaffUserTable() {
                   email: user.email,
                   firstName: user.firstName,
                   lastName: user.lastName,
+                  zipCode: user.zipCode,
                   role: user.role,
                   assignedPrograms: user.assignedPrograms,
                   assignedUsers: user.assignedUsers,
