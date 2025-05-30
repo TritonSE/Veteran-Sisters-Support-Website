@@ -21,6 +21,9 @@ type ChangeProgramDialogProps = {
   role: RoleEnum | undefined;
   userPrograms: string[];
   callback: (show: boolean) => void;
+  onSavePrograms: (newPrograms: string[]) => void;
+  programsChanged: (didProgramChange: boolean) => void;
+  didProgramChange: boolean; // optional prop to track if programs changed
 };
 
 const ChangeProgramDialog = ({
@@ -29,6 +32,9 @@ const ChangeProgramDialog = ({
   userPrograms,
   role,
   callback,
+  onSavePrograms,
+  programsChanged,
+  didProgramChange,
 }: ChangeProgramDialogProps) => {
   const [programs, setPrograms] = useState<string[]>(userPrograms);
   const [open, setOpen] = useState(false);
@@ -59,6 +65,8 @@ const ChangeProgramDialog = ({
 
   const savePrograms = async () => {
     await updateUserProgramsAndRole(programs, role, email);
+    onSavePrograms(programs);
+    programsChanged(!didProgramChange);
     callback(false);
   };
 

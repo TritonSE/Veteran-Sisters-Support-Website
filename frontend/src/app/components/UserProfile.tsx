@@ -157,6 +157,8 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [openProgramChange, setOpenProgramChange] = useState<boolean>(false);
+  const [programs, setPrograms] = useState<string[]>(userProfile?.assignedPrograms ?? []);
+  const [programsChanged, setProgramsChanged] = useState(false);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -172,6 +174,7 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
         if (res.success) {
           console.log("Response data: ", res.data);
           setUserProfile(res.data);
+          setPrograms(res.data.assignedPrograms ?? []);
           setProfileRenderingContext(
             getProfileRenderingContext(res.data.role, profileUserId, userRole, userId),
           );
@@ -190,7 +193,7 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
     };
 
     void fetchUserProfile();
-  }, [profileUserId, userId, userRole]);
+  }, [profileUserId, programsChanged, userId, userRole]);
 
   if (loading) {
     return (
@@ -231,6 +234,8 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
             <ProfileHeader
               userProfile={userProfile}
               minimized={false}
+              didProgramChange={programsChanged}
+              programsChanged={setProgramsChanged}
               showDocuments={profileRenderingContext.showVeteranDocuments}
               isPersonalProfile={profileRenderingContext.viewingPersonalProfile}
               isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
@@ -248,6 +253,7 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
                     userProfile={userProfile}
                     minimized={false}
                     title={profileRenderingContext.userListTitle}
+                    programs={programs}
                     callback={setOpenProgramChange}
                     isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
                     editable={profileRenderingContext.userListEditable}
@@ -290,8 +296,11 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
               firstName={userProfile?.firstName}
               email={userProfile?.email}
               role={userProfile?.role}
-              userPrograms={userProfile?.assignedPrograms ?? []}
+              userPrograms={programs}
+              onSavePrograms={setPrograms}
               callback={setOpenProgramChange}
+              didProgramChange={programsChanged}
+              programsChanged={setProgramsChanged}
             />
           </div>
         </div>

@@ -19,10 +19,18 @@ type ChangeRoleDialogProps = {
   firstName?: string;
   role: RoleEnum;
   onNext: (newrole: RoleEnum) => void;
+  onSavePrograms: (newPrograms: string[]) => void;
   onCancel: () => void;
 };
 
-const ChangeRoleDialog = ({ email, firstName, role, onNext, onCancel }: ChangeRoleDialogProps) => {
+const ChangeRoleDialog = ({
+  email,
+  firstName,
+  role,
+  onNext,
+  onSavePrograms,
+  onCancel,
+}: ChangeRoleDialogProps) => {
   const [newRole, setNewRole] = useState<RoleEnum>();
   const [availableRoles, setAvailableRoles] = useState<RoleOption[]>([]);
   const [open, setOpen] = useState(false);
@@ -125,6 +133,7 @@ const ChangeRoleDialog = ({ email, firstName, role, onNext, onCancel }: ChangeRo
           firstName={firstName}
           role={newRole}
           email={email}
+          onSavePrograms={onSavePrograms}
           callback={setShowProgramDialog}
         />
       )}

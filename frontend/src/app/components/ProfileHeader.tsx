@@ -17,6 +17,8 @@ export function ProfileHeader(params: {
   minimized: boolean;
   isProgramAndRoleEditable: boolean;
   isPersonalProfile: boolean;
+  programsChanged: (programChanged: boolean) => void;
+  didProgramChange: boolean;
 }) {
   const { userProfile, showDocuments, minimized, isProgramAndRoleEditable, isPersonalProfile } =
     params;
@@ -32,7 +34,10 @@ export function ProfileHeader(params: {
   const zipCodeText = userProfile?.zipCode?.toString() ?? "Zipcode: Unknown";
   const serviceBranchText = branchOfService ?? "Service Branch: Unknown";
   const militaryStatusText = militaryStatus ?? "Military Status: Unknown";
-  const assignedPrograms = userProfile?.assignedPrograms?.sort();
+  const assignedPrograms = userProfile?.assignedPrograms?.sort() ?? [];
+  const [userPrograms, setUserPrograms] = useState<string[]>(
+    assignedPrograms ? assignedPrograms.map((program) => program.toString()) : [],
+  );
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -96,8 +101,8 @@ export function ProfileHeader(params: {
               </div>
               <div className={styles.userMetadata}>
                 <span style={{ display: "flex", flexDirection: "row", gap: "8px" }}>
-                  {assignedPrograms && assignedPrograms.length > 0 ? (
-                    assignedPrograms.map((program) => <Program program={program} key={program} />)
+                  {userPrograms && userPrograms.length > 0 ? (
+                    userPrograms.map((program) => <Program program={program} key={program} />)
                   ) : (
                     <Program program={"unassigned"} textOnly={true} />
                   )}
@@ -134,9 +139,10 @@ export function ProfileHeader(params: {
               firstName={userProfile?.firstName}
               email={userProfile?.email}
               role={userProfile?.role}
-              userPrograms={
-                assignedPrograms ? assignedPrograms.map((program) => program.toString()) : []
-              }
+              userPrograms={userPrograms}
+              didProgramChange={params.didProgramChange}
+              programsChanged={params.programsChanged}
+              handleProgramsChange={setUserPrograms}
               selectedRole={selectedRole}
               handleRoleNext={handleRoleNext}
               callback={() => {

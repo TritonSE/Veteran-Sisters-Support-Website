@@ -21,6 +21,9 @@ type ProfileActionsProps = {
   selectedRole: RoleEnum | undefined;
   userPrograms: string[];
   handleRoleNext: (newRole: RoleEnum) => void;
+  handleProgramsChange: (newPrograms: string[]) => void;
+  didProgramChange: boolean;
+  programsChanged: (programChanged: boolean) => void;
   callback: () => void;
 };
 
@@ -37,7 +40,10 @@ const ProfileActions = ({
   role,
   selectedRole,
   userPrograms,
+  didProgramChange,
   handleRoleNext,
+  handleProgramsChange,
+  programsChanged,
   callback, // optional: parent can listen when menu toggles
 }: ProfileActionsProps) => {
   const [showRoleChangeDialog, setShowRoleChangeDialog] = useState(false);
@@ -169,6 +175,7 @@ const ProfileActions = ({
               email={email}
               role={role}
               onNext={onRoleNext}
+              onSavePrograms={handleProgramsChange}
               onCancel={() => {
                 setShowRoleChangeDialog(false);
               }}
@@ -194,7 +201,10 @@ const ProfileActions = ({
               email={email}
               role={selectedRole}
               userPrograms={userPrograms}
+              didProgramChange={didProgramChange}
+              programsChanged={programsChanged}
               callback={setShowProgramChangeDialog}
+              onSavePrograms={handleProgramsChange}
             />
           </div>
         </div>
