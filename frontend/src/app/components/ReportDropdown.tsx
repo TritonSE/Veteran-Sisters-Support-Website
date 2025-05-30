@@ -3,11 +3,13 @@ import React from "react";
 
 import styles from "./ReportDropdown.module.css";
 
+type Option = { label: string; value: string };
+
 type ReportDropdownProps = {
-  options: string[];
+  options: Option[];
   isOpen: boolean;
   toggleDropdown: () => void;
-  onSelect: (option: string) => void;
+  onSelect: (opt: Option) => void;
   selected?: string;
   fullWidth?: boolean;
 };
@@ -20,7 +22,7 @@ const ReportDropdown: React.FC<ReportDropdownProps> = ({
   selected,
   fullWidth,
 }) => {
-  const handleSelect = (option: string) => {
+  const handleSelect = (option: Option) => {
     toggleDropdown();
     onSelect(option);
   };
@@ -45,15 +47,15 @@ const ReportDropdown: React.FC<ReportDropdownProps> = ({
 
       {isOpen && (
         <div className={styles.optionsContainer}>
-          {options.map((option, index) => (
+          {options.map((option) => (
             <div
-              key={index}
+              key={option.value}
               onClick={() => {
                 handleSelect(option);
               }}
               className={styles.dropdownItem}
             >
-              {option}
+              {option.label}
             </div>
           ))}
         </div>

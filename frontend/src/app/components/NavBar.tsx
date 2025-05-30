@@ -39,12 +39,12 @@ export const NavBar = () => {
               </div>
             </div>
           </Link>
-          <Link href={userRole === "admin" ? "/announcements" : "/reportform"}>
+          <Link href={userRole === "admin" ? "/announcements" : "/report"}>
             <div
               className={
                 pathname === "/announcements" ||
                 pathname.startsWith("/announcements/") ||
-                pathname.startsWith("/reportform")
+                pathname.startsWith("/report")
                   ? styles.selectedBackground
                   : styles.unselectedBackground
               }
