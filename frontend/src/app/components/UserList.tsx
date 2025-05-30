@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { getAssignedUsers, removeVolunteerFromVeteran } from "../api/activeVolunteers";
 import { Role, UserProfile as UserProfileType } from "../api/profileApi";
@@ -10,7 +10,6 @@ import UserAssigningDialog, { DialogContext } from "./userAssigningDialog";
 
 export function UserList(params: {
   userProfile: UserProfileType | undefined;
-  programs: string[];
   title: string;
   editable: boolean;
   minimized: boolean;
@@ -18,12 +17,10 @@ export function UserList(params: {
   setMessage?: (message: string) => void;
   callback?: (openProgramChange: boolean) => void;
 }) {
-  const { title, userProfile, callback, programs, isProgramAndRoleEditable, editable, minimized } =
-    params;
+  const { title, userProfile, callback, isProgramAndRoleEditable, editable, minimized } = params;
   const userPrograms = Object.fromEntries(
-    programs?.map((program) => [program, []]) ?? [],
+    userProfile?.assignedPrograms?.map((program) => [program, []]) ?? [],
   ) as Record<string, UserProfileType[]>;
-  console.log("User Programs: ", programs);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [refreshFlag, setRefreshFlag] = useState(false);
@@ -70,7 +67,7 @@ export function UserList(params: {
 
       setCurrentUsers(() => {
         const updatedUsers = Object.fromEntries(
-          (programs ?? []).map((program) => [program, []]),
+          (userProfile?.assignedPrograms ?? []).map((program) => [program, []]),
         ) as Record<string, UserProfileType[]>;
         for (const [key, userObj] of users) {
           if (!updatedUsers[key].some((vol) => vol.email === userObj.email)) {
@@ -95,10 +92,9 @@ export function UserList(params: {
     void fetchProfiles();
   }, [userProfile?.email, refreshFlag]);
 
-  const sortedUserGroups: [string, UserProfileType[]][] = useMemo(
-    () => Object.entries(currentUsers).slice().sort(),
-    [currentUsers],
-  );
+  const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(currentUsers)
+    .slice()
+    .sort();
 
   return (
     // <div className={`${styles.userList} ${minimized ? styles.minimized : ""}`}>
@@ -119,7 +115,7 @@ export function UserList(params: {
         </div>
       </div>
       <div className={styles.userListContent}>
-        {programs && programs.length > 0 ? (
+        {userProfile?.assignedPrograms && userProfile?.assignedPrograms?.length > 0 ? (
           /* 1) We have programs → render each program section as before */
           sortedUserGroups.map(([program, users]) => (
             <div key={program} className={styles.programSection}>

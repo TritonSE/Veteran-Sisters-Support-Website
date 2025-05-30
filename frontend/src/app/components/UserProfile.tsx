@@ -253,7 +253,6 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
                     userProfile={userProfile}
                     minimized={false}
                     title={profileRenderingContext.userListTitle}
-                    programs={programs}
                     callback={setOpenProgramChange}
                     isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
                     editable={profileRenderingContext.userListEditable}

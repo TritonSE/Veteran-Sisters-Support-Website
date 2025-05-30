@@ -7,9 +7,9 @@
   justify-content: space-between; /* push leftDiv and mainDiv apart */
   width: 1024px;
   height: 735.6px;
-  position: fixed;
+  position: absolute;
   left: 50%;
-  top: 55%;
+  top: 50%;
   transform: translate(-50%, -50%);
   gap: var(--Spacing-md, 24px);
   box-sizing: border-box;

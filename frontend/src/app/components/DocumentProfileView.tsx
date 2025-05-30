@@ -207,7 +207,9 @@ export function DocumentProfileView({ profileId }: DocumentProfileViewProps) {
         <div className={styles.leftDiv}>
           <NavigateBack />
           <ProfileHeader
-            userProfile={userProfile}
+            userProfile={userProfile ?? undefined}
+            programsChanged={() => undefined}
+            didProgramChange={false}
             showDocuments={false}
             minimized={true}
             isPersonalProfile={false}
