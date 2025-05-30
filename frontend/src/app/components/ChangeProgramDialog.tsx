@@ -19,11 +19,11 @@ type ChangeProgramDialogProps = {
   email: string | undefined;
   firstName?: string;
   role: RoleEnum | undefined;
-  userPrograms: string[];
+  userPrograms?: string[];
   callback: (show: boolean) => void;
-  onSavePrograms: (newPrograms: string[]) => void;
-  programsChanged: (didProgramChange: boolean) => void;
-  didProgramChange: boolean; // optional prop to track if programs changed
+  onSavePrograms?: (newPrograms: string[]) => void;
+  programsChanged?: (didProgramChange: boolean) => void;
+  didProgramChange?: boolean; // optional prop to track if programs changed
 };
 
 const ChangeProgramDialog = ({
@@ -36,7 +36,7 @@ const ChangeProgramDialog = ({
   programsChanged,
   didProgramChange,
 }: ChangeProgramDialogProps) => {
-  const [programs, setPrograms] = useState<string[]>(userPrograms);
+  const [programs, setPrograms] = useState<string[]>(userPrograms ?? []);
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +54,7 @@ const ChangeProgramDialog = ({
   }, []);
 
   useEffect(() => {
-    setPrograms(userPrograms);
+    setPrograms(userPrograms ?? []);
   }, [userPrograms]);
 
   const handleCheckboxChange = (value: string) => {
@@ -65,8 +65,8 @@ const ChangeProgramDialog = ({
 
   const savePrograms = async () => {
     await updateUserProgramsAndRole(programs, role, email);
-    onSavePrograms(programs);
-    programsChanged(!didProgramChange);
+    onSavePrograms?.(programs);
+    programsChanged?.(!didProgramChange);
     callback(false);
   };
 
