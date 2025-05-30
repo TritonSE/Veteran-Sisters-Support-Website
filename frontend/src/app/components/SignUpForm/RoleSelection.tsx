@@ -3,9 +3,9 @@
 import Image from "next/image";
 import React, { MouseEvent } from "react";
 
-import styles from "./page.module.css";
+import { Button } from "../Button";
 
-import { Button } from "@/app/components/Button";
+import styles from "./page.module.css";
 
 type RoleSelectionProps = {
   activeButton: string;

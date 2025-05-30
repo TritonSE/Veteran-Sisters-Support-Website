@@ -3,12 +3,12 @@
 import Image from "next/image";
 import React, { MouseEvent, useEffect, useRef, useState } from "react";
 
-import styles from "./page.module.css";
+import { BackButton } from "../BackButton";
+import { Button } from "../Button";
+import CustomDropdown from "../CustomDropdown";
+import ProgressBar from "../ProgressBar";
 
-import { BackButton } from "@/app/components/BackButton";
-import { Button } from "@/app/components/Button";
-import CustomDropdown from "@/app/components/CustomDropdown";
-import ProgressBar from "@/app/components/ProgressBar";
+import styles from "./page.module.css";
 
 type ServiceDetailsProps = {
   serviceDate: string;

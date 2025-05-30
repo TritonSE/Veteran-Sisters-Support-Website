@@ -3,11 +3,11 @@
 import Image from "next/image";
 import React, { MouseEvent, useEffect, useState } from "react";
 
-import styles from "./page.module.css";
+import { BackButton } from "../BackButton";
+import { Button } from "../Button";
+import ProgressBar from "../ProgressBar";
 
-import { BackButton } from "@/app/components/BackButton";
-import { Button } from "@/app/components/Button";
-import ProgressBar from "@/app/components/ProgressBar";
+import styles from "./page.module.css";
 
 type UserDetailsProps = {
   email: string;
