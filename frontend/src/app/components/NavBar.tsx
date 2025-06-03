@@ -39,6 +39,19 @@ export const NavBar = () => {
               </div>
             </div>
           </Link>
+          <Link href="/activities">
+            <div className={styles.homeFrame}>
+              <div
+                className={
+                  pathname === "/activities" || pathname.startsWith("/activities/")
+                    ? styles.selectedBackground
+                    : styles.unselectedBackground
+                }
+              >
+                <Image src="/bell.svg" alt="Home" width={32} height={32}></Image>
+              </div>
+            </div>
+          </Link>
           <Link href={userRole === "admin" ? "/announcements" : "/report"}>
             <div
               className={
