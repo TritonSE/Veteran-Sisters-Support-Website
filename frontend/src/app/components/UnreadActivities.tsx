@@ -2,14 +2,15 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { ActivityObject, getUnreadActivities } from "../api/activities";
+import { Role as RoleEnum } from "../api/profileApi";
 import { markActivityRead } from "../api/userApi";
 
+import { Role } from "./Role";
 import styles from "./UnreadActivities.module.css";
-import { Role } from "../api/profileApi";
 
 type UnreadActivitiesProps = {
   userId: string;
-  userRole: Role;
+  userRole: RoleEnum;
   isOpen: boolean;
   toggleDropdown: () => void;
 };
@@ -137,21 +138,18 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                     <div className={styles.subtitle}>
                       {activity.type !== "assignment" ? (
                         <>
-                          {activity.uploader.firstName}{" "}
-                          <span className={styles.label}>
-                            {activity.uploader.role.charAt(0).toUpperCase() +
-                              activity.uploader.role.slice(1)}
-                          </span>
+                          <span>{activity.uploader.firstName} </span>
+                          <Role role={activity.uploader.role} />
                         </>
-                      ) : userRole === Role.VOLUNTEER ? (
+                      ) : userRole === RoleEnum.VOLUNTEER ? (
                         <>
-                          {activity.assignmentInfo.veteranId.firstName}{" "}
-                          <span className={styles.label}>Veteran</span>
+                          <span>{activity.assignmentInfo.veteranId.firstName} </span>
+                          <Role role="veteran" />
                         </>
                       ) : (
                         <>
-                          {activity.assignmentInfo.volunteerId.firstName}{" "}
-                          <span className={styles.label}>Volunteer</span>
+                          <span>{activity.assignmentInfo.volunteerId.firstName} </span>
+                          <Role role="volunteer" />
                         </>
                       )}
                     </div>

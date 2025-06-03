@@ -267,3 +267,21 @@ export const createRequest = async ({ uploader, documentName }) => {
     throw new Error("Error creating Request activity: " + error.message);
   }
 };
+
+export const createSignup = async ({ uploader }) => {
+  try {
+    const newActivity = {
+      uploader,
+      type: "signup",
+    };
+
+    const savedActivity = await createActivity(newActivity);
+    await User.updateMany(
+      { role: "admin" },
+      { $push: { unreadActivities: savedActivity._id.toString() } },
+    );
+    return savedActivity;
+  } catch (error) {
+    throw new Error("Error creating Signup activity: " + error.message);
+  }
+};
