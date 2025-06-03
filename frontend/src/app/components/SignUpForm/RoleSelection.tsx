@@ -58,6 +58,8 @@ export default function RoleSelection({
             }}
             style={{
               backgroundColor: activeButton === "button1" ? "lightgrey" : "white",
+              width: "88%",
+              marginBottom: "1rem",
             }}
             onMouseEnter={(e) => {
               if (activeButton !== "button1") e.currentTarget.style.backgroundColor = "#f2f2f2";
@@ -74,6 +76,8 @@ export default function RoleSelection({
             }}
             style={{
               backgroundColor: activeButton === "button2" ? "lightgrey" : "white",
+              width: "88%",
+              marginBottom: "1.5rem",
             }}
             onMouseEnter={(e) => {
               if (activeButton !== "button2") e.currentTarget.style.backgroundColor = "#f2f2f2";
@@ -82,9 +86,15 @@ export default function RoleSelection({
               if (activeButton !== "button2") e.currentTarget.style.backgroundColor = "white";
             }}
           />
-          <Button label="Continue" className={styles.continueButton} onClick={handleContinue} />
+          <Button
+            label="Continue"
+            className={styles.continueButton}
+            onClick={handleContinue}
+            filled={true}
+            width="88%"
+          />
           <div className={styles.subtitle2}>
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center", marginTop: "1rem" }}>
               Already have an account?
               <a href="/login" style={{ color: "#057E6F" }}>
                 {" "}
