@@ -179,7 +179,6 @@ export const createDocument = async ({ uploader, filename, programs }) => {
 
 // Create activity type "announcement" by calling createActivity
 export const createAnnouncement = async (req, res) => {
-  console.log(req);
   try {
     const { uploader, title, description } = req.body;
     const newActivity = {
