@@ -1,6 +1,5 @@
 import { User } from "../models/userModel.js";
 import mongoose from "mongoose";
-import { createSignup } from "./activityController.js";
 export const queryUsers = async (req, res) => {
   try {
     const { assignedProgram, assignedVeteran, ...userQuery } = req.query;
@@ -89,7 +88,6 @@ export const addUser = async (req, res) => {
         assignedUsers,
         unreadActivities: [],
       });
-      createSignup({ uploader: newUser._id.toString() });
       res.status(201).json(newUser);
     }
   } catch (error) {
