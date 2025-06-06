@@ -77,6 +77,18 @@ export const getFileById = async (id: string): Promise<APIResult<FileObject>> =>
   }
 };
 
+export const deleteFileObject = async (id: string): Promise<APIResult<void>> => {
+  try {
+    const response = await del(`/file/${id}`);
+    if (!response.ok) {
+      return handleAPIError(response);
+    }
+    return { success: true, data: undefined };
+  } catch (error: unknown) {
+    return { success: false, error: (error as Error).message };
+  }
+};
+
 export const createCommentObject = async (
   comment: CreateCommentRequest,
 ): Promise<APIResult<Comment>> => {
