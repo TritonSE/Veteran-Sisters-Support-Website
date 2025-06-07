@@ -293,6 +293,7 @@ export const updateUserPrograms = async (req, res) => {
 
     if (role) {
       user.role = role;
+      user.assignedUsers = [];
     }
 
     await user.save();

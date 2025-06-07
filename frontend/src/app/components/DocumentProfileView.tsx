@@ -225,7 +225,7 @@ export function DocumentProfileView({ profileId }: DocumentProfileViewProps) {
           <ProfileInterests minimized={true} interests={userProfile?.roleSpecificInfo?.interests} />
         </div>
         <div className={styles.mainDiv}>
-          <VeteranFilesTable veteranId={userId} refresh={false} />
+          <VeteranFilesTable veteranId={profileId} refresh={false} />
         </div>
       </div>
     </>
