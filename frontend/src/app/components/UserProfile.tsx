@@ -172,7 +172,6 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
 
         const res = await getUserProfile(profileUserId);
         if (res.success) {
-          console.log("Response data: ", res.data);
           setUserProfile(res.data);
           setPrograms(res.data.assignedPrograms ?? []);
           setProfileRenderingContext(

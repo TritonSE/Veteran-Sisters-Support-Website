@@ -21,8 +21,6 @@ export function VolunteerNotes({ profileUserId }: { profileUserId: string }) {
   useEffect(() => {
     const fetchProfileNotes = async () => {
       const res = await getComments(profileUserId);
-      console.log(res);
-      console.log(profileUserId);
       if (res.success) {
         return res.data;
       }
@@ -44,7 +42,6 @@ export function VolunteerNotes({ profileUserId }: { profileUserId: string }) {
   };
 
   const hasNotes = Array.isArray(profileNotes) && profileNotes.length > 0;
-  console.log("Has notes: ", hasNotes);
 
   return (
     <div className={styles.volunteerNotes}>

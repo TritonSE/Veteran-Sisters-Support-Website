@@ -106,7 +106,6 @@ export async function getUserProfile(userId: string): Promise<APIResult<UserProf
       return handleAPIError(response);
     }
     const data = (await response.json()) as UserProfile;
-    console.log("API request data: ", data);
     return { success: true, data };
   } catch (error: unknown) {
     return { success: false, error: (error as Error).message };

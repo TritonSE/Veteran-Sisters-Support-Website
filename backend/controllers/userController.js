@@ -288,16 +288,27 @@ export const updateUserPrograms = async (req, res) => {
     }
 
     if (programs) {
+      // Update the user's assigned programs
       user.assignedPrograms = programs;
+
+      // Only filter assignedUsers if a new role is not provided
+      if (!role) {
+        // Get only previously assigned users who have at least one overlapping program with the new programs
+        const validUsers = await User.find({
+          email: { $in: user.assignedUsers },
+          assignedPrograms: { $in: programs },
+        }).exec();
+        user.assignedUsers = validUsers.map((u) => u.email);
+      }
     }
 
     if (role) {
       user.role = role;
+      // When a new role is provided, clear the assignedUsers array
       user.assignedUsers = [];
     }
 
     await user.save();
-
     res.status(200).json(user);
   } catch (error) {
     console.log(error);

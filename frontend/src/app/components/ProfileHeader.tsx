@@ -23,9 +23,7 @@ export function ProfileHeader(params: {
   const { userProfile, showDocuments, minimized, isProgramAndRoleEditable, isPersonalProfile } =
     params;
   const branchOfService = userProfile?.roleSpecificInfo?.serviceInfo?.branchOfService;
-  console.log("Branch of service: ", branchOfService);
   const militaryStatus = userProfile?.roleSpecificInfo?.serviceInfo?.currentMilitaryStatus;
-  console.log("Miliary status: ", militaryStatus);
   const fullName = `${userProfile?.firstName ?? "Unknown"} ${userProfile?.lastName ?? "Unknown"}`;
   const joinedText = userProfile?.yearJoined?.toString() ?? "Year Joined: Unknown";
   const ageText = `Age: ${userProfile?.age?.toString() ?? " Age: Unknown"}`;

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { getAssignedUsers, removeVolunteerFromVeteran } from "../api/activeVolunteers";
-import { Role, UserProfile as UserProfileType } from "../api/profileApi";
+import { AssignedProgram, Role, UserProfile as UserProfileType } from "../api/profileApi";
 
 import { Program } from "./Program";
 import styles from "./UserList.module.css";
@@ -59,18 +59,25 @@ export function UserList(params: {
         throw new Error("Failed to fetch volunteers");
       }
 
+      console.log("Res: ", res);
+
       const users: [string, UserProfileType][] = res.data.map((profile) => {
         const activeUser =
           userProfile?.role === Role.VETERAN ? profile.volunteerUser : profile.veteranUser;
         return [profile.assignedProgram, activeUser];
       });
 
+      console.log("Users: ", users);
+
       setCurrentUsers(() => {
         const updatedUsers = Object.fromEntries(
           (userProfile?.assignedPrograms ?? []).map((program) => [program, []]),
         ) as Record<string, UserProfileType[]>;
         for (const [key, userObj] of users) {
-          if (!updatedUsers[key].some((vol) => vol.email === userObj.email)) {
+          if (
+            userProfile?.assignedPrograms?.includes(key as AssignedProgram) &&
+            !updatedUsers[key].some((vol) => vol.email === userObj.email)
+          ) {
             updatedUsers[key].push(userObj);
           }
         }
