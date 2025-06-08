@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 
+import { createAnnouncement } from "../../api/activities";
 import { Button } from "../../components/Button";
 import { NavBar } from "../../components/NavBar";
 import { useAuth } from "../../contexts/AuthContext";
@@ -12,9 +13,34 @@ import { AuthContextWrapper } from "../../contexts/AuthContextWrapper";
 import styles from "./page.module.css";
 
 function AnnouncementCreateContent() {
+  const { userId } = useAuth();
   const [cancelPopup, setCancelPopup] = useState<boolean>(false);
   const [confirmPage, setConfirmPage] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("");
+  const [detail, setDetail] = useState<string>("");
   const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (title === "" || detail === "") {
+      return;
+    }
+    createAnnouncement({
+      uploader: userId,
+      title,
+      description: detail,
+    })
+      .then((result) => {
+        if (result.success) {
+          setConfirmPage(true);
+        } else {
+          console.error(result.error);
+        }
+      })
+      .catch((error: unknown) => {
+        console.error("Failed to create announcement activity: ", error);
+      });
+  };
 
   return (
     <div className={styles.container}>
@@ -31,13 +57,17 @@ function AnnouncementCreateContent() {
                 </span>
               </div>
             </div>
-            <form className={styles.form}>
+            <form className={styles.form} onSubmit={handleSubmit}>
               <div className={styles.label}>
                 <span>Title</span>
                 <input
                   className={styles.inputTitle}
                   required
                   placeholder="Name your announcement"
+                  value={title}
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                  }}
                 ></input>
               </div>
               <div className={styles.label}>
@@ -46,25 +76,26 @@ function AnnouncementCreateContent() {
                   className={styles.inputDetails}
                   required
                   placeholder="Describe the announcement"
+                  value={detail}
+                  onChange={(e) => {
+                    setDetail(e.target.value);
+                  }}
                 ></textarea>
               </div>
+              <div className={styles.buttons}>
+                <Button
+                  label="Cancel"
+                  className={styles.cancel}
+                  type="button"
+                  onClick={() => {
+                    if (title !== "" || detail !== "") setCancelPopup(true);
+                    else router.push("/announcements");
+                  }}
+                />
+                <Button label="Send" filled={true} type="submit" />
+              </div>
             </form>
-            <div className={styles.buttons}>
-              <Button
-                label="Cancel"
-                className={styles.cancel}
-                onClick={() => {
-                  setCancelPopup(true);
-                }}
-              />
-              <Button
-                label="Send"
-                filled={true}
-                onClick={() => {
-                  setConfirmPage(true);
-                }}
-              />
-            </div>
+
             {cancelPopup && (
               <div>
                 <div className={styles.overlay}></div>
@@ -84,7 +115,7 @@ function AnnouncementCreateContent() {
                       label="Exit"
                       filled={true}
                       onClick={() => {
-                        router.back();
+                        router.push("/announcements");
                       }}
                     />
                   </div>
@@ -115,6 +146,8 @@ function AnnouncementCreateContent() {
                   filled={true}
                   onClick={() => {
                     setConfirmPage(false);
+                    setTitle("");
+                    setDetail("");
                   }}
                 />
               </div>

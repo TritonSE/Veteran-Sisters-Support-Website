@@ -12,6 +12,7 @@ import { AuthContextWrapper } from "../contexts/AuthContextWrapper";
 import styles from "./page.module.css";
 
 function AnnouncementContent() {
+  const { userId } = useAuth();
   const router = useRouter();
   return (
     <div className={styles.container}>
@@ -38,13 +39,7 @@ function AnnouncementContent() {
             }}
           />
           <div className={styles.spacing2}></div>
-          <AnnouncementTable />
-          {/* <br></br>
-          <AnnouncementTableItem
-            date="1/23/2023"
-            announcement="asdasjdoaisjdoaisjdoaisjdoaisjdoaisjdaoisjdaoisjdaosijdaoisjdoaisjdoaisjdoaisjdoaiosjdoasjdoaisjdoaisjdoaisjdoaisjdoaijsdoaisjodiajsdoiajsodiajsoidjaosidjaosijdoaisjdoaijsdoaijsodijaosidjoaisjodaijsoiajdoaisjdoaisjdaosijdoaisjdoaisjdoaisjdoaijsdoaisjdoaijsdoaisjdoaisjdoaijsdoaisjdoiasjodiajsodiajsodiajsodijasoidjaosidjaosijdaosijdaosijdoaisjdoaaijsdoiajsodaijsdoiajsodaijsdoiasjodijaosidjaosidjaosidjaosijdaoisjdaoisjdaoisjdoaisjdoaisjdoaisjdoaisjdoaisjdoaisjdoaisjdo"
-          />
-          <AnnouncementTableItem date="1/23/2023" announcement="asdasdasd" /> */}
+          <AnnouncementTable userId={userId} />
         </div>
       </div>
     </div>
