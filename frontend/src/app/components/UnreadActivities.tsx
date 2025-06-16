@@ -2,18 +2,22 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { ActivityObject, getUnreadActivities } from "../api/activities";
+import { Role as RoleEnum } from "../api/profileApi";
 import { markActivityRead } from "../api/userApi";
 
+import { Role } from "./Role";
 import styles from "./UnreadActivities.module.css";
 
 type UnreadActivitiesProps = {
   userId: string;
+  userRole: RoleEnum;
   isOpen: boolean;
   toggleDropdown: () => void;
 };
 
 export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
   userId,
+  userRole,
   isOpen,
   toggleDropdown,
 }) => {
@@ -132,11 +136,22 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                   ></Image>
                   <div className={styles.horizontalDiv}>
                     <div className={styles.subtitle}>
-                      {activity.uploader.firstName}{" "}
-                      <span className={styles.label}>
-                        {activity.uploader.role.charAt(0).toUpperCase() +
-                          activity.uploader.role.slice(1)}
-                      </span>
+                      {activity.type !== "assignment" ? (
+                        <>
+                          <span>{activity.uploader.firstName} </span>
+                          <Role role={activity.uploader.role} />
+                        </>
+                      ) : userRole === RoleEnum.VOLUNTEER ? (
+                        <>
+                          <span>{activity.assignmentInfo.veteranId.firstName} </span>
+                          <Role role="veteran" />
+                        </>
+                      ) : (
+                        <>
+                          <span>{activity.assignmentInfo.volunteerId.firstName} </span>
+                          <Role role="volunteer" />
+                        </>
+                      )}
                     </div>
                     <div style={{ fontWeight: "14px" }}>{activity.relativeTime}</div>
                   </div>
@@ -152,7 +167,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                     </button>
                   </div>
 
-                  {["report", "announcement"].includes(activity.type) && (
+                  {["report", "announcement", "comment"].includes(activity.type) && (
                     <p className={styles.description}>{activity.description}</p>
                   )}
                 </div>
