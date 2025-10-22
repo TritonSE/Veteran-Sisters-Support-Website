@@ -17,7 +17,10 @@ export const authenticateProfilePermissions = async (req, res, next) => {
     }
     switch (user.role) {
       case "veteran":
-        if (!(user.email === profileUser.email)) {
+        if (
+          !(user.email === profileUser.email) &&
+          !user.assignedUsers.includes(profileUser.email)
+        ) {
           return res.status(403).json({ error: "You do not have permission to view this user!" });
         }
         break;
@@ -79,7 +82,10 @@ export const authenticateProfilePermissionsByEmail = async (req, res, next) => {
     }
     switch (user.role) {
       case "veteran":
-        if (!(user.email === profileUser.email)) {
+        if (
+          !(user.email === profileUser.email) &&
+          !user.assignedUsers.includes(profileUser.email)
+        ) {
           return res.status(403).json({ error: "You do not have permission to view this user!" });
         }
         break;
