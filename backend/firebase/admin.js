@@ -9,4 +9,4 @@ const app = initializeApp({
   credential: cert(JSON.parse(process.env.BACKEND_FIREBASE_SERVICE_ACCOUNT)),
 });
 
-export const auth = getAuth(app); 
+export const auth = getAuth(app);
