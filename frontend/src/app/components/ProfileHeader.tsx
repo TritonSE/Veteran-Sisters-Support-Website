@@ -52,7 +52,9 @@ export function ProfileHeader(params: {
           <div className={styles.userInfoHeader}>
             <div className={styles.userFullName}>{fullName}</div>
             <Role role={role} />
-            {assignedPrograms?.map((program) => <Program program={program} key={program} />)}
+            {assignedPrograms?.map((program) => (
+              <Program program={program} key={program} />
+            ))}
           </div>
           <div className={styles.userMetadata}>
             <div className={styles.metadataSubsection}>
