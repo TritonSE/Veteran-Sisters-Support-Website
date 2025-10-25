@@ -66,7 +66,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
       case "request":
         return `You received access to "${activity.documentName}"`;
       case "announcement":
-        return String(activity.title);
+        return activity.title;
       case "signup":
         return `${activity.uploader.firstName} has signed up as a ${activity.uploader.role}`;
       default:

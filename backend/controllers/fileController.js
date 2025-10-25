@@ -69,3 +69,25 @@ export const editFileById = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deleteFileById = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const file = await FileObject.findById(id);
+
+    if (!file) {
+      return res.status(404).json({ message: "File not found" });
+    }
+
+    // Delete associated comments if any
+    if (file.comments && file.comments.length > 0) {
+      await Comment.deleteMany({ _id: { $in: file.comments } });
+    }
+
+    await FileObject.findByIdAndDelete(id);
+
+    res.status(200).json({ message: "File and any associated comments deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};

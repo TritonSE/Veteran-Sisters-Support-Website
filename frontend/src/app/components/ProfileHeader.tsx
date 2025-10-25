@@ -52,7 +52,9 @@ export function ProfileHeader(params: {
           <div className={styles.userInfoHeader}>
             <div className={styles.userFullName}>{fullName}</div>
             <Role role={role} />
-            {assignedPrograms?.map((program) => <Program program={program} key={program} />)}
+            {assignedPrograms?.map((program) => (
+              <Program program={program} key={program} />
+            ))}
           </div>
           <div className={styles.userMetadata}>
             <div className={styles.metadataSubsection}>
@@ -62,7 +64,6 @@ export function ProfileHeader(params: {
               <Image src="/vertical_divider.svg" width={20} height={20} alt="divider" />
               <div>{genderText}</div>
             </div>
-
             <div className={styles.metadataSubsection}>
               <div className={styles.smallMetadata}>{email}</div>
               <Image src="/vertical_divider.svg" width={20} height={20} alt="divider" />
