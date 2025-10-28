@@ -5,10 +5,6 @@ import React, { MouseEvent, useEffect, useState } from "react";
 
 import { Role } from "../Role";
 
-import { BackButton } from "../BackButton";
-import { Button } from "../Button";
-import ProgressBar from "../ProgressBar";
-
 import styles from "./page.module.css";
 
 import { Role as RoleEnum } from "@/app/api/profileApi";

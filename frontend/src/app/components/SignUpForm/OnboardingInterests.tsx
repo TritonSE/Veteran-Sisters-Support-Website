@@ -3,11 +3,6 @@
 import Image from "next/image";
 import React, { MouseEvent } from "react";
 
-import { BackButton } from "../BackButton";
-import { Button } from "../Button";
-import OnboardingOption from "../OnboardingOption";
-import ProgressBar from "../ProgressBar";
-
 import { Role } from "../Role";
 
 import styles from "./page.module.css";
