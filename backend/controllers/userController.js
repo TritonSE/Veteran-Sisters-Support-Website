@@ -319,7 +319,10 @@ export const updateUserPrograms = async (req, res) => {
       user.assignedUsers = [];
     }
 
-    await user.save();
+    // Use save with validateBeforeSave: false to skip validation during role changes
+    // volunteer users do not have roleSpecificInfo fields, so it should skip validation when changing
+    // from veteran to any other role
+    await user.save({ validateBeforeSave: false });
     res.status(200).json(user);
   } catch (error) {
     console.log(error);
