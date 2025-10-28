@@ -37,6 +37,17 @@ export const getUserByEmail = async (req, res) => {
   }
 };
 
+export const doesUserEmailExist = async (req, res) => {
+  try {
+    const email = req.params.email;
+    const userExists = await User.exists({ email });
+    res.json({ exists: !!userExists });
+  } catch (error) {
+    console.error("doesUserEmailExist Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 export const getUserById = async (req, res) => {
   try {
     const { userId } = req.params;

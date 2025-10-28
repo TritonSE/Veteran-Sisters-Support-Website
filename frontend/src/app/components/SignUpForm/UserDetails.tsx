@@ -3,8 +3,11 @@
 import Image from "next/image";
 import React, { MouseEvent, useEffect, useState } from "react";
 
+import { Role } from "../Role";
+
 import styles from "./page.module.css";
 
+import { Role as RoleEnum, checkIfUserEmailExists } from "@/app/api/profileApi";
 import { BackButton } from "@/app/components/BackButton";
 import { Button } from "@/app/components/Button";
 import ProgressBar from "@/app/components/ProgressBar";
@@ -40,6 +43,7 @@ type UserDetailsProps = {
   setFormErrors: React.Dispatch<React.SetStateAction<Record<string, string | undefined>>>;
   onNext: () => void;
   onPrevious: () => void;
+  isVeteran: boolean;
 };
 
 export default function UserDetails({
@@ -71,6 +75,7 @@ export default function UserDetails({
   setFormErrors,
   onNext,
   onPrevious,
+  isVeteran,
 }: UserDetailsProps) {
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
@@ -82,7 +87,7 @@ export default function UserDetails({
     setHasSubmitted(false);
   }, [formErrors, hasSubmitted]);
 
-  const handleContinue = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleContinue = async (e: MouseEvent<HTMLButtonElement>) => {
     setHasSubmitted(true);
     e.preventDefault();
     let hasError = false;
@@ -90,6 +95,15 @@ export default function UserDetails({
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (email && !emailRegex.test(email)) {
       setFormErrors((prev) => ({ ...prev, email: "Please enter a valid email address." }));
+      hasError = true;
+    }
+    const doesEmailExist = await checkIfUserEmailExists(email);
+    // User email already exists in mongo DB
+    if (doesEmailExist.success && doesEmailExist.data) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        alreadyExists: "An account with this email already exists.",
+      }));
       hasError = true;
     }
     if (password.length < 6 && password.length > 0) {
@@ -151,9 +165,13 @@ export default function UserDetails({
             <BackButton handlePrevious={onPrevious} />
             <ProgressBar percentCompleted={25} />
           </div>
+          <div style={{ width: "80px", marginBottom: "20px" }}>
+            <Role role={isVeteran ? RoleEnum.VETERAN : RoleEnum.VOLUNTEER} />
+          </div>
           <div className={styles.subtitle}>Create a membership account</div>
           {formErrors.requiredFields && <p className={styles.error}>{formErrors.requiredFields}</p>}
           {formErrors.email && <p className={styles.error}>{formErrors.email}</p>}
+          {formErrors.alreadyExists && <p className={styles.error}>{formErrors.alreadyExists}</p>}
           <label htmlFor="email" className={styles.formEntry}>
             Email
           </label>
@@ -291,7 +309,7 @@ export default function UserDetails({
           {formErrors.zip && <p className={styles.error}>{formErrors.zip}</p>}
           {formErrors.zipValid && <p className={styles.error}>{formErrors.zipValid}</p>}
           {showDropdown && (
-            <div style={{ marginTop: "16px" }}>
+            <div>
               <label htmlFor="address" className={styles.formEntry}>
                 Street address
               </label>
@@ -371,9 +389,17 @@ export default function UserDetails({
               </div>
             </div>
           )}
-          <Button label="Continue" className={styles.continueButton} onClick={handleContinue} />
+          <Button
+            label="Continue"
+            className={styles.continueButton}
+            onClick={(e) => {
+              void handleContinue(e);
+            }}
+            filled={true}
+            width="88%"
+          />
           <div className={styles.subtitle2}>
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center", marginTop: "16px" }}>
               Already have an account?
               <a href="/login" style={{ color: "#057E6F" }}>
                 {" "}
