@@ -58,7 +58,7 @@ const userSchema = new Schema({
           "Veteran",
           "Veteran Medically Retired",
           "Veteran 20+ Years Retired",
-          "First Responder",
+          "First Responder (no military service)",
           "",
         ],
         required: function () {

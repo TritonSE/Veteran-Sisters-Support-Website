@@ -154,6 +154,19 @@ export async function getUserProfileByEmail(userEmail: string): Promise<APIResul
   }
 }
 
+export async function checkIfUserEmailExists(userEmail: string): Promise<APIResult<boolean>> {
+  try {
+    const response = await get(`/users/${userEmail}`);
+    if (!response.ok) {
+      return handleAPIError(response);
+    }
+    const json = (await response.json()) as unknown as { exists: boolean };
+    return { success: true, data: json.exists };
+  } catch (error: unknown) {
+    return { success: false, error: (error as Error).message };
+  }
+}
+
 export async function getComments(profileId: string): Promise<APIResult<ProfileComment[]>> {
   try {
     const response = await get(`/comments/${profileId}`);

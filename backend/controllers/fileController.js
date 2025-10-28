@@ -48,7 +48,9 @@ export const getFileById = async (req, res, next) => {
 export const getFileByUploader = async (req, res, next) => {
   const { userId } = req.params;
   try {
-    const files = await FileObject.find({ uploader: userId }).populate("uploader").populate("comments");
+    const files = await FileObject.find({ uploader: userId })
+      .populate("uploader")
+      .populate("comments");
     res.status(200).json(files);
   } catch (error) {
     res.status(400).json({ error: "Internal Server Error" });

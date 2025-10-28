@@ -3,12 +3,20 @@
 import Image from "next/image";
 import React, { MouseEvent, useEffect, useRef, useState } from "react";
 
+import { Role } from "../Role";
+
 import { BackButton } from "../BackButton";
 import { Button } from "../Button";
 import CustomDropdown from "../CustomDropdown";
 import ProgressBar from "../ProgressBar";
 
 import styles from "./page.module.css";
+
+import { Role as RoleEnum } from "@/app/api/profileApi";
+import { BackButton } from "@/app/components/BackButton";
+import { Button } from "@/app/components/Button";
+import CustomDropdown from "@/app/components/CustomDropdown";
+import ProgressBar from "@/app/components/ProgressBar";
 
 type ServiceDetailsProps = {
   serviceDate: string;
@@ -84,6 +92,9 @@ export default function ServiceDetails({
             <BackButton handlePrevious={onPrevious} />
             <ProgressBar percentCompleted={50} />
           </div>
+          <div style={{ width: "80px", marginBottom: "20px" }}>
+            <Role role={RoleEnum.VETERAN} />
+          </div>
           <div className={styles.title}>Tell Us About Your Service</div>
           <div className={styles.description}>
             This helps us match you with the right benefits and community.
@@ -115,7 +126,7 @@ export default function ServiceDetails({
               "National Guard",
               "Marine Corps",
               "Space Force",
-              "First responder",
+              "First Responder",
               "Navy",
             ]}
             isOpen={activeDropdown === "select1"}
@@ -137,7 +148,7 @@ export default function ServiceDetails({
               "Veteran",
               "Veteran Medically Retired",
               "Veteran 20+ years Retired",
-              "First responder (no military service)",
+              "First Responder (no military service)",
             ]}
             isOpen={activeDropdown === "select2"}
             toggleDropdown={() => {
@@ -162,9 +173,15 @@ export default function ServiceDetails({
             }}
             selected={gender}
           />
-          <Button label="Continue" className={styles.continueButton} onClick={handleContinue} />
+          <Button
+            label="Continue"
+            className={styles.continueButton}
+            onClick={handleContinue}
+            filled={true}
+            width="88%"
+          />
           <div className={styles.subtitle2}>
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center", marginTop: "20px" }}>
               Already have an account?
               <a href="/login" style={{ color: "#057E6F" }}>
                 {" "}

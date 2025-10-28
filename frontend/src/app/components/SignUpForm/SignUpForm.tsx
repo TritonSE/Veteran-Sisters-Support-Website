@@ -9,11 +9,11 @@ import { auth } from "../../../firebase/firebase";
 import createUserImported, { CreateUserRequest } from "../../api/userApi";
 import { useAuth } from "../../contexts/AuthContext";
 
+import Loading from "./Loading";
 import OnboardingInterests from "./OnboardingInterests";
 import RoleSelection from "./RoleSelection";
 import ServiceDetails from "./ServiceDetails";
 import UserDetails from "./UserDetails";
-import styles from "./page.module.css";
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -51,7 +51,7 @@ export default function SignUpForm() {
     service?: string; // On service page, all fields are required
     onboarding?: string; // At least one interest must be chosen on last page
   }>({});
-  const { setIsSigningUp } = useAuth();
+  const { setIsSigningUp, isSigningUp } = useAuth();
 
   const handleNext = () => {
     setCurrentPage((prev) => {
@@ -202,6 +202,7 @@ export default function SignUpForm() {
             setFormErrors={setFormErrors}
             onNext={handleNext}
             onPrevious={handlePrevious}
+            isVeteran={isVeteran}
           />
         );
       case 2:
@@ -232,6 +233,7 @@ export default function SignUpForm() {
             setFormErrors={setFormErrors}
             onSubmit={(e) => void handleSignup(e)}
             onPrevious={handlePrevious}
+            isVeteran={isVeteran}
           />
         );
       default:
@@ -239,5 +241,5 @@ export default function SignUpForm() {
     }
   };
 
-  return <div className={styles.page}>{renderStage()}</div>;
+  return <>{isSigningUp ? <Loading /> : renderStage()}</>;
 }
