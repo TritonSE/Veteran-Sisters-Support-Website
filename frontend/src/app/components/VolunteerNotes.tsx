@@ -23,7 +23,6 @@ export function VolunteerNotes({ profileUserId }: { profileUserId: string }) {
     const fetchProfileNotes = async () => {
       const res = await getComments(profileUserId);
       console.log(res);
-      console.log(profileUserId);
       if (res.success) {
         return res.data;
       }

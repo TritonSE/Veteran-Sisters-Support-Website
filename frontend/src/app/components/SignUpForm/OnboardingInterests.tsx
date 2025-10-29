@@ -3,8 +3,11 @@
 import Image from "next/image";
 import React, { MouseEvent } from "react";
 
+import { Role } from "../Role";
+
 import styles from "./page.module.css";
 
+import { Role as RoleEnum } from "@/app/api/profileApi";
 import { BackButton } from "@/app/components/BackButton";
 import { Button } from "@/app/components/Button";
 import OnboardingOption from "@/app/components/OnboardingOption";
@@ -17,6 +20,7 @@ type OnboardingInterestsProps = {
   setFormErrors: React.Dispatch<React.SetStateAction<Record<string, string | undefined>>>;
   onSubmit: (e: MouseEvent<HTMLButtonElement>) => void;
   onPrevious: () => void;
+  isVeteran: boolean;
 };
 
 export default function OnboardingInterests({
@@ -26,6 +30,7 @@ export default function OnboardingInterests({
   setFormErrors,
   onSubmit,
   onPrevious,
+  isVeteran,
 }: OnboardingInterestsProps) {
   const handleToggleOption = (option: string) => {
     setSelectedOptions((prevOptions: string[]) => {
@@ -65,6 +70,9 @@ export default function OnboardingInterests({
           <div className={styles.interestsBox}>
             <BackButton handlePrevious={onPrevious} />
             <ProgressBar percentCompleted={75} />
+            <div style={{ width: "80px", marginBottom: "20px" }}>
+              <Role role={isVeteran ? RoleEnum.VETERAN : RoleEnum.VOLUNTEER} />
+            </div>
             <div className={styles.title}>
               What are your interests? <a style={{ color: "#B80037" }}> *</a>
             </div>
@@ -138,9 +146,17 @@ export default function OnboardingInterests({
                 handleToggleOption("Other");
               }}
             />
-            <Button label="Submit" className={styles.continueButton} onClick={handleSubmit} />
+            <div style={{ marginTop: "20px" }}>
+              <Button
+                label="Submit"
+                className={styles.continueButton}
+                onClick={handleSubmit}
+                filled={true}
+                width="88%"
+              />
+            </div>
             <div className={styles.subtitle2}>
-              <div style={{ textAlign: "center" }}>
+              <div style={{ textAlign: "center", marginTop: "20px" }}>
                 Already have an account?
                 <a href="/login" style={{ color: "#057E6F" }}>
                   {" "}

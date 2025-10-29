@@ -11,6 +11,7 @@ import {
   getVeteransByProgram,
   deleteUser,
   markActivityRead,
+  doesUserEmailExist
 } from "../controllers/userController.js";
 import { authenticateUser } from "../middleware/auth.js";
 import {
@@ -22,6 +23,7 @@ const router = express.Router();
 
 // Public routes (no authentication required)
 router.post("/users", addUser); // Signup endpoint
+router.get("/users/:email", doesUserEmailExist); // Check if user email exists
 
 // Protected routes (authentication required)
 router.get("/users/id/:userId", authenticateUser, authenticateProfilePermissions, getUserById);
