@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import { ActivityObject, getUnreadActivities } from "../api/activities";
+import { ActivityObject, ActivityType, getUnreadActivities } from "../api/activities";
 import { Role as RoleEnum } from "../api/profileApi";
 import { markActivityRead } from "../api/userApi";
 
@@ -53,7 +53,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
 
   const getActivityMessage = (activity: ActivityObject) => {
     switch (activity.type) {
-      case "document":
+      case ActivityType.DOCUMENT:
         return `${activity.uploader.firstName} uploaded a new document named "${activity.documentName}" to "${activity.programName
           ?.map((program) => {
             if (program === "battle buddies") return "Battle Buddies";
@@ -61,17 +61,17 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
             else return "Operation Wellness";
           })
           .join(", ")}"`;
-      case "comment":
+      case ActivityType.COMMENT:
         return `${activity.uploader.firstName} made a comment on "${activity.documentName}"`;
-      case "assignment":
+      case ActivityType.ASSIGNMENT:
         return `You've been assigned a new veteran!`;
-      case "report":
+      case ActivityType.REPORT:
         return `Your report has been resolved.`;
-      case "request":
+      case ActivityType.REQUEST:
         return `You received access to "${activity.documentName}"`;
-      case "announcement":
+      case ActivityType.ANNOUNCEMENT:
         return String(activity.title);
-      case "signup":
+      case ActivityType.SIGNUP:
         return `${activity.uploader.firstName} has signed up as a ${activity.uploader.role}`;
       default:
         return `Unknown Activity by ${activity.uploader.firstName}`;
@@ -87,7 +87,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
               id="arrowUp"
               width={35}
               height={35}
-              src="ic_round-arrow-drop-up.svg"
+              src="/ic_round-arrow-drop-up.svg"
               alt="Dropdown arrow"
               style={{
                 objectFit: "contain",
@@ -108,24 +108,26 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
         {isOpen &&
           activities.map((activity, index) => (
             <li className={styles.dropdownItem} key={index}>
-              {activity.type === "document"
+              {activity.type === ActivityType.DOCUMENT
                 ? "New Document"
-                : activity.type === "report"
+                : activity.type === ActivityType.REPORT
                   ? "Reports"
-                  : activity.type === "assignment"
+                  : activity.type === ActivityType.ASSIGNMENT
                     ? "New Assignment"
-                    : activity.type === "request"
+                    : activity.type === ActivityType.REQUEST
                       ? "Requests"
-                      : activity.type === "comment"
+                      : activity.type === ActivityType.COMMENT
                         ? "New Comment"
-                        : activity.type === "signup"
+                        : activity.type === ActivityType.SIGNUP
                           ? "Sign Up"
                           : ""}
               <div>
-                {activity.type === "announcement" && (
+                {activity.type === ActivityType.ANNOUNCEMENT && (
                   <div className={styles.urgentButton}>Urgent</div>
                 )}
-                <div className={activity.type === "announcement" ? styles.announcement : ""}>
+                <div
+                  className={activity.type === ActivityType.ANNOUNCEMENT ? styles.announcement : ""}
+                >
                   <Image
                     id="pfp"
                     width={40}
@@ -136,7 +138,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                   ></Image>
                   <div className={styles.horizontalDiv}>
                     <div className={styles.subtitle}>
-                      {activity.type !== "assignment" ? (
+                      {activity.type !== ActivityType.ASSIGNMENT ? (
                         <>
                           <span>{activity.uploader.firstName} </span>
                           <Role role={activity.uploader.role} />
@@ -167,9 +169,9 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                     </button>
                   </div>
 
-                  {["report", "announcement", "comment"].includes(activity.type) && (
-                    <p className={styles.description}>{activity.description}</p>
-                  )}
+                  {[ActivityType.REPORT, ActivityType.ANNOUNCEMENT, ActivityType.COMMENT].includes(
+                    activity.type,
+                  ) && <p className={styles.description}>{activity.description}</p>}
                 </div>
               </div>
             </li>

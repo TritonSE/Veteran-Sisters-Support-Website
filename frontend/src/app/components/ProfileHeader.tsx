@@ -62,7 +62,6 @@ export function ProfileHeader(params: {
               <Image src="/vertical_divider.svg" width={20} height={20} alt="divider" />
               <div>{genderText}</div>
             </div>
-
             <div className={styles.metadataSubsection}>
               <div className={styles.smallMetadata}>{email}</div>
               <Image src="/vertical_divider.svg" width={20} height={20} alt="divider" />

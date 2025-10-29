@@ -274,7 +274,7 @@ export const updateUserId = async (req, res) => {
 // Mark activity as read
 export const markActivityRead = async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userId = req.params.userId;
     const { activityId } = req.body;
     const updatedUser = await User.findByIdAndUpdate(userId, {
       $pull: { unreadActivities: activityId },
