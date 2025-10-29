@@ -98,7 +98,7 @@ export function AnnouncementTable() {
       </div>
       {announcements.length > 8 && (
         <div className={styles.pageSelect}>
-          {page === Math.floor(announcements.length / pageSize) ? (
+          {page === Math.floor((announcements.length - 1) / pageSize) ? (
             <div className={styles.arrowBoxDisabled}>
               <Image
                 src="/caret_right_disabled.svg"
