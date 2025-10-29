@@ -7,8 +7,29 @@ const router = express.Router();
 
 // All file routes require authentication
 router.post("/file", authenticateUser, FileController.uploadFile);
-router.get("/file/uploader/:userId", authenticateUser, authenticateProfilePermissions, FileController.getFileByUploader);
-router.get("/file/:id", authenticateUser, authenticateDocumentPermissions, FileController.getFileById);
-router.put("/file/:id", authenticateUser, authenticateDocumentPermissions, FileController.editFileById);
+router.get(
+  "/file/uploader/:userId",
+  authenticateUser,
+  authenticateProfilePermissions,
+  FileController.getFileByUploader,
+);
+router.get(
+  "/file/:id",
+  authenticateUser,
+  authenticateDocumentPermissions,
+  FileController.getFileById,
+);
+router.put(
+  "/file/:id",
+  authenticateUser,
+  authenticateDocumentPermissions,
+  FileController.editFileById,
+);
+router.delete(
+  "/file/:id",
+  authenticateUser,
+  authenticateDocumentPermissions,
+  FileController.deleteFileById,
+);
 
 export default router;

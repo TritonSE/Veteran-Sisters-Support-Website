@@ -3,16 +3,21 @@ import {
   getUnreadActivities,
   createActivity,
   createAnnouncement,
+  getActivities,
   getAnnouncements,
 } from "../controllers/activityController.js";
 import { authenticateUser } from "../middleware/auth.js";
-import { authenticateStaffOrAdmin } from "../middleware/profile.js";
+import { authenticateProfilePermissions, authenticateStaffOrAdmin } from "../middleware/profile.js";
 
 const router = express.Router();
 
-router.get("/activities/:userId", authenticateUser, getUnreadActivities);
-
-router.post("/activities", authenticateUser, createActivity);
+router.get(
+  "/activities/unread/:userId",
+  authenticateUser,
+  authenticateProfilePermissions,
+  getUnreadActivities,
+);
+router.get("/activities/:userId", authenticateUser, authenticateProfilePermissions, getActivities);
 
 router.post(
   "/activities/announcement",

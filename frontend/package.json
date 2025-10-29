@@ -24,14 +24,14 @@
     "node": "^23.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-select": "^5.10.0",
-    "react-pdf": "^9.2.1"
+    "react-pdf": "^9.2.1",
+    "react-select": "^5.10.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^22",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
     "@typescript-eslint/eslint-plugin": "^8.19.1",
     "@typescript-eslint/parser": "^8.19.1",
     "eslint": "^8.57.1",
