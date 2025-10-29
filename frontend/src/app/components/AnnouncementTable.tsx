@@ -59,7 +59,7 @@ export function AnnouncementTable({ userId }: AnnouncementTableProp) {
           )}
         </div>
       </div>
-      {announcements.length > 8 && (
+      {announcements.length > pageSize && (
         <div className={styles.pageSelect}>
           {page === Math.floor((announcements.length - 1) / pageSize) ? (
             <div className={styles.arrowBoxDisabled}>
