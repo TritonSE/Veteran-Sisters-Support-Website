@@ -7,8 +7,7 @@ import { Role } from "../Role";
 
 import styles from "./page.module.css";
 
-import { Role as RoleEnum } from "@/app/api/profileApi";
-import { checkIfUserEmailExists } from "@/app/api/profileApi";
+import { Role as RoleEnum, checkIfUserEmailExists } from "@/app/api/profileApi";
 import { BackButton } from "@/app/components/BackButton";
 import { Button } from "@/app/components/Button";
 import ProgressBar from "@/app/components/ProgressBar";
