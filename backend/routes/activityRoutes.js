@@ -1,7 +1,6 @@
 import express from "express";
 import {
   getUnreadActivities,
-  createActivity,
   createAnnouncement,
   getActivities,
   getAnnouncements,
