@@ -25,5 +25,11 @@ router.put(
   authenticateDocumentPermissions,
   FileController.editFileById,
 );
+router.delete(
+  "/file/:id",
+  authenticateUser,
+  authenticateDocumentPermissions,
+  FileController.deleteFileById,
+);
 
 export default router;
