@@ -66,16 +66,18 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  width: 100%;
 }
 
 .label {
   display: flex;
   flex-direction: column;
+  width: 100%;
   gap: 20px;
 }
 
 .inputTitle {
-  width: 1024px;
+  width: 100%;
   height: 41px;
   padding-top: 12.46px;
   padding-bottom: 12.54px;
@@ -88,7 +90,7 @@
 }
 
 .inputDetails {
-  width: 1024px;
+  width: 100%;
   height: 134px;
   padding-top: 12.46px;
   padding-left: 18.23px;
