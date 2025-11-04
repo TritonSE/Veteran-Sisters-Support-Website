@@ -99,6 +99,15 @@ export const getUnreadActivities = async (req, res) => {
   }
 };
 
+export const getAnnouncements = async (req, res) => {
+  try {
+    const announcements = await Activity.find({ type: "announcement" }).sort({ createdAt: -1 });
+    res.status(200).json(announcements);
+  } catch (error) {
+    res.status(500).json({ message: "Error getting announcements", error: error.message });
+  }
+};
+
 // Helper function: Create new activity
 export const createActivity = async (activityData) => {
   try {
@@ -200,8 +209,9 @@ export const createDocument = async ({ uploader, filename, programs }) => {
 };
 
 // Create activity type "announcement" by calling createActivity
-export const createAnnouncement = async ({ uploader, title, description }) => {
+export const createAnnouncement = async (req, res) => {
   try {
+    const { uploader, title, description } = req.body;
     const newActivity = {
       uploader,
       type: "announcement",
@@ -210,9 +220,10 @@ export const createAnnouncement = async ({ uploader, title, description }) => {
     };
 
     const savedActivity = await createActivity(newActivity);
-    return savedActivity;
+    await User.updateMany({}, { $push: { unreadActivities: savedActivity._id.toString() } });
+    res.status(201).json(savedActivity);
   } catch (error) {
-    throw new Error("Error creating Announcement activity: " + error.message);
+    res.status(500).json({ message: "Error creating Announcement activity", error: error.message });
   }
 };
 
