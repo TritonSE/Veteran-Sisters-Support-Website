@@ -1,16 +1,18 @@
 import Image from "next/image";
 
 import { ActivityObject, ActivityType } from "../api/activities";
+import { Role as RoleEnum } from "../api/profileApi";
 
 import styles from "./ActivitiesTableItem.module.css";
 import { Role } from "./Role";
 
 type ActivitiesTableItemProp = {
   activityObject: ActivityObject;
+  userRole: RoleEnum;
   last: boolean;
 };
 
-export function ActivitiesTableItem({ activityObject, last }: ActivitiesTableItemProp) {
+export function ActivitiesTableItem({ activityObject, userRole, last }: ActivitiesTableItemProp) {
   const getActivityMessage = (activity: ActivityObject) => {
     switch (activity.type) {
       case ActivityType.DOCUMENT:
@@ -24,7 +26,7 @@ export function ActivitiesTableItem({ activityObject, last }: ActivitiesTableIte
       case ActivityType.COMMENT:
         return `${activity.uploader.firstName} made a comment on "${activity.documentName}"`;
       case ActivityType.ASSIGNMENT:
-        return `You've been assigned a new veteran!`;
+        return `You've been assigned a new veteran/volunteer!`;
       case ActivityType.REPORT:
         return `Your report has been resolved.`;
       case ActivityType.REQUEST:
@@ -57,8 +59,22 @@ export function ActivitiesTableItem({ activityObject, last }: ActivitiesTableIte
           ></Image>
           <div className={styles.horizontalDiv}>
             <div className={styles.subtitle}>
-              <span>{activityObject.uploader.firstName}</span>
-              <Role role={activityObject.uploader.role} />
+              {activityObject.type !== ActivityType.ASSIGNMENT ? (
+                <>
+                  <span>{activityObject.uploader.firstName} </span>
+                  <Role role={activityObject.uploader.role} />
+                </>
+              ) : userRole === RoleEnum.VOLUNTEER ? (
+                <>
+                  <span>{activityObject.assignmentInfo.veteranId.firstName} </span>
+                  <Role role="veteran" />
+                </>
+              ) : (
+                <>
+                  <span>{activityObject.assignmentInfo.volunteerId.firstName} </span>
+                  <Role role="volunteer" />
+                </>
+              )}
             </div>
             <div>{getActivityMessage(activityObject)}</div>
             {[ActivityType.REPORT, ActivityType.ANNOUNCEMENT, ActivityType.COMMENT].includes(

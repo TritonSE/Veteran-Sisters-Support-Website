@@ -64,7 +64,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
       case ActivityType.COMMENT:
         return `${activity.uploader.firstName} made a comment on "${activity.documentName}"`;
       case ActivityType.ASSIGNMENT:
-        return `You've been assigned a new veteran!`;
+        return `You've been assigned a new veteran/volunteer!`;
       case ActivityType.REPORT:
         return `Your report has been resolved.`;
       case ActivityType.REQUEST:
@@ -146,12 +146,12 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                       ) : userRole === RoleEnum.VOLUNTEER ? (
                         <>
                           <span>{activity.assignmentInfo.veteranId.firstName} </span>
-                          <Role role="veteran" />
+                          <Role role={RoleEnum.VETERAN} />
                         </>
                       ) : (
                         <>
                           <span>{activity.assignmentInfo.volunteerId.firstName} </span>
-                          <Role role="volunteer" />
+                          <Role role={RoleEnum.VOLUNTEER} />
                         </>
                       )}
                     </div>

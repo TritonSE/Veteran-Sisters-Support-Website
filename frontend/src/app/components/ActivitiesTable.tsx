@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { ActivityObject, ActivityType, getActivities } from "../api/activities";
+import { Role as RoleEnum } from "../api/profileApi";
 
 import styles from "./ActivitiesTable.module.css";
 import { ActivitiesTableItem } from "./ActivitiesTableItem";
@@ -94,6 +95,7 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
           <ActivitiesTableItem
             key={activity._id}
             activityObject={activity}
+            userRole={role as RoleEnum}
             last={(idx + 1) % pageSize === 0 || idx === list.length - 1}
           />
         ))}

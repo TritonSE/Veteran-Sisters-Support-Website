@@ -25,6 +25,8 @@ export const getActivities = async (req, res) => {
         ],
       })
         .populate("uploader", "firstName lastName role")
+        .populate("assignmentInfo.volunteerId", "firstName lastName")
+        .populate("assignmentInfo.veteranId", "firstName lastName")
         .sort({ createdAt: -1 })
         .lean();
     } else if (user.role == "staff") {
@@ -38,6 +40,8 @@ export const getActivities = async (req, res) => {
         ],
       })
         .populate("uploader", "firstName lastName role")
+        .populate("assignmentInfo.volunteerId", "firstName lastName")
+        .populate("assignmentInfo.veteranId", "firstName lastName")
         .sort({ createdAt: -1 })
         .lean();
     } else {
@@ -45,6 +49,8 @@ export const getActivities = async (req, res) => {
         $or: [{ receivers: user._id.toString() }, { type: "announcement" }],
       })
         .populate("uploader", "firstName lastName role")
+        .populate("assignmentInfo.volunteerId", "firstName lastName")
+        .populate("assignmentInfo.veteranId", "firstName lastName")
         .sort({ createdAt: -1 })
         .lean();
     }
