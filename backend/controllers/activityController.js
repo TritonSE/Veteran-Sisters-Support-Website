@@ -185,7 +185,8 @@ export const createDocument = async ({ uploader, filename, programs }) => {
     const lowercasePrograms = programs.map((program) => {
       if (program === "BattleBuddies") return "battle buddies";
       else if (program === "Advocacy") return "advocacy";
-      else return "operation wellness";
+      else if (program === "OperationWellness") return "operation wellness";
+      else return program;
     });
     const activeVolunteer = await ActiveVolunteers.find({
       veteranUser: uploader,
