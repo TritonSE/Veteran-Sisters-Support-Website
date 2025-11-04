@@ -24,8 +24,6 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
     if (!type) {
       setActivities(allActivities);
     } else {
-      // console.log(allActivities);
-      // console.log(allActivities.filter((activity) => activity.type === type));
       setActivities(allActivities.filter((activity) => activity.type === type));
     }
     setPage(0);
