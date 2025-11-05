@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
 
 import { auth } from "../../firebase/firebase";
-import { Button } from "../components/Button";
 import SuccessNotification from "../components/SuccessNotification";
 
 import styles from "./page.module.css";
@@ -80,7 +79,9 @@ function LoginFormContent() {
             }}
           ></input>
 
-          <Button label="Continue" className={styles.signInButton} type="submit"></Button>
+          <button className={styles.signInButton} type="submit">
+            Continue
+          </button>
         </form>
         <div className={styles.subtitle2}>
           <div>
