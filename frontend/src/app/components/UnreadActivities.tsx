@@ -83,7 +83,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
               id="arrowUp"
               width={35}
               height={35}
-              src="ic_round-arrow-drop-up.svg"
+              src="/ic_round-arrow-drop-up.svg"
               alt="Dropdown arrow"
               style={{
                 objectFit: "contain",
@@ -126,7 +126,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                     id="pfp"
                     width={40}
                     height={40}
-                    src="Veteran.svg"
+                    src="/Veteran.svg"
                     alt="Profile Photo"
                     style={{ float: "left", margin: "16px 16px 16px 0px" }}
                   ></Image>

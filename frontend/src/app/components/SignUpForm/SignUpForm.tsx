@@ -1,7 +1,7 @@
 "use client";
 
 import { FirebaseError } from "firebase/app";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { User, createUserWithEmailAndPassword, deleteUser, signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import React, { MouseEvent, useState } from "react";
 
@@ -73,6 +73,21 @@ export default function SignUpForm() {
     });
   };
 
+  // Helper function to clean up Firebase user when MongoDB creation fails
+  const cleanupFirebaseUser = async (firebaseUser: User) => {
+    try {
+      await deleteUser(firebaseUser);
+      console.log("Firebase user deleted due to MongoDB creation failure");
+    } catch (deleteError) {
+      console.error("Failed to delete Firebase user:", deleteError);
+      try {
+        await signOut(auth);
+      } catch (signOutError) {
+        console.error("Failed to sign out:", signOutError);
+      }
+    }
+  };
+
   const handleSignup = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     let hasError = false;
@@ -94,8 +109,12 @@ export default function SignUpForm() {
 
     try {
       setIsSigningUp(true);
-      await createUserWithEmailAndPassword(auth, email, password);
-      console.log("Firebase User created successfully!");
+
+      // Create Firebase user first
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const firebaseUser = userCredential.user;
+      console.log("Firebase user created successfully!");
+
       // If successful, create user data in MongoDB
       try {
         const [month, day, year] = serviceDate.split("-").map(Number);
@@ -125,16 +144,31 @@ export default function SignUpForm() {
           },
           assignedVeterans: [],
         };
-        await createUserImported(newUser);
+
+        const result = await createUserImported(newUser);
+        if (!result.success) {
+          // MongoDB user creation failed - delete the Firebase user and sign out
+          console.error("MongoDB user creation failed:", result.error);
+          await cleanupFirebaseUser(firebaseUser);
+          setIsSigningUp(false);
+          alert(`Failed to create user: ${result.error}. Please try again.`);
+          return;
+        }
+
+        // Both Firebase and MongoDB user creation succeeded
+        console.log("MongoDB user created successfully!");
         setIsSigningUp(false);
         router.push("/");
-        console.log("User created successfully in MongoDB");
       } catch (error: unknown) {
-        console.error("User creation failed:", error);
+        // MongoDB user creation failed with an exception - delete Firebase user
+        console.error("MongoDB user creation failed:", error);
+        await cleanupFirebaseUser(firebaseUser);
         setIsSigningUp(false);
         alert("Something went wrong. Please try again.");
+        return;
       }
     } catch (error: unknown) {
+      // Firebase user creation failed (or other unexpected errors)
       if (error instanceof FirebaseError) {
         if (error.code === "auth/email-already-in-use") {
           setFormErrors((prevErrors) => ({
