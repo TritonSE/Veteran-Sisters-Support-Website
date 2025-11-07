@@ -40,6 +40,13 @@ export const addVolunteer = async (req, res) => {
   try {
     const { userEmail, program, veteranEmail, volunteerId, veteranId } = req.body;
 
+    // Validate required fields are provided
+    if (!volunteerId || !veteranId || !program) {
+      return res.status(400).json({
+        error: "Missing required fields: volunteerId, veteranId, and program are required.",
+      });
+    }
+
     const existingVolunteer = await ActiveVolunteers.findOne({
       volunteer: userEmail,
       assignedProgram: program,
@@ -54,6 +61,7 @@ export const addVolunteer = async (req, res) => {
         .json({ error: "This volunteer is already assigned to this program and veteran." });
     }
 
+    // Create and save with proper validation
     const newVolunteer = await ActiveVolunteers.create({
       volunteer: userEmail,
       assignedProgram: program,
