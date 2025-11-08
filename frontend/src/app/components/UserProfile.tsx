@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import {
+  AssignedProgram,
   Role as RoleEnum,
   UserProfile as UserProfileType,
   getUserProfile,
@@ -190,9 +191,9 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
         setLoading(false);
       }
     };
-
+    console.log("programs: ", programs);
     void fetchUserProfile();
-  }, [profileUserId, programsChanged, userId, userRole]);
+  }, [profileUserId, programsChanged, programs, userId, userRole]);
 
   if (loading) {
     return (
@@ -295,7 +296,16 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
               email={userProfile?.email}
               role={userProfile?.role}
               userPrograms={programs}
-              onSavePrograms={setPrograms}
+              onSavePrograms={(newPrograms) => {
+                setPrograms(newPrograms);
+                // Optimistically update userProfile to reflect new programs immediately
+                if (userProfile) {
+                  setUserProfile({
+                    ...userProfile,
+                    assignedPrograms: newPrograms as AssignedProgram[],
+                  });
+                }
+              }}
               callback={setOpenProgramChange}
               didProgramChange={programsChanged}
               programsChanged={setProgramsChanged}

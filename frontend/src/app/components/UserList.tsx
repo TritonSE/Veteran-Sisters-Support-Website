@@ -27,6 +27,25 @@ export function UserList(params: {
   const [dialogProgram, setDialogProgram] = useState<string[]>([]);
   const [currentUsers, setCurrentUsers] = useState<Record<string, UserProfileType[]>>(userPrograms);
 
+  // Update currentUsers when userProfile.assignedPrograms changes
+  useEffect(() => {
+    const updatedPrograms = Object.fromEntries(
+      userProfile?.assignedPrograms?.map((program) => [program, []]) ?? [],
+    ) as Record<string, UserProfileType[]>;
+
+    // Preserve existing users for programs that still exist
+    setCurrentUsers((prev) => {
+      const preserved: Record<string, UserProfileType[]> = {};
+      for (const [program, users] of Object.entries(prev)) {
+        if (userProfile?.assignedPrograms?.includes(program as AssignedProgram)) {
+          preserved[program] = users;
+        }
+      }
+      // Merge with new programs (new programs will have empty arrays)
+      return { ...updatedPrograms, ...preserved };
+    });
+  }, [userProfile?.assignedPrograms]);
+
   const openDialog = (program: string) => {
     setIsDialogOpen(true);
     setDialogProgram([program]);
@@ -59,15 +78,11 @@ export function UserList(params: {
         throw new Error("Failed to fetch volunteers");
       }
 
-      console.log("Res: ", res);
-
       const users: [string, UserProfileType][] = res.data.map((profile) => {
         const activeUser =
           userProfile?.role === Role.VETERAN ? profile.volunteerUser : profile.veteranUser;
         return [profile.assignedProgram, activeUser];
       });
-
-      console.log("Users: ", users);
 
       setCurrentUsers(() => {
         const updatedUsers = Object.fromEntries(
@@ -93,11 +108,10 @@ export function UserList(params: {
     const fetchProfiles = async () => {
       if (userProfile?.email) {
         await fetchUserProfiles(userProfile);
-        console.log("User PRof: ", userProfile);
       }
     };
     void fetchProfiles();
-  }, [userProfile?.email, refreshFlag]);
+  }, [userProfile?.email, userProfile?.assignedPrograms, refreshFlag]);
 
   const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(currentUsers)
     .slice()
