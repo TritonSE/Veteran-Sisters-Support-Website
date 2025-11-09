@@ -1,6 +1,10 @@
 // ChangeProgramDialog.tsx
 import React, { useEffect, useRef, useState } from "react";
 
+import {
+  removeAllAssignedVeteransWithVolunteerId,
+  removeAllAssignedVolunteersWithVeteranEmail,
+} from "../api/activeVolunteers";
 import { Role as RoleEnum } from "../api/profileApi";
 import { updateUserProgramsAndRole } from "../api/userApi";
 
@@ -65,6 +69,22 @@ const ChangeProgramDialog = ({
 
   const savePrograms = async () => {
     await updateUserProgramsAndRole(programs, role, email);
+    // When changing TO volunteer, remove all volunteers assigned to this veteran
+    if (role === RoleEnum.VOLUNTEER) {
+      if (!email) {
+        console.error("Email is required to remove assigned volunteers");
+      } else {
+        await removeAllAssignedVolunteersWithVeteranEmail(email);
+      }
+    }
+    // When changing TO veteran, remove all veterans assigned to this volunteer
+    else if (role === RoleEnum.VETERAN) {
+      if (!email) {
+        console.error("Email is required to remove assigned veterans");
+      } else {
+        await removeAllAssignedVeteransWithVolunteerId(email);
+      }
+    }
     onSavePrograms?.(programs);
     programsChanged?.(!didProgramChange);
     callback(false);

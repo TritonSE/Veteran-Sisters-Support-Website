@@ -191,7 +191,6 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
         setLoading(false);
       }
     };
-    console.log("programs: ", programs);
     void fetchUserProfile();
   }, [profileUserId, programsChanged, programs, userId, userRole]);
 
