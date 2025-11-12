@@ -58,13 +58,14 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
           ?.map((program) => {
             if (program === "battle buddies") return "Battle Buddies";
             else if (program === "advocacy") return "Advocacy";
-            else return "Operation Wellness";
+            else if (program === "operation wellness") return "Operation Wellness";
+            else return program;
           })
           .join(", ")}"`;
       case ActivityType.COMMENT:
         return `${activity.uploader.firstName} made a comment on "${activity.documentName}"`;
       case ActivityType.ASSIGNMENT:
-        return `You've been assigned a new veteran/volunteer!`;
+        return `You've been assigned a new ${userRole === RoleEnum.VETERAN ? "volunteer" : "veteran"}!`;
       case ActivityType.REPORT:
         return `Your report has been resolved.`;
       case ActivityType.REQUEST:
