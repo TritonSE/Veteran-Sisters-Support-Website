@@ -62,13 +62,13 @@ export function VeteranFilesTable({ veteranId, refresh }: VeteranFilesTableProps
             setSelectedProgram("All");
           },
           () => {
-            setSelectedProgram("BattleBuddies");
+            setSelectedProgram("battle buddies");
           },
           () => {
-            setSelectedProgram("Advocacy");
+            setSelectedProgram("advocacy");
           },
           () => {
-            setSelectedProgram("OperationWellness");
+            setSelectedProgram("operation wellness");
           },
         ]}
       />
