@@ -2,6 +2,10 @@ import Activity from "../models/activityModel.js";
 import { User } from "../models/userModel.js";
 import { ActiveVolunteers } from "../models/activeVolunteers.js";
 
+//TODO modify getActivities to so matches with unread - getting assignment activity info
+//also update notfication page for assignment activities display
+//Add enums to unread activities
+
 export const getActivities = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -21,6 +25,8 @@ export const getActivities = async (req, res) => {
         ],
       })
         .populate("uploader", "firstName lastName role")
+        .populate("assignmentInfo.volunteerId", "firstName lastName")
+        .populate("assignmentInfo.veteranId", "firstName lastName")
         .sort({ createdAt: -1 })
         .lean();
     } else if (user.role == "staff") {
@@ -34,6 +40,8 @@ export const getActivities = async (req, res) => {
         ],
       })
         .populate("uploader", "firstName lastName role")
+        .populate("assignmentInfo.volunteerId", "firstName lastName")
+        .populate("assignmentInfo.veteranId", "firstName lastName")
         .sort({ createdAt: -1 })
         .lean();
     } else {
@@ -41,6 +49,8 @@ export const getActivities = async (req, res) => {
         $or: [{ receivers: user._id.toString() }, { type: "announcement" }],
       })
         .populate("uploader", "firstName lastName role")
+        .populate("assignmentInfo.volunteerId", "firstName lastName")
+        .populate("assignmentInfo.veteranId", "firstName lastName")
         .sort({ createdAt: -1 })
         .lean();
     }
@@ -72,6 +82,8 @@ export const getUnreadActivities = async (req, res) => {
       type: { $ne: "announcement" },
     })
       .populate("uploader", "firstName lastName role")
+      .populate("assignmentInfo.volunteerId", "firstName lastName")
+      .populate("assignmentInfo.veteranId", "firstName lastName")
       .sort({ createdAt: -1 })
       .lean();
 
@@ -99,8 +111,16 @@ export const getAnnouncements = async (req, res) => {
 // Helper function: Create new activity
 export const createActivity = async (activityData) => {
   try {
-    const { uploader, type, receivers, title, description, documentName, programName } =
-      activityData;
+    const {
+      uploader,
+      type,
+      receivers,
+      title,
+      description,
+      documentName,
+      programName,
+      assignmentInfo,
+    } = activityData;
 
     if (!uploader || !type) {
       return res.status(400).json({ message: "Uploader ID, and type are required" });
@@ -116,10 +136,10 @@ export const createActivity = async (activityData) => {
       return res.status(400).json({ message: "programName is required for Document type" });
     }
 
-    if (["report", "announcement"].includes(type) && !description) {
+    if (["report", "announcement", "comment"].includes(type) && !description) {
       return res
         .status(400)
-        .json({ message: "description is required for Report and Announcement type" });
+        .json({ message: "description is required for Report, Announcement, and Comment type" });
     }
 
     if (type === "announcement" && !title) {
@@ -140,10 +160,17 @@ export const createActivity = async (activityData) => {
       description,
       documentName,
       programName,
+      assignmentInfo,
       createdAt: new Date(),
       type,
     });
     const savedActivity = await newActivity.save();
+    if (!!receivers) {
+      await User.updateMany(
+        { _id: { $in: receivers } },
+        { $push: { unreadActivities: savedActivity._id.toString() } },
+      );
+    }
     return savedActivity;
     // res.status(201).json(newActivity);
   } catch (error) {
@@ -158,7 +185,8 @@ export const createDocument = async ({ uploader, filename, programs }) => {
     const lowercasePrograms = programs.map((program) => {
       if (program === "BattleBuddies") return "battle buddies";
       else if (program === "Advocacy") return "advocacy";
-      else return "operation wellness";
+      else if (program === "OperationWellness") return "operation wellness";
+      else return program;
     });
     const activeVolunteer = await ActiveVolunteers.find({
       veteranUser: uploader,
@@ -175,10 +203,6 @@ export const createDocument = async ({ uploader, filename, programs }) => {
     };
 
     const savedActivity = await createActivity(newActivity);
-    await User.updateMany(
-      { _id: { $in: receivers } },
-      { $push: { unreadActivities: savedActivity._id.toString() } },
-    );
     return savedActivity;
   } catch (error) {
     throw new Error("Error creating Document activity: " + error.message);
@@ -205,12 +229,14 @@ export const createAnnouncement = async (req, res) => {
 };
 
 // Create activity type "comment" by calling createActivity
-export const createComment = async ({ uploader, documentName }) => {
+export const createComment = async ({ comment, documentName, documentUploader }) => {
   try {
     const newActivity = {
-      uploader,
+      uploader: comment.commenterId,
       type: "comment",
+      receivers: [documentUploader],
       documentName,
+      description: comment.comment,
     };
 
     const savedActivity = await createActivity(newActivity);
@@ -221,11 +247,16 @@ export const createComment = async ({ uploader, documentName }) => {
 };
 
 // Create activity type "assignment" by calling createActivity
-export const createAssignment = async ({ uploader }) => {
+export const createAssignment = async ({ uploader, veteranId, volunteerId }) => {
   try {
     const newActivity = {
       uploader,
       type: "assignment",
+      receivers: [veteranId, volunteerId],
+      assignmentInfo: {
+        veteranId: veteranId,
+        volunteerId: volunteerId,
+      },
     };
 
     const savedActivity = await createActivity(newActivity);

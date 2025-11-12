@@ -25,6 +25,7 @@
 
 .welcome {
   color: var(--Text-3, #3a3c3d);
+  width: 1024px;
 
   /* title large */
   font-family: "Albert Sans";

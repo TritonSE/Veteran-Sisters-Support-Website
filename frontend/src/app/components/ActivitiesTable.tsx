@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { ActivityObject, ActivityType, getActivities } from "../api/activities";
+import { Role as RoleEnum } from "../api/profileApi";
 
 import styles from "./ActivitiesTable.module.css";
 import { ActivitiesTableItem } from "./ActivitiesTableItem";
@@ -19,11 +20,11 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
   const [refresh, setRefresh] = useState<boolean>(false);
   const pageSize = 4;
 
-  const handleChangeType = (type: ActivityType | undefined) => {
-    if (!type) {
+  const handleChangeType = (types: ActivityType[] | undefined) => {
+    if (!types) {
       setActivities(allActivities);
     } else {
-      setActivities(allActivities.filter((activity) => activity.type === type));
+      setActivities(allActivities.filter((activity) => types.includes(activity.type)));
     }
     setPage(0);
   };
@@ -37,10 +38,10 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
         handleChangeType(undefined);
       },
       () => {
-        handleChangeType(ActivityType.REPORT);
+        handleChangeType([ActivityType.REPORT]);
       },
       () => {
-        handleChangeType(ActivityType.REQUEST);
+        handleChangeType([ActivityType.REQUEST]);
       },
     ];
   } else {
@@ -50,10 +51,10 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
         handleChangeType(undefined);
       },
       () => {
-        handleChangeType(ActivityType.DOCUMENT);
+        handleChangeType([ActivityType.DOCUMENT, ActivityType.COMMENT]);
       },
       () => {
-        handleChangeType(ActivityType.ASSIGNMENT);
+        handleChangeType([ActivityType.ASSIGNMENT]);
       },
     ];
   }
@@ -94,6 +95,7 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
           <ActivitiesTableItem
             key={activity._id}
             activityObject={activity}
+            userRole={role as RoleEnum}
             last={(idx + 1) % pageSize === 0 || idx === list.length - 1}
           />
         ))}

@@ -1,5 +1,16 @@
 import { APIResult, get, handleAPIError, post } from "./requests";
 
+type assignmentInfo = {
+  volunteerId: {
+    firstName: string;
+    lastName: string;
+  };
+  veteranId: {
+    firstName: string;
+    lastName: string;
+  };
+};
+
 export type ActivityObject = {
   _id: string;
   uploader: { firstName: string; lastName: string; role: string };
@@ -8,6 +19,7 @@ export type ActivityObject = {
   description: string;
   documentName: string;
   programName: string[];
+  assignmentInfo: assignmentInfo;
   isRead: boolean;
   createdAt: Date;
   relativeTime: string;

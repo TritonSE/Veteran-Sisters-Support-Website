@@ -2,7 +2,7 @@ import Comment from "../models/commentModel.js";
 import FileObject from "../models/fileModel.js";
 import mongoose from "mongoose";
 
-import { createDocument } from "./activityController.js";
+import { createComment, createDocument } from "./activityController.js";
 
 export const uploadFile = async (req, res, next) => {
   const { filename, uploaderId, comment, programs } = req.body;
@@ -61,9 +61,26 @@ export const editFileById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const update = req.body;
+    const originalFile = await FileObject.findById(id);
     const file = await FileObject.findOneAndUpdate({ _id: id }, update, { new: true })
       .populate("uploader")
       .populate([{ path: "comments", populate: [{ path: "commenterId" }] }]);
+
+    if (!!update.comments && update.comments.length > originalFile.comments.length) {
+      const originalComments = originalFile.comments.map((comment) => comment.toString());
+      const newComments = update.comments.filter(
+        (comment) => !originalComments.includes(comment._id),
+      );
+      newComments.forEach((comment) => {
+        if (comment.commenterId !== file.uploader._id.toString()) {
+          createComment({
+            comment: comment,
+            documentName: file.filename,
+            documentUploader: file.uploader._id.toString(),
+          });
+        }
+      });
+    }
     res.status(200).json(file);
   } catch (error) {
     next(error);

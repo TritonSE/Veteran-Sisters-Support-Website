@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import { UserProfile } from "../api/profileApi";
+import { Role, UserProfile } from "../api/profileApi";
 import { getUser } from "../api/userApi";
 import { FileUpload } from "../components/FileUpload";
 import { UnreadActivities } from "../components/UnreadActivities";
@@ -75,7 +75,12 @@ export function VeteranDashboard() {
             </div>
           </div>
 
-          <UnreadActivities userId={userId} isOpen={dropdownOpen} toggleDropdown={toggleDropdown} />
+          <UnreadActivities
+            userId={userId}
+            userRole={Role.VETERAN}
+            isOpen={dropdownOpen}
+            toggleDropdown={toggleDropdown}
+          />
 
           <br />
           <br />
