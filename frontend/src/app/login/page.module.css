@@ -73,6 +73,11 @@
   background: var(--Primary, #057e6f);
   color: var(--Neutral-Base-White, #fafafa);
   border: none;
+  font-family: "Albert Sans";
+  font-size: 16px;
+  font-style: medium;
+  font-weight: 500;
+  border-radius: 8px;
 }
 
 .rememberMeContainer {
