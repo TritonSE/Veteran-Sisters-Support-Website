@@ -1,69 +1,32 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+import { ActivityObject, getAnnouncements } from "../api/activities";
+
 import styles from "./AnnouncementTable.module.css";
 import { AnnouncementTableItem } from "./AnnouncementTableItem";
 
-//PH
-type ActivityObject = {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  role: string;
-  type: "document" | "comment" | "assignment" | "report" | "request" | "announcement";
-  title: string;
-  description: string;
-  documentName: string;
-  programName: string[];
-  isRead: boolean;
-  createdAt: Date;
-  relativeTime: string;
+type AnnouncementTableProp = {
+  userId: string;
 };
 
-export function AnnouncementTable() {
+export function AnnouncementTable({ userId }: AnnouncementTableProp) {
   const [announcements, setAnnouncements] = useState<ActivityObject[]>([]);
   const [page, setPage] = useState<number>(0);
   const pageSize = 8;
 
   useEffect(() => {
-    const announcementList = [];
-    for (let i = 0; i < 5; i++) {
-      const act = {
-        _id: String(i),
-        firstName: "fname",
-        lastName: "lname",
-        role: "admin",
-        type: "announcement",
-        title: "AnnouncementTitle",
-        description: "asd",
-        documentName: "name",
-        programName: ["battle buddies"],
-        isRead: false,
-        createdAt: new Date(),
-        relativeTime: "a",
-      } as ActivityObject;
-      announcementList.push(act);
-    }
-    const j = announcementList.length;
-    for (let i = announcementList.length; i < j + 5; i++) {
-      const act = {
-        _id: String(i),
-        firstName: "fname",
-        lastName: "lname",
-        role: "admin",
-        type: "announcement",
-        title:
-          "AnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitleAnnouncementTitle",
-        description: "asd",
-        documentName: "name",
-        programName: ["battle buddies"],
-        isRead: false,
-        createdAt: new Date(),
-        relativeTime: "a",
-      } as ActivityObject;
-      announcementList.push(act);
-    }
-    setAnnouncements(announcementList);
+    getAnnouncements(userId)
+      .then((result) => {
+        if (result.success) {
+          setAnnouncements(result.data);
+        } else {
+          console.error(result.error);
+        }
+      })
+      .catch((reason: unknown) => {
+        console.error(reason);
+      });
   }, []);
 
   return (
@@ -96,9 +59,9 @@ export function AnnouncementTable() {
           )}
         </div>
       </div>
-      {announcements.length > 8 && (
+      {announcements.length > pageSize && (
         <div className={styles.pageSelect}>
-          {page === Math.floor(announcements.length / pageSize) ? (
+          {page === Math.floor((announcements.length - 1) / pageSize) ? (
             <div className={styles.arrowBoxDisabled}>
               <Image
                 src="/caret_right_disabled.svg"

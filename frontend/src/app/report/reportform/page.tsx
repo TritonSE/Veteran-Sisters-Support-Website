@@ -118,8 +118,8 @@ function ReportFormContent() {
         reporterId: userId,
         reporteeId: selectedReporteeProfile?._id ?? "",
         situation: orderedSituations,
-        proofOfLifeDate: proofOfLifeDate ? proofOfLifeDate : null,
-        proofOfLifeTime: proofOfLifeTime ? proofOfLifeTime : null,
+        proofOfLifeDate: proofOfLifeDate ?? null,
+        proofOfLifeTime: proofOfLifeTime ?? null,
         explanation,
       });
       if (!res.success) {

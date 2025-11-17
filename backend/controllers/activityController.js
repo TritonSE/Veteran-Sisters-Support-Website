@@ -2,54 +2,62 @@ import Activity from "../models/activityModel.js";
 import { User } from "../models/userModel.js";
 import { ActiveVolunteers } from "../models/activeVolunteers.js";
 
+export const getActivities = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    let activities;
+    if (user.role == "admin") {
+      activities = await Activity.find({
+        $or: [
+          { receivers: user._id.toString() },
+          { type: "announcement" },
+          { type: "report" },
+          { type: "signup" },
+        ],
+      })
+        .populate("uploader", "firstName lastName role")
+        .sort({ createdAt: -1 })
+        .lean();
+    } else if (user.role == "staff") {
+      activities = await Activity.find({
+        $or: [
+          { receivers: user._id.toString() },
+          { type: "announcement" },
+          { type: "request" },
+          { type: "signup" },
+          { programName: { $in: user.assignedPrograms } },
+        ],
+      })
+        .populate("uploader", "firstName lastName role")
+        .sort({ createdAt: -1 })
+        .lean();
+    } else {
+      activities = await Activity.find({
+        $or: [{ receivers: user._id.toString() }, { type: "announcement" }],
+      })
+        .populate("uploader", "firstName lastName role")
+        .sort({ createdAt: -1 })
+        .lean();
+    }
+    res.status(200).json(activities);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching activities", error: error.message });
+  }
+};
+
 // Return a. Recent 3 unread activities, b. Total count of unread activities
 export const getUnreadActivities = async (req, res) => {
   try {
-    // Commented for future use maybe
-    // const announcements = await Activity.find({ isRead: false, type: "announcement" })
-    //   .populate("uploader", "firstName lastName role")
-    //   .sort({ createdAt: -1 })
-    //   .lean();
-
-    // let otherActivities;
-    // if (user.role == "admin") {
-    //   otherActivities = await Activity.find({
-    //     isRead: false,
-    //     type: { $ne: "announcement" },
-    //     $or: [{ receivers: user._id.toString() }, { type: "report" }, { type: "signup" }],
-    //   })
-    //     .populate("uploader", "firstName lastName role")
-    //     .sort({ createdAt: -1 })
-    //     .lean();
-    // } else if (user.role == "staff") {
-    //   otherActivities = await Activity.find({
-    //     isRead: false,
-    //     type: { $ne: "announcement" },
-    //     $or: [
-    //       { receivers: user._id.toString() },
-    //       { type: "request" },
-    //       { type: "signup" },
-    //       { programName: { $in: user.assignedPrograms } },
-    //     ],
-    //   })
-    //     .populate("uploader", "firstName lastName role")
-    //     .sort({ createdAt: -1 })
-    //     .lean();
-    // } else {
-    //   otherActivities = await Activity.find({
-    //     isRead: false,
-    //     receivers: user._id.toString(),
-    //     type: { $ne: "announcement" },
-    //   })
-    //     .populate("uploader", "firstName lastName role")
-    //     .sort({ createdAt: -1 })
-    //     .lean();
-    // }
-    // const totalUnreadCount = announcements.length + otherActivities.length;
-    // const activities = [...announcements, ...otherActivities].slice(0, 3);
-
     const { userId } = req.params;
     const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
     const announcements = await Activity.find({
       _id: { $in: user.unreadActivities },
@@ -76,6 +84,15 @@ export const getUnreadActivities = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Error fetching unread activities", error: error.message });
+  }
+};
+
+export const getAnnouncements = async (req, res) => {
+  try {
+    const announcements = await Activity.find({ type: "announcement" }).sort({ createdAt: -1 });
+    res.status(200).json(announcements);
+  } catch (error) {
+    res.status(500).json({ message: "Error getting announcements", error: error.message });
   }
 };
 
@@ -169,8 +186,9 @@ export const createDocument = async ({ uploader, filename, programs }) => {
 };
 
 // Create activity type "announcement" by calling createActivity
-export const createAnnouncement = async ({ uploader, title, description }) => {
+export const createAnnouncement = async (req, res) => {
   try {
+    const { uploader, title, description } = req.body;
     const newActivity = {
       uploader,
       type: "announcement",
@@ -179,9 +197,10 @@ export const createAnnouncement = async ({ uploader, title, description }) => {
     };
 
     const savedActivity = await createActivity(newActivity);
-    return savedActivity;
+    await User.updateMany({}, { $push: { unreadActivities: savedActivity._id.toString() } });
+    res.status(201).json(savedActivity);
   } catch (error) {
-    throw new Error("Error creating Announcement activity: " + error.message);
+    res.status(500).json({ message: "Error creating Announcement activity", error: error.message });
   }
 };
 
