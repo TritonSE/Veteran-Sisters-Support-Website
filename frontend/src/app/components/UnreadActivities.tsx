@@ -128,7 +128,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                     id="pfp"
                     width={40}
                     height={40}
-                    src="Veteran.svg"
+                    src="/Veteran.svg"
                     alt="Profile Photo"
                     style={{ float: "left", margin: "16px 16px 16px 0px" }}
                   ></Image>

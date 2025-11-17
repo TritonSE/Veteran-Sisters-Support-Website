@@ -99,10 +99,47 @@ export const addUser = async (req, res) => {
         assignedUsers,
         unreadActivities: [],
       });
+
+      // Check if the user was actually created successfully
+      // Bruh without this check everything breaks if there is an issue w MongoDB connection
+      // More error checks pls I beg
+      if (!newUser || !newUser._id) {
+        throw new Error("Failed to create user: User was not saved to database");
+      }
+
       res.status(201).json(newUser);
     }
   } catch (error) {
-    console.log("addUser Error", error);
+    console.error("addUser Error:", error);
+
+    // Handle Mongoose validation errors
+    if (error instanceof mongoose.Error.ValidationError) {
+      const validationErrors = Object.keys(error.errors).map((key) => ({
+        field: key,
+        message: error.errors[key].message,
+      }));
+      return res.status(400).json({
+        error: "Validation failed",
+        details: validationErrors,
+      });
+    }
+
+    // Handle duplicate key errors
+    if (error.code === 11000) {
+      return res.status(409).json({
+        error: "Duplicate entry",
+        message: "A user with these details already exists",
+      });
+    }
+
+    // Handle database connection errors and other Mongoose errors
+    if (error instanceof mongoose.Error || error.message?.includes("buffering timed out") || error.message?.includes("not connected")) {
+      return res.status(503).json({ 
+        error: "Database Error",
+        message: "Failed to connect to database. Please ensure MongoDB is running." 
+      });
+    }
+
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
