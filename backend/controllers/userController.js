@@ -133,10 +133,14 @@ export const addUser = async (req, res) => {
     }
 
     // Handle database connection errors and other Mongoose errors
-    if (error instanceof mongoose.Error || error.message?.includes("buffering timed out") || error.message?.includes("not connected")) {
-      return res.status(503).json({ 
+    if (
+      error instanceof mongoose.Error ||
+      error.message?.includes("buffering timed out") ||
+      error.message?.includes("not connected")
+    ) {
+      return res.status(503).json({
         error: "Database Error",
-        message: "Failed to connect to database. Please ensure MongoDB is running." 
+        message: "Failed to connect to database. Please ensure MongoDB is running.",
       });
     }
 
@@ -189,7 +193,7 @@ export const getUserRole = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const email = req.params.email;
-    const { program, veteranEmail } = req.body;
+    const { program } = req.body;
 
     const user = await User.findOne({ email }).exec();
     if (!user) {
@@ -203,33 +207,10 @@ export const updateUser = async (req, res) => {
       } else {
         user.assignedPrograms.push(program);
       }
+      await user.save();
     }
 
-    if (veteranEmail) {
-      //updates assignedUsers on both users involved
-      const veteran = await User.findOne({ email: veteranEmail }).exec();
-      if (!veteran) {
-        return res.status(404).json({ error: "Veteran not found" });
-      }
-      const userIndex = veteran.assignedUsers.indexOf(email);
-      const veteranIndex = user.assignedUsers.indexOf(veteranEmail);
-
-      if (veteranIndex > -1) {
-        user.assignedUsers.splice(veteranIndex, 1);
-      } else {
-        user.assignedUsers.push(veteranEmail);
-      }
-
-      if (userIndex > -1) {
-        veteran.assignedUsers.splice(userIndex, 1);
-      } else {
-        veteran.assignedUsers.push(email);
-      }
-
-      await veteran.save();
-    }
-
-    await user.save();
+    // assignedUsers management moved to activeVolunteersController to keep it in sync with activeVolunteers
 
     res.status(200).json({ message: "User updated successfully", user });
   } catch (error) {
