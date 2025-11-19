@@ -1,4 +1,5 @@
 import { ActiveVolunteers } from "../models/activeVolunteers.js";
+import { createAssignment } from "./activityController.js";
 
 //query active volunteers by program, veteran, or get all active volunteers
 export const queryActiveVolunteersVeteranByEmail = async (req, res) => {
@@ -62,6 +63,11 @@ export const addVolunteer = async (req, res) => {
       veteranUser: veteranId,
     });
 
+    await createAssignment({
+      uploader: req.user.userId,
+      veteranId: veteranId,
+      volunteerId: volunteerId,
+    });
     const { User } = await import("../models/userModel.js");
 
     const volunteer = await User.findById(volunteerId).exec();

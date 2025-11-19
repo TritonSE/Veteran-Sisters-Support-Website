@@ -2,18 +2,22 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { ActivityObject, ActivityType, getUnreadActivities } from "../api/activities";
+import { Role as RoleEnum } from "../api/profileApi";
 import { markActivityRead } from "../api/userApi";
 
+import { Role } from "./Role";
 import styles from "./UnreadActivities.module.css";
 
 type UnreadActivitiesProps = {
   userId: string;
+  userRole: RoleEnum;
   isOpen: boolean;
   toggleDropdown: () => void;
 };
 
 export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
   userId,
+  userRole,
   isOpen,
   toggleDropdown,
 }) => {
@@ -54,13 +58,14 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
           ?.map((program) => {
             if (program === "battle buddies") return "Battle Buddies";
             else if (program === "advocacy") return "Advocacy";
-            else return "Operation Wellness";
+            else if (program === "operation wellness") return "Operation Wellness";
+            else return program;
           })
           .join(", ")}"`;
       case ActivityType.COMMENT:
         return `${activity.uploader.firstName} made a comment on "${activity.documentName}"`;
       case ActivityType.ASSIGNMENT:
-        return `You've been assigned a new veteran!`;
+        return `You've been assigned a new ${userRole === RoleEnum.VETERAN ? "volunteer" : "veteran"}!`;
       case ActivityType.REPORT:
         return `Your report has been resolved.`;
       case ActivityType.REQUEST:
@@ -134,11 +139,22 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                   ></Image>
                   <div className={styles.horizontalDiv}>
                     <div className={styles.subtitle}>
-                      {activity.uploader.firstName}{" "}
-                      <span className={styles.label}>
-                        {activity.uploader.role.charAt(0).toUpperCase() +
-                          activity.uploader.role.slice(1)}
-                      </span>
+                      {activity.type !== ActivityType.ASSIGNMENT ? (
+                        <>
+                          <span>{activity.uploader.firstName} </span>
+                          <Role role={activity.uploader.role} />
+                        </>
+                      ) : userRole === RoleEnum.VOLUNTEER ? (
+                        <>
+                          <span>{activity.assignmentInfo.veteranId.firstName} </span>
+                          <Role role={RoleEnum.VETERAN} />
+                        </>
+                      ) : (
+                        <>
+                          <span>{activity.assignmentInfo.volunteerId.firstName} </span>
+                          <Role role={RoleEnum.VOLUNTEER} />
+                        </>
+                      )}
                     </div>
                     <div style={{ fontWeight: "14px" }}>{activity.relativeTime}</div>
                   </div>
@@ -154,9 +170,9 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                     </button>
                   </div>
 
-                  {[ActivityType.REPORT, ActivityType.ANNOUNCEMENT].includes(activity.type) && (
-                    <p className={styles.description}>{activity.description}</p>
-                  )}
+                  {[ActivityType.REPORT, ActivityType.ANNOUNCEMENT, ActivityType.COMMENT].includes(
+                    activity.type,
+                  ) && <p className={styles.description}>{activity.description}</p>}
                 </div>
               </div>
             </li>

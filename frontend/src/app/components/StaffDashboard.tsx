@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 
-import { UserProfile } from "../api/profileApi";
+import { Role, UserProfile } from "../api/profileApi";
 import { getUser } from "../api/userApi";
 import { AdminStaffUserTable } from "../components/AdminStaffUserTable";
 
 import styles from "./StaffDashboard.module.css";
+import { UnreadActivities } from "./UnreadActivities";
 
 type StaffDashboardProp = {
   staffId: string;
@@ -12,6 +13,11 @@ type StaffDashboardProp = {
 
 export function StaffDashboard({ staffId }: StaffDashboardProp) {
   const [user, setUser] = useState<UserProfile>();
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(true);
+
+  const toggleDropdown = () => {
+    setDropdownOpen((prev) => !prev);
+  };
 
   useEffect(() => {
     getUser(staffId)
@@ -31,6 +37,12 @@ export function StaffDashboard({ staffId }: StaffDashboardProp) {
         <div className={styles.frame}>
           <div className={styles.welcome}>
             <span>Welcome, {user?.firstName}!</span>
+            <UnreadActivities
+              userId={staffId}
+              userRole={Role.STAFF}
+              isOpen={dropdownOpen}
+              toggleDropdown={toggleDropdown}
+            />
           </div>
           <AdminStaffUserTable />
         </div>
