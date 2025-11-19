@@ -99,10 +99,51 @@ export const addUser = async (req, res) => {
         assignedUsers,
         unreadActivities: [],
       });
+
+      // Check if the user was actually created successfully
+      // Bruh without this check everything breaks if there is an issue w MongoDB connection
+      // More error checks pls I beg
+      if (!newUser || !newUser._id) {
+        throw new Error("Failed to create user: User was not saved to database");
+      }
+
       res.status(201).json(newUser);
     }
   } catch (error) {
-    console.log("addUser Error", error);
+    console.error("addUser Error:", error);
+
+    // Handle Mongoose validation errors
+    if (error instanceof mongoose.Error.ValidationError) {
+      const validationErrors = Object.keys(error.errors).map((key) => ({
+        field: key,
+        message: error.errors[key].message,
+      }));
+      return res.status(400).json({
+        error: "Validation failed",
+        details: validationErrors,
+      });
+    }
+
+    // Handle duplicate key errors
+    if (error.code === 11000) {
+      return res.status(409).json({
+        error: "Duplicate entry",
+        message: "A user with these details already exists",
+      });
+    }
+
+    // Handle database connection errors and other Mongoose errors
+    if (
+      error instanceof mongoose.Error ||
+      error.message?.includes("buffering timed out") ||
+      error.message?.includes("not connected")
+    ) {
+      return res.status(503).json({
+        error: "Database Error",
+        message: "Failed to connect to database. Please ensure MongoDB is running.",
+      });
+    }
+
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -152,7 +193,7 @@ export const getUserRole = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const email = req.params.email;
-    const { program, veteranEmail } = req.body;
+    const { program } = req.body;
 
     const user = await User.findOne({ email }).exec();
     if (!user) {
@@ -166,33 +207,10 @@ export const updateUser = async (req, res) => {
       } else {
         user.assignedPrograms.push(program);
       }
+      await user.save();
     }
 
-    if (veteranEmail) {
-      //updates assignedUsers on both users involved
-      const veteran = await User.findOne({ email: veteranEmail }).exec();
-      if (!veteran) {
-        return res.status(404).json({ error: "Veteran not found" });
-      }
-      const userIndex = veteran.assignedUsers.indexOf(email);
-      const veteranIndex = user.assignedUsers.indexOf(veteranEmail);
-
-      if (veteranIndex > -1) {
-        user.assignedUsers.splice(veteranIndex, 1);
-      } else {
-        user.assignedUsers.push(veteranEmail);
-      }
-
-      if (userIndex > -1) {
-        veteran.assignedUsers.splice(userIndex, 1);
-      } else {
-        veteran.assignedUsers.push(email);
-      }
-
-      await veteran.save();
-    }
-
-    await user.save();
+    // assignedUsers management moved to activeVolunteersController to keep it in sync with activeVolunteers
 
     res.status(200).json({ message: "User updated successfully", user });
   } catch (error) {
