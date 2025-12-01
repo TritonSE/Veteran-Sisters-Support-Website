@@ -18,7 +18,16 @@ export function VeteranList({ volunteer }: VeteranListProp) {
     getAssignedUsers(volunteer)
       .then((result) => {
         if (result.success) {
-          setUsers(result.data);
+          const seenIds = new Set();
+          const uniqueVeterans = result.data.filter((activeVolunteer) => {
+            const id = activeVolunteer.veteranUser._id;
+            if (seenIds.has(id)) {
+              return false;
+            }
+            seenIds.add(id);
+            return true;
+          });
+          setUsers(uniqueVeterans);
         } else {
           console.error(result.error);
         }
