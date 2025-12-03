@@ -152,7 +152,7 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
 
   const formattedOptions = volunteers.map((v) => ({
     value: v,
-    label: `${v.firstName} ${v.lastName} - ${String(v.assignedUsers?.length ?? 0)} ${
+    label: `${v.firstName} ${v.lastName} - ${String(v.assignedUsers ? new Set(v.assignedUsers).size : 0)} ${
       props.user.role === RoleEnum.VETERAN ? "veterans" : "volunteers"
     }`,
   }));
