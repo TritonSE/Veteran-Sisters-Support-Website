@@ -79,7 +79,7 @@ export const addVolunteer = async (req, res) => {
       }
       if (!volunteer.assignedUsers.includes(veteranEmail)) {
         volunteer.assignedUsers.push(veteranEmail);
-        await volunteer.save();
+        await volunteer.save({ validateBeforeSave: false });
       }
     }
 
@@ -89,7 +89,7 @@ export const addVolunteer = async (req, res) => {
       }
       if (!veteran.assignedUsers.includes(userEmail)) {
         veteran.assignedUsers.push(userEmail);
-        await veteran.save();
+        await veteran.save({ validateBeforeSave: false });
       }
     }
 
@@ -143,14 +143,14 @@ export const removeVolunteer = async (req, res) => {
           volunteer.assignedUsers = volunteer.assignedUsers.filter(
             (email) => email !== deletedVeteranEmail,
           );
-          await volunteer.save();
+          await volunteer.save({ validateBeforeSave: false });
         }
 
         if (veteran.assignedUsers && veteran.assignedUsers.includes(deletedVolunteerEmail)) {
           veteran.assignedUsers = veteran.assignedUsers.filter(
             (email) => email !== deletedVolunteerEmail,
           );
-          await veteran.save();
+          await veteran.save({ validateBeforeSave: false });
         }
       }
     }
