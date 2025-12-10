@@ -50,22 +50,3 @@ export function AdminDashboard({ adminId }: AdminDashboardProp) {
     </div>
   );
 }
-
-// return (
-//     <div className={styles.container}>
-//       <div className={styles.page}>
-//         <div className={styles.frame}>
-//           <div className={styles.welcome}>
-//             <span>Welcome, {user?.firstName}!</span>
-//             <UnreadActivities
-//               userId={volunteerId}
-//               userRole={Role.VOLUNTEER}
-//               isOpen={dropdownOpen}
-//               toggleDropdown={toggleDropdown}
-//             />
-//           </div>
-//           {user && <VeteranList volunteer={user} />}
-//         </div>
-//       </div>
-//     </div>
-//   );
