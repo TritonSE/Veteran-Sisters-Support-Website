@@ -10,6 +10,7 @@ import {
 } from "../api/profileApi";
 
 import { Button } from "./Button";
+import ChangePasswordModal from "./ChangePasswordModal";
 import CustomDropdown from "./CustomDropdown";
 import styles from "./EditProfile.module.css";
 import NavigateBack from "./NavigateBack";
@@ -31,6 +32,7 @@ export default function EditProfile({ userId }: { userId: string }) {
   const [userProfile, setUserProfile] = useState<UserProfileType | null>(null);
   const [genderSelectOpen, setGenderSelectOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [changePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -180,9 +182,10 @@ export default function EditProfile({ userId }: { userId: string }) {
       <div className={styles.formControls}>
         <Button
           label="Click to change password"
-          onClick={(event) => {
-            event.preventDefault();
+          onClick={() => {
+            setChangePasswordModalOpen(true);
           }}
+          type="button"
         />
         <div className={styles.formSubmissionControls}>
           <Button
@@ -191,10 +194,17 @@ export default function EditProfile({ userId }: { userId: string }) {
               event.preventDefault();
               router.back();
             }}
+            type="button"
           />
           <Button label="Save" filled={true} type="submit" />
         </div>
       </div>
+      <ChangePasswordModal
+        isOpen={changePasswordModalOpen}
+        onClose={() => {
+          setChangePasswordModalOpen(false);
+        }}
+      />
     </form>
   );
 }
