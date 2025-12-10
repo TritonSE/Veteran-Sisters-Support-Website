@@ -34,6 +34,7 @@ function ReportFormContent() {
   const [assignedUsersProfiles, setAssignedUsersProfiles] = useState<UserProfile[]>([]);
   const [selectedReporteeName, setSelectedReporteeName] = useState<string>("");
   const [selectedReporteeProfile, setSelectedReporteeProfile] = useState<UserProfile | null>(null);
+  const [loadingDropdownOptions, setLoadingDropdownOptions] = useState(false);
 
   const resetForm = () => {
     setSelectedReporteeName("");
@@ -139,14 +140,17 @@ function ReportFormContent() {
   useEffect(() => {
     if (loading || !userId) return;
 
+    setLoadingDropdownOptions(true);
     getUser(userId)
       .then((res: APIResult<UserProfile>) => {
         if (!res.success) {
           console.error("Error loading current user:", res.error);
+          setLoadingDropdownOptions(false);
           return;
         }
         const me = res.data;
         if (!me.assignedUsers?.length) {
+          setLoadingDropdownOptions(false);
           setAssignedUsersProfiles([]);
           return;
         }
@@ -158,11 +162,18 @@ function ReportFormContent() {
             const profiles = results
               .filter((r): r is APIResult<UserProfile> & { success: true } => r.success)
               .map((r) => r.data);
+            setLoadingDropdownOptions(false);
             setAssignedUsersProfiles(profiles);
           })
-          .catch(console.error);
+          .catch((error: unknown) => {
+            console.error(error);
+            setLoadingDropdownOptions(false);
+          });
       })
-      .catch(console.error);
+      .catch((error: unknown) => {
+        console.error(error);
+        setLoadingDropdownOptions(false);
+      });
   }, [loading, userId]);
 
   return (
@@ -199,6 +210,13 @@ function ReportFormContent() {
                 }}
                 selected={selectedReporteeName}
               />
+              {/* If we're finished loading and don't have any options for who to report, display an empty state */}
+              {!loading && !loadingDropdownOptions && dropdownOptions.length === 0 ? (
+                <p className={styles.subtitle}>
+                  You can&apos;t report anyone because you don&apos;t have any assigned{" "}
+                  {userRole === "volunteer" ? "veterans" : "volunteers"}.
+                </p>
+              ) : null}
               <p className={styles.question}>
                 What type of situation is this? <span className={styles.asterisk}> *</span>
               </p>
