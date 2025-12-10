@@ -5,6 +5,7 @@ import React, { ChangeEvent, useState } from "react";
 import { storage } from "../../firebase/firebase";
 import { CreateFileObjectRequest, createFileObject } from "../api/fileApi";
 
+import ErrorMessage from "./ErrorMessage";
 import styles from "./FileUpload.module.css";
 
 type FileUploadProps = {
@@ -202,10 +203,7 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
           </div>
         </div>
         {sizeError && (
-          <div className={styles.error}>
-            <Image src="/error_symbol.svg" alt="error" width={20} height={20} /> File size was too
-            big, please upload one smaller than 1 GB!
-          </div>
+          <ErrorMessage message="File size was too big, please upload one smaller than 1 GB!" />
         )}
       </div>
     </>
