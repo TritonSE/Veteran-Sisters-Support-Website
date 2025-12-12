@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { ActivityObject, ActivityType, getActivities } from "../api/activities";
 import { Role as RoleEnum } from "../api/profileApi";
@@ -14,18 +14,22 @@ type ActivitiesTableProp = {
 };
 
 export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
-  const [activities, setActivities] = useState<ActivityObject[]>([]);
   const [allActivities, setAllActivities] = useState<ActivityObject[]>([]);
+  const [activityTypes, setActivityTypes] = useState<ActivityType[] | null>(null);
   const [page, setPage] = useState<number>(0);
+  const activities = useMemo(
+    () =>
+      activityTypes
+        ? allActivities.filter((activity) => activityTypes.includes(activity.type))
+        : allActivities,
+    [allActivities, activityTypes],
+  );
+
   const [refresh, setRefresh] = useState<boolean>(false);
   const pageSize = 4;
 
-  const handleChangeType = (types: ActivityType[] | undefined) => {
-    if (!types) {
-      setActivities(allActivities);
-    } else {
-      setActivities(allActivities.filter((activity) => types.includes(activity.type)));
-    }
+  const handleChangeType = (types: ActivityType[] | null) => {
+    setActivityTypes(types);
     setPage(0);
   };
 
@@ -35,7 +39,7 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
     tabs = ["All", "Reports", "Requests"];
     handlers = [
       () => {
-        handleChangeType(undefined);
+        handleChangeType(null);
       },
       () => {
         handleChangeType([ActivityType.REPORT]);
@@ -48,7 +52,7 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
     tabs = ["All", "Documents", "Assignments"];
     handlers = [
       () => {
-        handleChangeType(undefined);
+        handleChangeType(null);
       },
       () => {
         handleChangeType([ActivityType.DOCUMENT, ActivityType.COMMENT]);
@@ -64,7 +68,6 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
       .then((result) => {
         if (result.success) {
           setAllActivities(result.data);
-          setActivities(result.data);
         } else {
           console.error(result.error);
         }
