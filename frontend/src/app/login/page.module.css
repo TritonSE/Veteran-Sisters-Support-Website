@@ -78,6 +78,7 @@
   font-style: medium;
   font-weight: 500;
   border-radius: 8px;
+  cursor: pointer;
 }
 
 .rememberMeContainer {
@@ -126,9 +127,10 @@
   line-height: normal;
 }
 
-.forgotPassword {
+.linkText {
   float: right;
   color: var(--Primary, #057e6f);
+  cursor: pointer;
 }
 
 .error {
@@ -137,4 +139,10 @@
   font-size: 14px;
   margin-bottom: 4px;
   margin-top: 8px;
+}
+
+.successText {
+  margin-top: 12px;
+  color: var(--Primary, #057e6f);
+  font-size: 14px;
 }
