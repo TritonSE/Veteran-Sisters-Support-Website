@@ -1,11 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-import { ActiveVolunteer, getAssignedUsers } from "../api/activeVolunteers";
 import { Comment, FileObject, getFilesByUploader } from "../api/fileApi";
-import { Role as RoleEnum, UserProfile } from "../api/profileApi";
-import { getUser } from "../api/userApi";
-import { useAuth } from "../contexts/AuthContext";
 
 import { VeteranFilePreview } from "./VeteranFilePreview";
 import styles from "./VeteranFilesTable.module.css";
@@ -15,9 +11,6 @@ type VeteranDocumentProps = {
 };
 
 export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
-  const { userId } = useAuth();
-  const [user, setUser] = useState<UserProfile>();
-  const [assignedUsers, setAssignedUsers] = useState<ActiveVolunteer[]>();
   const programs = ["operation wellness", "battle buddies", "advocacy"];
   const programMap: Record<string, string> = {
     "operation wellness": "Operation Wellness",
@@ -40,19 +33,6 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
     return changed ? latest : undefined;
   };
 
-  const shouldLock = (file: FileObject) => {
-    if (user?.role === RoleEnum.VOLUNTEER || user?.role === RoleEnum.STAFF) {
-      for (const assignedUser of assignedUsers ?? []) {
-        if (assignedUser.veteranUser._id === file.uploader._id) {
-          return !file.programs.includes(assignedUser.assignedProgram);
-        }
-      }
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   useEffect(() => {
     getFilesByUploader(uploader)
       .then((result) => {
@@ -65,29 +45,11 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
       .catch((err: unknown) => {
         console.error(err);
       });
-    getUser(userId)
-      .then((response) => {
-        if (response.success) {
-          setUser(response.data);
-          getAssignedUsers(response.data)
-            .then((res) => {
-              if (res.success) {
-                setAssignedUsers(res.data);
-              }
-            })
-            .catch((err: unknown) => {
-              console.error(err);
-            });
-        }
-      })
-      .catch((error: unknown) => {
-        console.error(error);
-      });
-  }, []);
+  }, [uploader]);
 
   return (
     <div>
-      {user &&
+      {
         programs.map((program, index) => (
           <div
             key={index}
@@ -107,7 +69,6 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
                       documentId={file._id}
                       documentName={file.filename}
                       latestComment={getLatestComment(file.comments)}
-                      lock={shouldLock(file)}
                     />
                   </div>
                 ))}
