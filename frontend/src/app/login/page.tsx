@@ -128,6 +128,11 @@ function LoginFormContent() {
             Continue
           </button>
         </form>
+        {showResetPasswordSuccess && (
+          <p className={styles.successText}>
+            Email sent! Check your spam folder if you didn&apos;t receive it.
+          </p>
+        )}
         {showResetPassword ? (
           <div className={styles.subtitle2}>
             <div>
@@ -155,7 +160,6 @@ function LoginFormContent() {
       </div>
       {showSuccess && <SuccessNotification message="User Created Successfully" />}
       {showLoggedin && <SuccessNotification message="User Logged In Successfully" />}
-      {showResetPasswordSuccess && <SuccessNotification message="Password Reset Email Sent" />}
     </main>
   );
 }

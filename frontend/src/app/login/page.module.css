@@ -140,3 +140,9 @@
   margin-bottom: 4px;
   margin-top: 8px;
 }
+
+.successText {
+  margin-top: 12px;
+  color: var(--Primary, #057e6f);
+  font-size: 14px;
+}
