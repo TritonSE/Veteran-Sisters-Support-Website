@@ -60,43 +60,42 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
 
   return (
     <div>
-      {
-        programs.map((program, index) => (
-          <div
-            key={index}
-            style={{ marginBottom: 24, paddingTop: 30, borderTop: "1px solid #E0E0E0" }}
-          >
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-              <div className={styles.programName}>{programMap[program]} Documents</div>
-              <p
-                style={{ color: "#057E6F", cursor: "pointer" }}
-                onClick={() => {
-                  const prev = showMoreFiles[program as keyof ShowMoreFiles];
-                  setShowMoreFiles({
-                    ...showMoreFiles,
-                    [program]: !prev,
-                  });
-                }}
-              >
-                See {showMoreFiles[program as keyof ShowMoreFiles] ? "less" : "more"} documents
-              </p>
-            </div>
-            <div className={styles.documentTable}>
-              {fileObjects
-                .filter((obj) => obj.programs.includes(program))
-                .slice(0, !showMoreFiles[program as keyof ShowMoreFiles] ? 4 : undefined)
-                .map((file) => (
-                  <div key={file._id}>
-                    <VeteranFilePreview
-                      documentId={file._id}
-                      documentName={file.filename}
-                      latestComment={getLatestComment(file.comments)}
-                    />
-                  </div>
-                ))}
-            </div>
+      {programs.map((program, index) => (
+        <div
+          key={index}
+          style={{ marginBottom: 24, paddingTop: 30, borderTop: "1px solid #E0E0E0" }}
+        >
+          <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+            <div className={styles.programName}>{programMap[program]} Documents</div>
+            <p
+              style={{ color: "#057E6F", cursor: "pointer" }}
+              onClick={() => {
+                const prev = showMoreFiles[program as keyof ShowMoreFiles];
+                setShowMoreFiles({
+                  ...showMoreFiles,
+                  [program]: !prev,
+                });
+              }}
+            >
+              See {showMoreFiles[program as keyof ShowMoreFiles] ? "less" : "more"} documents
+            </p>
           </div>
-        ))}
+          <div className={styles.documentTable}>
+            {fileObjects
+              .filter((obj) => obj.programs.includes(program))
+              .slice(0, !showMoreFiles[program as keyof ShowMoreFiles] ? 4 : undefined)
+              .map((file) => (
+                <div key={file._id}>
+                  <VeteranFilePreview
+                    documentId={file._id}
+                    documentName={file.filename}
+                    latestComment={getLatestComment(file.comments)}
+                  />
+                </div>
+              ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
