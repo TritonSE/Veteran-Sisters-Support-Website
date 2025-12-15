@@ -12,7 +12,7 @@ type VeteranFilePreviewProps = {
   documentId: string;
   documentName: string;
   latestComment?: Date;
-  lock?: boolean;
+  // lock?: boolean;
 };
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -24,12 +24,12 @@ export function VeteranFilePreview({
   documentId,
   documentName,
   latestComment,
-  lock,
+  // lock,
 }: VeteranFilePreviewProps) {
   const [fileURL, setFileURL] = useState<string>();
   const [numPages, setNumPages] = useState<number>();
 
-  const [hovering, setHovering] = useState<boolean>(false);
+  // const [hovering, setHovering] = useState<boolean>(false);
 
   const months = [
     "Jan",
@@ -103,7 +103,7 @@ export function VeteranFilePreview({
           <Image src="/pdf_icon.svg" width={80} height={80} alt="pdf" />
         )}
       </Link>
-      {lock && (
+      {/* {lock && (
         <>
           <div
             className={hovering ? styles.coloredBlur : styles.blur}
@@ -127,7 +127,7 @@ export function VeteranFilePreview({
             <Image className={styles.lock} src="/lock_icon.svg" width={32} height={42} alt="lock" />
           )}
         </>
-      )}
+      )} */}
       <div>
         <div
           style={{
