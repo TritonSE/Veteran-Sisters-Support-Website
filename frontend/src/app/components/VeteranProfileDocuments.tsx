@@ -10,7 +10,18 @@ type VeteranDocumentProps = {
   uploader: string;
 };
 
+type ShowMoreFiles = {
+  "battle buddies": boolean;
+  advocacy: boolean;
+  "operation wellness": boolean;
+};
+
 export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
+  const [showMoreFiles, setShowMoreFiles] = useState<ShowMoreFiles>({
+    "battle buddies": false,
+    advocacy: false,
+    "operation wellness": false,
+  });
   const programs = ["operation wellness", "battle buddies", "advocacy"];
   const programMap: Record<string, string> = {
     "operation wellness": "Operation Wellness",
@@ -57,12 +68,23 @@ export function VeteranDocuments({ uploader }: VeteranDocumentProps) {
           >
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
               <div className={styles.programName}>{programMap[program]} Documents</div>
-              <p style={{ color: "#057E6F" }}>See all documents</p>
+              <p
+                style={{ color: "#057E6F", cursor: "pointer" }}
+                onClick={() => {
+                  const prev = showMoreFiles[program as keyof ShowMoreFiles];
+                  setShowMoreFiles({
+                    ...showMoreFiles,
+                    [program]: !prev,
+                  });
+                }}
+              >
+                See {showMoreFiles[program as keyof ShowMoreFiles] ? "less" : "more"} documents
+              </p>
             </div>
             <div className={styles.documentTable}>
               {fileObjects
                 .filter((obj) => obj.programs.includes(program))
-                .slice(0, 4)
+                .slice(0, !showMoreFiles[program as keyof ShowMoreFiles] ? 4 : undefined)
                 .map((file) => (
                   <div key={file._id}>
                     <VeteranFilePreview

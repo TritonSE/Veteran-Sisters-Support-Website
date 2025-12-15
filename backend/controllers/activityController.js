@@ -2,10 +2,6 @@ import Activity from "../models/activityModel.js";
 import { User } from "../models/userModel.js";
 import { ActiveVolunteers } from "../models/activeVolunteers.js";
 
-//TODO modify getActivities to so matches with unread - getting assignment activity info
-//also update notfication page for assignment activities display
-//Add enums to unread activities
-
 export const getActivities = async (req, res) => {
   try {
     const { userId } = req.params;
