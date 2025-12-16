@@ -69,14 +69,7 @@ export default function EditProfile({ userId }: { userId: string }) {
       return;
     }
 
-    const response = await updateUserProfile(
-      userId,
-      firstName,
-      lastName,
-      phoneNumber,
-      age,
-      gender,
-    );
+    const response = await updateUserProfile(userId, firstName, lastName, phoneNumber, age, gender);
 
     if (!response.success) {
       setError(response.error ?? "Failed to update profile");
