@@ -263,12 +263,11 @@ export const getVeteransByProgram = async (req, res) => {
 export const updateUserId = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { firstName, lastName, email, phoneNumber, age, gender } = req.body;
+    const { firstName, lastName, phoneNumber, age, gender } = req.body;
 
     const update = {
       firstName,
       lastName,
-      email,
       phoneNumber,
       age,
       roleSpecificInfo: {
