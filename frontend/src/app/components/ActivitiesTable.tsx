@@ -9,6 +9,7 @@ import {
 } from "../api/activities";
 import { Role as RoleEnum } from "../api/profileApi";
 import { markActivityRead } from "../api/userApi";
+
 import styles from "./ActivitiesTable.module.css";
 import { ActivitiesTableItem } from "./ActivitiesTableItem";
 import { Tabs } from "./Tabs";
