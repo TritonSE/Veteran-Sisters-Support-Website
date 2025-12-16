@@ -1,9 +1,14 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
-import { ActivityObject, ActivityType, getActivities } from "../api/activities";
+import {
+  ActivityObject,
+  ActivityType,
+  getActivities,
+  getUnreadActivities,
+} from "../api/activities";
 import { Role as RoleEnum } from "../api/profileApi";
-
+import { markActivityRead } from "../api/userApi";
 import styles from "./ActivitiesTable.module.css";
 import { ActivitiesTableItem } from "./ActivitiesTableItem";
 import { Tabs } from "./Tabs";
@@ -17,6 +22,7 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
   const [allActivities, setAllActivities] = useState<ActivityObject[]>([]);
   const [activityTypes, setActivityTypes] = useState<ActivityType[] | null>(null);
   const [page, setPage] = useState<number>(0);
+  const [unreadIds, setUnreadIds] = useState<Set<string>>(new Set());
   const activities = useMemo(
     () =>
       activityTypes
@@ -62,20 +68,20 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
       },
     ];
   }
-
   useEffect(() => {
-    getActivities(userId)
-      .then((result) => {
-        if (result.success) {
-          setAllActivities(result.data);
+    Promise.all([getActivities(userId), getUnreadActivities(userId)])
+      .then(([allRes, unreadRes]) => {
+        if (allRes.success) setAllActivities(allRes.data);
+        else console.error(allRes.error);
+
+        if (unreadRes.success) {
+          setUnreadIds(new Set(unreadRes.data.recentUnread.map((a) => a._id)));
         } else {
-          console.error(result.error);
+          console.error(unreadRes.error);
         }
       })
-      .catch((reason: unknown) => {
-        console.error(reason);
-      });
-  }, [refresh]);
+      .catch(console.error);
+  }, [refresh, userId]);
 
   return (
     <div className={styles.container}>
@@ -94,14 +100,30 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
       </div>
       <Tabs tabs={tabs} handlers={handlers} />
       <div className={styles.table}>
-        {activities.slice(page * pageSize, (page + 1) * pageSize).map((activity, idx, list) => (
-          <ActivitiesTableItem
-            key={activity._id}
-            activityObject={activity}
-            userRole={role as RoleEnum}
-            last={(idx + 1) % pageSize === 0 || idx === list.length - 1}
-          />
-        ))}
+        {activities.slice(page * pageSize, (page + 1) * pageSize).map((activity, idx, list) => {
+          const isUnread = unreadIds.has(activity._id);
+          return (
+            <ActivitiesTableItem
+              key={activity._id}
+              activityObject={activity}
+              userRole={role as RoleEnum}
+              last={(idx + 1) % pageSize === 0 || idx === list.length - 1}
+              onView={
+                isUnread
+                  ? (activityId) => {
+                      markActivityRead(userId, activityId)
+                        .then(() => {
+                          setRefresh((prev) => !prev);
+                        })
+                        .catch((err: unknown) => {
+                          console.error("Error marking activity as read:", err);
+                        });
+                    }
+                  : undefined
+              }
+            />
+          );
+        })}
       </div>
       {activities.length > pageSize && (
         <div className={styles.pageSelect}>
