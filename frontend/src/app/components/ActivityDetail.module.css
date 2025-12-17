@@ -1,0 +1,123 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: 16px;
+  flex: 1 0 0;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  width: 1024px;
+  padding: 24px 32px 32px;
+  border-radius: 8px 8px 8px 8px;
+  background: #ffffff;
+  /* border-bottom: 1px solid var(--Stroke-1, #edf1f5); */
+  border: 1px solid var(--Stroke-2, #d0d7de);
+  gap: 24px;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.titleText {
+  font-family: "Albert Sans";
+  font-weight: 500;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #3a3c3d;
+  max-width: 780px;
+}
+
+.titleDate {
+  font-family: "Albert Sans";
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #60696f;
+  min-width: 180px;
+  text-align: right;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.profile {
+  height: 46px;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+}
+
+.profilePicture {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--Background-3, #e9ebed);
+  color: var(--Text-3, #3a3c3d);
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  border-radius: 17px;
+}
+
+.uploaderInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.uploaderName {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+
+  font-family: "Albert Sans";
+  font-weight: 500;
+  font-style: Medium;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #4d5358;
+}
+
+.uploaderContact {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
+}
+
+.uploaderContactText {
+  font-family: "Albert Sans";
+  font-weight: 400;
+  font-style: normal;
+  font-size: 13px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #0099ee;
+}
+
+.contentText {
+  font-family: "Albert Sans";
+  font-weight: 500;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #4d5358;
+}

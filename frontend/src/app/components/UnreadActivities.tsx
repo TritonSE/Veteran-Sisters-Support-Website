@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { ActivityObject, ActivityType, getUnreadActivities } from "../api/activities";
@@ -25,6 +26,8 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
   const [totalUnreadCount, setTotalUnreadCount] = useState<number>(0);
   const [refresh, setRefresh] = useState<boolean>(false);
 
+  const router = useRouter();
+
   useEffect(() => {
     getUnreadActivities(userId)
       .then((result) => {
@@ -40,11 +43,16 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
       });
   }, [refresh]);
 
-  const handleSelect = (option: string) => {
+  const handleSelect = (option: string, type: ActivityType) => {
     // Mark activity as read when selected
     markActivityRead(userId, option)
       .then(() => {
-        setRefresh(!refresh);
+        // Temporary measure until we get other pages
+        if (type === ActivityType.ANNOUNCEMENT) {
+          router.push(`/activities/?activityId=${option}`);
+        } else {
+          setRefresh(!refresh);
+        }
       })
       .catch((err: unknown) => {
         console.error("Error marking activity as read:", err);
@@ -163,7 +171,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                     <button
                       className={styles.button}
                       onClick={() => {
-                        handleSelect(activity._id);
+                        handleSelect(activity._id, activity.type);
                       }}
                     >
                       View
