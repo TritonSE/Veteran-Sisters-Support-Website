@@ -13,6 +13,7 @@ import { Button } from "./Button";
 import ChangePasswordModal from "./ChangePasswordModal";
 import CustomDropdown from "./CustomDropdown";
 import styles from "./EditProfile.module.css";
+import ErrorMessage from "./ErrorMessage";
 import NavigateBack from "./NavigateBack";
 
 function Field(params: { label: string; children: ReactNode }) {
@@ -87,14 +88,6 @@ export default function EditProfile({ userId }: { userId: string }) {
 
     router.back();
   };
-
-  if (error) {
-    return (
-      <div className={styles.editProfile}>
-        <div className={styles.error}>{error}</div>
-      </div>
-    );
-  }
 
   return (
     <form className={styles.editProfile} onSubmit={(e) => void handleSubmit(e)}>
@@ -205,6 +198,7 @@ export default function EditProfile({ userId }: { userId: string }) {
           setChangePasswordModalOpen(false);
         }}
       />
+      {error && <ErrorMessage message={error} />}
     </form>
   );
 }

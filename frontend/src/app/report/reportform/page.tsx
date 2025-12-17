@@ -17,6 +17,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import styles from "./page.module.css";
 
 import { APIResult } from "@/app/api/requests";
+import ErrorMessage from "@/app/components/ErrorMessage";
 import { AuthContextWrapper } from "@/app/contexts/AuthContextWrapper";
 
 function ReportFormContent() {
@@ -35,6 +36,7 @@ function ReportFormContent() {
   const [selectedReporteeName, setSelectedReporteeName] = useState<string>("");
   const [selectedReporteeProfile, setSelectedReporteeProfile] = useState<UserProfile | null>(null);
   const [loadingDropdownOptions, setLoadingDropdownOptions] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const resetForm = () => {
     setSelectedReporteeName("");
@@ -124,12 +126,12 @@ function ReportFormContent() {
         explanation,
       });
       if (!res.success) {
-        console.error("Failed to create report:", res.error);
+        setErrorMessage(`Failed to create report: ${res.error}`);
         return;
       }
       setConfirmPage(true);
     } catch (err) {
-      console.error("Unexpected error creating report:", err);
+      setErrorMessage(`Failed to create report: ${String(err)}`);
     }
   };
 
@@ -427,6 +429,7 @@ function ReportFormContent() {
           </div>
         )}
       </div>
+      {errorMessage && <ErrorMessage message={errorMessage} />}
     </div>
   );
 }

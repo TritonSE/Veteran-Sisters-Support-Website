@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { getAssignedUsers, removeVolunteerFromVeteran } from "../api/activeVolunteers";
 import { Role, UserProfile as UserProfileType } from "../api/profileApi";
 
+import ErrorMessage from "./ErrorMessage";
 import { Program } from "./Program";
+import SuccessNotification from "./SuccessNotification";
 import styles from "./UserList.module.css";
 import UserAssigningDialog, { DialogContext } from "./userAssigningDialog";
 
@@ -24,6 +26,8 @@ export function UserList(params: {
   const [refreshFlag, setRefreshFlag] = useState(false);
   const [dialogProgram, setDialogProgram] = useState<string[]>([]);
   const [currentUsers, setCurrentUsers] = useState<Record<string, UserProfileType[]>>(userPrograms);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const openDialog = (program: string) => {
     setIsDialogOpen(true);
@@ -41,11 +45,16 @@ export function UserList(params: {
       const volEmail = userProfile.role === Role.VETERAN ? selectedEmail : userProfile.email;
 
       removeVolunteerFromVeteran(volEmail, vetEmail, program)
-        .then(() => {
-          setRefreshFlag((prev) => !prev);
+        .then((res) => {
+          if (res.success) {
+            setSuccessMessage("Successfully removed veteran");
+            setRefreshFlag((prev) => !prev);
+          } else {
+            setErrorMessage(`Error removing veteran: ${res.error}`);
+          }
         })
         .catch((err: unknown) => {
-          console.error(err);
+          setErrorMessage(`Error removing veteran: ${String(err)}`);
         });
     }
   };
@@ -161,6 +170,8 @@ export function UserList(params: {
           );
         })}
       </div>
+      {successMessage && <SuccessNotification message={successMessage} />}
+      {errorMessage && <ErrorMessage message={errorMessage} />}
     </div>
   );
 }

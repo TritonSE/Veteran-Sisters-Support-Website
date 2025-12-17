@@ -17,6 +17,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 import { DocumentComment } from "./DocumentComment";
 import styles from "./DocumentView.module.css";
+import ErrorMessage from "./ErrorMessage";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -39,6 +40,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
 
   const [currUser, setCurrUser] = useState<UserProfile>();
   const { userId } = useAuth();
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     getFileById(documentId)
@@ -103,7 +105,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
           fileDownload(res.data as Blob, file?.filename);
         })
         .catch((error: unknown) => {
-          console.log(error);
+          setErrorMessage(`Error downloading file: ${String(error)}`);
         });
     }
   };
@@ -129,7 +131,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
           };
         })
         .catch((error: unknown) => {
-          console.log(error);
+          setErrorMessage(`Error printing file: ${String(error)}`);
         });
     }
   };
@@ -255,6 +257,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
           </div>
         </>
       )}
+      {errorMessage && <ErrorMessage message={errorMessage} />}
     </>
   );
 }

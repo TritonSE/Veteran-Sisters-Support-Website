@@ -7,6 +7,7 @@ import React, { MouseEvent, useState } from "react";
 
 import { auth } from "../../../firebase/firebase";
 import { useAuth } from "../../contexts/AuthContext";
+import ErrorMessage from "../ErrorMessage";
 
 import Loading from "./Loading";
 import OnboardingInterests from "./OnboardingInterests";
@@ -53,6 +54,7 @@ export default function SignUpForm() {
     onboarding?: string; // At least one interest must be chosen on last page
   }>({});
   const { setIsSigningUp, isSigningUp } = useAuth();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleNext = () => {
     setCurrentPage((prev) => {
@@ -90,14 +92,14 @@ export default function SignUpForm() {
 
   const handleSignup = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    let hasError = false;
+    setFormErrors({});
 
     if (selectedOptions.length === 0) {
       setFormErrors((prev) => ({
         ...prev,
         onboarding: "Please select at least one option.",
       }));
-      hasError = true;
+      return;
     } else {
       setFormErrors((prev) => ({
         ...prev,
@@ -105,15 +107,12 @@ export default function SignUpForm() {
       }));
     }
 
-    if (hasError) return;
-
     try {
       setIsSigningUp(true);
 
       // Create Firebase user first
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const firebaseUser = userCredential.user;
-      console.log("Firebase user created successfully!");
 
       // If successful, create user data in MongoDB
       try {
@@ -151,12 +150,11 @@ export default function SignUpForm() {
           console.error("MongoDB user creation failed:", result.error);
           await cleanupFirebaseUser(firebaseUser);
           setIsSigningUp(false);
-          alert(`Failed to create user: ${result.error}. Please try again.`);
+          setErrorMessage(`Failed to create user: ${result.error}. Please try again.`);
           return;
         }
 
         // Both Firebase and MongoDB user creation succeeded
-        console.log("MongoDB user created successfully!");
         setIsSigningUp(false);
         router.push("/");
       } catch (error: unknown) {
@@ -164,18 +162,19 @@ export default function SignUpForm() {
         console.error("MongoDB user creation failed:", error);
         await cleanupFirebaseUser(firebaseUser);
         setIsSigningUp(false);
-        alert("Something went wrong. Please try again.");
+        setErrorMessage("Something went wrong. Please try again.");
         return;
       }
     } catch (error: unknown) {
       // Firebase user creation failed (or other unexpected errors)
       if (error instanceof FirebaseError) {
         if (error.code === "auth/email-already-in-use") {
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            alreadyExists: "An account with this email already exists.",
-          }));
+          setErrorMessage("An account with this email already exists.");
+        } else {
+          setErrorMessage(`Error creating user: ${error.code}`);
         }
+      } else {
+        setErrorMessage(`Error creating user: ${String(error)}`);
       }
       setIsSigningUp(false);
       return;
@@ -276,5 +275,10 @@ export default function SignUpForm() {
     }
   };
 
-  return <>{isSigningUp ? <Loading /> : renderStage()}</>;
+  return (
+    <>
+      {isSigningUp ? <Loading /> : renderStage()}
+      <ErrorMessage message={errorMessage} />
+    </>
+  );
 }
