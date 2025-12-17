@@ -1,6 +1,10 @@
 .page {
   background-image: url("/signUpBackground.svg");
-  height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  min-height: 100vh;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -25,9 +29,6 @@
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 24px;
-}
-
-.innerForm {
 }
 
 .input {
