@@ -60,25 +60,16 @@ export default function EditProfile({ userId }: { userId: string }) {
     const formData = new FormData(event.currentTarget);
     const firstName = formData.get("firstName") as string;
     const lastName = formData.get("lastName") as string;
-    const email = formData.get("email") as string;
     const phoneNumber = formData.get("phoneNumber") as string;
     const age = Number(formData.get("age") as string);
     const gender = userProfile?.roleSpecificInfo?.serviceInfo?.gender ?? "";
 
-    if (!firstName || !lastName || !email || !phoneNumber || !age) {
+    if (!firstName || !lastName || !phoneNumber || !age) {
       setError("Please fill in all required fields");
       return;
     }
 
-    const response = await updateUserProfile(
-      userId,
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      age,
-      gender,
-    );
+    const response = await updateUserProfile(userId, firstName, lastName, phoneNumber, age, gender);
 
     if (!response.success) {
       setError(response.error ?? "Failed to update profile");
@@ -120,16 +111,6 @@ export default function EditProfile({ userId }: { userId: string }) {
             />
           </Field>
         </div>
-        <Field label="Email">
-          <input
-            name="email"
-            required
-            defaultValue={userProfile?.email}
-            type="email"
-            className={styles.fieldInput}
-          />
-        </Field>
-
         <Field label="Phone Number">
           <input
             name="phoneNumber"
