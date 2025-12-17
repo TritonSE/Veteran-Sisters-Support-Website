@@ -13,6 +13,7 @@ import {
 import { AssignedProgram as ProgramEnum, Role as RoleEnum, UserProfile } from "../api/profileApi";
 
 import styles from "./DocumentComment.module.css";
+import ErrorMessage from "./ErrorMessage";
 import { Program } from "./Program";
 import { Role } from "./Role";
 
@@ -60,6 +61,7 @@ export function DocumentComment({
 
   const [currComment, setCurrComment] = useState<Comment>(comment);
   const [tempCommentBody, setTempCommentBody] = useState<string>(comment.comment);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     setCurrComment(comment);
@@ -85,10 +87,12 @@ export function DocumentComment({
               setCurrComment(response.data);
               setTempCommentBody(response.data.comment);
               setSelected(false);
+            } else {
+              setErrorMessage(`Error updating comment: ${response.error}`);
             }
           })
           .catch((error: unknown) => {
-            console.log(error);
+            setErrorMessage(`Error updating comment: ${String(error)}`);
           });
       } else {
         const newComment: CreateCommentRequest = {
@@ -106,15 +110,19 @@ export function DocumentComment({
                     setCurrComment(response.data);
                     setTempCommentBody(response.data.comment);
                     setSelected(false);
+                  } else {
+                    setErrorMessage(`Error updating comment: ${response2.error}`);
                   }
                 })
                 .catch((error: unknown) => {
-                  console.log(error);
+                  setErrorMessage(`Error updating comment: ${String(error)}`);
                 });
+            } else {
+              setErrorMessage(`Error creating comment: ${response.error}`);
             }
           })
           .catch((error: unknown) => {
-            console.log(error);
+            setErrorMessage(`Error updating comment: ${String(error)}`);
           });
       }
     }
@@ -123,21 +131,25 @@ export function DocumentComment({
   const deleteCommentHandler = (id: string, key: number) => {
     deleteCommentObject(id)
       .then((response) => {
-        if (response.success && file) {
+        if (response.success) {
           const newCommentList = file.comments.slice(0, key).concat(file.comments.slice(key + 1));
           editFileObject(file._id, { comments: newCommentList })
             .then((response2) => {
               if (response2.success) {
                 setFile(response2.data);
+              } else {
+                setErrorMessage(`Error deleting comment: ${response2.error}`);
               }
             })
             .catch((error: unknown) => {
-              console.log(error);
+              setErrorMessage(`Error deleting comment: ${String(error)}`);
             });
+        } else {
+          setErrorMessage(`Error deleting comment: ${response.error}`);
         }
       })
       .catch((error: unknown) => {
-        console.log(error);
+        setErrorMessage(`Error deleting comment: ${String(error)}`);
       });
   };
 
@@ -234,6 +246,7 @@ export function DocumentComment({
           </div>
         </div>
       )}
+      {errorMessage && <ErrorMessage message={errorMessage} />}
     </div>
   );
 }

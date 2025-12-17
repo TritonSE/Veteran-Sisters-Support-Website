@@ -1,7 +1,7 @@
 .error {
   position: fixed;
   left: 50%;
-  top: 45px;
+  top: 75px;
   transform: translate(-50%, 0%);
   display: flex;
   align-items: center;
@@ -13,4 +13,7 @@
   padding: var(--Spacing-s, 8px) var(--Spacing-sm, 16px);
   color: #b80037;
   gap: 5px;
+  z-index: 1000;
+  font-size: 16px;
+  font-weight: 500;
 }

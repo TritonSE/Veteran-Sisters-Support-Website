@@ -1,10 +1,12 @@
 "use client";
 
+import { FirebaseError } from "firebase/app";
 import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
 
 import { auth } from "../../firebase/firebase";
+import ErrorMessage from "../components/ErrorMessage";
 import SuccessNotification from "../components/SuccessNotification";
 
 import styles from "./page.module.css";
@@ -38,8 +40,24 @@ function LoginFormContent() {
       } else {
         router.push("/");
       }
-    } catch {
-      setError("Account not found.");
+    } catch (caughtError) {
+      if (caughtError instanceof FirebaseError) {
+        switch (caughtError.code) {
+          case "auth/invalid-email":
+          case "auth/invalid-credential":
+          case "auth/wrong-password":
+          case "auth/user-not-found":
+            setError("Invalid username and/or password");
+            break;
+          case "auth/network-request-failed":
+            setError("Request failed, check your Internet connection and try again");
+            break;
+          default:
+            setError(`Error signing in: ${caughtError.code}`);
+        }
+      } else {
+        setError(`Error signing in: ${String(caughtError)}`);
+      }
     }
   };
 
@@ -47,8 +65,8 @@ function LoginFormContent() {
     try {
       await sendPasswordResetEmail(auth, email);
       setShowResetPasswordSuccess(true);
-    } catch {
-      setError("Could not reset password.");
+    } catch (caughtError) {
+      setError(`Error resetting password: ${String(caughtError)}`);
     }
   };
 
@@ -74,7 +92,6 @@ function LoginFormContent() {
         <div className={styles.subtitle}>
           {showResetPassword ? "Reset your password" : "Log in to your account"}
         </div>
-        {error && <p className={styles.error}>{error}</p>}
         <form className={styles.innerForm} id="contactForm" onSubmit={handleSubmit}>
           {showResetPassword ? (
             <p className={styles.subtitle2} style={{ marginTop: 0, marginBottom: 24 }}>
@@ -128,11 +145,6 @@ function LoginFormContent() {
             Continue
           </button>
         </form>
-        {showResetPasswordSuccess && (
-          <p className={styles.successText}>
-            Email sent! Check your spam folder if you didn&apos;t receive it.
-          </p>
-        )}
         {showResetPassword ? (
           <div className={styles.subtitle2}>
             <div>
@@ -160,6 +172,10 @@ function LoginFormContent() {
       </div>
       {showSuccess && <SuccessNotification message="User Created Successfully" />}
       {showLoggedin && <SuccessNotification message="User Logged In Successfully" />}
+      {showResetPasswordSuccess && (
+        <SuccessNotification message="Email sent! Check your spam folder if you didn't receive it." />
+      )}
+      {error && <ErrorMessage message={error} />}
     </main>
   );
 }

@@ -5,6 +5,7 @@ import { ActivityObject, ActivityType, getUnreadActivities } from "../api/activi
 import { Role as RoleEnum } from "../api/profileApi";
 import { markActivityRead } from "../api/userApi";
 
+import ErrorMessage from "./ErrorMessage";
 import { Role } from "./Role";
 import styles from "./UnreadActivities.module.css";
 
@@ -24,6 +25,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
   const [activities, setActivities] = useState<ActivityObject[]>([]);
   const [totalUnreadCount, setTotalUnreadCount] = useState<number>(0);
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     getUnreadActivities(userId)
@@ -43,11 +45,15 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
   const handleSelect = (option: string) => {
     // Mark activity as read when selected
     markActivityRead(userId, option)
-      .then(() => {
-        setRefresh(!refresh);
+      .then((res) => {
+        if (res.success) {
+          setRefresh(!refresh);
+        } else {
+          setErrorMessage(`Error marking activity as read: ${res.error}`);
+        }
       })
       .catch((err: unknown) => {
-        console.error("Error marking activity as read:", err);
+        setErrorMessage(`Error marking activity as read: ${String(err)}`);
       });
   };
 
@@ -178,6 +184,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
             </li>
           ))}
       </ul>
+      {errorMessage && <ErrorMessage message={errorMessage} />}
     </div>
   );
 };

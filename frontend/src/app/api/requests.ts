@@ -96,7 +96,7 @@ async function assertOk(response: Response): Promise<void> {
 export async function get(url: string, headers: Record<string, string> = {}): Promise<Response> {
   // GET requests do not have a body
   const response = await fetchRequest("GET", API_BASE_URL + url, undefined, headers);
-  void assertOk(response);
+  await assertOk(response);
   return response;
 }
 
@@ -114,7 +114,7 @@ export async function post(
   headers: Record<string, string> = {},
 ): Promise<Response> {
   const response = await fetchRequest("POST", API_BASE_URL + url, body, headers);
-  void assertOk(response);
+  await assertOk(response);
   return response;
 }
 
@@ -132,7 +132,7 @@ export async function put(
   headers: Record<string, string> = {},
 ): Promise<Response> {
   const response = await fetchRequest("PUT", API_BASE_URL + url, body, headers);
-  void assertOk(response);
+  await assertOk(response);
   return response;
 }
 
@@ -150,7 +150,7 @@ export async function patch(
   headers: Record<string, string> = {},
 ): Promise<Response> {
   const response = await fetchRequest("PATCH", API_BASE_URL + url, body, headers);
-  void assertOk(response);
+  await assertOk(response);
   return response;
 }
 
@@ -168,7 +168,7 @@ export async function del(
   headers: Record<string, string> = {},
 ): Promise<Response> {
   const response = await fetchRequest("DELETE", API_BASE_URL + url, body, headers);
-  void assertOk(response);
+  await assertOk(response);
   return response;
 }
 
