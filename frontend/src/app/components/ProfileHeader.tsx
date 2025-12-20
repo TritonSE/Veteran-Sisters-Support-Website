@@ -20,7 +20,7 @@ export function ProfileHeader(params: {
   programsChanged: (programChanged: boolean) => void;
   didProgramChange: boolean;
 }) {
-  const { userProfile, showDocuments, minimized, isProgramAndRoleEditable, isProfileEditable} =
+  const { userProfile, showDocuments, minimized, isProgramAndRoleEditable, isProfileEditable } =
     params;
   const branchOfService = userProfile?.roleSpecificInfo?.serviceInfo?.branchOfService;
   const militaryStatus = userProfile?.roleSpecificInfo?.serviceInfo?.currentMilitaryStatus;
