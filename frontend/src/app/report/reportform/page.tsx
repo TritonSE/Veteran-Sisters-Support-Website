@@ -6,6 +6,7 @@ import React, { Suspense, useEffect, useState } from "react";
 
 import { UserProfile } from "../../api/profileApi";
 import { createReport } from "../../api/reportApi";
+import { APIResult } from "../../api/requests";
 import { getUser } from "../../api/userApi";
 import { Button } from "../../components/Button";
 import Checklist from "../../components/Checklist";
@@ -13,12 +14,11 @@ import CustomDatePicker from "../../components/CustomDatePicker";
 import { NavBar } from "../../components/NavBar";
 import ReportDropdown from "../../components/ReportDropdown";
 import { useAuth } from "../../contexts/AuthContext";
+import { AuthContextWrapper } from "../../contexts/AuthContextWrapper";
 
 import styles from "./page.module.css";
 
-import { APIResult } from "@/app/api/requests";
 import ErrorMessage from "@/app/components/ErrorMessage";
-import { AuthContextWrapper } from "@/app/contexts/AuthContextWrapper";
 
 function ReportFormContent() {
   const router = useRouter();

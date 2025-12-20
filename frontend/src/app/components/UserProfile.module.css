@@ -36,11 +36,37 @@
 
 .userProfileInnerContent {
   display: flex;
-  min-width: 1024px;
+  flex-direction: column;
+  width: 100%;
   padding-bottom: var(--Spacing-l, 32px);
   align-items: flex-start;
   gap: var(--Spacing-md, 24px);
   align-self: stretch;
+}
+
+.userProfileRow2 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.userProfileRow2 > * {
+  flex: 1 1 0; /* grow:1, shrink:1, basis:0 */
+  min-width: 0; /* allow it to shrink below its content’s min size */
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  background: rgba(0, 0, 0, 0.2); /* subtle dim */
+  backdrop-filter: blur(4px); /* ⬅️ blur underlying content */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
 .messageContainer {

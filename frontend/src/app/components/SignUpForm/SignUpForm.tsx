@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import React, { MouseEvent, useState } from "react";
 
 import { auth } from "../../../firebase/firebase";
+import createUserImported, { CreateUserRequest } from "../../api/userApi";
 import { useAuth } from "../../contexts/AuthContext";
 import ErrorMessage from "../ErrorMessage";
 
@@ -14,8 +15,6 @@ import OnboardingInterests from "./OnboardingInterests";
 import RoleSelection from "./RoleSelection";
 import ServiceDetails from "./ServiceDetails";
 import UserDetails from "./UserDetails";
-
-import createUserImported, { CreateUserRequest } from "@/app/api/userApi";
 
 export default function SignUpForm() {
   const router = useRouter();

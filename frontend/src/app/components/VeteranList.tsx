@@ -53,6 +53,7 @@ export function VeteranList({ volunteer }: VeteranListProp) {
                   email: user.veteranUser.email,
                   firstName: user.veteranUser.firstName,
                   lastName: user.veteranUser.lastName,
+                  zipCode: user.veteranUser.zipCode,
                   role: user.veteranUser.role,
                   assignedPrograms: user.veteranUser.assignedPrograms,
                   assignedUsers: user.veteranUser.assignedUsers,

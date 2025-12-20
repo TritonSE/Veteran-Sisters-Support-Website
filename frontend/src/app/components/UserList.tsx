@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { getAssignedUsers, removeVolunteerFromVeteran } from "../api/activeVolunteers";
-import { Role, UserProfile as UserProfileType } from "../api/profileApi";
+import { AssignedProgram, Role, UserProfile as UserProfileType } from "../api/profileApi";
 
 import ErrorMessage from "./ErrorMessage";
 import { Program } from "./Program";
@@ -15,9 +15,11 @@ export function UserList(params: {
   title: string;
   editable: boolean;
   minimized: boolean;
-  setMessage: (message: string) => void;
+  isProgramAndRoleEditable: boolean;
+  setMessage?: (message: string) => void;
+  callback?: (openProgramChange: boolean) => void;
 }) {
-  const { title, userProfile, editable, minimized } = params;
+  const { title, userProfile, callback, isProgramAndRoleEditable, editable, minimized } = params;
   const userPrograms = Object.fromEntries(
     userProfile?.assignedPrograms?.map((program) => [program, []]) ?? [],
   ) as Record<string, UserProfileType[]>;
@@ -28,6 +30,25 @@ export function UserList(params: {
   const [currentUsers, setCurrentUsers] = useState<Record<string, UserProfileType[]>>(userPrograms);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  // Update currentUsers when userProfile.assignedPrograms changes
+  useEffect(() => {
+    const updatedPrograms = Object.fromEntries(
+      userProfile?.assignedPrograms?.map((program) => [program, []]) ?? [],
+    ) as Record<string, UserProfileType[]>;
+
+    // Preserve existing users for programs that still exist
+    setCurrentUsers((prev) => {
+      const preserved: Record<string, UserProfileType[]> = {};
+      for (const [program, users] of Object.entries(prev)) {
+        if (userProfile?.assignedPrograms?.includes(program as AssignedProgram)) {
+          preserved[program] = users;
+        }
+      }
+      // Merge with new programs (new programs will have empty arrays)
+      return { ...updatedPrograms, ...preserved };
+    });
+  }, [userProfile?.assignedPrograms]);
 
   const openDialog = (program: string) => {
     setIsDialogOpen(true);
@@ -77,7 +98,10 @@ export function UserList(params: {
           (userProfile?.assignedPrograms ?? []).map((program) => [program, []]),
         ) as Record<string, UserProfileType[]>;
         for (const [key, userObj] of users) {
-          if (!updatedUsers[key].some((vol) => vol.email === userObj.email)) {
+          if (
+            userProfile?.assignedPrograms?.includes(key as AssignedProgram) &&
+            !updatedUsers[key].some((vol) => vol.email === userObj.email)
+          ) {
             updatedUsers[key].push(userObj);
           }
         }
@@ -96,30 +120,34 @@ export function UserList(params: {
       }
     };
     void fetchProfiles();
-  }, [refreshFlag]);
+  }, [userProfile?.email, userProfile?.assignedPrograms, refreshFlag]);
 
   const sortedUserGroups: [string, UserProfileType[]][] = Object.entries(currentUsers)
     .slice()
     .sort();
 
   return (
-    <div className={`${styles.userList} ${minimized ? styles.minimized : ""}`}>
+    // <div className={`${styles.userList} ${minimized ? styles.minimized : ""}`}>
+    <div className={styles.userList}>
       {isDialogOpen && userProfile && (
         <UserAssigningDialog
           isOpen={isDialogOpen}
           program={dialogProgram}
           user={userProfile}
           closeDialog={closeDialog}
-          setMessage={params.setMessage}
+          setMessage={params.setMessage ? params.setMessage : () => undefined}
           context={DialogContext.USER_PROFILE}
         />
       )}
       <div className={styles.userListHeader}>
-        <div className={styles.userListHeading}>{title}</div>
+        <div className={!minimized ? styles.userListHeading : styles.userListHeadingMin}>
+          {title}
+        </div>
       </div>
       <div className={styles.userListContent}>
-        {sortedUserGroups.map(([program, users]) => {
-          return (
+        {userProfile?.assignedPrograms && userProfile?.assignedPrograms?.length > 0 ? (
+          /* 1) We have programs → render each program section as before */
+          sortedUserGroups.map(([program, users]) => (
             <div key={program} className={styles.programSection}>
               <div className={styles.programSectionHeader}>
                 <div className={styles.programSectionHeaderSectionInfo}>
@@ -135,15 +163,15 @@ export function UserList(params: {
                       onClick={() => {
                         openDialog(program);
                       }}
-                    ></Image>
+                    />
                   </div>
                 )}
               </div>
               {users.length > 0 ? (
-                users.map((user, ind) => {
+                users.map((user, idx) => {
                   const fullName = `${user.firstName} ${user.lastName}`;
                   return (
-                    <div key={ind} className={styles.userInfo}>
+                    <div key={idx} className={styles.userInfo}>
                       <div>
                         <div className={styles.fullName}>{fullName}</div>
                         <div className={styles.email}>{user.email}</div>
@@ -158,7 +186,7 @@ export function UserList(params: {
                           onClick={() => {
                             removeVolunteer(user.email, program);
                           }}
-                        ></Image>
+                        />
                       )}
                     </div>
                   );
@@ -167,8 +195,20 @@ export function UserList(params: {
                 <div className={styles.unassigned}>Unassigned</div>
               )}
             </div>
-          );
-        })}
+          ))
+        ) : isProgramAndRoleEditable ? (
+          /* 2) No programs, but editable → show “assign program” call-to-action */
+          <div className={styles.programUnassignedWrapper}>
+            <div className={styles.progUnassignedHeader}>No assignments yet</div>
+            <div className={styles.progUnassignedText}>Assign member a program to begin</div>
+            <button className={styles.progUnassignedButton} onClick={() => callback?.(true)}>
+              Assign a program
+            </button>
+          </div>
+        ) : (
+          /* 3) No programs, not editable → simple text */
+          <div className={styles.unassigned}>No assigned programs</div>
+        )}
       </div>
       {successMessage && <SuccessNotification message={successMessage} />}
       {errorMessage && <ErrorMessage message={errorMessage} />}

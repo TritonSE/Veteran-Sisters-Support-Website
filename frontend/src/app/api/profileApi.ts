@@ -9,6 +9,7 @@ export type ServiceInfo = {
 
 export type RoleSpecificInfo = {
   serviceInfo?: ServiceInfo;
+  interests?: string[];
 };
 
 export type UserProfile = {
@@ -16,6 +17,7 @@ export type UserProfile = {
   email: string;
   firstName: string;
   lastName: string;
+  zipCode: number;
   assignedPrograms: AssignedProgram[] | undefined;
   yearJoined?: number;
   age?: number;
@@ -27,7 +29,7 @@ export type UserProfile = {
   veteransUnderPointOfContact?: Veteran[];
 };
 
-type BranchOfService =
+export type BranchOfService =
   | "Air Force"
   | "Army"
   | "Coast Guard"
@@ -38,7 +40,7 @@ type BranchOfService =
   | "Space Force"
   | "";
 
-type CurrentMilitaryStatus =
+export type CurrentMilitaryStatus =
   | "Active Duty"
   | "Reservist"
   | "Veteran"

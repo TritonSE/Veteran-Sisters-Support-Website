@@ -46,8 +46,16 @@ const userSchema = new Schema({
           "Space Force",
           "",
         ],
-        required: function () {
-          return this.role === "veteran";
+        validate: {
+          validator: function (value) {
+            // if role is veteran, branch of service required (empty string allowed)
+            if (this.role === "veteran") {
+              return value !== undefined && value !== null;
+            }
+            // not required if not veteran
+            return true;
+          },
+          message: "Branch of service is required",
         },
       },
       currentMilitaryStatus: {
@@ -61,15 +69,31 @@ const userSchema = new Schema({
           "First Responder (no military service)",
           "",
         ],
-        required: function () {
-          return this.role === "veteran";
+        validate: {
+          validator: function (value) {
+            // if role is veteran, current military status required (empty string allowed)
+            if (this.role === "veteran") {
+              return value !== undefined && value !== null;
+            }
+            // not required if not veteran
+            return true;
+          },
+          message: "Current military status is required",
         },
       },
       gender: {
         type: String,
         enum: ["Female", "Male", "Other", ""],
-        required: function () {
-          return this.role === "veteran";
+        validate: {
+          validator: function (value) {
+            // if role is veteran, gender required (empty string allowed)
+            if (this.role === "veteran") {
+              return value !== undefined && value !== null;
+            }
+            // not required if not veteran
+            return true;
+          },
+          message: "Gender is required",
         },
       },
     },
