@@ -19,6 +19,7 @@ export function AdminStaffUserTable() {
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [allUsers, setAllUsers] = useState<UserProfile[]>([]);
   const [page, setPage] = useState<number>(0);
+  const [selectedProgram, setSelectedProgram] = useState<ProgramEnum | undefined>(undefined);
   const [filterDropdownOpen, setFilterDropdownOpen] = useState(false);
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
   const [filterDropdownValue, setFilterDropdownValue] = useState("None");
@@ -38,22 +39,14 @@ export function AdminStaffUserTable() {
     setRefreshFlag((prev) => !prev);
   };
 
-  const handleChangeProgram = (program: ProgramEnum | undefined) => {
-    if (!program) {
-      setUsers(allUsers);
-    } else {
-      setUsers(allUsers.filter((user) => user.assignedPrograms?.includes(program)));
-    }
-    setPage(0);
-  };
-
-  const compare = (a: UserProfile, b: UserProfile) => {
+  const compareFirstName = (a: UserProfile, b: UserProfile) => {
     if (a.firstName < b.firstName) return -1;
     if (a.firstName > b.firstName) return 1;
     return 0;
   };
 
-  const sortUsers = (userList: UserProfile[]) => {
+  // sorts by putting unassigned at front, then alphabetically by first name
+  const sortUsersDefault = (userList: UserProfile[]) => {
     const unassigned: UserProfile[] = [];
     const assigned: UserProfile[] = [];
     userList.forEach((user) => {
@@ -63,17 +56,85 @@ export function AdminStaffUserTable() {
         assigned.push(user);
       }
     });
-    unassigned.sort(compare);
-    assigned.sort(compare);
+    unassigned.sort(compareFirstName);
+    assigned.sort(compareFirstName);
     unassigned.push(...assigned);
     return unassigned;
+  };
+
+  const sortByAssignment = (userList: UserProfile[]) => {
+    return userList.sort((a, b) => {
+      const aCount = a.assignedUsers ? a.assignedUsers.length : 0;
+      const bCount = b.assignedUsers ? b.assignedUsers.length : 0;
+      const diff = aCount - bCount;
+      if (diff === 0) {
+        return compareFirstName(a, b);
+      }
+      return diff;
+    });
+  };
+
+  const sortByProgram = (userList: UserProfile[]) => {
+    const battleBuddies: UserProfile[] = [];
+    const advocacy: UserProfile[] = [];
+    const operationWellness: UserProfile[] = [];
+    const unassigned: UserProfile[] = [];
+    userList.forEach((user) => {
+      if (user.assignedPrograms?.includes(AssignedProgram.BATTLE_BUDDIES)) {
+        battleBuddies.push(user);
+      } else if (user.assignedPrograms?.includes(AssignedProgram.ADVOCACY)) {
+        advocacy.push(user);
+      } else if (user.assignedPrograms?.includes(AssignedProgram.OPERATION_WELLNESS)) {
+        operationWellness.push(user);
+      } else {
+        unassigned.push(user);
+      }
+    });
+    const sortedBattleBuddies = sortUsersDefault(battleBuddies);
+    const sortedAdvocacy = sortUsersDefault(advocacy);
+    const sortedOperationWellness = sortUsersDefault(operationWellness);
+    unassigned.sort(compareFirstName);
+    const combinedList = unassigned;
+    combinedList.push(...sortedBattleBuddies);
+    combinedList.push(...sortedAdvocacy);
+    combinedList.push(...sortedOperationWellness);
+    return combinedList;
+  };
+
+  const sort = (userList: UserProfile[], sortType: string) => {
+    if (sortType === "Assignment") {
+      return sortByAssignment(userList);
+    } else if (sortType === "Program") {
+      return sortByProgram(userList);
+    } else {
+      return sortUsersDefault(userList);
+    }
+  };
+
+  const roleOptionToRoleEnum = (roleOption: string) => {
+    if (roleOption === "Volunteer") {
+      return RoleEnum.VOLUNTEER;
+    } else if (roleOption === "Veteran") {
+      return RoleEnum.VETERAN;
+    } else if (roleOption === "Staff") {
+      return RoleEnum.STAFF;
+    }
+    return RoleEnum.ADMIN;
+  };
+
+  const filterRole = (userList: UserProfile[], filteredRole: string) => {
+    if (filteredRole === "None") {
+      return userList;
+    } else {
+      return userList.filter((user) => user.role === roleOptionToRoleEnum(filteredRole));
+    }
   };
 
   useEffect(() => {
     getNonAdminUsers()
       .then((result) => {
         if (result.success) {
-          const sortedList = sortUsers(result.data);
+          const sortedList = sortUsersDefault(result.data);
           setAllUsers(sortedList);
           setUsers(sortedList);
         } else {
@@ -85,6 +146,17 @@ export function AdminStaffUserTable() {
       });
   }, [refreshFlag]);
 
+  useEffect(() => {
+    let currUsers = allUsers;
+    if (selectedProgram) {
+      currUsers = allUsers.filter((user) => user.assignedPrograms?.includes(selectedProgram));
+    }
+    currUsers = filterRole(currUsers, filterDropdownValue);
+    currUsers = sort(currUsers, sortDropdownValue);
+    setUsers(currUsers);
+    setPage(0);
+  }, [selectedProgram, filterDropdownValue, sortDropdownValue]);
+
   return (
     <div className={styles.container}>
       <div className={styles.member}>
@@ -95,23 +167,26 @@ export function AdminStaffUserTable() {
       </div>
       <div className={styles.filterSortContainer}>
         <Tabs
-          OnAll={() => {
-            handleChangeProgram(undefined);
-          }}
-          OnBattleBuddies={() => {
-            handleChangeProgram(AssignedProgram.BATTLE_BUDDIES);
-          }}
-          OnAdvocacy={() => {
-            handleChangeProgram(AssignedProgram.ADVOCACY);
-          }}
-          OnOperationWellness={() => {
-            handleChangeProgram(AssignedProgram.OPERATION_WELLNESS);
-          }}
+          tabs={["All", "Battle Buddies", "Advocacy", "Operation Wellness"]}
+          handlers={[
+            () => {
+              setSelectedProgram(undefined);
+            },
+            () => {
+              setSelectedProgram(AssignedProgram.BATTLE_BUDDIES);
+            },
+            () => {
+              setSelectedProgram(AssignedProgram.ADVOCACY);
+            },
+            () => {
+              setSelectedProgram(AssignedProgram.OPERATION_WELLNESS);
+            },
+          ]}
         />
         <div className={styles.filterSort}>
           <div>Filter by</div>
           <CustomDropdown
-            options={["Role", "Program", "None"]}
+            options={["Veteran", "Volunteer", "Staff", "None"]}
             toggleDropdown={() => {
               setFilterDropdownOpen((prev) => !prev);
             }}

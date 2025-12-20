@@ -56,7 +56,12 @@ router.get(
   getVeteransByProgram,
 );
 router.delete("/users/:userId", authenticateUser, authenticateStaffOrAdmin, deleteUser);
-router.put("/users/activity/:id", authenticateUser, markActivityRead);
+router.put(
+  "/users/activity/:userId",
+  authenticateUser,
+  authenticateProfilePermissions,
+  markActivityRead,
+);
 router.put(
   "/users/programs/:email",
   authenticateUser,

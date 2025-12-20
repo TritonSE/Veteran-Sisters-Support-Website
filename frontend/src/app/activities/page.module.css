@@ -16,21 +16,10 @@
 
 .frame {
   display: flex;
-  max-width: 1100px;
-  flex-direction: column;
   align-items: flex-start;
-  gap: var(--Spacing-2xl, 48px);
+  align-self: stretch;
   flex: 1 0 0;
-}
-
-.welcome {
-  color: var(--Text-3, #3a3c3d);
-  width: 1100px;
-
-  /* title large */
-  font-family: "Albert Sans";
-  font-size: 32px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
+  max-width: 1024px;
+  top: 80px;
+  left: 64px;
 }

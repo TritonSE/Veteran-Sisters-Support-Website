@@ -122,6 +122,7 @@ const userSchema = new Schema({
   assignedUsers: [String],
   yearJoined: { type: Number },
   age: { type: Number },
+  // list of activity id string
   unreadActivities: {
     type: [String],
   },

@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
 
-import {
-  ProfileComment,
-  ProfileCommentPostRequest,
-  getComments,
-  postComment,
-} from "../api/profileApi";
+import { ProfileComment, getComments, postComment } from "../api/profileApi";
 import { useAuth } from "../contexts/AuthContext";
 
+import ErrorMessage from "./ErrorMessage";
 import { ProfilePicture } from "./ProfilePicture";
 import styles from "./VolunteerNotes.module.css";
 
@@ -17,6 +13,7 @@ export function VolunteerNotes({ profileUserId }: { profileUserId: string }) {
   // use this to trigger a re-fetch of the notes when new note posted
   const [profileNotesChanged, setProfileNotesChanged] = useState<boolean>(false);
   const { userId } = useAuth();
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchProfileNotes = async () => {
@@ -34,13 +31,6 @@ export function VolunteerNotes({ profileUserId }: { profileUserId: string }) {
         console.error(err);
       });
   }, [profileNotesChanged]);
-
-  const postProfileNote = async (comment: ProfileCommentPostRequest) => {
-    const res = await postComment(comment);
-    if (res.success) {
-      setProfileNotesChanged(!profileNotesChanged);
-    }
-  };
 
   const hasNotes = Array.isArray(profileNotes) && profileNotes.length > 0;
 
@@ -66,12 +56,17 @@ export function VolunteerNotes({ profileUserId }: { profileUserId: string }) {
                 comment: currentComment,
                 datePosted: new Date(),
               };
-              postProfileNote(comment)
-                .then(() => {
-                  setCurrentComment("");
+              postComment(comment)
+                .then((res) => {
+                  if (res.success) {
+                    setProfileNotesChanged(!profileNotesChanged);
+                    setCurrentComment("");
+                  } else {
+                    setErrorMessage(`Error submitting note: ${res.error}`);
+                  }
                 })
                 .catch((err: unknown) => {
-                  console.error(err);
+                  setErrorMessage(`Error submitting note: ${String(err)}`);
                 });
             }}
             className={styles.postNoteButton}
@@ -109,6 +104,7 @@ export function VolunteerNotes({ profileUserId }: { profileUserId: string }) {
           )}
         </div>
       </div>
+      {errorMessage && <ErrorMessage message={errorMessage} />}
     </div>
   );
 }

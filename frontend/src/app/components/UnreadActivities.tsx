@@ -1,25 +1,31 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import { ActivityObject, getUnreadActivities } from "../api/activities";
+import { ActivityObject, ActivityType, getUnreadActivities } from "../api/activities";
+import { Role as RoleEnum } from "../api/profileApi";
 import { markActivityRead } from "../api/userApi";
 
+import ErrorMessage from "./ErrorMessage";
+import { Role } from "./Role";
 import styles from "./UnreadActivities.module.css";
 
 type UnreadActivitiesProps = {
   userId: string;
+  userRole: RoleEnum;
   isOpen: boolean;
   toggleDropdown: () => void;
 };
 
 export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
   userId,
+  userRole,
   isOpen,
   toggleDropdown,
 }) => {
   const [activities, setActivities] = useState<ActivityObject[]>([]);
   const [totalUnreadCount, setTotalUnreadCount] = useState<number>(0);
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     getUnreadActivities(userId)
@@ -39,35 +45,40 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
   const handleSelect = (option: string) => {
     // Mark activity as read when selected
     markActivityRead(userId, option)
-      .then(() => {
-        setRefresh(!refresh);
+      .then((res) => {
+        if (res.success) {
+          setRefresh(!refresh);
+        } else {
+          setErrorMessage(`Error marking activity as read: ${res.error}`);
+        }
       })
       .catch((err: unknown) => {
-        console.error("Error marking activity as read:", err);
+        setErrorMessage(`Error marking activity as read: ${String(err)}`);
       });
   };
 
   const getActivityMessage = (activity: ActivityObject) => {
     switch (activity.type) {
-      case "document":
+      case ActivityType.DOCUMENT:
         return `${activity.uploader.firstName} uploaded a new document named "${activity.documentName}" to "${activity.programName
           ?.map((program) => {
             if (program === "battle buddies") return "Battle Buddies";
             else if (program === "advocacy") return "Advocacy";
-            else return "Operation Wellness";
+            else if (program === "operation wellness") return "Operation Wellness";
+            else return program;
           })
           .join(", ")}"`;
-      case "comment":
+      case ActivityType.COMMENT:
         return `${activity.uploader.firstName} made a comment on "${activity.documentName}"`;
-      case "assignment":
-        return `You've been assigned a new veteran!`;
-      case "report":
+      case ActivityType.ASSIGNMENT:
+        return `You've been assigned a new ${userRole === RoleEnum.VETERAN ? "volunteer" : "veteran"}!`;
+      case ActivityType.REPORT:
         return `Your report has been resolved.`;
-      case "request":
+      case ActivityType.REQUEST:
         return `You received access to "${activity.documentName}"`;
-      case "announcement":
+      case ActivityType.ANNOUNCEMENT:
         return String(activity.title);
-      case "signup":
+      case ActivityType.SIGNUP:
         return `${activity.uploader.firstName} has signed up as a ${activity.uploader.role}`;
       default:
         return `Unknown Activity by ${activity.uploader.firstName}`;
@@ -83,7 +94,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
               id="arrowUp"
               width={35}
               height={35}
-              src="ic_round-arrow-drop-up.svg"
+              src="/ic_round-arrow-drop-up.svg"
               alt="Dropdown arrow"
               style={{
                 objectFit: "contain",
@@ -104,39 +115,52 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
         {isOpen &&
           activities.map((activity, index) => (
             <li className={styles.dropdownItem} key={index}>
-              {activity.type === "document"
+              {activity.type === ActivityType.DOCUMENT
                 ? "New Document"
-                : activity.type === "report"
+                : activity.type === ActivityType.REPORT
                   ? "Reports"
-                  : activity.type === "assignment"
+                  : activity.type === ActivityType.ASSIGNMENT
                     ? "New Assignment"
-                    : activity.type === "request"
+                    : activity.type === ActivityType.REQUEST
                       ? "Requests"
-                      : activity.type === "comment"
+                      : activity.type === ActivityType.COMMENT
                         ? "New Comment"
-                        : activity.type === "signup"
+                        : activity.type === ActivityType.SIGNUP
                           ? "Sign Up"
                           : ""}
               <div>
-                {activity.type === "announcement" && (
+                {activity.type === ActivityType.ANNOUNCEMENT && (
                   <div className={styles.urgentButton}>Urgent</div>
                 )}
-                <div className={activity.type === "announcement" ? styles.announcement : ""}>
+                <div
+                  className={activity.type === ActivityType.ANNOUNCEMENT ? styles.announcement : ""}
+                >
                   <Image
                     id="pfp"
                     width={40}
                     height={40}
-                    src="Veteran.svg"
+                    src="/Veteran.svg"
                     alt="Profile Photo"
                     style={{ float: "left", margin: "16px 16px 16px 0px" }}
                   ></Image>
                   <div className={styles.horizontalDiv}>
                     <div className={styles.subtitle}>
-                      {activity.uploader.firstName}{" "}
-                      <span className={styles.label}>
-                        {activity.uploader.role.charAt(0).toUpperCase() +
-                          activity.uploader.role.slice(1)}
-                      </span>
+                      {activity.type !== ActivityType.ASSIGNMENT ? (
+                        <>
+                          <span>{activity.uploader.firstName} </span>
+                          <Role role={activity.uploader.role} />
+                        </>
+                      ) : userRole === RoleEnum.VOLUNTEER ? (
+                        <>
+                          <span>{activity.assignmentInfo.veteranId.firstName} </span>
+                          <Role role={RoleEnum.VETERAN} />
+                        </>
+                      ) : (
+                        <>
+                          <span>{activity.assignmentInfo.volunteerId.firstName} </span>
+                          <Role role={RoleEnum.VOLUNTEER} />
+                        </>
+                      )}
                     </div>
                     <div style={{ fontWeight: "14px" }}>{activity.relativeTime}</div>
                   </div>
@@ -152,14 +176,15 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                     </button>
                   </div>
 
-                  {["report", "announcement"].includes(activity.type) && (
-                    <p className={styles.description}>{activity.description}</p>
-                  )}
+                  {[ActivityType.REPORT, ActivityType.ANNOUNCEMENT, ActivityType.COMMENT].includes(
+                    activity.type,
+                  ) && <p className={styles.description}>{activity.description}</p>}
                 </div>
               </div>
             </li>
           ))}
       </ul>
+      {errorMessage && <ErrorMessage message={errorMessage} />}
     </div>
   );
 };

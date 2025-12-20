@@ -12,6 +12,7 @@ const activitySchema = new mongoose.Schema(
       enum: ["document", "comment", "assignment", "report", "request", "announcement", "signup"], // Restrict values
       required: true,
     },
+    // list of user id string
     receivers: {
       type: [String],
       required: false,
@@ -25,7 +26,7 @@ const activitySchema = new mongoose.Schema(
     description: {
       type: String,
       required: function () {
-        return ["report", "announcement"].includes(this.type);
+        return ["report", "announcement", "comment"].includes(this.type);
       },
     },
     documentName: {
@@ -38,6 +39,22 @@ const activitySchema = new mongoose.Schema(
       type: [String],
       required: function () {
         return this.type === "document";
+      },
+    },
+    assignmentInfo: {
+      volunteerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: function () {
+          this.type === "assignment";
+        },
+      },
+      veteranId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: function () {
+          this.type === "assignment";
+        },
       },
     },
   },

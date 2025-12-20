@@ -46,13 +46,10 @@ export const createUser = async (
 ): Promise<APIResult<CreateUserRequest>> => {
   try {
     const response = await post("/users", fileObject);
-    if (!response.ok) {
-      return handleAPIError(response);
-    }
     const data = (await response.json()) as CreateUserRequest;
     return { success: true, data };
   } catch (error: unknown) {
-    return { success: false, error: (error as Error).message };
+    return handleAPIError(error);
   }
 };
 

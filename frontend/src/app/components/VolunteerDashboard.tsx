@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { UserProfile } from "../api/profileApi";
+import { Role, UserProfile } from "../api/profileApi";
 import { getUser } from "../api/userApi";
 import { UnreadActivities } from "../components/UnreadActivities";
 import { VeteranList } from "../components/VeteranList";
@@ -39,6 +39,7 @@ export function VolunteerDashboard({ volunteerId }: VolunteerDashboardProp) {
             <span>Welcome, {user?.firstName}!</span>
             <UnreadActivities
               userId={volunteerId}
+              userRole={Role.VOLUNTEER}
               isOpen={dropdownOpen}
               toggleDropdown={toggleDropdown}
             />

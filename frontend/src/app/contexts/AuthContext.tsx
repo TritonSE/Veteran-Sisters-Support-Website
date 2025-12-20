@@ -4,6 +4,7 @@ import React, { ReactNode, useContext, useEffect, useMemo, useState } from "reac
 import { auth } from "../../firebase/firebase";
 import { setCurrentUserInfo } from "../api/authHeaders";
 import { get } from "../api/requests";
+import ErrorMessage from "../components/ErrorMessage";
 
 type UserReturn = {
   id: string;
@@ -21,23 +22,22 @@ type ApiUserResponse = {
 };
 
 const getUserIdAndRole = async (email: string): Promise<UserReturn> => {
-  try {
-    const response = await get(`/users/email/${encodeURIComponent(email)}`);
+  const response = await get(`/users/email/${encodeURIComponent(email)}`);
 
-    if (response.status === 404) {
-      console.log(`User not found for email: ${email}`);
-      return { id: "", role: "" };
-    }
+  if (!response.ok) {
+    throw new Error(`HTTP error ${response.status.toString()}`);
+  }
 
-    const data = (await response.json()) as ApiUserResponse;
-    return {
-      id: data._id,
-      role: data.role,
-    };
-  } catch (error) {
-    console.error("Error fetching user ID:", error);
+  if (response.status === 404) {
+    console.log(`User not found for email: ${email}`);
     return { id: "", role: "" };
   }
+
+  const data = (await response.json()) as ApiUserResponse;
+  return {
+    id: data._id,
+    role: data.role,
+  };
 };
 
 type AuthContextType = {
@@ -70,19 +70,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userRole, setUserRole] = useState("");
   const [loading, setLoading] = useState(true);
   const [isSigningUp, setIsSigningUp] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser?.email && !isSigningUp) {
         // Only make the API request if the user is signed in with Firebase and not signing up
-        void getUserIdAndRole(currentUser.email).then(({ id, role }) => {
-          setUserId(id);
-          setUserRole(role);
-          setLoading(false);
-          // Update the auth headers with the current user info
-          setCurrentUserInfo(id, role);
-        });
+        getUserIdAndRole(currentUser.email)
+          .then(({ id, role }) => {
+            setUserId(id);
+            setUserRole(role);
+            setLoading(false);
+            // Update the auth headers with the current user info
+            setCurrentUserInfo(id, role);
+          })
+          .catch((error: unknown) => {
+            setErrorMessage(`Unable to fetch current user: ${String(error)}`);
+          });
       } else {
         // If no user is signed in or is signing up, reset the state
         setUserId("");
@@ -110,5 +115,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   }, [user, userId, userRole, loading, isSigningUp, setIsSigningUp]);
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+      {errorMessage ? <ErrorMessage message={errorMessage} /> : null}
+    </AuthContext.Provider>
+  );
 };

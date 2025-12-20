@@ -1,6 +1,10 @@
 .page {
   background-image: url("/signUpBackground.svg");
-  height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  min-height: 100vh;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -25,9 +29,6 @@
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 24px;
-}
-
-.innerForm {
 }
 
 .input {
@@ -73,6 +74,12 @@
   background: var(--Primary, #057e6f);
   color: var(--Neutral-Base-White, #fafafa);
   border: none;
+  font-family: "Albert Sans";
+  font-size: 16px;
+  font-style: medium;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 .rememberMeContainer {
@@ -121,9 +128,10 @@
   line-height: normal;
 }
 
-.forgotPassword {
+.linkText {
   float: right;
   color: var(--Primary, #057e6f);
+  cursor: pointer;
 }
 
 .error {
@@ -132,4 +140,10 @@
   font-size: 14px;
   margin-bottom: 4px;
   margin-top: 8px;
+}
+
+.successText {
+  margin-top: 12px;
+  color: var(--Primary, #057e6f);
+  font-size: 14px;
 }

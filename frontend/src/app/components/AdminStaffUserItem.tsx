@@ -15,7 +15,8 @@ type AdminStaffUserItemProp = {
 export function AdminStaffUserItem({ user, openDialog }: AdminStaffUserItemProp) {
   let assignedText;
   let assignedStyle = styles.assignedText;
-  const length = user.assignedUsers ? user.assignedUsers.length : 0;
+  const uniqueAssignedUsers = user.assignedUsers ? Array.from(new Set(user.assignedUsers)) : [];
+  const length = uniqueAssignedUsers.length;
   if (user.role === RoleEnum.STAFF) {
     assignedText = "Not applicable";
   } else if (length === 0) {

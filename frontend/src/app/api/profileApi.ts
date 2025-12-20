@@ -116,7 +116,6 @@ export const updateUserProfile = async (
   userId: string,
   firstName: string,
   lastName: string,
-  email: string,
   phoneNumber: string,
   age: number,
   gender: Gender,
@@ -125,7 +124,6 @@ export const updateUserProfile = async (
     const response = await patch(`/users/id/${userId}`, {
       firstName,
       lastName,
-      email,
       phoneNumber,
       age,
       gender,
