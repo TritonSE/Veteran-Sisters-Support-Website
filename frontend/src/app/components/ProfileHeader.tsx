@@ -16,11 +16,11 @@ export function ProfileHeader(params: {
   showDocuments: boolean;
   minimized: boolean;
   isProgramAndRoleEditable: boolean;
-  isPersonalProfile: boolean;
+  isProfileEditable: boolean;
   programsChanged: (programChanged: boolean) => void;
   didProgramChange: boolean;
 }) {
-  const { userProfile, showDocuments, minimized, isProgramAndRoleEditable, isPersonalProfile } =
+  const { userProfile, showDocuments, minimized, isProgramAndRoleEditable, isProfileEditable} =
     params;
   const branchOfService = userProfile?.roleSpecificInfo?.serviceInfo?.branchOfService;
   const militaryStatus = userProfile?.roleSpecificInfo?.serviceInfo?.currentMilitaryStatus;
@@ -127,7 +127,7 @@ export function ProfileHeader(params: {
           </div>
           <div className={styles.profileContentControls}>
             <ProfileActions
-              isPersonalProfile={isPersonalProfile}
+              isProfileEditable={isProfileEditable}
               isProgramAndRoleEditable={isProgramAndRoleEditable}
               minimized={minimized}
               showDocuments={showDocuments}

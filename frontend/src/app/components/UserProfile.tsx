@@ -192,7 +192,7 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
       }
     };
     void fetchUserProfile();
-  }, [profileUserId, programsChanged, programs, userId, userRole]);
+  }, [profileUserId, programsChanged, userId, userRole]);
 
   if (loading) {
     return (
@@ -236,7 +236,7 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
               didProgramChange={programsChanged}
               programsChanged={setProgramsChanged}
               showDocuments={profileRenderingContext.showVeteranDocuments}
-              isPersonalProfile={profileRenderingContext.viewingPersonalProfile}
+              isProfileEditable={profileRenderingContext.isProfileEditable}
               isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
             />
             <div className={styles.userProfileInnerContent}>

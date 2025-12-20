@@ -212,7 +212,7 @@ export function DocumentProfileView({ profileId }: DocumentProfileViewProps) {
             didProgramChange={false}
             showDocuments={false}
             minimized={true}
-            isPersonalProfile={false}
+            isProfileEditable={false}
             isProgramAndRoleEditable={false}
           />
           <UserList

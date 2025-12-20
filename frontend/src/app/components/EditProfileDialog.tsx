@@ -8,7 +8,7 @@ import ChangeRoleDialog from "./ChangeRoleDialog";
 import styles from "./EditProfileDialog.module.css";
 
 type ProfileActionsProps = {
-  isPersonalProfile: boolean;
+  isProfileEditable: boolean;
   isProgramAndRoleEditable: boolean;
   minimized: boolean;
   showDocuments: boolean;
@@ -28,7 +28,7 @@ type ProfileActionsProps = {
 };
 
 const ProfileActions = ({
-  isPersonalProfile,
+  isProfileEditable,
   isProgramAndRoleEditable,
   minimized,
   showDocuments,
@@ -97,7 +97,7 @@ const ProfileActions = ({
         setMenuOpen(false);
       },
     },
-    isPersonalProfile && {
+    isProfileEditable && {
       label: "Edit profile",
       onClick: handleEditProfile,
     },
@@ -124,7 +124,7 @@ const ProfileActions = ({
             className={styles.meatballMenu}
           />
         </div>
-      ) : isProgramAndRoleEditable || isPersonalProfile ? (
+      ) : isProgramAndRoleEditable || isProfileEditable ? (
         <div className={styles.headerTopRight}>
           <Image
             src="/meatball_menu.svg"
