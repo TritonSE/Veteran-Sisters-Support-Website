@@ -61,6 +61,6 @@ const activitySchema = new mongoose.Schema(
   { timestamps: true }, // Will create createdAt timestamp
 );
 
-const Activity = mongoose.model("Activity", activitySchema);
+export const Activity = mongoose.model("Activity", activitySchema);
 
 export default Activity;

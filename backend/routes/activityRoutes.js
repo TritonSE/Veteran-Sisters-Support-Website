@@ -4,9 +4,11 @@ import {
   createAnnouncement,
   getActivities,
   getAnnouncements,
+  getActivity,
 } from "../controllers/activityController.js";
 import { authenticateUser } from "../middleware/auth.js";
 import { authenticateProfilePermissions, authenticateStaffOrAdmin } from "../middleware/profile.js";
+import { authenticateActivityPermissions } from "../middleware/activity.js";
 
 const router = express.Router();
 
@@ -16,7 +18,12 @@ router.get(
   authenticateProfilePermissions,
   getUnreadActivities,
 );
-router.get("/activities/:userId", authenticateUser, authenticateProfilePermissions, getActivities);
+router.get(
+  "/activities/all/:userId",
+  authenticateUser,
+  authenticateProfilePermissions,
+  getActivities,
+);
 
 router.post(
   "/activities/announcement",
@@ -30,6 +37,13 @@ router.get(
   authenticateUser,
   authenticateStaffOrAdmin,
   getAnnouncements,
+);
+
+router.get(
+  "/activities/:activityId",
+  authenticateUser,
+  authenticateActivityPermissions,
+  getActivity,
 );
 
 export default router;

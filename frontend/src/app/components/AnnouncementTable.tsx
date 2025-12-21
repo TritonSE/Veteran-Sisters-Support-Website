@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { ActivityObject, getAnnouncements } from "../api/activities";
@@ -14,6 +15,8 @@ export function AnnouncementTable({ userId }: AnnouncementTableProp) {
   const [announcements, setAnnouncements] = useState<ActivityObject[]>([]);
   const [page, setPage] = useState<number>(0);
   const pageSize = 8;
+
+  const router = useRouter();
 
   useEffect(() => {
     getAnnouncements(userId)
@@ -47,15 +50,16 @@ export function AnnouncementTable({ userId }: AnnouncementTableProp) {
           {announcements.length === 0 ? (
             <AnnouncementTableItem date="None" announcement="None" />
           ) : (
-            announcements
-              .slice(page * pageSize, (page + 1) * pageSize)
-              .map((announcement) => (
-                <AnnouncementTableItem
-                  key={announcement._id}
-                  date={announcement.createdAt.toLocaleDateString()}
-                  announcement={announcement.title}
-                />
-              ))
+            announcements.slice(page * pageSize, (page + 1) * pageSize).map((announcement) => (
+              <AnnouncementTableItem
+                key={announcement._id}
+                date={announcement.createdAt.toLocaleDateString()}
+                announcement={announcement.title}
+                onClick={() => {
+                  router.push(`/activities?activityId=${announcement._id}`);
+                }}
+              />
+            ))
           )}
         </div>
       </div>

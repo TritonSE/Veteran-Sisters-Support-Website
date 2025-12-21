@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import { ActivityObject, ActivityType } from "../api/activities";
 import { Role as RoleEnum } from "../api/profileApi";
@@ -13,6 +14,7 @@ type ActivitiesTableItemProp = {
 };
 
 export function ActivitiesTableItem({ activityObject, userRole, last }: ActivitiesTableItemProp) {
+  const router = useRouter();
   const getActivityMessage = (activity: ActivityObject) => {
     switch (activity.type) {
       case ActivityType.DOCUMENT:
@@ -41,6 +43,13 @@ export function ActivitiesTableItem({ activityObject, userRole, last }: Activiti
     }
   };
 
+  // temporary measure until we get other pages
+  const handleClick = (activity: ActivityObject) => {
+    if (activity.type === ActivityType.ANNOUNCEMENT) {
+      router.push(`/activities?activityId=${activity._id}`);
+    }
+  };
+
   return (
     <div className={last ? styles.lastContainer : styles.container}>
       {activityObject.type === ActivityType.ANNOUNCEMENT && (
@@ -48,6 +57,9 @@ export function ActivitiesTableItem({ activityObject, userRole, last }: Activiti
       )}
       <div
         className={`${styles.content} ${activityObject.type === ActivityType.ANNOUNCEMENT ? styles.announcement : ""}`}
+        onClick={() => {
+          handleClick(activityObject);
+        }}
       >
         <div className={styles.info}>
           <Image
@@ -83,7 +95,7 @@ export function ActivitiesTableItem({ activityObject, userRole, last }: Activiti
             ) && <p className={styles.description}>{activityObject.description}</p>}
           </div>
         </div>
-        <div style={{ fontWeight: "14px" }}>{activityObject.relativeTime}</div>
+        <div style={{ fontWeight: "14px", flexShrink: "0" }}>{activityObject.relativeTime}</div>
       </div>
     </div>
   );

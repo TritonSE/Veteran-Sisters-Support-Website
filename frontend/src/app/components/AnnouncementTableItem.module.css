@@ -18,6 +18,10 @@
   vertical-align: middle;
 }
 
+.linked {
+  cursor: pointer;
+}
+
 .date {
   display: flex;
   width: 180px;
