@@ -1,6 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
-import { ReactNode } from "react";
+import { useRouter } from "next/navigation";
 
 import { ActivityObject, ActivityType } from "../api/activities";
 import { Role as RoleEnum } from "../api/profileApi";
@@ -15,6 +14,7 @@ type ActivitiesTableItemProp = {
 };
 
 export function ActivitiesTableItem({ activityObject, userRole, last }: ActivitiesTableItemProp) {
+  const router = useRouter();
   const getActivityMessage = (activity: ActivityObject) => {
     switch (activity.type) {
       case ActivityType.DOCUMENT:
@@ -44,18 +44,10 @@ export function ActivitiesTableItem({ activityObject, userRole, last }: Activiti
   };
 
   // temporary measure until we get other pages
-  type ConditionalLinkProps = {
-    link: boolean;
-    children: ReactNode;
-  };
-  const ConditionalLink = ({ link, children }: ConditionalLinkProps) => {
-    return link ? (
-      <Link href={{ pathname: "/activities", query: { activityId: activityObject._id } }}>
-        {children}
-      </Link>
-    ) : (
-      <>{children}</>
-    );
+  const handleClick = (activity: ActivityObject) => {
+    if (activity.type === ActivityType.ANNOUNCEMENT) {
+      router.push(`/activities?activityId=${activity._id}`);
+    }
   };
 
   return (
@@ -63,47 +55,48 @@ export function ActivitiesTableItem({ activityObject, userRole, last }: Activiti
       {activityObject.type === ActivityType.ANNOUNCEMENT && (
         <div className={styles.urgentButton}>Urgent</div>
       )}
-      <ConditionalLink link={activityObject.type === ActivityType.ANNOUNCEMENT}>
-        <div
-          className={`${styles.content} ${activityObject.type === ActivityType.ANNOUNCEMENT ? styles.announcement : ""}`}
-        >
-          <div className={styles.info}>
-            <Image
-              id="pfp"
-              width={40}
-              height={40}
-              src="/Veteran.svg"
-              alt="Profile Photo"
-              style={{ float: "left" }}
-            ></Image>
-            <div className={styles.horizontalDiv}>
-              <div className={styles.subtitle}>
-                {activityObject.type !== ActivityType.ASSIGNMENT ? (
-                  <>
-                    <span>{activityObject.uploader.firstName} </span>
-                    <Role role={activityObject.uploader.role} />
-                  </>
-                ) : userRole === RoleEnum.VOLUNTEER ? (
-                  <>
-                    <span>{activityObject.assignmentInfo.veteranId.firstName} </span>
-                    <Role role="veteran" />
-                  </>
-                ) : (
-                  <>
-                    <span>{activityObject.assignmentInfo.volunteerId.firstName} </span>
-                    <Role role="volunteer" />
-                  </>
-                )}
-              </div>
-              <div>{getActivityMessage(activityObject)}</div>
-              {[ActivityType.REPORT, ActivityType.ANNOUNCEMENT, ActivityType.COMMENT].includes(
-                activityObject.type,
-              ) && <p className={styles.description}>{activityObject.description}</p>}
+      <div
+        className={`${styles.content} ${activityObject.type === ActivityType.ANNOUNCEMENT ? styles.announcement : ""}`}
+        onClick={() => {
+          handleClick(activityObject);
+        }}
+      >
+        <div className={styles.info}>
+          <Image
+            id="pfp"
+            width={40}
+            height={40}
+            src="/Veteran.svg"
+            alt="Profile Photo"
+            style={{ float: "left" }}
+          ></Image>
+          <div className={styles.horizontalDiv}>
+            <div className={styles.subtitle}>
+              {activityObject.type !== ActivityType.ASSIGNMENT ? (
+                <>
+                  <span>{activityObject.uploader.firstName} </span>
+                  <Role role={activityObject.uploader.role} />
+                </>
+              ) : userRole === RoleEnum.VOLUNTEER ? (
+                <>
+                  <span>{activityObject.assignmentInfo.veteranId.firstName} </span>
+                  <Role role="veteran" />
+                </>
+              ) : (
+                <>
+                  <span>{activityObject.assignmentInfo.volunteerId.firstName} </span>
+                  <Role role="volunteer" />
+                </>
+              )}
             </div>
+            <div>{getActivityMessage(activityObject)}</div>
+            {[ActivityType.REPORT, ActivityType.ANNOUNCEMENT, ActivityType.COMMENT].includes(
+              activityObject.type,
+            ) && <p className={styles.description}>{activityObject.description}</p>}
           </div>
-          <div style={{ fontWeight: "14px", flexShrink: "0" }}>{activityObject.relativeTime}</div>
         </div>
-      </ConditionalLink>
+        <div style={{ fontWeight: "14px", flexShrink: "0" }}>{activityObject.relativeTime}</div>
+      </div>
     </div>
   );
 }
