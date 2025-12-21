@@ -41,6 +41,13 @@ export const addVolunteer = async (req, res) => {
   try {
     const { userEmail, program, veteranEmail, volunteerId, veteranId } = req.body;
 
+    // Validate required fields are provided
+    if (!volunteerId || !veteranId || !program) {
+      return res.status(400).json({
+        error: "Missing required fields: volunteerId, veteranId, and program are required.",
+      });
+    }
+
     const existingVolunteer = await ActiveVolunteers.findOne({
       volunteer: userEmail,
       assignedProgram: program,
@@ -55,6 +62,7 @@ export const addVolunteer = async (req, res) => {
         .json({ error: "This volunteer is already assigned to this program and veteran." });
     }
 
+    // Create and save with proper validation
     const newVolunteer = await ActiveVolunteers.create({
       volunteer: userEmail,
       assignedProgram: program,
@@ -156,6 +164,32 @@ export const removeVolunteer = async (req, res) => {
     }
 
     return res.status(200).json({ message: "Volunteer assignment removed successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+// remove all volunteers assigned to a veteran using the veteran email
+// when switching from veteran to volunteer
+export const removeAllAssignedVolunteersWithVeteranEmail = async (req, res) => {
+  try {
+    const veteranEmail = req.params.email;
+    await ActiveVolunteers.deleteMany({ assignedVeteran: veteranEmail }).exec();
+    return res.status(200).json({ message: "All assigned volunteers removed successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+// remove all veterans assigned to a volunteer using the volunteer email
+// when switching from volunteer to veteran
+export const removeAllAssignedVeteransWithVolunteerId = async (req, res) => {
+  try {
+    const email = req.params.id; // param name is 'id' but it's actually the email
+    await ActiveVolunteers.deleteMany({ volunteer: email }).exec();
+    return res.status(200).json({ message: "All assigned veterans removed successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });

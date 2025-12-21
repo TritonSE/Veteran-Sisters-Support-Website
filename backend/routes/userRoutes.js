@@ -11,7 +11,8 @@ import {
   getVeteransByProgram,
   deleteUser,
   markActivityRead,
-  doesUserEmailExist
+  updateUserPrograms,
+  doesUserEmailExist,
 } from "../controllers/userController.js";
 import { authenticateUser } from "../middleware/auth.js";
 import {
@@ -61,4 +62,10 @@ router.put(
   authenticateProfilePermissions,
   markActivityRead,
 );
+router.put(
+  "/users/programs/:email",
+  authenticateUser,
+  authenticateStaffOrAdmin,
+  updateUserPrograms,
+); // Update user programs/role
 export default router;

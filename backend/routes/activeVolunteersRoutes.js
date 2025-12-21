@@ -4,6 +4,8 @@ import {
   queryActiveVolunteersVolunteerByEmail,
   addVolunteer,
   removeVolunteer,
+  removeAllAssignedVolunteersWithVeteranEmail,
+  removeAllAssignedVeteransWithVolunteerId,
 } from "../controllers/activeVolunteersController.js";
 import { authenticateUser } from "../middleware/auth.js";
 import {
@@ -27,5 +29,17 @@ router.get(
 );
 router.post("/activeVolunteers", authenticateUser, authenticateStaffOrAdmin, addVolunteer);
 router.delete("/activeVolunteers/:id", authenticateUser, authenticateStaffOrAdmin, removeVolunteer);
+router.delete(
+  "/activeVolunteers/veteran/:email",
+  authenticateUser,
+  authenticateStaffOrAdmin,
+  removeAllAssignedVolunteersWithVeteranEmail,
+);
+router.delete(
+  "/activeVolunteers/volunteer/:id",
+  authenticateUser,
+  authenticateStaffOrAdmin,
+  removeAllAssignedVeteransWithVolunteerId,
+);
 
 export default router;

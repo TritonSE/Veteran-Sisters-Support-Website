@@ -126,3 +126,42 @@ export const getAssignedUsers = async (
     return { success: false, error: (error as Error).message };
   }
 };
+
+// remove all volunteers assigned to a veteran when switching from veteran to volunteer
+export const removeAllAssignedVolunteersWithVeteranEmail = async (
+  veteranEmail: string | undefined,
+): Promise<APIResult<ActiveVolunteer>> => {
+  if (!veteranEmail) {
+    return { success: false, error: "Veteran email is undefined" };
+  }
+  try {
+    const response = await del(`/activeVolunteers/veteran/${veteranEmail}`);
+    if (!response.ok) {
+      return handleAPIError(response);
+    }
+    const data = (await response.json()) as ActiveVolunteer;
+    return { success: true, data };
+  } catch (error: unknown) {
+    return handleAPIError(error);
+  }
+};
+
+// remove all veterans assigned to a volunteer when switching from volunteer to veteran
+// Note: volunteerEmail is passed as the 'id' parameter in the route
+export const removeAllAssignedVeteransWithVolunteerId = async (
+  volunteerEmail: string | undefined,
+): Promise<APIResult<ActiveVolunteer>> => {
+  if (!volunteerEmail) {
+    return { success: false, error: "Volunteer email is undefined" };
+  }
+  try {
+    const response = await del(`/activeVolunteers/volunteer/${volunteerEmail}`);
+    if (!response.ok) {
+      return handleAPIError(response);
+    }
+    const data = (await response.json()) as ActiveVolunteer;
+    return { success: true, data };
+  } catch (error: unknown) {
+    return handleAPIError(error);
+  }
+};

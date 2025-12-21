@@ -90,6 +90,8 @@ export default function UserDetails({
   const handleContinue = async (e: MouseEvent<HTMLButtonElement>) => {
     setHasSubmitted(true);
     e.preventDefault();
+    setFormErrors({});
+
     let hasError = false;
     const emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -105,6 +107,11 @@ export default function UserDetails({
         alreadyExists: "An account with this email already exists.",
       }));
       hasError = true;
+    } else {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        alreadyExists: "Error checking if this email is already in use.",
+      }));
     }
     if (password.length < 6 && password.length > 0) {
       setFormErrors((prev) => ({
@@ -143,7 +150,6 @@ export default function UserDetails({
       hasError = true;
     }
     if (hasError) return;
-    setFormErrors({});
     onNext();
   };
 
