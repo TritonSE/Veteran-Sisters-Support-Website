@@ -277,7 +277,7 @@ export default function SignUpForm() {
   return (
     <>
       {isSigningUp ? <Loading /> : renderStage()}
-      <ErrorMessage message={errorMessage} />
+      {errorMessage && <ErrorMessage message={errorMessage} />}
     </>
   );
 }
