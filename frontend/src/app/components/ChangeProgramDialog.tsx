@@ -1,4 +1,5 @@
 // ChangeProgramDialog.tsx
+import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 
 import {
@@ -13,7 +14,7 @@ import { Role } from "./Role";
 
 type ProgramOption = { label: string; value: string };
 
-const AVAILABLE_PROGRAMS: ProgramOption[] = [
+export const AVAILABLE_PROGRAMS: ProgramOption[] = [
   { label: "Battle Buddies", value: "battle buddies" },
   { label: "Operational Wellness", value: "operation wellness" },
   { label: "Advocacy", value: "advocacy" },
@@ -117,15 +118,25 @@ const ChangeProgramDialog = ({
           <div className={styles.dropdownList}>
             {AVAILABLE_PROGRAMS.map((opt) => (
               <label key={opt.value} className={styles.dropdownItem}>
-                <input
-                  type="checkbox"
-                  value={opt.value}
-                  checked={programs.includes(opt.value)}
-                  onChange={() => {
-                    handleCheckboxChange(opt.value);
-                  }}
-                  className={styles.checkbox}
-                />
+                <div className={styles.checkboxContainer}>
+                  <input
+                    id={`${opt.value}-checkbox`}
+                    type="checkbox"
+                    value={opt.value}
+                    checked={programs.includes(opt.value)}
+                    onChange={() => {
+                      handleCheckboxChange(opt.value);
+                    }}
+                    className={styles.checkbox}
+                  />
+                  <label
+                    htmlFor={`${opt.value}-checkbox`}
+                    className={styles.checkmarkIcon}
+                    style={programs.includes(opt.value) ? {} : { display: "none" }}
+                  >
+                    <Image width={20} height={20} src="/checkbox.svg" alt="Checkbox" />
+                  </label>
+                </div>
                 {opt.label}
               </label>
             ))}
@@ -136,19 +147,19 @@ const ChangeProgramDialog = ({
       <div className={styles.actions}>
         <button
           onClick={() => {
-            void savePrograms();
-          }}
-          className={styles.btnPrimary}
-        >
-          Save
-        </button>
-        <button
-          onClick={() => {
             callback(false);
           }}
           className={styles.btnSecondary}
         >
           Cancel
+        </button>
+        <button
+          onClick={() => {
+            void savePrograms();
+          }}
+          className={styles.btnPrimary}
+        >
+          Save
         </button>
       </div>
     </div>

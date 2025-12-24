@@ -97,6 +97,10 @@
   cursor: pointer;
 }
 
+.saveDisabled {
+  background-color: #b8c2ca;
+}
+
 .cancel {
   background-color: white;
   border: 1px solid #d0d7de;

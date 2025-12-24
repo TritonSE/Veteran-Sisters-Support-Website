@@ -101,12 +101,14 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                 transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
               }}
             ></Image>
-            {activities.length > 0 ? (
+            {totalUnreadCount > 0 ? (
               <span>Unread activity</span>
             ) : (
               <span>No new activity. You&apos;re all caught up!</span>
             )}
-            <span className={styles.activityCount}>{totalUnreadCount}</span>
+            {totalUnreadCount > 0 && (
+              <span className={styles.activityCount}>{totalUnreadCount}</span>
+            )}
           </div>
           <a href="/activities" style={{ color: "#057E6F", fontSize: "14px", fontWeight: "600" }}>
             View all activities
