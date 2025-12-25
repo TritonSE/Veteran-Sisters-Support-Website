@@ -141,15 +141,25 @@
 }
 
 .progUnassignedHeader {
+  color: var(--Text-1, #60696f);
+  text-align: center;
+  /* body large */
+  font-family: "Albert Sans";
   font-size: 16px;
-  color: #60696f;
+  font-style: normal;
   font-weight: 500;
+  line-height: normal;
 }
 
 .progUnassingedText {
+  color: var(--Text-1, #60696f);
+  text-align: center;
+  /* body small */
+  font-family: "Albert Sans";
   font-size: 13px;
-  color: #60696f;
+  font-style: normal;
   font-weight: 400;
+  line-height: normal;
 }
 
 .progUnassignedButton {
@@ -166,4 +176,6 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
+  border: none;
+  appearance: none;
 }

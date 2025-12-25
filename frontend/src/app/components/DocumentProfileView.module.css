@@ -31,3 +31,21 @@
   gap: var(--Spacing-md, 24px);
   overflow: auto; /* allow scrolling if content exceeds height */
 }
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalInner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}

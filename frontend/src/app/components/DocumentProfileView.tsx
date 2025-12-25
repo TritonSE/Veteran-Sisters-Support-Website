@@ -7,6 +7,7 @@ import {
 } from "../api/profileApi";
 import { useAuth } from "../contexts/AuthContext";
 
+import ChangeProgramDialog from "./ChangeProgramDialog";
 import styles from "./DocumentProfileView.module.css";
 import { NavBar } from "./NavBar";
 import NavigateBack from "./NavigateBack";
@@ -155,6 +156,9 @@ export function DocumentProfileView({ profileId }: DocumentProfileViewProps) {
   const [profileRenderingContext, setProfileRenderingContext] = useState(
     getProfileRenderingContext(null, null, userRole, userId),
   );
+  const [openProgramChange, setOpenProgramChange] = useState<boolean>(false);
+  const [programs, setPrograms] = useState<string[]>([]);
+  const [programsChanged, setProgramsChanged] = useState(false);
   const [error, setError] = useState<string | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -212,15 +216,16 @@ export function DocumentProfileView({ profileId }: DocumentProfileViewProps) {
             didProgramChange={false}
             showDocuments={false}
             minimized={true}
-            isProfileEditable={false}
-            isProgramAndRoleEditable={false}
+            isProfileEditable={profileRenderingContext.isProfileEditable}
+            isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
           />
           <UserList
             userProfile={userProfile}
             minimized={true}
             title="Assigned Volunteers"
             isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
-            editable={false}
+            editable={profileRenderingContext.userListEditable}
+            callback={setOpenProgramChange}
           />
           <ProfileInterests minimized={true} interests={userProfile?.roleSpecificInfo?.interests} />
         </div>
@@ -228,6 +233,37 @@ export function DocumentProfileView({ profileId }: DocumentProfileViewProps) {
           <VeteranFilesTable veteranId={profileId} refresh={false} />
         </div>
       </div>
+      {openProgramChange && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => {
+            setOpenProgramChange(false);
+          }}
+        >
+          <div
+            className={styles.modalInner}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <ChangeProgramDialog
+              firstName={userProfile?.firstName}
+              email={userProfile?.email}
+              role={userProfile?.role}
+              userPrograms={programs}
+              onSavePrograms={(newPrograms) => {
+                setPrograms(newPrograms);
+                if (userProfile) {
+                  setUserProfile({ ...userProfile, assignedPrograms: newPrograms as [] });
+                }
+              }}
+              callback={setOpenProgramChange}
+              didProgramChange={programsChanged}
+              programsChanged={setProgramsChanged}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 }
