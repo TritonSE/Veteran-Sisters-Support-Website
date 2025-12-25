@@ -20,6 +20,7 @@ export type ActivityObject = {
   documentName: string;
   programName: string[];
   assignmentInfo: assignmentInfo;
+  reportId?: string | { _id: string; status: string };
   isRead: boolean;
   createdAt: Date;
   relativeTime: string;

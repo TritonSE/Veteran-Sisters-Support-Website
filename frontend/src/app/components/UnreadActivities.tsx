@@ -72,8 +72,17 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
         return `${activity.uploader.firstName} made a comment on "${activity.documentName}"`;
       case ActivityType.ASSIGNMENT:
         return `You've been assigned a new ${userRole === RoleEnum.VETERAN ? "volunteer" : "veteran"}!`;
-      case ActivityType.REPORT:
-        return `Your report has been resolved.`;
+      case ActivityType.REPORT: {
+        const reportStatus =
+          activity.reportId && typeof activity.reportId === "object"
+            ? (activity.reportId as { _id: string; status: string }).status
+            : null;
+        if (reportStatus === "Resolved") {
+          return `A report regarding volunteer services has been resolved.`;
+        } else {
+          return `Issue regarding volunteer services!.`;
+        }
+      }
       case ActivityType.REQUEST:
         return `You received access to "${activity.documentName}"`;
       case ActivityType.ANNOUNCEMENT:
