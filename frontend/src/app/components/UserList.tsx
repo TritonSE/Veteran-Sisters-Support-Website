@@ -68,7 +68,11 @@ export function UserList(params: {
       removeVolunteerFromVeteran(volEmail, vetEmail, program)
         .then((res) => {
           if (res.success) {
-            setSuccessMessage("Successfully removed veteran");
+            const successText =
+              userProfile.role === Role.VETERAN
+                ? "Successfully removed volunteer"
+                : "Successfully removed veteran";
+            setSuccessMessage(successText);
             setRefreshFlag((prev) => !prev);
           } else {
             setErrorMessage(`Error removing veteran: ${res.error}`);

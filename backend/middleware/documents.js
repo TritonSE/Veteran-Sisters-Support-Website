@@ -47,6 +47,11 @@ export const authenticateDocumentPermissions = async (req, res, next) => {
             }
           }
         }
+        //check volunteer is allowed to make action (prohibit change file name)
+        if (req.body.filename && req.body.filename !== document.filename)
+          return res
+            .status(403)
+            .json({ error: "You do not have permission to perform this action" });
         break;
       case "staff":
         if (!user.assignedPrograms.some((element) => document.programs.includes(element))) {

@@ -11,7 +11,7 @@ import { storage } from "../../firebase/firebase";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { Comment, FileObject, editFileObject, getFileById } from "../api/fileApi";
-import { UserProfile } from "../api/profileApi";
+import { Role as RoleEnum, UserProfile } from "../api/profileApi";
 import { getUser } from "../api/userApi";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -39,7 +39,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
   const [currTitle, setCurrTitle] = useState<string>();
 
   const [currUser, setCurrUser] = useState<UserProfile>();
-  const { userId } = useAuth();
+  const { userId, userRole } = useAuth();
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -156,6 +156,8 @@ export function DocumentView({ documentId }: DocumentViewProps) {
             }}
             onKeyDown={changeTitleHandler}
           />
+        ) : userRole === (RoleEnum.VOLUNTEER as string) ? (
+          <div className={styles.headerSection}>{filename}</div>
         ) : (
           <div
             className={styles.headerSection}

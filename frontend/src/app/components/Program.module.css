@@ -15,6 +15,7 @@
   font-weight: 500;
   line-height: normal;
   color: inherit;
+  text-wrap: nowrap;
 }
 
 .battleBuddies {
