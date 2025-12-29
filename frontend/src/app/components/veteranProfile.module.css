@@ -10,6 +10,7 @@
   left: 0;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  z-index: 1001;
 }
 
 .dialog {
