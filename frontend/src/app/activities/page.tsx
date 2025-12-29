@@ -17,17 +17,6 @@ type ActivitiesContentProp = {
   userRole: string;
 };
 
-// function ProfileContent() {
-//   const searchParams = useSearchParams();
-//   const userId = searchParams.get("userId") ?? "";
-//   return (
-//     <div className={styles.profilePage}>
-//       <NavBar />
-//       <UserProfile key={userId} profileUserId={userId} />
-//     </div>
-//   );
-// }
-
 function ActivitiesContent({ userId, userRole }: ActivitiesContentProp) {
   const searchParams = useSearchParams();
   const activityId = searchParams.get("activityId") ?? "";
@@ -37,7 +26,7 @@ function ActivitiesContent({ userId, userRole }: ActivitiesContentProp) {
       <div className={styles.page}>
         <div className={styles.frame}>
           {activityId ? (
-            <ActivityDetail activityId={activityId} />
+            <ActivityDetail activityId={activityId} userRole={userRole} />
           ) : (
             <ActivitiesTable userId={userId} role={userRole} />
           )}

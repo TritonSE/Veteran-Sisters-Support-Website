@@ -1,13 +1,22 @@
+import { AssignedProgram } from "./profileApi";
 import { APIResult, get, handleAPIError, post } from "./requests";
 
 type assignmentInfo = {
   volunteerId: {
+    _id: string;
     firstName: string;
     lastName: string;
+    email?: string;
+    phoneNumber?: string;
+    assignedPrograms?: AssignedProgram[];
   };
   veteranId: {
+    _id: string;
     firstName: string;
     lastName: string;
+    email?: string;
+    phoneNumber?: string;
+    assignedPrograms?: AssignedProgram[];
   };
 };
 
@@ -24,6 +33,7 @@ export type ActivityObject = {
   title: string;
   description: string;
   documentName: string;
+  documentId: string;
   programName: string[];
   assignmentInfo: assignmentInfo;
   isRead: boolean;

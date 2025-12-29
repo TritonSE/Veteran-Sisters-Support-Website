@@ -5,10 +5,16 @@ import { ActiveVolunteers } from "../models/activeVolunteers.js";
 export const getActivity = async (req, res) => {
   try {
     const { activityId } = req.params;
-    const activity = await Activity.findById(activityId).populate(
-      "uploader",
-      "firstName lastName role email phoneNumber",
-    );
+    const activity = await Activity.findById(activityId)
+      .populate("uploader", "firstName lastName role email phoneNumber")
+      .populate(
+        "assignmentInfo.volunteerId",
+        "_id firstName lastName email phoneNumber assignedPrograms",
+      )
+      .populate(
+        "assignmentInfo.veteranId",
+        "_id firstName lastName email phoneNumber assignedPrograms",
+      );
     if (!activity) {
       return res.status(404).json({ error: "Activity not found" });
     }
@@ -130,6 +136,7 @@ export const createActivity = async (activityData) => {
       title,
       description,
       documentName,
+      documentId,
       programName,
       assignmentInfo,
     } = activityData;
@@ -138,10 +145,11 @@ export const createActivity = async (activityData) => {
       return res.status(400).json({ message: "Uploader ID, and type are required" });
     }
 
-    if (["document", "comment", "request"].includes(type) && !documentName) {
-      return res
-        .status(400)
-        .json({ message: "documentName is required for Document, Comment, and Request types" });
+    if (["document", "comment", "request"].includes(type) && (!documentName || !documentId)) {
+      return res.status(400).json({
+        message:
+          "documentName and documentId are required for Document, Comment, and Request types",
+      });
     }
 
     if (type === "document" && !programName) {
@@ -171,6 +179,7 @@ export const createActivity = async (activityData) => {
       title,
       description,
       documentName,
+      documentId,
       programName,
       assignmentInfo,
       createdAt: new Date(),
@@ -191,7 +200,7 @@ export const createActivity = async (activityData) => {
 };
 
 // Create activity type "document" by calling createActivity
-export const createDocument = async ({ uploader, filename, programs }) => {
+export const createDocument = async ({ uploader, documentName, documentId, programs }) => {
   try {
     // Create unread activity
     const lowercasePrograms = programs.map((program) => {
@@ -210,7 +219,8 @@ export const createDocument = async ({ uploader, filename, programs }) => {
       uploader,
       type: "document",
       receivers: receivers,
-      documentName: filename,
+      documentName: documentName,
+      documentId: documentId,
       programName: lowercasePrograms,
     };
 
@@ -241,13 +251,14 @@ export const createAnnouncement = async (req, res) => {
 };
 
 // Create activity type "comment" by calling createActivity
-export const createComment = async ({ comment, documentName, documentUploader }) => {
+export const createComment = async ({ comment, documentName, documentId, documentUploader }) => {
   try {
     const newActivity = {
       uploader: comment.commenterId,
       type: "comment",
       receivers: [documentUploader],
       documentName,
+      documentId,
       description: comment.comment,
     };
 
@@ -295,12 +306,13 @@ export const createReport = async ({ uploader, description }) => {
 };
 
 // Create activity type "request" by calling createActivity
-export const createRequest = async ({ uploader, documentName }) => {
+export const createRequest = async ({ uploader, documentName, documentId }) => {
   try {
     const newActivity = {
       uploader,
       type: "request",
       documentName,
+      documentId,
     };
 
     const savedActivity = await createActivity(newActivity);

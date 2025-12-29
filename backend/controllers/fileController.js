@@ -25,7 +25,12 @@ export const uploadFile = async (req, res, next) => {
     });
 
     // Create unread activity
-    await createDocument({ uploader: uploaderId, filename: filename, programs: programs });
+    await createDocument({
+      uploader: uploaderId,
+      documentName: fileObject.filename,
+      documentId: fileObject._id,
+      programs: programs,
+    });
 
     return res.status(201).json(fileObject);
   } catch (error) {
@@ -76,6 +81,7 @@ export const editFileById = async (req, res, next) => {
           createComment({
             comment: comment,
             documentName: file.filename,
+            documentId: file._id,
             documentUploader: file.uploader._id.toString(),
           });
         }

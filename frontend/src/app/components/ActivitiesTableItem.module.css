@@ -22,6 +22,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  cursor: pointer;
 }
 
 .announcement {
@@ -95,5 +96,4 @@
   border: 1px dashed #f9a825;
   border-radius: 4px;
   padding: 8px 16px;
-  cursor: pointer;
 }
