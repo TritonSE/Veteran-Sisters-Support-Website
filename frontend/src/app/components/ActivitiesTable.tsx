@@ -36,16 +36,13 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
   let tabs;
   let handlers;
   if (role === "admin" || role === "staff") {
-    tabs = ["All", "Reports", "Requests"];
+    tabs = ["All", "Reports"];
     handlers = [
       () => {
         handleChangeType(null);
       },
       () => {
         handleChangeType([ActivityType.REPORT]);
-      },
-      () => {
-        handleChangeType([ActivityType.REQUEST]);
       },
     ];
   } else {
