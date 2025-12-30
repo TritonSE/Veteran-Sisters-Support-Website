@@ -16,6 +16,7 @@ import styles from "./DocumentComment.module.css";
 import ErrorMessage from "./ErrorMessage";
 import { Program } from "./Program";
 import { Role } from "./Role";
+import SuccessNotification from "./SuccessNotification";
 
 type DocumentCommentProps = {
   comment: Comment;
@@ -62,6 +63,7 @@ export function DocumentComment({
   const [currComment, setCurrComment] = useState<Comment>(comment);
   const [tempCommentBody, setTempCommentBody] = useState<string>(comment.comment);
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     setCurrComment(comment);
@@ -83,6 +85,7 @@ export function DocumentComment({
           .then((response) => {
             if (response.success) {
               file.comments[commentKey] = response.data;
+              setSuccessMessage("Successfully updated comment");
               setFile(file);
               setCurrComment(response.data);
               setTempCommentBody(response.data.comment);
@@ -106,6 +109,7 @@ export function DocumentComment({
               editFileObject(file._id, { comments: newCommentsList })
                 .then((response2) => {
                   if (response2.success) {
+                    setSuccessMessage("Successfully created comment");
                     setFile(response2.data);
                     setCurrComment(response.data);
                     setTempCommentBody(response.data.comment);
@@ -136,6 +140,7 @@ export function DocumentComment({
           editFileObject(file._id, { comments: newCommentList })
             .then((response2) => {
               if (response2.success) {
+                setSuccessMessage("Successfully deleted comment");
                 setFile(response2.data);
               } else {
                 setErrorMessage(`Error deleting comment: ${response2.error}`);
@@ -247,6 +252,7 @@ export function DocumentComment({
         </div>
       )}
       {errorMessage && <ErrorMessage message={errorMessage} />}
+      {successMessage && <SuccessNotification message={successMessage} />}
     </div>
   );
 }

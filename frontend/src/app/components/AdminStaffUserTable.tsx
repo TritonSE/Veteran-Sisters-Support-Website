@@ -12,6 +12,8 @@ import { getNonAdminUsers } from "../api/userApi";
 import { AdminStaffUserItem } from "./AdminStaffUserItem";
 import styles from "./AdminStaffUserTable.module.css";
 import CustomDropdown from "./CustomDropdown";
+import ErrorMessage from "./ErrorMessage";
+import SuccessNotification from "./SuccessNotification";
 import { Tabs } from "./Tabs";
 import UserAssigningDialog, { DialogContext } from "./userAssigningDialog";
 
@@ -302,18 +304,12 @@ export function AdminStaffUserTable() {
           context={DialogContext.ADMIN_DASHBOARD}
         />
       )}
-      {message && (
-        <div
-          className={`${styles.messageContainer} ${message.includes("Successfully") ? styles.messageSuccess : styles.messageError}`}
-        >
-          {message.includes("Successfully") ? (
-            <Image src="/check.svg" alt="Check Symbol" width={20} height={20}></Image>
-          ) : (
-            <Image src="/error_symbol.svg" alt="Error Symbol" width={20} height={20}></Image>
-          )}
-          <p>{message}</p>
-        </div>
-      )}
+      {message &&
+        (message.includes("Successfully") ? (
+          <SuccessNotification message={message} />
+        ) : (
+          <ErrorMessage message={message} />
+        ))}
     </div>
   );
 }

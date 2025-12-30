@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import {
@@ -11,9 +10,11 @@ import {
 import { useAuth } from "../contexts/AuthContext";
 
 import ChangeProgramDialog from "./ChangeProgramDialog";
+import ErrorMessage from "./ErrorMessage";
 import NavigateBack from "./NavigateBack";
 import { ProfileHeader } from "./ProfileHeader";
 import ProfileInterests from "./ProfileInterests";
+import SuccessNotification from "./SuccessNotification";
 import { UserList } from "./UserList";
 import styles from "./UserProfile.module.css";
 import { VolunteerNotes } from "./VolunteerNotes";
@@ -160,6 +161,8 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
   const [openProgramChange, setOpenProgramChange] = useState<boolean>(false);
   const [programs, setPrograms] = useState<string[]>(userProfile?.assignedPrograms ?? []);
   const [programsChanged, setProgramsChanged] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -263,18 +266,12 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
                 <VolunteerNotes profileUserId={profileUserId} />
               )}
             </div>
-            {message && (
-              <div
-                className={`${styles.messageContainer} ${message.includes("Successfully") ? styles.messageSuccess : styles.messageError}`}
-              >
-                {message.includes("Successfully") ? (
-                  <Image src="/check.svg" alt="Check Symbol" width={20} height={20}></Image>
-                ) : (
-                  <Image src="/error_symbol.svg" alt="Error Symbol" width={20} height={20}></Image>
-                )}
-                <p>{message}</p>
-              </div>
-            )}
+            {message &&
+              (message.includes("Successfully") ? (
+                <SuccessNotification message={message} />
+              ) : (
+                <ErrorMessage message={message} />
+              ))}
           </div>
         </div>
       )}
@@ -308,10 +305,15 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
               callback={setOpenProgramChange}
               didProgramChange={programsChanged}
               programsChanged={setProgramsChanged}
+              onSuccess={setSuccessMessage}
+              onError={setErrorMessage}
             />
           </div>
         </div>
       )}
+
+      {successMessage && <SuccessNotification message={successMessage} />}
+      {errorMessage && <ErrorMessage message={errorMessage} />}
     </>
   );
 }
