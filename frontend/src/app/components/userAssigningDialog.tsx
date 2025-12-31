@@ -185,6 +185,7 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
                 placeholder="Choose program"
                 options={formattedProgramOptions}
                 menuPortalTarget={document.body}
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
                 onChange={(selectedOption) => {
                   if (!selectedOption) return;
                   setSelectedProgram(selectedOption);
@@ -238,6 +239,7 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
                 }
                 options={formattedOptions}
                 menuPortalTarget={document.body}
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
                 formatOptionLabel={customLabel}
                 onChange={(selectedOption) => {
                   if (!selectedOption) return;
