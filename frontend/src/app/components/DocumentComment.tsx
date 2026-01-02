@@ -37,7 +37,7 @@ export function DocumentComment({
   setSelected,
   setFile,
   onSuccess,
-  onError
+  onError,
 }: DocumentCommentProps) {
   const borderColor =
     comment.commenterId.assignedPrograms?.[0] === ProgramEnum.BATTLE_BUDDIES
@@ -80,8 +80,8 @@ export function DocumentComment({
 
   const postCommentHandler = () => {
     if (tempCommentBody?.trim() && file && user._id) {
-      onError('');
-      onSuccess('');
+      onError("");
+      onSuccess("");
       if (currComment.comment !== "") {
         editCommentObject(comment._id, tempCommentBody)
           .then((response) => {
@@ -135,8 +135,8 @@ export function DocumentComment({
   };
 
   const deleteCommentHandler = (id: string, key: number) => {
-    onError('');
-    onSuccess('');
+    onError("");
+    onSuccess("");
     deleteCommentObject(id)
       .then((response) => {
         if (response.success) {

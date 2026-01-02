@@ -41,7 +41,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
 
   const [currUser, setCurrUser] = useState<UserProfile>();
   const { userId, userRole } = useAuth();
-  const [errorMessage, setErrorMessage] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
