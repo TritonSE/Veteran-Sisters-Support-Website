@@ -18,6 +18,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { DocumentComment } from "./DocumentComment";
 import styles from "./DocumentView.module.css";
 import ErrorMessage from "./ErrorMessage";
+import SuccessNotification from "./SuccessNotification";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -40,7 +41,8 @@ export function DocumentView({ documentId }: DocumentViewProps) {
 
   const [currUser, setCurrUser] = useState<UserProfile>();
   const { userId, userRole } = useAuth();
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); 
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     getFileById(documentId)
@@ -234,6 +236,8 @@ export function DocumentView({ documentId }: DocumentViewProps) {
                       }
                     }}
                     setFile={setFile}
+                    onSuccess={setSuccessMessage}
+                    onError={setErrorMessage}
                   />
                 );
               })}
@@ -260,6 +264,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
         </>
       )}
       {errorMessage && <ErrorMessage message={errorMessage} />}
+      {successMessage && <SuccessNotification message={successMessage} />}
     </>
   );
 }

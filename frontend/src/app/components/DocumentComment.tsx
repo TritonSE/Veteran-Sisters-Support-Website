@@ -13,10 +13,8 @@ import {
 import { AssignedProgram as ProgramEnum, Role as RoleEnum, UserProfile } from "../api/profileApi";
 
 import styles from "./DocumentComment.module.css";
-import ErrorMessage from "./ErrorMessage";
 import { Program } from "./Program";
 import { Role } from "./Role";
-import SuccessNotification from "./SuccessNotification";
 
 type DocumentCommentProps = {
   comment: Comment;
@@ -26,6 +24,8 @@ type DocumentCommentProps = {
   selected: boolean;
   setSelected: (selected: boolean) => void;
   setFile: (file: FileObject) => void;
+  onSuccess: (message: string) => void;
+  onError: (message: string) => void;
 };
 
 export function DocumentComment({
@@ -36,6 +36,8 @@ export function DocumentComment({
   selected,
   setSelected,
   setFile,
+  onSuccess,
+  onError
 }: DocumentCommentProps) {
   const borderColor =
     comment.commenterId.assignedPrograms?.[0] === ProgramEnum.BATTLE_BUDDIES
@@ -62,8 +64,6 @@ export function DocumentComment({
 
   const [currComment, setCurrComment] = useState<Comment>(comment);
   const [tempCommentBody, setTempCommentBody] = useState<string>(comment.comment);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     setCurrComment(comment);
@@ -80,22 +80,24 @@ export function DocumentComment({
 
   const postCommentHandler = () => {
     if (tempCommentBody?.trim() && file && user._id) {
+      onError('');
+      onSuccess('');
       if (currComment.comment !== "") {
         editCommentObject(comment._id, tempCommentBody)
           .then((response) => {
             if (response.success) {
               file.comments[commentKey] = response.data;
-              setSuccessMessage("Successfully updated comment");
+              onSuccess("Successfully updated comment");
               setFile(file);
               setCurrComment(response.data);
               setTempCommentBody(response.data.comment);
               setSelected(false);
             } else {
-              setErrorMessage(`Error updating comment: ${response.error}`);
+              onError(`Error updating comment: ${response.error}`);
             }
           })
           .catch((error: unknown) => {
-            setErrorMessage(`Error updating comment: ${String(error)}`);
+            onError(`Error updating comment: ${String(error)}`);
           });
       } else {
         const newComment: CreateCommentRequest = {
@@ -109,30 +111,32 @@ export function DocumentComment({
               editFileObject(file._id, { comments: newCommentsList })
                 .then((response2) => {
                   if (response2.success) {
-                    setSuccessMessage("Successfully created comment");
+                    onSuccess("Successfully created comment");
                     setFile(response2.data);
                     setCurrComment(response.data);
                     setTempCommentBody(response.data.comment);
                     setSelected(false);
                   } else {
-                    setErrorMessage(`Error updating comment: ${response2.error}`);
+                    onError(`Error updating comment: ${response2.error}`);
                   }
                 })
                 .catch((error: unknown) => {
-                  setErrorMessage(`Error updating comment: ${String(error)}`);
+                  onError(`Error updating comment: ${String(error)}`);
                 });
             } else {
-              setErrorMessage(`Error creating comment: ${response.error}`);
+              onError(`Error creating comment: ${response.error}`);
             }
           })
           .catch((error: unknown) => {
-            setErrorMessage(`Error updating comment: ${String(error)}`);
+            onError(`Error updating comment: ${String(error)}`);
           });
       }
     }
   };
 
   const deleteCommentHandler = (id: string, key: number) => {
+    onError('');
+    onSuccess('');
     deleteCommentObject(id)
       .then((response) => {
         if (response.success) {
@@ -140,21 +144,21 @@ export function DocumentComment({
           editFileObject(file._id, { comments: newCommentList })
             .then((response2) => {
               if (response2.success) {
-                setSuccessMessage("Successfully deleted comment");
+                onSuccess("Successfully deleted comment");
                 setFile(response2.data);
               } else {
-                setErrorMessage(`Error deleting comment: ${response2.error}`);
+                onError(`Error deleting comment: ${response2.error}`);
               }
             })
             .catch((error: unknown) => {
-              setErrorMessage(`Error deleting comment: ${String(error)}`);
+              onError(`Error deleting comment: ${String(error)}`);
             });
         } else {
-          setErrorMessage(`Error deleting comment: ${response.error}`);
+          onError(`Error deleting comment: ${response.error}`);
         }
       })
       .catch((error: unknown) => {
-        setErrorMessage(`Error deleting comment: ${String(error)}`);
+        onError(`Error deleting comment: ${String(error)}`);
       });
   };
 
@@ -251,8 +255,6 @@ export function DocumentComment({
           </div>
         </div>
       )}
-      {errorMessage && <ErrorMessage message={errorMessage} />}
-      {successMessage && <SuccessNotification message={successMessage} />}
     </div>
   );
 }
