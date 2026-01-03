@@ -106,7 +106,7 @@ export function VeteranDashboard() {
       {showUploadConfirm && (
         <div className={styles.uploadConfirm}>
           <Image src="/check.svg" width={20} height={20} alt="check" />
-          Document upload success!
+          Document uploaded successfully!
         </div>
       )}
     </>

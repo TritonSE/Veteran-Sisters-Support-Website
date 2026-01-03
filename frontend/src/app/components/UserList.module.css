@@ -6,15 +6,9 @@
   align-items: flex-start;
   gap: var(--Spacing-sm, 16px);
   height: fit-content;
-
   border-radius: 8px;
   border: 1px solid var(--Stroke-2, #d0d7de);
   background: #fff;
-}
-
-.userList.minimized {
-  width: 256px;
-  min-width: 256px;
 }
 
 .userList .userListHeader {
@@ -27,6 +21,17 @@
   color: var(--Text-3, #3a3c3d);
   font-family: "Albert Sans";
   font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userListHeadingMin {
+  color: var(--Text-3, #3a3c3d);
+  font-family: "Albert Sans";
+  font-size: 16px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -122,4 +127,55 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+
+.userList .programUnassignedWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  margin-left: 70px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.progUnassignedHeader {
+  color: var(--Text-1, #60696f);
+  text-align: center;
+  /* body large */
+  font-family: "Albert Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.progUnassingedText {
+  color: var(--Text-1, #60696f);
+  text-align: center;
+  /* body small */
+  font-family: "Albert Sans";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.progUnassignedButton {
+  width: 135px;
+  height: 33px;
+  gap: 10px;
+  border-radius: 8px;
+  padding-top: 8px;
+  padding-right: var(--Spacing-sm 8px);
+  padding-bottom: 8px;
+  padding-left: var(--Spacing-sm 8px);
+  background-color: #057e6f;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  appearance: none;
 }

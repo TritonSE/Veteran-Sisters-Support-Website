@@ -12,6 +12,8 @@ import { AuthContextWrapper } from "../../contexts/AuthContextWrapper";
 
 import styles from "./page.module.css";
 
+import ErrorMessage from "@/app/components/ErrorMessage";
+
 function AnnouncementCreateContent() {
   const { userId } = useAuth();
   const [cancelPopup, setCancelPopup] = useState<boolean>(false);
@@ -19,6 +21,7 @@ function AnnouncementCreateContent() {
   const [title, setTitle] = useState<string>("");
   const [detail, setDetail] = useState<string>("");
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,11 +37,11 @@ function AnnouncementCreateContent() {
         if (result.success) {
           setConfirmPage(true);
         } else {
-          console.error(result.error);
+          setErrorMessage(`Failed to create announcement: ${result.error}`);
         }
       })
       .catch((error: unknown) => {
-        console.error("Failed to create announcement activity: ", error);
+        setErrorMessage(`Failed to create announcement: ${String(error)}`);
       });
   };
 
@@ -155,6 +158,7 @@ function AnnouncementCreateContent() {
           </div>
         )}
       </div>
+      {errorMessage && <ErrorMessage message={errorMessage} />}
     </div>
   );
 }

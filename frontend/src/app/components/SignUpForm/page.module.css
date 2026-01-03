@@ -1,6 +1,9 @@
 .page {
   background-image: url("/signUpBackground.svg");
   background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
   min-height: 100vh;
   width: 100%;
   display: flex;

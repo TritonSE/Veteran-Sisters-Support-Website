@@ -28,16 +28,17 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
   });
   const [comment, setComment] = useState<string>();
   const [file, setFile] = useState<File | null>(null);
-  const [sizeError, setSizeError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [uploading, setUploading] = useState<boolean>(false);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setErrorMessage("");
     if (e.target.files && e.target.files.length > 0) {
       const currFile = e.target.files[0];
-      if (currFile.size > 1000000000) {
-        setSizeError(true);
+      if (currFile.type !== "application/pdf") setErrorMessage("File must be a pdf!");
+      else if (currFile.size > 1000000000) {
+        setErrorMessage("File size was too big, please upload one smaller than 1 GB!");
       } else {
-        setSizeError(false);
         setFile(e.target.files[0]);
       }
     }
@@ -51,6 +52,7 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
         checkboxStates["operation wellness"]) &&
       !uploading
     ) {
+      setErrorMessage("");
       setUploading(true);
       const fileObjRequest: CreateFileObjectRequest = {
         filename: file.name,
@@ -71,14 +73,14 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
                 onUpload();
               })
               .catch((error: unknown) => {
-                console.error(error);
+                setErrorMessage(`Error uploading file: ${String(error)}`);
               });
           } else {
-            console.error(result.error);
+            setErrorMessage(`Error uploading file: ${result.error}`);
           }
         })
         .catch((err: unknown) => {
-          console.error(err);
+          setErrorMessage(`Error uploading file: ${String(err)}`);
         });
     }
   };
@@ -95,8 +97,6 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
         <div className={styles.uploadWrapper}>
           <div className={styles.iconWrapper}>
             <Image src="/pdf_icon.svg" width={83} height={83} alt="pdf" />
-            <span>or</span>
-            <Image src="/doc_icon.svg" width={83} height={83} alt="doc" />
           </div>
           {!file ? (
             <>
@@ -104,7 +104,7 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
                 Select a File
               </label>
               <input
-                accept=".doc,.docx,.pdf"
+                accept=".pdf"
                 onChange={handleFileChange}
                 style={{ display: "none" }}
                 type="file"
@@ -125,7 +125,7 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
             </div>
           )}
         </div>
-        <div className={styles.fileTypeLabel}>Accepted File Types: PDF, DOC, DOCX</div>
+        <div className={styles.fileTypeLabel}>Accepted File Type: PDF</div>
         <div className={styles.bottomWrapper}>
           <div className={styles.programWrapper}>
             <div>
@@ -202,9 +202,7 @@ export function FileUpload({ veteranId, onClose, onUpload }: FileUploadProps) {
             </div>
           </div>
         </div>
-        {sizeError && (
-          <ErrorMessage message="File size was too big, please upload one smaller than 1 GB!" />
-        )}
+        {errorMessage && <ErrorMessage message={errorMessage} />}
       </div>
     </>
   );

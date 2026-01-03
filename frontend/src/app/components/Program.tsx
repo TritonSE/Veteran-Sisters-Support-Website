@@ -5,9 +5,10 @@ import styles from "./Program.module.css";
 type ProgramProp = {
   program: string;
   iconOnly?: boolean;
+  textOnly?: boolean;
 };
 
-export function Program({ program, iconOnly }: ProgramProp) {
+export function Program({ program, iconOnly, textOnly }: ProgramProp) {
   let style;
   let programName;
   let icon;
@@ -19,14 +20,18 @@ export function Program({ program, iconOnly }: ProgramProp) {
     style = `${styles.container} ${styles.advocacy}`;
     programName = "Advocacy";
     icon = "/advocacy_icon.svg";
-  } else {
+  } else if (program === "operation wellness") {
     style = `${styles.container} ${styles.operationWellness}`;
     programName = "Operation Wellness";
     icon = "/operation_wellness_icon.svg";
+  } else {
+    style = `${styles.container} ${styles.unassigned}`;
+    programName = "Unassigned";
+    icon = "/trash_icon_2.svg";
   }
   return (
     <div className={style}>
-      <Image src={icon} alt="Program" width={14} height={14} />
+      {!textOnly && <Image src={icon} alt="Program" width={14} height={14} />}
       {!iconOnly && <span className={styles.text}>{programName}</span>}
     </div>
   );

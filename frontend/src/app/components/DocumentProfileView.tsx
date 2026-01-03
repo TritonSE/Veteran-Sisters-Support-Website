@@ -1,9 +1,6 @@
-"use client";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
-  AssignedProgram,
   Role as RoleEnum,
   UserProfile as UserProfileType,
   getUserProfile,
@@ -11,12 +8,17 @@ import {
 import { useAuth } from "../contexts/AuthContext";
 
 import ChangeProgramDialog from "./ChangeProgramDialog";
+import styles from "./DocumentProfileView.module.css";
+import { NavBar } from "./NavBar";
 import NavigateBack from "./NavigateBack";
 import { ProfileHeader } from "./ProfileHeader";
 import ProfileInterests from "./ProfileInterests";
 import { UserList } from "./UserList";
-import styles from "./UserProfile.module.css";
-import { VolunteerNotes } from "./VolunteerNotes";
+import { VeteranFilesTable } from "./VeteranFilesTable";
+
+type DocumentProfileViewProps = {
+  profileId: string;
+};
 
 type ProfileRenderingContext = {
   invalidContext: boolean;
@@ -148,35 +150,34 @@ function getProfileRenderingContext(
   return context;
 }
 
-export default function UserProfile({ profileUserId }: { profileUserId: string }) {
+export function DocumentProfileView({ profileId }: DocumentProfileViewProps) {
   const { userId, userRole } = useAuth();
   const [userProfile, setUserProfile] = useState<UserProfileType | undefined>(undefined);
   const [profileRenderingContext, setProfileRenderingContext] = useState(
     getProfileRenderingContext(null, null, userRole, userId),
   );
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [message, setMessage] = useState("");
   const [openProgramChange, setOpenProgramChange] = useState<boolean>(false);
-  const [programs, setPrograms] = useState<string[]>(userProfile?.assignedPrograms ?? []);
+  const [programs, setPrograms] = useState<string[]>([]);
   const [programsChanged, setProgramsChanged] = useState(false);
+  const [error, setError] = useState<string | undefined>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        if (!profileUserId) {
+        if (!profileId) {
           console.error("No profileUserId provided");
           setError("No user ID provided");
           setLoading(false);
           return;
         }
 
-        const res = await getUserProfile(profileUserId);
+        const res = await getUserProfile(profileId);
         if (res.success) {
+          console.log("Response data: ", res.data);
           setUserProfile(res.data);
-          setPrograms(res.data.assignedPrograms ?? []);
           setProfileRenderingContext(
-            getProfileRenderingContext(res.data.role, profileUserId, userRole, userId),
+            getProfileRenderingContext(res.data.role, profileId, userRole, userId),
           );
         } else {
           console.error("Failed to fetch profile:", res.error);
@@ -191,93 +192,47 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
         setLoading(false);
       }
     };
+
     void fetchUserProfile();
-  }, [profileUserId, programsChanged, userId, userRole]);
+  }, [profileId, userId, userRole]);
 
   if (loading) {
-    return (
-      <div className={styles.userProfile}>
-        <div className={styles.loading}>Loading profile...</div>
-      </div>
-    );
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return (
-      <div className={styles.userProfile}>
-        <div className={styles.error}>Error: {error}</div>
-      </div>
-    );
-  }
-
-  if (!userProfile) {
-    return (
-      <div className={styles.userProfile}>
-        <div className={styles.error}>Profile not found</div>
-      </div>
-    );
+    return <div>There was an error</div>;
   }
 
   return (
     <>
-      {profileRenderingContext?.invalidContext ? (
-        <h1>Error: Invalid Profile Rendering Context</h1>
-      ) : (
-        <div className={styles.userProfile}>
-          {profileRenderingContext?.viewingPersonalProfile ? (
-            <div className={styles.profileHeading}>Profile Information</div>
-          ) : (
-            <NavigateBack />
-          )}
-          <div className={styles.userProfileContent}>
-            <ProfileHeader
-              userProfile={userProfile}
-              minimized={false}
-              didProgramChange={programsChanged}
-              programsChanged={setProgramsChanged}
-              showDocuments={profileRenderingContext.showVeteranDocuments}
-              isProfileEditable={profileRenderingContext.isProfileEditable}
-              isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
-            />
-            <div className={styles.userProfileInnerContent}>
-              <div className={styles.userProfileRow2}>
-                {profileRenderingContext.showProfileInterests && (
-                  <ProfileInterests
-                    minimized={false}
-                    interests={userProfile.roleSpecificInfo?.interests}
-                  />
-                )}
-                {profileRenderingContext.showUserList && (
-                  <UserList
-                    userProfile={userProfile}
-                    minimized={false}
-                    title={profileRenderingContext.userListTitle}
-                    callback={setOpenProgramChange}
-                    isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
-                    editable={profileRenderingContext.userListEditable}
-                    setMessage={setMessage}
-                  />
-                )}
-              </div>
-              {profileRenderingContext.showVolunteerNotes && (
-                <VolunteerNotes profileUserId={profileUserId} />
-              )}
-            </div>
-            {message && (
-              <div
-                className={`${styles.messageContainer} ${message.includes("Successfully") ? styles.messageSuccess : styles.messageError}`}
-              >
-                {message.includes("Successfully") ? (
-                  <Image src="/check.svg" alt="Check Symbol" width={20} height={20}></Image>
-                ) : (
-                  <Image src="/error_symbol.svg" alt="Error Symbol" width={20} height={20}></Image>
-                )}
-                <p>{message}</p>
-              </div>
-            )}
-          </div>
+      <NavBar />
+      <div className={styles.profileView}>
+        <div className={styles.leftDiv}>
+          <NavigateBack />
+          <ProfileHeader
+            userProfile={userProfile ?? undefined}
+            programsChanged={() => undefined}
+            didProgramChange={false}
+            showDocuments={false}
+            minimized={true}
+            isProfileEditable={profileRenderingContext.isProfileEditable}
+            isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
+          />
+          <UserList
+            userProfile={userProfile}
+            minimized={true}
+            title="Assigned Volunteers"
+            isProgramAndRoleEditable={profileRenderingContext.isProgramAndRoleEditable}
+            editable={profileRenderingContext.userListEditable}
+            callback={setOpenProgramChange}
+          />
+          <ProfileInterests minimized={true} interests={userProfile?.roleSpecificInfo?.interests} />
         </div>
-      )}
+        <div className={styles.mainDiv}>
+          <VeteranFilesTable veteranId={profileId} refresh={false} />
+        </div>
+      </div>
       {openProgramChange && (
         <div
           className={styles.modalOverlay}
@@ -286,6 +241,7 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
           }}
         >
           <div
+            className={styles.modalInner}
             onClick={(e) => {
               e.stopPropagation();
             }}
@@ -297,12 +253,8 @@ export default function UserProfile({ profileUserId }: { profileUserId: string }
               userPrograms={programs}
               onSavePrograms={(newPrograms) => {
                 setPrograms(newPrograms);
-                // Optimistically update userProfile to reflect new programs immediately
                 if (userProfile) {
-                  setUserProfile({
-                    ...userProfile,
-                    assignedPrograms: newPrograms as AssignedProgram[],
-                  });
+                  setUserProfile({ ...userProfile, assignedPrograms: newPrograms as [] });
                 }
               }}
               callback={setOpenProgramChange}

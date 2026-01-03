@@ -1,7 +1,7 @@
 .container {
   display: flex;
   padding: 4px var(--Spacing-s, 8px);
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: var(--Spacing-xs, 4px);
   border-radius: var(--Spacing-xs, 4px);
@@ -15,6 +15,7 @@
   font-weight: 500;
   line-height: normal;
   color: inherit;
+  text-wrap: nowrap;
 }
 
 .battleBuddies {
@@ -33,4 +34,16 @@
   color: #337357;
   border: 0px solid rgba(51, 115, 87, 0.4);
   background: rgba(51, 115, 87, 0.1);
+}
+
+.unassigned {
+  width: 81;
+  height: 22;
+  gap: var(--Spacing-xs, 4px);
+  border-radius: var(--Spacing-xs, 4px);
+  padding-top: 4px;
+  padding-right: var(--Spacing-s, 8px);
+  padding-bottom: 4px;
+  padding-left: var(--Spacing-s, 8px);
+  background-color: #2525250d;
 }

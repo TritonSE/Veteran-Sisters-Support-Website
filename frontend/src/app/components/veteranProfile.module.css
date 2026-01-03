@@ -10,6 +10,7 @@
   left: 0;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  z-index: 1001;
 }
 
 .dialog {
@@ -97,6 +98,10 @@
   cursor: pointer;
 }
 
+.saveDisabled {
+  background-color: #b8c2ca;
+}
+
 .cancel {
   background-color: white;
   border: 1px solid #d0d7de;
@@ -142,6 +147,7 @@
 }
 
 .userInfo {
-  display: flex;
+  display: inline-flex;
+  align-items: center;
   gap: 0.5rem;
 }

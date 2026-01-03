@@ -1,0 +1,117 @@
+/* ChangeProgramDialog.module.css */
+
+.dialog {
+  padding: 1.5rem; /* p-6 */
+  background-color: white; /* bg-white */
+  border-radius: 0.5rem; /* rounded-lg */
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+  width: 500px; /* w-80 */
+  height: auto;
+}
+
+.title {
+  font-size: 1.25rem; /* text-xl */
+  margin-bottom: 1rem; /* mb-4 */
+}
+
+.dropdownWrapper {
+  position: relative;
+  margin-bottom: 1.5rem; /* mb-6 */
+}
+
+.button {
+  width: 100%;
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  padding: 0.5rem 0.75rem; /* px-3 py-2 */
+  border-radius: 0.375rem; /* rounded */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  cursor: pointer;
+}
+
+.dropdownList {
+  position: absolute;
+  z-index: 10;
+  margin-top: 0.25rem; /* mt-1 */
+  width: 100%;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  max-height: 12rem; /* max-h-48 */
+  overflow: auto;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem; /* px-3 py-2 */
+  cursor: pointer;
+}
+
+.dropdownItem:hover {
+  background-color: #f9fafb; /* hover:bg-gray-50 */
+}
+
+.checkboxContainer {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  margin-right: 0.5rem; /* mr-2 */
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  border-radius: 3px;
+  border: 3px solid #057e6f;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+
+.checkmarkIcon {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem; /* space-x-2 */
+}
+
+.btnPrimary {
+  background-color: #057e6f;
+  color: white;
+  padding: 0.5rem 1rem; /* px-4 py-2 */
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btnSecondary {
+  background-color: #e5e7eb; /* gray-200 */
+  color: #374151; /* gray-700 */
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btnSecondary:hover {
+  background-color: #d1d5db; /* gray-300 */
+}
