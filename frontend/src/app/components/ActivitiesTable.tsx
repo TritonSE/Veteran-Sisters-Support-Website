@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import ErrorMessage from "./ErrorMessage";
+
 import {
   ActivityObject,
   ActivityType,
@@ -12,6 +12,7 @@ import { markActivityRead } from "../api/userApi";
 
 import styles from "./ActivitiesTable.module.css";
 import { ActivitiesTableItem } from "./ActivitiesTableItem";
+import ErrorMessage from "./ErrorMessage";
 import { Tabs } from "./Tabs";
 
 type ActivitiesTableProp = {

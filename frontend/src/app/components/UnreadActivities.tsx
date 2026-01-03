@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import ErrorMessage from "./ErrorMessage";
+
 import { ActivityObject, ActivityType, getUnreadActivities } from "../api/activities";
 import { Role as RoleEnum } from "../api/profileApi";
 import { markActivityRead } from "../api/userApi";
