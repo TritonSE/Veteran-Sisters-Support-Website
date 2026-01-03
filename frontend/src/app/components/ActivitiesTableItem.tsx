@@ -95,7 +95,7 @@ export function ActivitiesTableItem({
                     onView(activityObject._id);
                   }}
                 >
-                  View
+                  Mark as read
                 </button>
               )}
             </div>

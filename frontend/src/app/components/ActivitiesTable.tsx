@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-
+import ErrorMessage from "./ErrorMessage";
 import {
   ActivityObject,
   ActivityType,
@@ -24,6 +24,7 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
   const [activityTypes, setActivityTypes] = useState<ActivityType[] | null>(null);
   const [page, setPage] = useState<number>(0);
   const [unreadIds, setUnreadIds] = useState<Set<string>>(new Set());
+  const [errorMessage, setErrorMessage] = useState("");
   const activities = useMemo(
     () =>
       activityTypes
@@ -73,15 +74,17 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
     Promise.all([getActivities(userId), getUnreadActivities(userId)])
       .then(([allRes, unreadRes]) => {
         if (allRes.success) setAllActivities(allRes.data);
-        else console.error(allRes.error);
+        else setErrorMessage(`Failed to get activities: ${allRes.error}`);
 
         if (unreadRes.success) {
           setUnreadIds(new Set(unreadRes.data.recentUnread.map((a) => a._id)));
         } else {
-          console.error(unreadRes.error);
+          setErrorMessage(`Failed to get unread activities: ${unreadRes.error}`);
         }
       })
-      .catch(console.error);
+      .catch((error: unknown) => {
+        setErrorMessage(`Error getting activities: ${String(error)}`);
+      });
   }, [refresh, userId]);
 
   return (
@@ -116,8 +119,8 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
                         .then(() => {
                           setRefresh((prev) => !prev);
                         })
-                        .catch((err: unknown) => {
-                          console.error("Error marking activity as read:", err);
+                        .catch((error: unknown) => {
+                          setErrorMessage(`Error getting activities: ${String(error)}`);
                         });
                     }
                   : undefined
@@ -166,6 +169,7 @@ export function ActivitiesTable({ userId, role }: ActivitiesTableProp) {
           )}
         </div>
       )}
+      {errorMessage && <ErrorMessage message={errorMessage}></ErrorMessage>}
     </div>
   );
 }

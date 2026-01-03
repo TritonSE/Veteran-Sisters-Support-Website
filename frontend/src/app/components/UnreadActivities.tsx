@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
-
+import ErrorMessage from "./ErrorMessage";
 import { ActivityObject, ActivityType, getUnreadActivities } from "../api/activities";
 import { Role as RoleEnum } from "../api/profileApi";
 import { markActivityRead } from "../api/userApi";
@@ -24,7 +24,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
   const [activities, setActivities] = useState<ActivityObject[]>([]);
   const [totalUnreadCount, setTotalUnreadCount] = useState<number>(0);
   const [refresh, setRefresh] = useState<boolean>(false);
-
+  const [errorMessage, setErrorMessage] = useState("");
   useEffect(() => {
     getUnreadActivities(userId)
       .then((result) => {
@@ -32,11 +32,11 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
           setActivities(result.data.recentUnread);
           setTotalUnreadCount(result.data.totalUnread);
         } else {
-          console.error(result.error);
+          setErrorMessage(`Failed to get unread activities: ${result.error}`);
         }
       })
-      .catch((err: unknown) => {
-        console.error(err);
+      .catch((error: unknown) => {
+        setErrorMessage(`Error getting unread activities: ${String(error)}`);
       });
   }, [refresh]);
 
@@ -46,8 +46,8 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
       .then(() => {
         setRefresh(!refresh);
       })
-      .catch((err: unknown) => {
-        console.error("Error marking activity as read:", err);
+      .catch((error: unknown) => {
+        setErrorMessage(`Error marking activity as read: ${String(error)}`);
       });
   };
 
@@ -166,7 +166,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                         handleSelect(activity._id);
                       }}
                     >
-                      View
+                      Mark as read
                     </button>
                   </div>
 
@@ -178,6 +178,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
             </li>
           ))}
       </ul>
+      {errorMessage && <ErrorMessage message={errorMessage}></ErrorMessage>}
     </div>
   );
 };
