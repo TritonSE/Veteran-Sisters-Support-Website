@@ -49,8 +49,9 @@
 
 .info {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
+  width: 100%;
 }
 
 .subtitle {
@@ -77,8 +78,10 @@
 
 .horizontalDiv {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 500;
 }
 
 .label {
@@ -96,4 +99,27 @@
   border-radius: 4px;
   padding: 8px 16px;
   cursor: pointer;
+}
+
+.button {
+  background-color: white;
+  color: #4d5358;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.8px;
+  display: inline-block;
+  width: 116;
+  height: 33;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  padding: 8px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.textColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
 }

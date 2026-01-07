@@ -120,11 +120,15 @@ const ChangeRoleDialog = ({
       </div>
 
       <div className={styles.actions}>
-        <button onClick={handleNext} className={styles.btnPrimary}>
-          Next
-        </button>
         <button onClick={onCancel} className={styles.btnSecondary}>
           Cancel
+        </button>
+        <button
+          onClick={handleNext}
+          className={`${styles.btnPrimary} ${newRole ? "" : styles.btnPrimaryDisabled}`}
+          disabled={!newRole}
+        >
+          Next
         </button>
       </div>
 

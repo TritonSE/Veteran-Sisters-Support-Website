@@ -104,7 +104,7 @@ const ProfileActions = ({
   ];
 
   const actions = rawActions.filter(Boolean) as Action[];
-  if (actions.length === 0) return null;
+  if (actions.length === 0 && !showDocuments) return null;
 
   // Render --------------------------------------------------------------
   return (
