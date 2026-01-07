@@ -34,11 +34,11 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
           setActivities(result.data.recentUnread);
           setTotalUnreadCount(result.data.totalUnread);
         } else {
-          console.error(result.error);
+          setErrorMessage(`Failed to get unread activities: ${result.error}`);
         }
       })
-      .catch((err: unknown) => {
-        console.error(err);
+      .catch((error: unknown) => {
+        setErrorMessage(`Error getting unread activities: ${String(error)}`);
       });
   }, [refresh]);
 
@@ -52,8 +52,8 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
           setErrorMessage(`Error marking activity as read: ${res.error}`);
         }
       })
-      .catch((err: unknown) => {
-        setErrorMessage(`Error marking activity as read: ${String(err)}`);
+      .catch((error: unknown) => {
+        setErrorMessage(`Error marking activity as read: ${String(error)}`);
       });
   };
 
@@ -174,7 +174,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                         handleSelect(activity._id);
                       }}
                     >
-                      View
+                      Mark as read
                     </button>
                   </div>
 
