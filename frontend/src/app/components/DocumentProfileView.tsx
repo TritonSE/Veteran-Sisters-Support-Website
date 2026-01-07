@@ -9,10 +9,12 @@ import { useAuth } from "../contexts/AuthContext";
 
 import ChangeProgramDialog from "./ChangeProgramDialog";
 import styles from "./DocumentProfileView.module.css";
+import ErrorMessage from "./ErrorMessage";
 import { NavBar } from "./NavBar";
 import NavigateBack from "./NavigateBack";
 import { ProfileHeader } from "./ProfileHeader";
 import ProfileInterests from "./ProfileInterests";
+import SuccessNotification from "./SuccessNotification";
 import { UserList } from "./UserList";
 import { VeteranFilesTable } from "./VeteranFilesTable";
 
@@ -161,6 +163,8 @@ export function DocumentProfileView({ profileId }: DocumentProfileViewProps) {
   const [programsChanged, setProgramsChanged] = useState(false);
   const [error, setError] = useState<string | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -260,10 +264,14 @@ export function DocumentProfileView({ profileId }: DocumentProfileViewProps) {
               callback={setOpenProgramChange}
               didProgramChange={programsChanged}
               programsChanged={setProgramsChanged}
+              onSuccess={setSuccessMessage}
+              onError={setErrorMessage}
             />
           </div>
         </div>
       )}
+      {successMessage && <SuccessNotification message={successMessage} />}
+      {errorMessage && <ErrorMessage message={errorMessage} />}
     </>
   );
 }
