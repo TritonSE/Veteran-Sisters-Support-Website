@@ -69,38 +69,6 @@
   z-index: 1000;
 }
 
-.messageContainer {
-  animation: fadeOut 5s forwards;
-  display: flex;
-  padding: 8px;
-  font-size: 14px;
-  border-radius: 8px;
-  gap: 5px;
-  font-family: "Albert Sans";
-  font-weight: 500;
-  position: fixed;
-  bottom: 80px;
-  left: 40%;
-}
-
-.messageError {
-  background-color: #851a1e1a;
-  border: 1px solid #851a1a33;
-}
-
-.messageSuccess {
-  background-color: #1a85381a;
-  border: 1px solid #1a853833;
-}
-
-.messageSuccess p {
-  color: #1a8538;
-}
-
-.messageError p {
-  color: #851a1a;
-}
-
 @keyframes fadeOut {
   to {
     opacity: 0;

@@ -9,6 +9,7 @@ import { VeteranFilesTable } from "../components/VeteranFilesTable";
 import { useAuth } from "../contexts/AuthContext";
 
 import { NavBar } from "./NavBar";
+import SuccessNotification from "./SuccessNotification";
 import styles from "./VeteranDashboard.module.css";
 
 export function VeteranDashboard() {
@@ -103,12 +104,7 @@ export function VeteranDashboard() {
           }}
         />
       )}
-      {showUploadConfirm && (
-        <div className={styles.uploadConfirm}>
-          <Image src="/check.svg" width={20} height={20} alt="check" />
-          Document uploaded successfully!
-        </div>
-      )}
+      {showUploadConfirm && <SuccessNotification message="Document uploaded successfully!" />}
     </>
   );
 }

@@ -26,6 +26,8 @@ type ChangeProgramDialogProps = {
   role: RoleEnum | undefined;
   userPrograms?: string[];
   callback: (show: boolean) => void;
+  onSuccess: (message: string) => void;
+  onError: (message: string) => void;
   onSavePrograms?: (newPrograms: string[]) => void;
   programsChanged?: (didProgramChange: boolean) => void;
   didProgramChange?: boolean; // optional prop to track if programs changed
@@ -37,6 +39,8 @@ const ChangeProgramDialog = ({
   userPrograms,
   role,
   callback,
+  onSuccess,
+  onError,
   onSavePrograms,
   programsChanged,
   didProgramChange,
@@ -69,26 +73,46 @@ const ChangeProgramDialog = ({
   };
 
   const savePrograms = async () => {
-    await updateUserProgramsAndRole(programs, role, email);
-    // When changing TO volunteer, remove all volunteers assigned to this veteran
-    if (role === RoleEnum.VOLUNTEER) {
-      if (!email) {
-        console.error("Email is required to remove assigned volunteers");
-      } else {
-        await removeAllAssignedVolunteersWithVeteranEmail(email);
+    onError("");
+    onSuccess("");
+
+    try {
+      const res = await updateUserProgramsAndRole(programs, role, email);
+      if (!res.success) {
+        onError(`Error updating programs: ${res.error}`);
+        return;
       }
-    }
-    // When changing TO veteran, remove all veterans assigned to this volunteer
-    else if (role === RoleEnum.VETERAN) {
-      if (!email) {
-        console.error("Email is required to remove assigned veterans");
-      } else {
-        await removeAllAssignedVeteransWithVolunteerId(email);
+      // When changing TO volunteer, remove all volunteers assigned to this veteran
+      if (role === RoleEnum.VOLUNTEER) {
+        if (!email) {
+          console.error("Email is required to remove assigned volunteers");
+        } else {
+          const res2 = await removeAllAssignedVolunteersWithVeteranEmail(email);
+          if (!res2.success) {
+            onError(`Error removing assigned volunteers: ${res2.error}`);
+            return;
+          }
+        }
       }
+      // When changing TO veteran, remove all veterans assigned to this volunteer
+      else if (role === RoleEnum.VETERAN) {
+        if (!email) {
+          console.error("Email is required to remove assigned veterans");
+        } else {
+          const res2 = await removeAllAssignedVeteransWithVolunteerId(email);
+          if (!res2.success) {
+            onError(`Error removing assigned veterans: ${res2.error}`);
+            return;
+          }
+        }
+      }
+      onSuccess("Successfully updated programs");
+      onSavePrograms?.(programs);
+      programsChanged?.(!didProgramChange);
+      callback(false);
+    } catch (error) {
+      onError(`Error updating programs: ${String(error)}`);
     }
-    onSavePrograms?.(programs);
-    programsChanged?.(!didProgramChange);
-    callback(false);
   };
 
   return (
