@@ -4,7 +4,9 @@ import { Role as RoleEnum } from "../api/profileApi";
 
 import ChangeProgramDialog from "./ChangeProgramDialog";
 import styles from "./ChangeRoleDialog.module.css";
+import ErrorMessage from "./ErrorMessage";
 import { Role } from "./Role";
+import SuccessNotification from "./SuccessNotification";
 
 type RoleOption = { label: string; value: RoleEnum };
 
@@ -36,6 +38,8 @@ const ChangeRoleDialog = ({
   const [open, setOpen] = useState(false);
   const [showProgramDialog, setShowProgramDialog] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   // update available roles based on initial role
   useEffect(() => {
@@ -120,11 +124,15 @@ const ChangeRoleDialog = ({
       </div>
 
       <div className={styles.actions}>
-        <button onClick={handleNext} className={styles.btnPrimary}>
-          Next
-        </button>
         <button onClick={onCancel} className={styles.btnSecondary}>
           Cancel
+        </button>
+        <button
+          onClick={handleNext}
+          className={`${styles.btnPrimary} ${newRole ? "" : styles.btnPrimaryDisabled}`}
+          disabled={!newRole}
+        >
+          Next
         </button>
       </div>
 
@@ -135,8 +143,13 @@ const ChangeRoleDialog = ({
           email={email}
           onSavePrograms={onSavePrograms}
           callback={setShowProgramDialog}
+          onSuccess={setSuccessMessage}
+          onError={setErrorMessage}
         />
       )}
+
+      {successMessage && <SuccessNotification message={successMessage} />}
+      {errorMessage && <ErrorMessage message={errorMessage} />}
     </div>
   );
 };

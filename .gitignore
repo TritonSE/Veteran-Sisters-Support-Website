@@ -139,3 +139,5 @@ frontend/.eslintcache
 backend/.eslintcache
 
 .firebase/*
+
+.DS_Store

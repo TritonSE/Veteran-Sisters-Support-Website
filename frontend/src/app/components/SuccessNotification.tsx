@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import styles from "./SuccessNotification.module.css";
@@ -14,7 +15,7 @@ const SuccessNotification: React.FC<SuccessNotificationProps> = ({ message }) =>
   useEffect(() => {
     const timer = setTimeout(() => {
       setVisible(false);
-    }, 10000); // Hide after 3 seconds
+    }, 5000); // Hide after 5 seconds
 
     return () => {
       clearTimeout(timer);
@@ -23,7 +24,12 @@ const SuccessNotification: React.FC<SuccessNotificationProps> = ({ message }) =>
 
   if (!visible) return null;
 
-  return <div className={styles.notif}>{message}</div>;
+  return (
+    <div className={styles.notif}>
+      <Image src="/check.svg" width={20} height={20} alt="check" />
+      {message}
+    </div>
+  );
 };
 
 export default SuccessNotification;

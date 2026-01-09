@@ -37,11 +37,11 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
           setActivities(result.data.recentUnread);
           setTotalUnreadCount(result.data.totalUnread);
         } else {
-          console.error(result.error);
+          setErrorMessage(`Failed to get unread activities: ${result.error}`);
         }
       })
-      .catch((err: unknown) => {
-        console.error(err);
+      .catch((error: unknown) => {
+        setErrorMessage(`Error getting unread activities: ${String(error)}`);
       });
   }, [refresh]);
 
@@ -60,8 +60,8 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
           setErrorMessage(`Error marking activity as read: ${res.error}`);
         }
       })
-      .catch((err: unknown) => {
-        setErrorMessage(`Error marking activity as read: ${String(err)}`);
+      .catch((error: unknown) => {
+        setErrorMessage(`Error marking activity as read: ${String(error)}`);
       });
   };
 
@@ -80,8 +80,17 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
         return `${activity.uploader.firstName} made a comment on "${activity.documentName}"`;
       case ActivityType.ASSIGNMENT:
         return `You've been assigned a new ${userRole === RoleEnum.VETERAN ? "volunteer" : "veteran"}!`;
-      case ActivityType.REPORT:
-        return `Your report has been resolved.`;
+      case ActivityType.REPORT: {
+        const reportStatus =
+          activity.reportId && typeof activity.reportId === "object"
+            ? (activity.reportId as { _id: string; status: string }).status
+            : null;
+        if (reportStatus === "Resolved") {
+          return `A report regarding volunteer services has been resolved.`;
+        } else {
+          return `Issue regarding volunteer services!.`;
+        }
+      }
       case ActivityType.REQUEST:
         return `You received access to "${activity.documentName}"`;
       case ActivityType.ANNOUNCEMENT:
@@ -109,12 +118,14 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                 transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
               }}
             ></Image>
-            {activities.length > 0 ? (
+            {totalUnreadCount > 0 ? (
               <span>Unread activity</span>
             ) : (
               <span>No new activity. You&apos;re all caught up!</span>
             )}
-            <span className={styles.activityCount}>{totalUnreadCount}</span>
+            {totalUnreadCount > 0 && (
+              <span className={styles.activityCount}>{totalUnreadCount}</span>
+            )}
           </div>
           <a href="/activities" style={{ color: "#057E6F", fontSize: "14px", fontWeight: "600" }}>
             View all activities
@@ -180,7 +191,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                         handleSelect(activity._id, activity.type);
                       }}
                     >
-                      View
+                      Mark as read
                     </button>
                   </div>
 

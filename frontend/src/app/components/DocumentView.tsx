@@ -11,13 +11,14 @@ import { storage } from "../../firebase/firebase";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { Comment, FileObject, editFileObject, getFileById } from "../api/fileApi";
-import { UserProfile } from "../api/profileApi";
+import { Role as RoleEnum, UserProfile } from "../api/profileApi";
 import { getUser } from "../api/userApi";
 import { useAuth } from "../contexts/AuthContext";
 
 import { DocumentComment } from "./DocumentComment";
 import styles from "./DocumentView.module.css";
 import ErrorMessage from "./ErrorMessage";
+import SuccessNotification from "./SuccessNotification";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -39,8 +40,9 @@ export function DocumentView({ documentId }: DocumentViewProps) {
   const [currTitle, setCurrTitle] = useState<string>();
 
   const [currUser, setCurrUser] = useState<UserProfile>();
-  const { userId } = useAuth();
+  const { userId, userRole } = useAuth();
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     getFileById(documentId)
@@ -156,6 +158,8 @@ export function DocumentView({ documentId }: DocumentViewProps) {
             }}
             onKeyDown={changeTitleHandler}
           />
+        ) : userRole === (RoleEnum.VOLUNTEER as string) ? (
+          <div className={styles.headerSection}>{filename}</div>
         ) : (
           <div
             className={styles.headerSection}
@@ -232,6 +236,8 @@ export function DocumentView({ documentId }: DocumentViewProps) {
                       }
                     }}
                     setFile={setFile}
+                    onSuccess={setSuccessMessage}
+                    onError={setErrorMessage}
                   />
                 );
               })}
@@ -258,6 +264,7 @@ export function DocumentView({ documentId }: DocumentViewProps) {
         </>
       )}
       {errorMessage && <ErrorMessage message={errorMessage} />}
+      {successMessage && <SuccessNotification message={successMessage} />}
     </>
   );
 }

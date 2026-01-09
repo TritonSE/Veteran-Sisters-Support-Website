@@ -6,6 +6,8 @@ import { Role as RoleEnum } from "../api/profileApi";
 import ChangeProgramDialog from "./ChangeProgramDialog";
 import ChangeRoleDialog from "./ChangeRoleDialog";
 import styles from "./EditProfileDialog.module.css";
+import ErrorMessage from "./ErrorMessage";
+import SuccessNotification from "./SuccessNotification";
 
 type ProfileActionsProps = {
   isProfileEditable: boolean;
@@ -49,6 +51,8 @@ const ProfileActions = ({
   const [showRoleChangeDialog, setShowRoleChangeDialog] = useState(false);
   const [showProgramChangeDialog, setShowProgramChangeDialog] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false); // controls visibility of dropdown
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
@@ -104,7 +108,7 @@ const ProfileActions = ({
   ];
 
   const actions = rawActions.filter(Boolean) as Action[];
-  if (actions.length === 0) return null;
+  if (actions.length === 0 && !showDocuments) return null;
 
   // Render --------------------------------------------------------------
   return (
@@ -205,10 +209,15 @@ const ProfileActions = ({
               programsChanged={programsChanged}
               callback={setShowProgramChangeDialog}
               onSavePrograms={handleProgramsChange}
+              onSuccess={setSuccessMessage}
+              onError={setErrorMessage}
             />
           </div>
         </div>
       )}
+
+      {successMessage && <SuccessNotification message={successMessage} />}
+      {errorMessage && <ErrorMessage message={errorMessage} />}
     </div>
   );
 };

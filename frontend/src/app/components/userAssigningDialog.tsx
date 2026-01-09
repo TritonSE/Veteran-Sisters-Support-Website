@@ -10,6 +10,7 @@ import {
 } from "../api/activeVolunteers";
 import { Role as RoleEnum, UserProfile as UserProfileType } from "../api/profileApi";
 
+import { AVAILABLE_PROGRAMS } from "./ChangeProgramDialog";
 import { Program } from "./Program";
 import { Role } from "./Role";
 import styles from "./veteranProfile.module.css";
@@ -150,17 +151,18 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
     return null;
   }
 
-  const formattedOptions = volunteers.map((v) => ({
-    value: v,
-    label: `${v.firstName} ${v.lastName} - ${String(v.assignedUsers ? new Set(v.assignedUsers).size : 0)} ${
-      props.user.role === RoleEnum.VETERAN ? "veterans" : "volunteers"
-    }`,
-  }));
+  const formattedOptions = volunteers.map((v) => {
+    const numAssignedUsers = v.assignedUsers ? new Set(v.assignedUsers).size : 0;
+    const assignedRole = props.user.role === RoleEnum.VETERAN ? "veteran" : "volunteer";
+    return {
+      value: v,
+      label: `${v.firstName} ${v.lastName} - ${String(numAssignedUsers)} ${assignedRole}${numAssignedUsers === 1 ? "" : "s"}`,
+    };
+  });
 
-  const formattedProgramOptions = props.program.map((v) => ({
-    value: v,
-    label: v,
-  }));
+  const formattedProgramOptions = AVAILABLE_PROGRAMS.filter((program) =>
+    props.program.some((assignedProgram) => program.value === assignedProgram),
+  );
 
   const customLabel = (option: OptionType) => (
     <>
@@ -183,6 +185,7 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
                 placeholder="Choose program"
                 options={formattedProgramOptions}
                 menuPortalTarget={document.body}
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
                 onChange={(selectedOption) => {
                   if (!selectedOption) return;
                   setSelectedProgram(selectedOption);
@@ -236,6 +239,7 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
                 }
                 options={formattedOptions}
                 menuPortalTarget={document.body}
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
                 formatOptionLabel={customLabel}
                 onChange={(selectedOption) => {
                   if (!selectedOption) return;
@@ -297,7 +301,7 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
 
           {step === 1 && (
             <button
-              className={styles.save}
+              className={`${styles.save} ${selectedProgram ? "" : styles.saveDisabled}`}
               disabled={!selectedProgram}
               onClick={() => {
                 setStep(2);
@@ -314,7 +318,7 @@ export default function UserAssigningDialog(props: UserAssigningDialogProps) {
               onClick={() => {
                 void assignVolunteer().then(props.closeDialog);
               }}
-              className={styles.save}
+              className={`${styles.save} ${selectedVolunteerOption ? "" : styles.saveDisabled}`}
             >
               Save
             </button>

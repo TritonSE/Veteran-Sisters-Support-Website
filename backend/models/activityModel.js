@@ -63,6 +63,11 @@ const activitySchema = new mongoose.Schema(
         },
       },
     },
+    reportId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Report",
+      required: false,
+    },
   },
   { timestamps: true }, // Will create createdAt timestamp
 );
