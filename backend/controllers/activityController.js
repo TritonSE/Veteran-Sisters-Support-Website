@@ -1,6 +1,7 @@
 import Activity from "../models/activityModel.js";
 import { User } from "../models/userModel.js";
 import { ActiveVolunteers } from "../models/activeVolunteers.js";
+import { Report } from "../models/reportModel.js";
 
 export const getActivity = async (req, res) => {
   try {
@@ -39,6 +40,7 @@ export const getActivities = async (req, res) => {
         .populate("uploader", "firstName lastName role email phoneNumber")
         .populate("assignmentInfo.volunteerId", "firstName lastName")
         .populate("assignmentInfo.veteranId", "firstName lastName")
+        .populate("reportId", "status")
         .sort({ createdAt: -1 })
         .lean();
     } else if (user.role == "staff") {
@@ -54,6 +56,7 @@ export const getActivities = async (req, res) => {
         .populate("uploader", "firstName lastName role email phoneNumber")
         .populate("assignmentInfo.volunteerId", "firstName lastName")
         .populate("assignmentInfo.veteranId", "firstName lastName")
+        .populate("reportId", "status")
         .sort({ createdAt: -1 })
         .lean();
     } else {
@@ -63,6 +66,7 @@ export const getActivities = async (req, res) => {
         .populate("uploader", "firstName lastName role email phoneNumber")
         .populate("assignmentInfo.volunteerId", "firstName lastName")
         .populate("assignmentInfo.veteranId", "firstName lastName")
+        .populate("reportId", "status")
         .sort({ createdAt: -1 })
         .lean();
     }
@@ -96,6 +100,7 @@ export const getUnreadActivities = async (req, res) => {
       .populate("uploader", "firstName lastName role email phoneNumber")
       .populate("assignmentInfo.volunteerId", "firstName lastName")
       .populate("assignmentInfo.veteranId", "firstName lastName")
+      .populate("reportId", "status")
       .sort({ createdAt: -1 })
       .lean();
 
@@ -132,6 +137,7 @@ export const createActivity = async (activityData) => {
       documentName,
       programName,
       assignmentInfo,
+      reportId,
     } = activityData;
 
     if (!uploader || !type) {
@@ -173,6 +179,7 @@ export const createActivity = async (activityData) => {
       documentName,
       programName,
       assignmentInfo,
+      reportId,
       createdAt: new Date(),
       type,
     });
