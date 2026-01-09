@@ -2,6 +2,22 @@ import Activity from "../models/activityModel.js";
 import { User } from "../models/userModel.js";
 import { ActiveVolunteers } from "../models/activeVolunteers.js";
 
+export const getActivity = async (req, res) => {
+  try {
+    const { activityId } = req.params;
+    const activity = await Activity.findById(activityId).populate(
+      "uploader",
+      "firstName lastName role email phoneNumber",
+    );
+    if (!activity) {
+      return res.status(404).json({ error: "Activity not found" });
+    }
+    res.status(200).json(activity);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching activity", error: error.message });
+  }
+};
+
 export const getActivities = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -20,7 +36,7 @@ export const getActivities = async (req, res) => {
           { type: "signup" },
         ],
       })
-        .populate("uploader", "firstName lastName role")
+        .populate("uploader", "firstName lastName role email phoneNumber")
         .populate("assignmentInfo.volunteerId", "firstName lastName")
         .populate("assignmentInfo.veteranId", "firstName lastName")
         .sort({ createdAt: -1 })
@@ -35,7 +51,7 @@ export const getActivities = async (req, res) => {
           { programName: { $in: user.assignedPrograms } },
         ],
       })
-        .populate("uploader", "firstName lastName role")
+        .populate("uploader", "firstName lastName role email phoneNumber")
         .populate("assignmentInfo.volunteerId", "firstName lastName")
         .populate("assignmentInfo.veteranId", "firstName lastName")
         .sort({ createdAt: -1 })
@@ -44,7 +60,7 @@ export const getActivities = async (req, res) => {
       activities = await Activity.find({
         $or: [{ receivers: user._id.toString() }, { type: "announcement" }],
       })
-        .populate("uploader", "firstName lastName role")
+        .populate("uploader", "firstName lastName role email phoneNumber")
         .populate("assignmentInfo.volunteerId", "firstName lastName")
         .populate("assignmentInfo.veteranId", "firstName lastName")
         .sort({ createdAt: -1 })
@@ -69,7 +85,7 @@ export const getUnreadActivities = async (req, res) => {
       _id: { $in: user.unreadActivities },
       type: "announcement",
     })
-      .populate("uploader", "firstName lastName role")
+      .populate("uploader", "firstName lastName role email phoneNumber")
       .sort({ createdAt: -1 })
       .lean();
 
@@ -77,7 +93,7 @@ export const getUnreadActivities = async (req, res) => {
       _id: { $in: user.unreadActivities },
       type: { $ne: "announcement" },
     })
-      .populate("uploader", "firstName lastName role")
+      .populate("uploader", "firstName lastName role email phoneNumber")
       .populate("assignmentInfo.volunteerId", "firstName lastName")
       .populate("assignmentInfo.veteranId", "firstName lastName")
       .sort({ createdAt: -1 })

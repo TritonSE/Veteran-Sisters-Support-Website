@@ -13,7 +13,13 @@ type assignmentInfo = {
 
 export type ActivityObject = {
   _id: string;
-  uploader: { firstName: string; lastName: string; role: string };
+  uploader: {
+    firstName: string;
+    lastName: string;
+    role: string;
+    email: string;
+    phoneNumber: string;
+  };
   type: ActivityType;
   title: string;
   description: string;
@@ -97,7 +103,7 @@ export const getUnreadActivities = async (
 
 export const getActivities = async (userId: string): Promise<APIResult<ActivityObject[]>> => {
   try {
-    const response = await get(`/activities/${userId}`);
+    const response = await get(`/activities/all/${userId}`);
     if (response.ok) {
       const activities = (await response.json()) as ActivityObject[];
       activities.forEach((activity: ActivityObject) => {
@@ -135,6 +141,19 @@ export const createAnnouncement = async (
 ): Promise<APIResult<ActivityObject>> => {
   try {
     const response = await post(`/activities/announcement`, announcementInfo);
+    if (!response.ok) {
+      return handleAPIError(response);
+    }
+    const activity = (await response.json()) as ActivityObject;
+    return { success: true, data: activity };
+  } catch (error: unknown) {
+    return { success: false, error: (error as Error).message };
+  }
+};
+
+export const getActivity = async (activityId: string) => {
+  try {
+    const response = await get(`/activities/${activityId}`);
     if (!response.ok) {
       return handleAPIError(response);
     }
