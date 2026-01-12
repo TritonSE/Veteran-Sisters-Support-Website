@@ -45,17 +45,12 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
       });
   }, [refresh]);
 
-  const handleSelect = (option: string, type: ActivityType) => {
+  const handleSelect = (option: string) => {
     // Mark activity as read when selected
     markActivityRead(userId, option)
       .then((res) => {
         if (res.success) {
-          // Temporary measure until we get other pages
-          if (type === ActivityType.ANNOUNCEMENT) {
-            router.push(`/activities/?activityId=${option}`);
-          } else {
-            setRefresh(!refresh);
-          }
+          setRefresh(!refresh);
         } else {
           setErrorMessage(`Error marking activity as read: ${res.error}`);
         }
@@ -63,6 +58,21 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
       .catch((error: unknown) => {
         setErrorMessage(`Error marking activity as read: ${String(error)}`);
       });
+  };
+
+  const handleLink = (activity: ActivityObject) => {
+    if (activity.type === ActivityType.ANNOUNCEMENT || activity.type === ActivityType.ASSIGNMENT) {
+      router.push(`/activities/?activityId=${activity._id}`);
+    } else if (activity.type === ActivityType.DOCUMENT || activity.type === ActivityType.COMMENT) {
+      if (activity.documentId) {
+        router.push(`/document?documentId=${activity.documentId}`);
+      } else {
+        setErrorMessage("Failed to find document");
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 3000);
+      }
+    }
   };
 
   const getActivityMessage = (activity: ActivityObject) => {
@@ -153,6 +163,10 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                 )}
                 <div
                   className={activity.type === ActivityType.ANNOUNCEMENT ? styles.announcement : ""}
+                  onClick={() => {
+                    handleLink(activity);
+                  }}
+                  style={{ cursor: "pointer" }}
                 >
                   <Image
                     id="pfp"
@@ -187,8 +201,9 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
                     <div>{getActivityMessage(activity)}</div>
                     <button
                       className={styles.button}
-                      onClick={() => {
-                        handleSelect(activity._id, activity.type);
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelect(activity._id);
                       }}
                     >
                       Mark as read

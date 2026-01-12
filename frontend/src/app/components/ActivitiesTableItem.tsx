@@ -1,10 +1,12 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import { ActivityObject, ActivityType } from "../api/activities";
 import { Role as RoleEnum } from "../api/profileApi";
 
 import styles from "./ActivitiesTableItem.module.css";
+import ErrorMessage from "./ErrorMessage";
 import { Role } from "./Role";
 
 type ActivitiesTableItemProp = {
@@ -21,6 +23,7 @@ export function ActivitiesTableItem({
   onView,
 }: ActivitiesTableItemProp) {
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const getActivityMessage = (activity: ActivityObject) => {
     switch (activity.type) {
@@ -59,12 +62,18 @@ export function ActivitiesTableItem({
     }
   };
 
-  // temporary measure until we get other pages
   const handleClick = (activity: ActivityObject) => {
     if (activity.type === ActivityType.ANNOUNCEMENT || activity.type === ActivityType.ASSIGNMENT) {
       router.push(`/activities?activityId=${activity._id}`);
     } else if (activity.type === ActivityType.DOCUMENT || activity.type === ActivityType.COMMENT) {
-      router.push(`/document?documentId=${activity.documentId}`);
+      if (activity.documentId) {
+        router.push(`/document?documentId=${activity.documentId}`);
+      } else {
+        setErrorMessage("Failed to find document");
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 3000);
+      }
     }
   };
 
@@ -133,6 +142,7 @@ export function ActivitiesTableItem({
           </div>
         </div>
       </div>
+      {errorMessage && <ErrorMessage message={errorMessage} />}
     </div>
   );
 }
