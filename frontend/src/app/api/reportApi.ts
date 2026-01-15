@@ -1,4 +1,4 @@
-import { APIResult, get, handleAPIError, post } from "./requests";
+import { APIResult, get, handleAPIError, post, put } from "./requests";
 
 export type ReportRequest = {
   reporterId: string;
@@ -41,6 +41,22 @@ export async function getReportsByReporter(reporterId: string): Promise<APIResul
       return handleAPIError(response);
     }
     const data = (await response.json()) as Report[];
+    return { success: true, data };
+  } catch (error: unknown) {
+    return { success: false, error: (error as Error).message };
+  }
+}
+
+export async function updateReportStatus(
+  reportId: string,
+  status: string,
+): Promise<APIResult<Report>> {
+  try {
+    const response = await put(`/report/${reportId}`, { status });
+    if (!response.ok) {
+      return handleAPIError(response);
+    }
+    const data = (await response.json()) as Report;
     return { success: true, data };
   } catch (error: unknown) {
     return { success: false, error: (error as Error).message };

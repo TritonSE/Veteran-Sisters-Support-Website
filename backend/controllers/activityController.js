@@ -6,10 +6,9 @@ import { Report } from "../models/reportModel.js";
 export const getActivity = async (req, res) => {
   try {
     const { activityId } = req.params;
-    const activity = await Activity.findById(activityId).populate(
-      "uploader",
-      "firstName lastName role email phoneNumber",
-    );
+    const activity = await Activity.findById(activityId)
+      .populate("uploader", "firstName lastName role email phoneNumber")
+      .populate("reportId", "status");
     if (!activity) {
       return res.status(404).json({ error: "Activity not found" });
     }
@@ -48,6 +47,7 @@ export const getActivities = async (req, res) => {
         $or: [
           { receivers: user._id.toString() },
           { type: "announcement" },
+          { type: "report" },
           { type: "request" },
           { type: "signup" },
           { programName: { $in: user.assignedPrograms } },

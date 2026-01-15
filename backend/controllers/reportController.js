@@ -46,19 +46,22 @@ export const addReport = async (req, res) => {
       status: "Pending",
     });
 
-    // Acitvity for report should be added to all admins
+    // Activity for report should be added to all admins and staff
     const adminUsers = await User.find({ role: "admin" }).select("_id").lean();
+    const staffUsers = await User.find({ role: "staff" }).select("_id").lean();
     const adminIds = adminUsers.map((admin) => admin._id.toString());
+    const staffIds = staffUsers.map((staff) => staff._id.toString());
+    const receiverIds = [...adminIds, ...staffIds];
 
     const situationText = Array.isArray(situation) ? situation.join(", ") : situation;
     const activityDescription = `${situationText}. ${explanation}`;
 
-    // Create the activity with admins as receivers
+
     newActivity = await createActivity({
       uploader: reporterId,
       type: "report",
       description: activityDescription,
-      receivers: adminIds,
+      receivers: receiverIds,
       reportId: newReport._id,
     });
 
@@ -76,6 +79,25 @@ export const getReportsByUser = async (req, res) => {
     const { userId } = req.params;
     const reports = await Report.find({ reporterId: userId }).sort({ datePosted: -1 });
     return res.status(200).json(reports);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const updateReportStatus = async (req, res) => {
+  try {
+    const { reportId } = req.params;
+    const { status } = req.body;
+    const report = await Report.findByIdAndUpdate(
+      reportId,
+      { status },
+      { new: true },
+    );
+    if (!report) {
+      return res.status(404).json({ error: "Report not found" });
+    }
+    return res.status(200).json(report);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Internal Server Error" });

@@ -61,7 +61,7 @@ export function ActivitiesTableItem({
 
   // temporary measure until we get other pages
   const handleClick = (activity: ActivityObject) => {
-    if (activity.type === ActivityType.ANNOUNCEMENT) {
+    if (activity.type === ActivityType.ANNOUNCEMENT || activity.type === ActivityType.REPORT) {
       router.push(`/activities?activityId=${activity._id}`);
     }
   };
