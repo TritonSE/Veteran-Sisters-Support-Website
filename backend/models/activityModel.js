@@ -35,6 +35,12 @@ const activitySchema = new mongoose.Schema(
         return ["document", "comment", "request"].includes(this.type);
       },
     },
+    documentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: function () {
+        return ["document", "comment", "request"].includes(this.type);
+      },
+    },
     programName: {
       type: [String],
       required: function () {

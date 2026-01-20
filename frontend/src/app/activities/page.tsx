@@ -26,7 +26,7 @@ function ActivitiesContent({ userId, userRole }: ActivitiesContentProp) {
       <div className={styles.page}>
         <div className={styles.frame}>
           {activityId ? (
-            <ActivityDetail activityId={activityId} />
+            <ActivityDetail activityId={activityId} userRole={userRole} />
           ) : (
             <ActivitiesTable userId={userId} role={userRole} />
           )}
