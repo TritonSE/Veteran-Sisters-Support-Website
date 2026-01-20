@@ -63,7 +63,11 @@ export function ActivitiesTableItem({
   };
 
   const handleClick = (activity: ActivityObject) => {
-    if (activity.type === ActivityType.ANNOUNCEMENT || activity.type === ActivityType.ASSIGNMENT) {
+    if (
+      activity.type === ActivityType.ANNOUNCEMENT ||
+      activity.type === ActivityType.ASSIGNMENT ||
+      activity.type === ActivityType.REPORT
+    ) {
       router.push(`/activities?activityId=${activity._id}`);
     } else if (activity.type === ActivityType.DOCUMENT || activity.type === ActivityType.COMMENT) {
       if (activity.documentId) {

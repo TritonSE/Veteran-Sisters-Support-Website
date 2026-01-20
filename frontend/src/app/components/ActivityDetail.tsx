@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { ActivityObject, ActivityType, getActivity } from "../api/activities";
 import { AssignedProgram as ProgramEnum, Role as RoleEnum } from "../api/profileApi";
+import { updateReportStatus } from "../api/reportApi";
 
 import styles from "./ActivityDetail.module.css";
 import NavigateBack from "./NavigateBack";
@@ -17,6 +18,8 @@ type ActivitiesDetailProp = {
 
 export function ActivityDetail({ activityId, userRole }: ActivitiesDetailProp) {
   const [activity, setActivity] = useState<ActivityObject | undefined>(undefined);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [copied, setCopied] = useState(false);
   const formatter = new Intl.DateTimeFormat("en-US", {
     weekday: "short",
     month: "short",
@@ -26,7 +29,7 @@ export function ActivityDetail({ activityId, userRole }: ActivitiesDetailProp) {
     hour12: true,
   });
 
-  useEffect(() => {
+  const fetchActivity = () => {
     getActivity(activityId)
       .then((result) => {
         if (result.success) {
@@ -38,7 +41,67 @@ export function ActivityDetail({ activityId, userRole }: ActivitiesDetailProp) {
       .catch((reason: unknown) => {
         console.error(reason);
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    fetchActivity();
+  }, [activityId]);
+
+  const getReportStatus = (): string | null => {
+    if (!activity || activity.type !== ActivityType.REPORT) return null;
+    if (activity.reportId && typeof activity.reportId === "object") {
+      return activity.reportId.status;
+    }
+    return null;
+  };
+
+  const getReportId = (): string | null => {
+    if (!activity || activity.type !== ActivityType.REPORT) return null;
+    if (activity.reportId && typeof activity.reportId === "object") {
+      return activity.reportId._id;
+    }
+    if (typeof activity.reportId === "string") {
+      return activity.reportId;
+    }
+    return null;
+  };
+
+  const handleStatusUpdate = async () => {
+    const reportId = getReportId();
+    if (!reportId) return;
+
+    const currentStatus = getReportStatus();
+    const newStatus = currentStatus === "Pending" ? "Resolved" : "Pending";
+
+    setIsUpdating(true);
+    try {
+      const result = await updateReportStatus(reportId, newStatus);
+      if (result.success) {
+        // Refresh the activity to get updated report status
+        fetchActivity();
+      } else {
+        console.error("Failed to update report status:", result.error);
+      }
+    } catch (error) {
+      console.error("Error updating report status:", error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleCopyEmail = async () => {
+    if (!activity?.uploader?.email) return;
+
+    try {
+      await navigator.clipboard.writeText(activity.uploader.email);
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to copy email:", error);
+    }
+  };
 
   const AnnouncementContent = () => {
     return (
@@ -134,6 +197,8 @@ export function ActivityDetail({ activityId, userRole }: ActivitiesDetailProp) {
       }
     } else if (activity?.type === ActivityType.ANNOUNCEMENT) {
       return activity?.title;
+    } else if (activity?.type === ActivityType.REPORT) {
+      return "Issue regarding volunteer services";
     } else {
       return "Unknown activity";
     }
@@ -164,6 +229,58 @@ export function ActivityDetail({ activityId, userRole }: ActivitiesDetailProp) {
           <AnnouncementContent />
         )}
       </div>
+      {activity?.type === ActivityType.REPORT && (
+        <div
+          style={{
+            marginTop: "12px",
+            display: "flex",
+            justifyContent: "space-between",
+            gap: "12px",
+            width: "1024px",
+          }}
+        >
+          <button
+            onClick={() => {
+              void handleCopyEmail();
+            }}
+            style={{
+              backgroundColor: "white",
+              color: "#057e6f",
+              border: "1px solid #057e6f",
+              padding: "12px 24px",
+              borderRadius: "4px",
+              fontSize: "16px",
+              fontWeight: "600",
+              cursor: "pointer",
+            }}
+          >
+            {copied ? "Copied!" : "Copy Email"}
+          </button>
+          <button
+            onClick={() => {
+              void handleStatusUpdate();
+            }}
+            disabled={isUpdating}
+            style={{
+              backgroundColor: "#057e6f",
+              color: "white",
+              border: "none",
+              padding: "12px 24px",
+              borderRadius: "4px",
+              fontSize: "16px",
+              fontWeight: "600",
+              cursor: isUpdating ? "not-allowed" : "pointer",
+              opacity: isUpdating ? 0.6 : 1,
+            }}
+          >
+            {isUpdating
+              ? "Updating..."
+              : getReportStatus() === "Pending"
+                ? "Mark as Resolved"
+                : "Mark as Pending"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

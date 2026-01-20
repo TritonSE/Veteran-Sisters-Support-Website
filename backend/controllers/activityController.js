@@ -15,7 +15,8 @@ export const getActivity = async (req, res) => {
       .populate(
         "assignmentInfo.veteranId",
         "_id firstName lastName email phoneNumber assignedPrograms",
-      );
+      )
+      .populate("reportId", "status");
     if (!activity) {
       return res.status(404).json({ error: "Activity not found" });
     }
@@ -54,6 +55,7 @@ export const getActivities = async (req, res) => {
         $or: [
           { receivers: user._id.toString() },
           { type: "announcement" },
+          { type: "report" },
           { type: "request" },
           { type: "signup" },
           { programName: { $in: user.assignedPrograms } },
