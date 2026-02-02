@@ -1,4 +1,6 @@
-import { auth } from "../firebase/admin.js";
+import admin from "../firebase/admin.js";
+
+const auth = admin.auth();
 
 export const authenticateUser = async (req, res, next) => {
   try {
