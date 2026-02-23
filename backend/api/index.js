@@ -4,12 +4,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
-import fileRoutes from "./routes/fileRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
-import activeVolunteersRoute from "./routes/activeVolunteersRoutes.js";
-import commentRoutes from "./routes/commentRoutes.js";
-import reportRoutes from "./routes/reportRoutes.js";
-import activityRoutes from "./routes/activityRoutes.js";
+import fileRoutes from "../routes/fileRoutes.js";
+import userRoutes from "../routes/userRoutes.js";
+import activeVolunteersRoute from "../routes/activeVolunteersRoutes.js";
+import commentRoutes from "../routes/commentRoutes.js";
+import reportRoutes from "../routes/reportRoutes.js";
+import activityRoutes from "../routes/activityRoutes.js";
 import { onRequest } from "firebase-functions/v2/https";
 
 // import { CustomError, InternalError } from "./errors.js";
