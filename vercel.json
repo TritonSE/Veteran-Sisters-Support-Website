@@ -3,10 +3,10 @@
   "devCommand": "npm --prefix frontend run dev",
   "builds": [
     { "src": "frontend/package.json", "use": "@vercel/next" },
-    { "src": "backend/src/api/index.ts", "use": "@vercel/node" }
+    { "src": "backend/api/index.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/backend/src/api/index.ts" },
+    { "src": "/api/(.*)", "dest": "/backend/api/index.js" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/frontend/$1" }
   ]

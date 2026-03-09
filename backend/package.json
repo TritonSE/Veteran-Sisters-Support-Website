@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js",
+    "start": "nodemon api/index.js",
     "check-git-hooks": "cd .. && node .secret-scan/secret-scan.js -- --check-git-hooks",
     "format": "npm run check-git-hooks && prettier --write .",
     "lint-fix": "npm run check-git-hooks && (eslint --fix --cache --report-unused-disable-directives . || true) && prettier --write .",
