@@ -2,7 +2,7 @@
   "name": "veteran-sisters-website-backend",
   "version": "1.0.0",
   "description": "Backend for the Veteran Sisters website being developed by Triton Software Engineering at UCSD.",
-  "main": "index.js",
+  "main": "api/index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
