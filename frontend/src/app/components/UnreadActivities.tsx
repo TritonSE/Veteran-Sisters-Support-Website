@@ -98,7 +98,7 @@ export const UnreadActivities: React.FC<UnreadActivitiesProps> = ({
         if (reportStatus === "Resolved") {
           return `A report regarding volunteer services has been resolved.`;
         } else {
-          return `Issue regarding volunteer services!.`;
+          return `Issue regarding volunteer services!`;
         }
       }
       case ActivityType.REQUEST:

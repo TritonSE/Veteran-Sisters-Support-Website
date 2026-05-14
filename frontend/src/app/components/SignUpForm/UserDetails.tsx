@@ -107,12 +107,20 @@ export default function UserDetails({
         alreadyExists: "An account with this email already exists.",
       }));
       hasError = true;
-    } else {
+    } else if (!doesEmailExist.success) {
       setFormErrors((prevErrors) => ({
         ...prevErrors,
         alreadyExists: "Error checking if this email is already in use.",
       }));
+      hasError = true;
+    } else {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        alreadyExists: "",
+      }));
     }
+
+
     if (password.length < 6 && password.length > 0) {
       setFormErrors((prev) => ({
         ...prev,
