@@ -120,7 +120,6 @@ export default function UserDetails({
       }));
     }
 
-
     if (password.length < 6 && password.length > 0) {
       setFormErrors((prev) => ({
         ...prev,
