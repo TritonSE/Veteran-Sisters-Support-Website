@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-page-custom-font */
 "use client";
+import { Analytics } from "@vercel/analytics/next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import "./globals.css";
@@ -41,6 +42,7 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AuthProvider>{children}</AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
