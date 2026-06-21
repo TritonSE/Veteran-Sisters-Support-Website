@@ -36,7 +36,7 @@ const OnboardingOption: React.FC<OnboardingOptionProps> = ({
       <div className={styles.flexContent}>
         <div className={styles.textContent}>
           <div className={styles.mainText}>{mainText}</div>
-          <div className={styles.description}>{description}</div>
+          {/* <div className={styles.description}>{description}</div> */}
         </div>
         <div className={styles.checkboxContainer}>
           <Image
