@@ -81,9 +81,11 @@ export default function UserDetails({
 
   useEffect(() => {
     const hasErrorText = Object.values(formErrors).some((error) => error && error.trim() !== "");
+
     if (hasSubmitted && hasErrorText) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
+
     setHasSubmitted(false);
   }, [formErrors, hasSubmitted]);
 
@@ -93,14 +95,21 @@ export default function UserDetails({
     setFormErrors({});
 
     let hasError = false;
+
     const emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
     if (email && !emailRegex.test(email)) {
-      setFormErrors((prev) => ({ ...prev, email: "Please enter a valid email address." }));
+      setFormErrors((prev) => ({
+        ...prev,
+        email: "Please enter a valid email address.",
+      }));
       hasError = true;
     }
+
     const doesEmailExist = await checkIfUserEmailExists(email);
-    // User email already exists in mongo DB
+
+    // User email already exists in MongoDB
     if (doesEmailExist.success && doesEmailExist.data) {
       setFormErrors((prevErrors) => ({
         ...prevErrors,
@@ -129,34 +138,56 @@ export default function UserDetails({
     } else {
       setFormErrors((prev) => ({ ...prev, password: "" }));
     }
+
     if (password !== confirmPassword) {
-      setFormErrors((prev) => ({ ...prev, confirmPassword: "Passwords do not match." }));
+      setFormErrors((prev) => ({
+        ...prev,
+        confirmPassword: "Passwords do not match.",
+      }));
       hasError = true;
     } else {
       setFormErrors((prev) => ({ ...prev, confirmPassword: "" }));
     }
-    const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
-    if (phone && !phoneRegex.test(phone)) {
+
+    // UPDATED: Validate the number of digits, not manually entered dashes
+    const phoneDigits = phone.replace(/\D/g, "");
+
+    if (phoneDigits.length !== 10) {
       setFormErrors((prev) => ({
         ...prev,
-        phone: "Please enter a valid phone number in the format XXX-XXX-XXXX.",
+        phone: "Please enter a valid 10-digit phone number.",
       }));
       hasError = true;
     }
+
     if (!zip) {
-      setFormErrors((prev) => ({ ...prev, zip: "Zip code is required." }));
+      setFormErrors((prev) => ({
+        ...prev,
+        zip: "Zip code is required.",
+      }));
       hasError = true;
     }
+
     const zipRegex = /^\d{5}$/;
+
     if (zip && !zipRegex.test(zip)) {
-      setFormErrors((prev) => ({ ...prev, zipValid: "Please enter a valid Zip Code" }));
+      setFormErrors((prev) => ({
+        ...prev,
+        zipValid: "Please enter a valid Zip Code",
+      }));
       hasError = true;
     }
+
     if (!email || !password || !confirmPassword || !phone || !firstName || !lastName) {
-      setFormErrors((prev) => ({ ...prev, requiredFields: "All required fields must be filled." }));
+      setFormErrors((prev) => ({
+        ...prev,
+        requiredFields: "All required fields must be filled.",
+      }));
       hasError = true;
     }
+
     if (hasError) return;
+
     onNext();
   };
 
@@ -173,22 +204,30 @@ export default function UserDetails({
             style={{ objectFit: "contain" }}
           />
         </div>
+
         <form className={styles.form}>
           <div style={{ marginBottom: "24px" }}>
             <BackButton handlePrevious={onPrevious} />
             <ProgressBar percentCompleted={25} />
           </div>
+
           <div style={{ width: "80px", marginBottom: "20px" }}>
             <Role role={isVeteran ? RoleEnum.VETERAN : RoleEnum.VOLUNTEER} />
           </div>
+
           <div className={styles.subtitle}>Create a membership account</div>
+
           {formErrors.requiredFields && <p className={styles.error}>{formErrors.requiredFields}</p>}
+
           {formErrors.email && <p className={styles.error}>{formErrors.email}</p>}
+
           {formErrors.alreadyExists && <p className={styles.error}>{formErrors.alreadyExists}</p>}
+
           <label htmlFor="email" className={styles.formEntry}>
             Email
           </label>
           <a style={{ color: "#B80037" }}> *</a>
+
           <input
             type="email"
             id="email"
@@ -199,11 +238,14 @@ export default function UserDetails({
               setEmail(e.target.value);
             }}
           />
+
           <label htmlFor="password" className={styles.formEntry}>
             Password
           </label>
           <a style={{ color: "#B80037" }}> *</a>
+
           {formErrors.password && <p className={styles.error}>{formErrors.password}</p>}
+
           <input
             type="password"
             id="password"
@@ -212,25 +254,38 @@ export default function UserDetails({
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
+
               if (e.target.value.length >= 6) {
-                setFormErrors((prev) => ({ ...prev, password: "" }));
+                setFormErrors((prev) => ({
+                  ...prev,
+                  password: "",
+                }));
               }
             }}
             onBlur={() => {
               if (confirmPassword && confirmPassword !== "" && confirmPassword !== password) {
-                setFormErrors((prev) => ({ ...prev, confirmPassword: "Passwords do not match." }));
+                setFormErrors((prev) => ({
+                  ...prev,
+                  confirmPassword: "Passwords do not match.",
+                }));
               } else {
-                setFormErrors((prev) => ({ ...prev, confirmPassword: "" }));
+                setFormErrors((prev) => ({
+                  ...prev,
+                  confirmPassword: "",
+                }));
               }
             }}
           />
+
           <label htmlFor="confirmPassword" className={styles.formEntry}>
             Confirm password
           </label>
           <a style={{ color: "#B80037" }}> *</a>
+
           {formErrors.confirmPassword && (
             <p className={styles.error}>{formErrors.confirmPassword}</p>
           )}
+
           <input
             type="password"
             id="confirmPassword"
@@ -242,16 +297,26 @@ export default function UserDetails({
             }}
             onBlur={() => {
               if (confirmPassword && confirmPassword !== password) {
-                setFormErrors((prev) => ({ ...prev, confirmPassword: "Passwords do not match." }));
+                setFormErrors((prev) => ({
+                  ...prev,
+                  confirmPassword: "Passwords do not match.",
+                }));
               } else {
-                setFormErrors((prev) => ({ ...prev, confirmPassword: "" }));
+                setFormErrors((prev) => ({
+                  ...prev,
+                  confirmPassword: "",
+                }));
               }
             }}
           />
+
           {formErrors.phone && <p className={styles.error}>{formErrors.phone}</p>}
+
           <label htmlFor="phone" className={styles.formEntry}>
             Phone number<a style={{ color: "#B80037" }}> *</a>
           </label>
+
+          {/* UPDATED: Automatically format phone numbers with dashes */}
           <input
             type="tel"
             id="phone"
@@ -259,20 +324,36 @@ export default function UserDetails({
             className={styles.input}
             required
             value={phone}
+            inputMode="numeric"
+            maxLength={12}
             onChange={(e) => {
-              const value = e.target.value;
-              setPhone(value);
-              const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
-              if (phoneRegex.test(value)) {
-                setFormErrors((prev) => ({ ...prev, phone: "" }));
+              const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+
+              let formatted = digits;
+
+              if (digits.length > 6) {
+                formatted = `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+              } else if (digits.length > 3) {
+                formatted = `${digits.slice(0, 3)}-${digits.slice(3)}`;
+              }
+
+              setPhone(formatted);
+
+              if (digits.length === 10) {
+                setFormErrors((prev) => ({
+                  ...prev,
+                  phone: "",
+                }));
               }
             }}
           />
+
           <div className={styles.doubleInput}>
             <div style={{ marginRight: "16px" }}>
               <label htmlFor="firstName" className={styles.formEntry}>
                 First name<a style={{ color: "#B80037" }}> *</a>
               </label>
+
               <input
                 type="text"
                 id="firstName"
@@ -284,10 +365,12 @@ export default function UserDetails({
                 }}
               />
             </div>
+
             <div>
               <label htmlFor="lastName" className={styles.formEntry}>
                 Last name<a style={{ color: "#B80037" }}> *</a>
               </label>
+
               <input
                 type="text"
                 id="lastName"
@@ -300,6 +383,7 @@ export default function UserDetails({
               />
             </div>
           </div>
+
           <div
             className={styles.addressDropdown}
             onClick={() => {
@@ -307,6 +391,7 @@ export default function UserDetails({
             }}
           >
             <div className={styles.subHeader}>Address Information</div>
+
             <Image
               id="caret"
               width={20}
@@ -319,13 +404,17 @@ export default function UserDetails({
               }}
             />
           </div>
+
           {formErrors.zip && <p className={styles.error}>{formErrors.zip}</p>}
+
           {formErrors.zipValid && <p className={styles.error}>{formErrors.zipValid}</p>}
+
           {showDropdown && (
             <div>
               <label htmlFor="address" className={styles.formEntry}>
                 Street address
               </label>
+
               <input
                 type="text"
                 id="address"
@@ -335,9 +424,11 @@ export default function UserDetails({
                   setStreetAddress(e.target.value);
                 }}
               />
+
               <label htmlFor="address2" className={styles.formEntry}>
                 Street address line 2
               </label>
+
               <input
                 type="text"
                 id="address2"
@@ -347,11 +438,13 @@ export default function UserDetails({
                   setStreetAddressLine2(e.target.value);
                 }}
               />
+
               <div className={styles.doubleInput}>
                 <div style={{ marginRight: "16px" }}>
                   <label htmlFor="city" className={styles.formEntry}>
                     City
                   </label>
+
                   <input
                     type="text"
                     id="city"
@@ -362,10 +455,12 @@ export default function UserDetails({
                     }}
                   />
                 </div>
+
                 <div style={{ marginRight: "16px" }}>
                   <label htmlFor="state" className={styles.formEntry}>
                     State
                   </label>
+
                   <input
                     type="text"
                     id="state"
@@ -376,10 +471,13 @@ export default function UserDetails({
                     }}
                   />
                 </div>
+
                 <div>
                   <label htmlFor="zip" className={styles.formEntry}>
-                    Zip code<a style={{ color: "#B80037" }}> *</a>
+                    Zip code
+                    <a style={{ color: "#B80037" }}> *</a>
                   </label>
+
                   <input
                     type="text"
                     id="zip"
@@ -389,12 +487,21 @@ export default function UserDetails({
                     onChange={(e) => {
                       const value = e.target.value;
                       setZip(value);
+
                       if (value.trim() !== "") {
-                        setFormErrors((prev) => ({ ...prev, zip: "" }));
+                        setFormErrors((prev) => ({
+                          ...prev,
+                          zip: "",
+                        }));
                       }
+
                       const zipRegex = /^\d{5}$/;
+
                       if (zipRegex.test(value)) {
-                        setFormErrors((prev) => ({ ...prev, zipValid: "" }));
+                        setFormErrors((prev) => ({
+                          ...prev,
+                          zipValid: "",
+                        }));
                       }
                     }}
                   />
@@ -402,6 +509,7 @@ export default function UserDetails({
               </div>
             </div>
           )}
+
           <Button
             label="Continue"
             className={styles.continueButton}
@@ -411,8 +519,14 @@ export default function UserDetails({
             filled={true}
             width="88%"
           />
+
           <div className={styles.subtitle2}>
-            <div style={{ textAlign: "center", marginTop: "16px" }}>
+            <div
+              style={{
+                textAlign: "center",
+                marginTop: "16px",
+              }}
+            >
               Already have an account?
               <a href="/login" style={{ color: "#057E6F" }}>
                 {" "}
